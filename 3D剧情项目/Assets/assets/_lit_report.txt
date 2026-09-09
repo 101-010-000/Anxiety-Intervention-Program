@@ -1,0 +1,11 @@
+guid map=412
+lit mats=68
+prefab 张知远_可动 assigned=17
+prefab 徐夏_可动 assigned=16
+prefab 李老师_可动 assigned=21
+prefab 林溪_可动 assigned=17
+prefab 王含_可动 assigned=18
+prefab 组长_可动 assigned=17
+prefab 舍友A_可动 assigned=20
+prefab 舍友B_可动 assigned=17
+prefab 陆宣雨_可动 assigned=16

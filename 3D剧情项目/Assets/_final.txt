@@ -1,0 +1,10 @@
+张知远_可动: mats=17 缺BaseMap=3 示例=hair_short.02_RGBMap
+徐夏_可动: mats=16 缺BaseMap=3 示例=hair_medium.001_RGBMap
+李老师_可动: mats=21 缺BaseMap=4 示例=mat_glasses_02_round_RGBMap
+林溪_可动: mats=17 缺BaseMap=3 示例=hair_tied.02_RGBMap
+王含_可动: mats=18 缺BaseMap=3 示例=hair_long.001_RGBMap
+组长_可动: mats=17 缺BaseMap=3 示例=hair_short.001_RGBMap
+舍友A_可动: mats=20 缺BaseMap=3 示例=hair_tied.01_RGBMap
+舍友B_可动: mats=17 缺BaseMap=3 示例=hair_curly.002_RGBMap
+陆宣雨_可动: mats=16 缺BaseMap=3 示例=hair_short.02_RGBMap
+徐夏渲染: 洋红像素=0 center=RGBA(0.420, 0.000, 0.000, 1.000)

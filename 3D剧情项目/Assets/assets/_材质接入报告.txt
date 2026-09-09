@@ -1,0 +1,11 @@
+shader=Shader Graphs/Rukha93/ShaderGraph_CharacterToon+FakeOutline
+mats remapped=68
+角色 张知远: 已挂材质 17 处 -> Assets/assets/角色_URP/张知远_可动.prefab
+角色 徐夏: 已挂材质 16 处 -> Assets/assets/角色_URP/徐夏_可动.prefab
+角色 李老师: 已挂材质 21 处 -> Assets/assets/角色_URP/李老师_可动.prefab
+角色 林溪: 已挂材质 17 处 -> Assets/assets/角色_URP/林溪_可动.prefab
+角色 王含: 已挂材质 18 处 -> Assets/assets/角色_URP/王含_可动.prefab
+角色 组长: 已挂材质 17 处 -> Assets/assets/角色_URP/组长_可动.prefab
+角色 舍友A: 已挂材质 20 处 -> Assets/assets/角色_URP/舍友A_可动.prefab
+角色 舍友B: 已挂材质 17 处 -> Assets/assets/角色_URP/舍友B_可动.prefab
+角色 陆宣雨: 已挂材质 16 处 -> Assets/assets/角色_URP/陆宣雨_可动.prefab

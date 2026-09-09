@@ -1,0 +1,9 @@
+徐夏: 已删除皮肤段 10 个 -> arms_lower, arms_upper, feet, hips, legs_knee, legs_lower, legs_upper, shoulders, torso, torso.001
+林溪: 已删除皮肤段 7 个 -> arms_lower, arms_upper, feet, hips, shoulders, torso, torso.001
+陆宣雨: 已删除皮肤段 8 个 -> arms_lower, arms_upper, feet, hips, legs_knee, legs_lower, legs_upper, shoulders
+王含: 已删除皮肤段 7 个 -> arms_lower, arms_upper, feet, hips, shoulders, torso, torso.001
+李老师: 已删除皮肤段 8 个 -> arms_lower, arms_upper, feet, hips, legs_knee, legs_lower, legs_upper, shoulders
+舍友A: 已删除皮肤段 4 个 -> hips, shoulders, torso, torso.001
+舍友B: 已删除皮肤段 6 个 -> arms_lower, arms_upper, hips, shoulders, torso, torso.001
+组长: 已删除皮肤段 8 个 -> arms_lower, arms_upper, feet, hips, legs_knee, legs_lower, legs_upper, shoulders
+张知远: 已删除皮肤段 5 个 -> feet, hips, shoulders, torso, torso.001

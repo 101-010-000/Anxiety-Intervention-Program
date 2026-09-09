@@ -1,0 +1,11 @@
+# Unity 工程缓存/临时
+**/Library/
+**/Temp/
+**/Logs/
+**/UserSettings/
+**/obj/
+**/Builds/
+# 杂项
+*.log
+Thumbs.db
+.DS_Store

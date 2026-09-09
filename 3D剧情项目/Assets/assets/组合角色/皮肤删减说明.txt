@@ -1,0 +1,68 @@
+
+### 徐夏
+  remove skin: F_body_arms_lower
+  remove skin: F_body_arms_upper
+  remove skin: F_body_hips
+  remove skin: F_body_legs_upper
+  remove skin: F_body_shoulders
+  remove skin: F_body_torso
+  remove skin: F_body_torso.001
+
+### 林溪
+  remove skin: F_body_arms_lower
+  remove skin: F_body_arms_upper
+  remove skin: F_body_feet
+  remove skin: F_body_hips
+  remove skin: F_body_shoulders
+  remove skin: F_body_torso
+  remove skin: F_body_torso.001
+
+### 陆宣雨
+  remove skin: F_body_arms_lower
+  remove skin: F_body_arms_upper
+  remove skin: F_body_hips
+  remove skin: F_body_legs_upper
+  remove skin: F_body_shoulders
+
+### 王含
+  remove skin: F_body_arms_upper
+  remove skin: F_body_feet
+  remove skin: F_body_hips
+  remove skin: F_body_shoulders
+  remove skin: F_body_torso
+  remove skin: F_body_torso.001
+
+### 李老师
+  remove skin: F_body_arms_lower
+  remove skin: F_body_arms_upper
+  remove skin: F_body_hips
+  remove skin: F_body_legs_upper
+  remove skin: F_body_shoulders
+
+### 舍友A
+  remove skin: F_body_hips
+  remove skin: F_body_shoulders
+  remove skin: F_body_torso
+  remove skin: F_body_torso.001
+
+### 舍友B
+  remove skin: F_body_arms_lower
+  remove skin: F_body_arms_upper
+  remove skin: F_body_hips
+  remove skin: F_body_shoulders
+  remove skin: F_body_torso
+  remove skin: F_body_torso.001
+
+### 组长
+  remove skin: M_body_arms_lower
+  remove skin: M_body_arms_upper
+  remove skin: M_body_hips
+  remove skin: M_body_legs_upper
+  remove skin: M_body_shoulders
+
+### 张知远
+  remove skin: M_body_feet
+  remove skin: M_body_hips
+  remove skin: M_body_shoulders
+  remove skin: M_body_torso
+  remove skin: M_body_torso.001
