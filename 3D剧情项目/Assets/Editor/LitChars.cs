@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 public static class LitChars
 {
-    static string root = "Assets/assets";
+    static string root = "Assets/assets/02_角色_Character";
     static StringBuilder sb = new StringBuilder();
 
     static Dictionary<string, string> LoadGuidMap()
@@ -105,7 +105,7 @@ public static class LitChars
             Object.DestroyImmediate(inst);
         }
         AssetDatabase.SaveAssets();
-        File.WriteAllText(root + "/_lit_report.txt", sb.ToString());
+        File.WriteAllText("Assets/assets/_报告/_lit_report.txt", sb.ToString());
         Debug.Log("LIT DONE");
     }
 

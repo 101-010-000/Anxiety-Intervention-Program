@@ -1,0 +1,3 @@
+音效/音乐的原始素材放这里（与 ui素材 同级）。
+导入 Unity 后请放到 Assets/assets/04_音效_Audio/ 下。
+建议子目录：环境_BGM / 日常_SFX / UI / 剧情_SFX。

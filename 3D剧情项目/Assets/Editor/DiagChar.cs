@@ -9,7 +9,7 @@ public static class DiagChar
     public static void Run()
     {
         var sb = new StringBuilder();
-        string dir = "Assets/assets/角色_URP";
+        string dir = "Assets/assets/02_角色_Character/角色_URP";
         foreach (var f in Directory.GetFiles(dir, "*.prefab").OrderBy(x => x))
         {
             var go = AssetDatabase.LoadAssetAtPath<GameObject>(f.Replace('\\', '/'));
@@ -26,7 +26,7 @@ public static class DiagChar
             }
             Object.DestroyImmediate(inst);
         }
-        File.WriteAllText("Assets/_diagchar.txt", sb.ToString());
+        File.WriteAllText("Assets/assets/_报告/_diagchar.txt", sb.ToString());
         Debug.Log("DIAG DONE");
     }
 }

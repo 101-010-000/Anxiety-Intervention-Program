@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 public static class RemapMatsBuildChars
 {
-    static string root = "Assets/assets";
+    static string root = "Assets/assets/02_角色_Character";
     static StringBuilder sb = new StringBuilder();
     static void Log(string m) { sb.AppendLine(m); }
 
@@ -39,7 +39,7 @@ public static class RemapMatsBuildChars
             string norm = Normalize(fn.Replace(".mat", ""));
             if (!lookup.ContainsKey(norm)) lookup[norm] = mp.Replace('\\', '/');
         }
-        string combo = root + "/组合角色";
+        string combo = "Assets/assets/02_角色_Character/组合角色";
         foreach (var d in Directory.GetDirectories(combo))
         {
             string name = Path.GetFileName(d);
@@ -73,7 +73,7 @@ public static class RemapMatsBuildChars
             Object.DestroyImmediate(inst);
         }
         AssetDatabase.SaveAssets();
-        File.WriteAllText(root + "/_材质接入报告.txt", sb.ToString());
+        File.WriteAllText("Assets/assets/_报告/_材质接入报告.txt", sb.ToString());
         Debug.Log("DONE");
     }
 

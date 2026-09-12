@@ -28,7 +28,7 @@ public static class ProbeNames
             sb.AppendLine(sh.name + " => " + string.Join(",", yes));
             Object.DestroyImmediate(m);
         }
-        File.WriteAllText("Assets/_probenames.txt", sb.ToString());
+        File.WriteAllText("Assets/assets/_报告/_probenames.txt", sb.ToString());
         Debug.Log("PROBENAMES DONE");
     }
 }

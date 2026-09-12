@@ -7,11 +7,11 @@ using System.Linq;
 
 public static class UrpSetup
 {
-    static void Log(string m) { File.AppendAllText("Assets/assets/_urp_setup.txt", m + "\n"); }
+    static void Log(string m) { File.AppendAllText("Assets/assets/_报告/_urp_setup.txt", m + "\n"); }
 
     public static void Run()
     {
-        File.WriteAllText("Assets/assets/_urp_setup.txt", "start\n");
+        File.WriteAllText("Assets/assets/_报告/_urp_setup.txt", "start\n");
         string dir = "Assets/URP";
         Directory.CreateDirectory(dir);
         Log("create renderer data");

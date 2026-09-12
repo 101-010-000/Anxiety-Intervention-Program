@@ -20,9 +20,8 @@ public static class RigTools
 
     public static void Run()
     {
-        string root = "Assets/assets";
         // ---- 1) characters -> Humanoid ----
-        string combo = root + "/组合角色";
+        string combo = "Assets/assets/02_角色_Character/组合角色";
         var chars = new List<string>();
         foreach (var d in Directory.GetDirectories(combo))
         {
@@ -46,7 +45,7 @@ public static class RigTools
         }
 
         // ---- 2) animations -> Humanoid ----
-        string animDir = root + "/动画";
+        string animDir = "Assets/assets/03_动作_Animation/动画";
         sb.AppendLine("\n== 动画 Humanoid 配置 ==");
         foreach (var f in Directory.GetFiles(animDir, "*.fbx").OrderBy(x => x))
         {
@@ -69,7 +68,7 @@ public static class RigTools
             string sample = mats.Count > 0 ? mats[0].name + "/" + mats[0].shader.name : "-";
             sb.AppendLine($"{Path.GetFileName(Path.GetDirectoryName(p))}: 内嵌材质数={mats.Count} 首材质={sample} 异常数={broken}");
         }
-        File.WriteAllText(root + "/_rig_report.txt", sb.ToString());
+        File.WriteAllText("Assets/assets/_报告/_rig_report.txt", sb.ToString());
         AssetDatabase.SaveAssets();
         Debug.Log("RIG DONE");
     }

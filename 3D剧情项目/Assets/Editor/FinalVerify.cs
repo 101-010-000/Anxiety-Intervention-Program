@@ -10,7 +10,7 @@ public static class FinalVerify
     public static void Run()
     {
         var sb = new StringBuilder();
-        string dir = "Assets/assets/角色_URP";
+        string dir = "Assets/assets/02_角色_Character/角色_URP";
         foreach (var f in Directory.GetFiles(dir, "*_可动.prefab").OrderBy(x => x))
         {
             var go = AssetDatabase.LoadAssetAtPath<GameObject>(f.Replace('\\', '/'));
@@ -59,7 +59,7 @@ public static class FinalVerify
         var tex = new Texture2D(512, 640, TextureFormat.RGB24, false);
         tex.ReadPixels(new Rect(0, 0, 512, 640), 0, 0);
         tex.Apply();
-        File.WriteAllBytes("Assets/assets/角色_URP/徐夏_贴图预览.png", tex.EncodeToPNG());
+        File.WriteAllBytes("Assets/assets/02_角色_Character/角色_URP/预览/徐夏_贴图预览.png", tex.EncodeToPNG());
         int mag = 0;
         for (int y = 0; y < 640; y += 2)
             for (int x = 0; x < 512; x += 2)
@@ -68,7 +68,7 @@ public static class FinalVerify
                 if (c.r > 0.8f && c.g < 0.3f && c.b > 0.8f) mag++;
             }
         sb.AppendLine("徐夏渲染: 洋红像素=" + mag + " center=" + tex.GetPixel(256, 200));
-        File.WriteAllText("Assets/_final.txt", sb.ToString());
+        File.WriteAllText("Assets/assets/_报告/_final.txt", sb.ToString());
         Debug.Log("FINAL DONE");
     }
 }

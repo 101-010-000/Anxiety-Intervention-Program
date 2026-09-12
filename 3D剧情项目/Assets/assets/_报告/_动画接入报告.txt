@@ -1,0 +1,2 @@
+控制器: Assets/assets/03_动作_Animation/Animators/PC_徐夏_测试.controller（Locomotion 混合树 + 拿手机待机 + 拿手机）
+已挂到: Assets/assets/02_角色_Character/角色_URP/徐夏_可动.prefab（avatar=徐夏Avatar）

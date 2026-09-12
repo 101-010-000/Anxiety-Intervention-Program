@@ -13,7 +13,7 @@ public static class PreviewChars
         RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
         RenderSettings.ambientLight = new Color(0.6f, 0.62f, 0.66f);
         QualitySettings.shadows = ShadowQuality.Disable;
-        string root = "Assets/assets/角色_URP";
+        string root = "Assets/assets/02_角色_Character/角色_URP";
         string outDir = root + "/预览";
         Directory.CreateDirectory(outDir);
         var sb = new StringBuilder();
@@ -61,7 +61,7 @@ public static class PreviewChars
             Object.DestroyImmediate(tex); RenderTexture.active = null; Object.DestroyImmediate(rt);
             Object.DestroyImmediate(camGO); Object.DestroyImmediate(lg); Object.DestroyImmediate(inst);
         }
-        File.WriteAllText(root + "/_预览审计.txt", sb.ToString());
+        File.WriteAllText("Assets/assets/_报告/_预览审计.txt", sb.ToString());
         Debug.Log("PREVIEW DONE");
     }
 }

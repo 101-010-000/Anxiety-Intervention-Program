@@ -1,0 +1,30 @@
+张知远_可动  [张知远_可动.prefab]
+    删: Base_M_body/M_body_hips
+徐夏_可动  [徐夏_可动.prefab]
+    删: Base_F_body/F_body_torso.001
+李老师_可动  [李老师_可动.prefab]
+    删: Base_F_body/F_body_arms_lower
+    删: Base_F_body/F_body_arms_upper
+    删: Base_F_body/F_body_feet
+    删: Base_F_body/F_body_hips
+    删: Base_F_body/F_body_legs_upper
+林溪_可动  [林溪_可动.prefab]
+    删: Base_F_body/F_body_hips
+    删: Base_F_body/F_body_torso.001
+王含_可动  [王含_可动.prefab]
+    删: Base_F_body/F_body_feet
+    删: Base_F_body/F_body_hips
+    删: Base_F_body/F_body_legs_lower
+    删: Base_F_body/F_body_legs_upper
+组长_可动  [组长_可动.prefab]
+    删: Base_M_body/M_body_hips
+    删: Base_M_body/M_body_shoulders
+舍友A_可动  [舍友A_可动.prefab]
+    删: Base_F_body/F_body_feet
+    删: Base_F_body/F_body_hips
+舍友B_可动  [舍友B_可动.prefab]
+    删: Base_F_body/F_body_hips
+    删: Base_F_body/F_body_torso.001
+陆宣雨_可动  [陆宣雨_可动.prefab]
+    删: Base_F_body/F_body_hips
+    删: Base_F_body/F_body_torso.001

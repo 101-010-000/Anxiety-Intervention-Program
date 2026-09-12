@@ -1,0 +1,272 @@
+场景素材材质匹配报告
+shader = Universal Render Pipeline/Lit (933532a4fcc9baf4fa0491de14d08ed7)
+FBX = 63, 材质资产 = 118
+
+说明:
+  - 每个 FBX 的 externalObjects 已重映射到 "<pak>/材质/" 下的 URP/Lit 材质资产
+  - FBX .meta materialName 已改为 1 (BasedOnMaterialName)，保证重映射名称稳定
+  - 楼梯间: 从 *_ORM_1K.png 烘焙 *_MetallicSmoothness_1K.png (R=金属度, A=平滑度) 与
+            *_AO_RGB_1K.png (G 通道=AO)，因为 URP/Lit 的对应贴图通道布局与 ORM 不同
+  - 楼梯间/走廊套件: 原 Roughness/AO/Alpha 贴图为全白，已改用 ORM 中的实际数据
+  - 走廊套件 12x12 调色板贴图: 修改导入设置为 Point + 无 mipmap + 无压缩
+  - 走廊套件 Office_Sh/Glass/Emit 在 FBX 中无贴图连接: Office_Sh 按相同 UV 的 墙.fbx 使用 Col_Office_02.png,
+            Glass 设为半透明, Emit 设为自发光；MiscTrim 的 EmissiveFactor=20 按 1.0 处理
+
+== 寝室套件1 : 90 个材质 ==
+  Material.001.mat               color=[0.214, 0.526, 0.8, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.002.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.3 metal=0.0 transparent=False
+  Material.002_v2.mat            color=[0.216, 0.527, 0.799, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.003.mat               color=[0.497, 0.799, 0.319, 1.0] smooth=0.3 metal=0.0 transparent=False
+  Material.003_v2.mat            color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.004.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.3 metal=0.0 transparent=False
+  Material.005.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.3 metal=0.0 transparent=False
+  Material.005_v2.mat            color=[0.538, 0.355, 0.181, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.006.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.006_v2.mat            color=[0.214, 0.526, 0.8, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.007.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.3 metal=0.0 transparent=False
+  Material.007_v2.mat            color=[0.216, 0.527, 0.799, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.008.mat               color=[1.0, 1.0, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.008_v2.mat            color=[0.214, 0.526, 0.8, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.009.mat               color=[0.497, 0.799, 0.319, 1.0] smooth=0.3 metal=0.0 transparent=False
+  Material.009_v2.mat            color=[0.538, 0.355, 0.181, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.010.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.010_v2.mat            color=[0.178, 0.319, 0.133, 1.0] smooth=0.3 metal=0.0 transparent=False
+  Material.011.mat               color=[1.0, 1.0, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.011_v2.mat            color=[0.8, 0.8, 0.8, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.012.mat               color=[0.108, 0.196, 0.376, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.013.mat               color=[0.351, 0.188, 0.098, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.014.mat               color=[0.178, 0.319, 0.133, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.018.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.019.mat               color=[0.216, 0.527, 0.799, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.020.mat               color=[1.0, 1.0, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.021.mat               color=[1.0, 1.0, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.022.mat               color=[0.205, 0.412, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.024.mat               color=[1.0, 1.0, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.025.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.029.mat               color=[1.0, 1.0, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.030.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.034.mat               color=[0.216, 0.527, 0.799, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.044.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.045.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.046.mat               color=[1.0, 1.0, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.047.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.048.mat               color=[1.0, 1.0, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.049.mat               color=[1.0, 1.0, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.050.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.051.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.052.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.053.mat               color=[1.0, 1.0, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.054.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.055.mat               color=[1.0, 1.0, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.056.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.057.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.058.mat               color=[1.0, 1.0, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.059.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.060.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.064.mat               color=[1.0, 1.0, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.065.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.066.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.067.mat               color=[1.0, 1.0, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.068.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.069.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.070.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.071.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.072.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.073.mat               color=[1.0, 1.0, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.074.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.075.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.076.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.077.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.078.mat               color=[1.0, 1.0, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.079.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.080.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.081.mat               color=[0.216, 0.527, 0.799, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.082.mat               color=[0.216, 0.527, 0.799, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.083.mat               color=[1.0, 1.0, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.084.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.085.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.086.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.087.mat               color=[0.8, 0.8, 0.8, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.088.mat               color=[0.216, 0.527, 0.799, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.089.mat               color=[0.216, 0.527, 0.799, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.090.mat               color=[1.0, 1.0, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.091.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.092.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.093.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.094.mat               color=[0.8, 0.8, 0.8, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.104.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.105.mat               color=[1.0, 1.0, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.106.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.107.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.108.mat               color=[1.0, 1.0, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.109.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.110.mat               color=[1.0, 1.0, 1.0, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.111.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+  Material.112.mat               color=[0.731, 0.479, 0.242, 1.0] smooth=0.25 metal=0.0 transparent=False
+
+== 寝室套件2 : 14 个材质 ==
+  OfficeMaterial.mat             color=[1, 1, 1, 1] smooth=0.3 metal=0.0 transparent=False
+      贴图: _BaseMap=OfficeTexture.png; _MainTex=OfficeTexture.png
+      备注: atlas=OfficeTexture.png
+  PrisonCellMaterial.mat         color=[1, 1, 1, 1] smooth=0.3 metal=0.0 transparent=False
+      贴图: _BaseMap=PrisonCellTexture.png; _MainTex=PrisonCellTexture.png
+      备注: atlas=PrisonCellTexture.png
+  atticTexture.mat               color=[1, 1, 1, 1] smooth=0.3 metal=0.0 transparent=False
+      贴图: _BaseMap=atticTexture.png; _MainTex=atticTexture.png
+      备注: atlas=atticTexture.png
+  bathroomMaterial.mat           color=[1, 1, 1, 1] smooth=0.3 metal=0.0 transparent=False
+      贴图: _BaseMap=bathroomTexture.png; _MainTex=bathroomTexture.png
+      备注: atlas=bathroomTexture.png
+  bedroomMaterial.mat            color=[1, 1, 1, 1] smooth=0.3 metal=0.0 transparent=False
+      贴图: _BaseMap=bedroomTexture.png; _MainTex=bedroomTexture.png
+      备注: atlas=bedroomTexture.png
+  briefingRoomMaterial.mat       color=[1, 1, 1, 1] smooth=0.3 metal=0.0 transparent=False
+      贴图: _BaseMap=briefingRoomTexture.png; _MainTex=briefingRoomTexture.png
+      备注: atlas=briefingRoomTexture.png
+  cellarMaterial.mat             color=[1, 1, 1, 1] smooth=0.3 metal=0.0 transparent=False
+      贴图: _BaseMap=cellarTexture.png; _MainTex=cellarTexture.png
+      备注: atlas=cellarTexture.png
+  garageMaterial.mat             color=[1, 1, 1, 1] smooth=0.3 metal=0.0 transparent=False
+      贴图: _BaseMap=garageTexture.png; _MainTex=garageTexture.png
+      备注: atlas=garageTexture.png
+  kitchenMaterial.mat            color=[1, 1, 1, 1] smooth=0.3 metal=0.0 transparent=False
+      贴图: _BaseMap=kitchenTexture.png; _MainTex=kitchenTexture.png
+      备注: atlas=kitchenTexture.png
+  kitchenMaterial_v2.mat         color=[1, 1, 1, 1] smooth=0.3 metal=0.0 transparent=False
+      贴图: _BaseMap=kitchenTexture.png; _MainTex=kitchenTexture.png
+      备注: atlas=kitchenTexture.png
+  libraryMaterial.mat            color=[1, 1, 1, 1] smooth=0.3 metal=0.0 transparent=False
+      贴图: _BaseMap=libraryTexture.png; _MainTex=libraryTexture.png
+      备注: atlas=libraryTexture.png
+  livingroomMaterial.mat         color=[1, 1, 1, 1] smooth=0.3 metal=0.0 transparent=False
+      贴图: _BaseMap=livingroomTexture.png; _MainTex=livingroomTexture.png
+      备注: atlas=livingroomTexture.png
+  roomMaterial.mat               color=[1, 1, 1, 1] smooth=0.3 metal=0.0 transparent=False
+      贴图: _BaseMap=roomTexture.png; _MainTex=roomTexture.png
+      备注: atlas=roomTexture.png
+  schoolMaterial.mat             color=[1, 1, 1, 1] smooth=0.3 metal=0.0 transparent=False
+      贴图: _BaseMap=schoolTexture.png; _MainTex=schoolTexture.png
+      备注: atlas=schoolTexture.png
+
+== 楼梯间 : 8 个材质 ==
+  Door.mat                       color=[1, 1, 1, 1.0] smooth=1.0 metal=1.0 transparent=False
+      贴图: _BaseMap=Door_DA_2K_C.png; _BumpMap=Door_Normal_2K.png; _MainTex=Door_DA_2K_C.png; _MetallicGlossMap=Door_MetallicSmoothness_1K.png; _OcclusionMap=Door_AO_RGB_1K.png
+      备注: baked from Door_ORM_1K.png
+  Glass.mat                      color=[1, 1, 1, 0.85] smooth=0.9 metal=0.0 transparent=True
+      贴图: _BaseMap=Door_DA_2K_C.png; _BumpMap=Door_Normal_2K.png; _MainTex=Door_DA_2K_C.png
+  MiscTrim.mat                   color=[1, 1, 1, 1.0] smooth=1.0 metal=1.0 transparent=False
+      贴图: _BaseMap=MiscTrim_Diffuse_2K.png; _BumpMap=MiscTrim_Normal_2K.png; _EmissionMap=MiscTrim_Emission_1K_RGB.png; _MainTex=MiscTrim_Diffuse_2K.png; _MetallicGlossMap=MiscTrim_MetallicSmoothness_1K.png; _OcclusionMap=MiscTrim_AO_RGB_1K.png
+      备注: baked from MiscTrim_ORM_1K.png; emission 转 RGB
+  Surface_Ceiling_A.mat          color=[1, 1, 1, 1.0] smooth=1.0 metal=1.0 transparent=False
+      贴图: _BaseMap=Surface_Ceiling_A_Diffuse_2K_A.png; _BumpMap=Surface_Ceiling_A_Normal_2K.png; _MainTex=Surface_Ceiling_A_Diffuse_2K_A.png; _MetallicGlossMap=Surface_Ceiling_A_MetallicSmoothness_1K.png; _OcclusionMap=Surface_Ceiling_A_AO_RGB_1K.png
+      备注: baked from Surface_Ceiling_A_ORM_1K.png
+  Surface_Ceiling_B.mat          color=[1, 1, 1, 1.0] smooth=1.0 metal=1.0 transparent=False
+      贴图: _BaseMap=Surface_Ceiling_B_Diffuse_2K_B.png; _BumpMap=Surface_Ceiling_B_Normal_2K.png; _MainTex=Surface_Ceiling_B_Diffuse_2K_B.png; _MetallicGlossMap=Surface_Ceiling_B_MetallicSmoothness_1K.png; _OcclusionMap=Surface_Ceiling_B_AO_RGB_1K.png
+      备注: baked from Surface_Ceiling_B_ORM_1K.png
+  Surface_Floor_A.mat            color=[1, 1, 1, 1.0] smooth=1.0 metal=1.0 transparent=False
+      贴图: _BaseMap=Surface_Floor_A_Diffuse_2K.png; _BumpMap=Surface_Floor_A_Normal_2K.png; _MainTex=Surface_Floor_A_Diffuse_2K.png; _MetallicGlossMap=Surface_Floor_A_MetallicSmoothness_1K.png; _OcclusionMap=Surface_Floor_A_AO_RGB_1K.png
+      备注: baked from Surface_Floor_A_ORM_1K.png
+  Surface_Floor_B.mat            color=[1, 1, 1, 1.0] smooth=1.0 metal=1.0 transparent=False
+      贴图: _BaseMap=Surface_Floor_B_Diffuse_2K.png; _BumpMap=Surface_Floor_B_Normal_2K.png; _MainTex=Surface_Floor_B_Diffuse_2K.png; _MetallicGlossMap=Surface_Floor_B_MetallicSmoothness_1K.png; _OcclusionMap=Surface_Floor_B_AO_RGB_1K.png
+      备注: baked from Surface_Floor_B_ORM_1K.png
+  Surface_Wall_A.mat             color=[1, 1, 1, 1.0] smooth=1.0 metal=1.0 transparent=False
+      贴图: _BaseMap=Surface_Wall_A_Diffuse_2K_A.png; _BumpMap=Surface_Wall_A_Normal_2K.png; _MainTex=Surface_Wall_A_Diffuse_2K_A.png; _MetallicGlossMap=Surface_Wall_A_MetallicSmoothness_1K.png; _OcclusionMap=Surface_Wall_A_AO_RGB_1K.png
+      备注: baked from Surface_Wall_A_ORM_1K.png
+
+== 走廊套件 : 6 个材质 ==
+  Emit.mat                       color=[0.15, 0.15, 0.15, 1.0] smooth=0.36 metal=0.0 transparent=False
+      备注: 自发光材质 -> Emission 白
+  Glass.mat                      color=[0.8, 0.8, 0.8, 0.35] smooth=0.9 metal=0.0 transparent=True
+      备注: 走廊玻璃 -> 半透明
+  Material_36.mat                color=[1, 1, 1, 1.0] smooth=0.7 metal=0.0 transparent=False
+      贴图: _BaseMap=Col_Office_02.png; _MainTex=Col_Office_02.png
+  Material_37.mat                color=[1, 1, 1, 1.0] smooth=0.7 metal=0.0 transparent=False
+      贴图: _BaseMap=Col_Office.png; _MainTex=Col_Office.png
+  Material_38.mat                color=[1, 1, 1, 1.0] smooth=0.7 metal=0.0 transparent=False
+      贴图: _BaseMap=Col_Office_02.png; _MainTex=Col_Office_02.png
+  Office_Sh.mat                  color=[1, 1, 1, 1.0] smooth=0.36 metal=0.0 transparent=False
+      贴图: _BaseMap=Col_Office_02.png; _MainTex=Col_Office_02.png
+      备注: Office_Sh -> Col_Office_02.png (UV 与 墙.fbx 一致)
+
+== 关键纹理导入设置 (80) ==
+   sRGB / textureType / enableMipMap / filterMode (0=Point)
+  Assets/assets/01_场景_Scene/楼梯间/texture/Door/Door_AO_RGB_1K.png          0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Door/Door_Alpha_1K.png           0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Door/Door_Alpha_2K.png           0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Door/Door_Ambient Occlusion_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Door/Door_Ambient Occlusion_2K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Door/Door_Mask_1K.png            0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Door/Door_Mask_2K.png            0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Door/Door_MetallicSmoothness_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Door/Door_Metalness_1K.png       0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Door/Door_Metalness_2K.png       0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Door/Door_Normal_1K.png          0 / 1 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Door/Door_Normal_2K.png          0 / 1 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Door/Door_ORM_1K.png             0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Door/Door_ORM_2K.png             0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Door/Door_Roughness_1K.png       0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Door/Door_Roughness_2K.png       0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/MiscTrim/MiscTrim_AO_RGB_1K.png  0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/MiscTrim/MiscTrim_Ambient Occlusion_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/MiscTrim/MiscTrim_Ambient Occlusion_2K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/MiscTrim/MiscTrim_MetallicSmoothness_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/MiscTrim/MiscTrim_Metalness_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/MiscTrim/MiscTrim_Metalness_2K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/MiscTrim/MiscTrim_Normal_1K.png  0 / 1 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/MiscTrim/MiscTrim_Normal_2K.png  0 / 1 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/MiscTrim/MiscTrim_ORM_1K.png     0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/MiscTrim/MiscTrim_ORM_2K.png     0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/MiscTrim/MiscTrim_Roughness_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/MiscTrim/MiscTrim_Roughness_2K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Ceiling_A/Surface_Ceiling_A_AO_RGB_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Ceiling_A/Surface_Ceiling_A_Ambient Occlusion_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Ceiling_A/Surface_Ceiling_A_Ambient Occlusion_2K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Ceiling_A/Surface_Ceiling_A_MetallicSmoothness_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Ceiling_A/Surface_Ceiling_A_Normal_1K.png 0 / 1 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Ceiling_A/Surface_Ceiling_A_Normal_2K.png 0 / 1 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Ceiling_A/Surface_Ceiling_A_ORM_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Ceiling_A/Surface_Ceiling_A_ORM_2K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Ceiling_A/Surface_Ceiling_A_Roughness_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Ceiling_A/Surface_Ceiling_A_Roughness_2K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Ceiling_B/Surface_Ceiling_B_AO_RGB_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Ceiling_B/Surface_Ceiling_B_Ambient Occlusion_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Ceiling_B/Surface_Ceiling_B_Ambient Occlusion_2K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Ceiling_B/Surface_Ceiling_B_MetallicSmoothness_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Ceiling_B/Surface_Ceiling_B_Normal_1K.png 0 / 1 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Ceiling_B/Surface_Ceiling_B_Normal_2K.png 0 / 1 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Ceiling_B/Surface_Ceiling_B_ORM_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Ceiling_B/Surface_Ceiling_B_ORM_2K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Ceiling_B/Surface_Ceiling_B_Roughness_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Ceiling_B/Surface_Ceiling_B_Roughness_2K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Floor_A/Surface_Floor_A_AO_RGB_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Floor_A/Surface_Floor_A_Ambient Occlusion_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Floor_A/Surface_Floor_A_Ambient Occlusion_2K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Floor_A/Surface_Floor_A_MetallicSmoothness_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Floor_A/Surface_Floor_A_Normal_1K.png 0 / 1 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Floor_A/Surface_Floor_A_Normal_2K.png 0 / 1 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Floor_A/Surface_Floor_A_ORM_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Floor_A/Surface_Floor_A_ORM_2K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Floor_A/Surface_Floor_A_Roughness_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Floor_A/Surface_Floor_A_Roughness_2K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Floor_B/Surface_Floor_B_AO_RGB_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Floor_B/Surface_Floor_B_Ambient Occlusion_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Floor_B/Surface_Floor_B_Ambient Occlusion_2K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Floor_B/Surface_Floor_B_MetallicSmoothness_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Floor_B/Surface_Floor_B_Normal_1K.png 0 / 1 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Floor_B/Surface_Floor_B_Normal_2K.png 0 / 1 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Floor_B/Surface_Floor_B_ORM_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Floor_B/Surface_Floor_B_ORM_2K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Floor_B/Surface_Floor_B_Roughness_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Floor_B/Surface_Floor_B_Roughness_2K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Wall_A/Surface_Wall_A_AO_RGB_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Wall_A/Surface_Wall_A_Ambient Occlusion_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Wall_A/Surface_Wall_A_Ambient Occlusion_2K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Wall_A/Surface_Wall_A_MetallicSmoothness_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Wall_A/Surface_Wall_A_Normal_1K.png 0 / 1 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Wall_A/Surface_Wall_A_Normal_2K.png 0 / 1 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Wall_A/Surface_Wall_A_ORM_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Wall_A/Surface_Wall_A_ORM_2K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Wall_A/Surface_Wall_A_Roughness_1K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/楼梯间/texture/Surface_Wall_A/Surface_Wall_A_Roughness_2K.png 0 / 0 / 1 / 1
+  Assets/assets/01_场景_Scene/走廊套件/走廊套件贴图/Col_Office.png                   1 / 0 / 0 / 0
+  Assets/assets/01_场景_Scene/走廊套件/走廊套件贴图/Col_Office_02.png                1 / 0 / 0 / 0

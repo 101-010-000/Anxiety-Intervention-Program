@@ -1,0 +1,203 @@
+### 直接加载测试（角色专属材质）
+    合计: 可加载=82  加载失败=0
+
+===== 张知远_可动
+    C_hair_short.004 | C_hair_short.004 | hair_mat_hair_short.004 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    M_body_arms_lower | M_body_arms_lower | skin_mat_base_M_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    M_body_arms_upper | M_body_arms_upper | skin_mat_base_M_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    M_body_feet | M_body_feet | skin_mat_base_M_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    M_body_hands | M_body_hands | skin_mat_base_M_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    M_body_legs_knee | M_body_legs_knee | skin_mat_base_M_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    M_body_legs_lower | M_body_legs_lower | skin_mat_base_M_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    M_body_legs_upper | M_body_legs_upper | skin_mat_base_M_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    M_body_shoulders | M_body_shoulders | skin_mat_base_M_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    M_body_torso | M_body_torso | skin_mat_base_M_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    M_body_torso.001 | M_body_torso.001 | skin_mat_base_M_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_M_head.002_mesh | M_head.002_mesh | skin_mat_base_M_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_M_head.002_mesh | M_head.002_mesh | skin_mat_base_M_face | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_M_head.002_mesh | M_head.002_mesh | brow_mat_eyelashes | shader=Universal Render Pipeline/Unlit | supported=True
+    Head_M_head.002_mesh | M_head.002_mesh | mat_base_eye.001 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_M_head.002_mesh | M_head.002_mesh | mat_eye_highlight | shader=Universal Render Pipeline/Lit | supported=True
+    Head_M_head.002_mesh | M_head.002_mesh | mat_base_mouth | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_M_head.002_mesh | M_head.002_mesh | brow_mat_eyebrows | shader=Universal Render Pipeline/Lit | supported=True
+    Top_M_top_002_jacket | M_top_002_jacket | top_mat_top.002_jacket | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Bot_M_bot_004_skinny | M_bot_004_skinny | bot_mat_bot.004_skinnyjeans | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Shoes_shoes_002_sneaker | shoes_002_sneaker | shoes_mat_shoes.002_sneakers | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+===== 徐夏_可动
+    medium.001_low | medium.001_low | hair_mat_hair_medium.001 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    bangs.001_low | bangs.001_low | hair_mat_hair_bangs.001 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_arms_lower | F_body_arms_lower | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_arms_upper | F_body_arms_upper | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_feet | F_body_feet | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_hands | F_body_hands | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_hips | F_body_hips | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_legs_knee | F_body_legs_knee | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_legs_lower | F_body_legs_lower | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_legs_upper | F_body_legs_upper | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_shoulders | F_body_shoulders | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_torso | F_body_torso | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.001_mesh | F_head.001_mesh | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.001_mesh | F_head.001_mesh | skin_mat_base_F_face | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.001_mesh | F_head.001_mesh | brow_mat_eyelashes | shader=Universal Render Pipeline/Unlit | supported=True
+    Head_F_head.001_mesh | F_head.001_mesh | mat_base_eye.001 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.001_mesh | F_head.001_mesh | mat_eye_highlight | shader=Universal Render Pipeline/Lit | supported=True
+    Head_F_head.001_mesh | F_head.001_mesh | mat_base_mouth | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.001_mesh | F_head.001_mesh | brow_mat_eyebrows | shader=Universal Render Pipeline/Lit | supported=True
+    Top_F_top.003_sweatshirt | F_top.003_sweatshirt | top_mat_top.003_sweater | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Bot_F_bot_003_skirt | F_bot_003_skirt | bot_mat_bot.003_skirt | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Shoes_shoes.006_lowsneakers | shoes.006_lowsneakers | shoes_mat_shoes.006_lowsneakers | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+===== 李老师_可动
+    tied.01.down | tied.01.down | hair_mat_hair_tied.001 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    bangs.002 | bangs.002 | hair_mat_hair_bangs.002 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    tied.01.downbun | tied.01.downbun | hair_mat_hair_tied - bun | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Glasses | F_glasses.002_round | mat_glasses.001_round | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Glasses | F_glasses.002_round | mat_glasses.001_round | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_hands | F_body_hands | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_legs_knee | F_body_legs_knee | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_legs_lower | F_body_legs_lower | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_shoulders | F_body_shoulders | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_torso | F_body_torso | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_torso.001 | F_body_torso.001 | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.004_mesh | F_head.004_mesh | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.004_mesh | F_head.004_mesh | skin_mat_base_F_face | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.004_mesh | F_head.004_mesh | brow_mat_eyelashes | shader=Universal Render Pipeline/Unlit | supported=True
+    Head_F_head.004_mesh | F_head.004_mesh | mat_base_eye.001 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.004_mesh | F_head.004_mesh | mat_eye_highlight | shader=Universal Render Pipeline/Lit | supported=True
+    Head_F_head.004_mesh | F_head.004_mesh | mat_base_mouth | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.004_mesh | F_head.004_mesh | brow_mat_eyebrows | shader=Universal Render Pipeline/Lit | supported=True
+    Top_F_top.011_blazer | F_top.011_blazer | top_mat_top.011_blazer | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Bot_F_bot_001_pants | F_bot_001_pants | bot_mat_bot.001_pants | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Shoes_shoes.005_highboots | shoes.005_highboots | shoes_mat_shoes.005_highboots | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+===== 林溪_可动
+    tied.02.updouble | tied.02.updouble | hair_mat_hair_tied.002 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    bangs.002 | bangs.002 | hair_mat_hair_bangs.002 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    tied.02..updouble.pigtails | tied.02..updouble.pigtails | hair_mat_hair_tied.002 - twintails | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_arms_lower | F_body_arms_lower | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_arms_upper | F_body_arms_upper | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_feet | F_body_feet | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_hands | F_body_hands | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_legs_knee | F_body_legs_knee | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_legs_lower | F_body_legs_lower | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_legs_upper | F_body_legs_upper | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_shoulders | F_body_shoulders | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_torso | F_body_torso | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.002_mesh | F_head.002_mesh | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.002_mesh | F_head.002_mesh | skin_mat_base_F_face | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.002_mesh | F_head.002_mesh | brow_mat_eyelashes | shader=Universal Render Pipeline/Unlit | supported=True
+    Head_F_head.002_mesh | F_head.002_mesh | mat_base_eye.001 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.002_mesh | F_head.002_mesh | mat_eye_highlight | shader=Universal Render Pipeline/Lit | supported=True
+    Head_F_head.002_mesh | F_head.002_mesh | mat_base_mouth | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.002_mesh | F_head.002_mesh | brow_mat_eyebrows | shader=Universal Render Pipeline/Lit | supported=True
+    Top_F_top_002_jacket | F_top_002_jacket | top_mat_top.002_jacket | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Bot_F_bot_002_shorts | F_bot_002_shorts | bot_mat_bot.002_shorts | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Shoes_shoes_002_sneaker | shoes_002_sneaker | shoes_mat_shoes.002_sneakers | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+===== 王含_可动
+    long.001_low | long.001_low | hair_mat_hair_long.001 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    bangs.003 | bangs.003 | hair_mat_hair_bangs.003 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_arms_lower | F_body_arms_lower | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_arms_upper | F_body_arms_upper | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_hands | F_body_hands | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_legs_knee | F_body_legs_knee | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_shoulders | F_body_shoulders | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_torso | F_body_torso | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_torso.001 | F_body_torso.001 | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.001_mesh | F_head.001_mesh | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.001_mesh | F_head.001_mesh | skin_mat_base_F_face | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.001_mesh | F_head.001_mesh | brow_mat_eyelashes | shader=Universal Render Pipeline/Unlit | supported=True
+    Head_F_head.001_mesh | F_head.001_mesh | mat_base_eye.001 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.001_mesh | F_head.001_mesh | mat_eye_highlight | shader=Universal Render Pipeline/Lit | supported=True
+    Head_F_head.001_mesh | F_head.001_mesh | mat_base_mouth | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.001_mesh | F_head.001_mesh | brow_mat_eyebrows | shader=Universal Render Pipeline/Lit | supported=True
+    Top_F_top_004_shirt | F_top_004_shirt | top_mat_top.004_shirt | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Bot_F_bot_004_skinny | F_bot_004_skinny | bot_mat_bot.004_skinnyjeans | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Shoes_shoes_001_boots+socks | shoes_001_boots+socks | shoes_mat_shoes.001_boots | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Scarf_F_acc.001_scarf | F_acc.001_scarf | acc_mat_acc.001_scarf | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+===== 组长_可动
+    short.001_low | short.001_low | hair_mat_hair_short.001 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    M_body_arms_lower | M_body_arms_lower | skin_mat_base_M_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    M_body_arms_upper | M_body_arms_upper | skin_mat_base_M_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    M_body_feet | M_body_feet | skin_mat_base_M_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    M_body_hands | M_body_hands | skin_mat_base_M_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    M_body_legs_knee | M_body_legs_knee | skin_mat_base_M_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    M_body_legs_lower | M_body_legs_lower | skin_mat_base_M_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    M_body_legs_upper | M_body_legs_upper | skin_mat_base_M_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    M_body_torso | M_body_torso | skin_mat_base_M_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    M_body_torso.001 | M_body_torso.001 | skin_mat_base_M_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_M_head.001_mesh | M_head.001_mesh | skin_mat_base_M_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_M_head.001_mesh | M_head.001_mesh | skin_mat_base_M_face | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_M_head.001_mesh | M_head.001_mesh | brow_mat_eyelashes | shader=Universal Render Pipeline/Unlit | supported=True
+    Head_M_head.001_mesh | M_head.001_mesh | mat_base_eye.001 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_M_head.001_mesh | M_head.001_mesh | mat_eye_highlight | shader=Universal Render Pipeline/Lit | supported=True
+    Head_M_head.001_mesh | M_head.001_mesh | mat_base_mouth | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_M_head.001_mesh | M_head.001_mesh | brow_mat_eyebrows | shader=Universal Render Pipeline/Lit | supported=True
+    Top_M_top.010_shirttie | M_top.010_shirttie | top_mat_top.010_shirtntie | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Bot_M_bot_001_pants | M_bot_001_pants | bot_mat_bot.001_pants | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Shoes_shoes.006_lowsneakers | shoes.006_lowsneakers | shoes_mat_shoes.006_lowsneakers | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+===== 舍友A_可动
+    tied.01.down | tied.01.down | hair_mat_hair_tied.001 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    bangs.001_low | bangs.001_low | hair_mat_hair_bangs.001 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    tied.01.downloose | tied.01.downloose | hair_mat_hair_tied.001 - ponytail | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_arms_lower | F_body_arms_lower | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_arms_upper | F_body_arms_upper | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_hands | F_body_hands | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_legs_knee | F_body_legs_knee | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_legs_lower | F_body_legs_lower | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_legs_upper | F_body_legs_upper | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_shoulders | F_body_shoulders | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_torso | F_body_torso | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_torso.001 | F_body_torso.001 | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.002_mesh | F_head.002_mesh | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.002_mesh | F_head.002_mesh | skin_mat_base_F_face | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.002_mesh | F_head.002_mesh | brow_mat_eyelashes | shader=Universal Render Pipeline/Unlit | supported=True
+    Head_F_head.002_mesh | F_head.002_mesh | mat_base_eye.001 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.002_mesh | F_head.002_mesh | mat_eye_highlight | shader=Universal Render Pipeline/Lit | supported=True
+    Head_F_head.002_mesh | F_head.002_mesh | mat_base_mouth | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.002_mesh | F_head.002_mesh | brow_mat_eyebrows | shader=Universal Render Pipeline/Lit | supported=True
+    Top_F_top_005_shirt+vest | F_top_005_shirt+vest | top_mat_top.005_shirt_vest | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Bot_F_bot_005_shorts | F_bot_005_shorts | bot_mat_bot.005_shorts | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Shoes_shoes.005_highboots | shoes.005_highboots | shoes_mat_shoes.005_highboots | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+===== 舍友B_可动
+    hair_curly.002 mesh | hair_curly.002 mesh | hair_mat_hair_curly.002 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    bangs.003 | bangs.003 | hair_mat_hair_bangs.003 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_arms_lower | F_body_arms_lower | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_arms_upper | F_body_arms_upper | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_feet | F_body_feet | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_hands | F_body_hands | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_legs_knee | F_body_legs_knee | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_legs_lower | F_body_legs_lower | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_legs_upper | F_body_legs_upper | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_shoulders | F_body_shoulders | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_torso | F_body_torso | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.003_mesh | F_head.003_mesh | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.003_mesh | F_head.003_mesh | skin_mat_base_F_face | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.003_mesh | F_head.003_mesh | brow_mat_eyelashes | shader=Universal Render Pipeline/Unlit | supported=True
+    Head_F_head.003_mesh | F_head.003_mesh | mat_base_eye.001 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.003_mesh | F_head.003_mesh | mat_eye_highlight | shader=Universal Render Pipeline/Lit | supported=True
+    Head_F_head.003_mesh | F_head.003_mesh | mat_base_mouth | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.003_mesh | F_head.003_mesh | brow_mat_eyebrows | shader=Universal Render Pipeline/Lit | supported=True
+    Top_F_top_006_openshirt+T | F_top_006_openshirt+T | top_mat_top.006_openshirt | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Bot_F_bot_006_loosepants+belt | F_bot_006_loosepants+belt | bot_mat_bot.006_loosepants | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Shoes_shoes.004_sandals | shoes.004_sandals | shoes_mat_shoes.004_sandals | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+===== 陆宣雨_可动
+    medium.02_low | medium.02_low | hair_mat_hair_medium.002 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    bangs.002 | bangs.002 | hair_mat_hair_bangs.002 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Glasses | F_glasses.001_square | mat_glasses.001_square | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Glasses | F_glasses.001_square | mat_glasses.001_square | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_arms_lower | F_body_arms_lower | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_arms_upper | F_body_arms_upper | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_feet | F_body_feet | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_hands | F_body_hands | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_legs_knee | F_body_legs_knee | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_legs_lower | F_body_legs_lower | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_legs_upper | F_body_legs_upper | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_shoulders | F_body_shoulders | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    F_body_torso | F_body_torso | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.003_mesh | F_head.003_mesh | skin_mat_base_F_body | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.003_mesh | F_head.003_mesh | skin_mat_base_F_face | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.003_mesh | F_head.003_mesh | brow_mat_eyelashes | shader=Universal Render Pipeline/Unlit | supported=True
+    Head_F_head.003_mesh | F_head.003_mesh | mat_base_eye.001 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.003_mesh | F_head.003_mesh | mat_eye_highlight | shader=Universal Render Pipeline/Lit | supported=True
+    Head_F_head.003_mesh | F_head.003_mesh | mat_base_mouth | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Head_F_head.003_mesh | F_head.003_mesh | brow_mat_eyebrows | shader=Universal Render Pipeline/Lit | supported=True
+    Outfit_F_outfit.003 | F_outfit.003 | top_mat_outfit.003 | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True
+    Shoes_shoes.007_chelsea | shoes.007_chelsea | shoes_mat_shoes.007_chelseas | shader=Shader Graphs/Rukha93/ShaderGraph_CharacterLit | supported=True

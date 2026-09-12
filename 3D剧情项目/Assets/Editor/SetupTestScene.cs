@@ -7,7 +7,6 @@ using System.Linq;
 
 public static class SetupTestScene
 {
-    static string root = "Assets/assets";
     static void Mark(string m) { System.IO.File.AppendAllText("Assets/_step.txt", m + "\n"); }
 
     public static void Run()
@@ -15,7 +14,7 @@ public static class SetupTestScene
         System.IO.File.WriteAllText("Assets/_step.txt", "start\n");
         string sceneDir = "Assets/Scenes";
         string prefabDir = "Assets/Prefabs";
-        string animDir = "Assets/Animations";
+        string animDir = "Assets/assets/03_动作_Animation/Animators";
         Directory.CreateDirectory(sceneDir);
         Directory.CreateDirectory(prefabDir);
         Directory.CreateDirectory(animDir);
@@ -38,7 +37,7 @@ public static class SetupTestScene
         Mark("controller+states");
 
         // ---------- animated character prefab ----------
-        string charPath = root + "/组合角色/徐夏/徐夏.fbx";
+        string charPath = "Assets/assets/02_角色_Character/组合角色/徐夏/徐夏.fbx";
         var charModel = AssetDatabase.LoadAssetAtPath<GameObject>(charPath);
         var holder = (GameObject)PrefabUtility.InstantiatePrefab(charModel);
         holder.name = "徐夏_可动";
@@ -90,7 +89,7 @@ public static class SetupTestScene
 
     static void AddState(AnimatorStateMachine sm, string stateName, string animFbx, bool isDefault)
     {
-        string p = root + "/动画/" + animFbx;
+        string p = "Assets/assets/03_动作_Animation/动画/" + animFbx;
         var clip = AssetDatabase.LoadAllAssetsAtPath(p).OfType<AnimationClip>()
                      .FirstOrDefault(c => !c.name.StartsWith("__preview__"));
         if (clip == null) { Mark("no clip " + animFbx); return; }

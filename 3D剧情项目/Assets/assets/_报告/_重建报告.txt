@@ -1,0 +1,10 @@
+  徐夏: F_top.003_sweater / F_bot.003_shortskirt / F_shoes.006_lowsneakers / 发:C_hair_medium.001  删:torso.001  皮肤:F0C9AE|FADEC9
+  林溪: F_top.002_jacket / F_bot.002_shorts / F_shoes.002_sneakers / 发:C_hair_tied.002+C_hair_tied.002_twintails  删:hips,torso.001  皮肤:F2CBAF|FBE1CD
+  陆宣雨: F_outfit.003 /  / F_shoes.007_chelsea / 发:C_hair_medium.002  删:hips,torso.001  皮肤:E7BFA3|F4D5C0
+  王含: F_top.004_shirt / F_bot.004_skinnyjeans / F_shoes.001_boots / 发:C_hair_long.001  删:hips,legs_upper,legs_lower,feet  皮肤:EFC7AC|F9DECC
+  李老师: F_top.011_blazer / F_bot.001_pants / F_shoes.005_highboots / 发:C_hair_tied.001+C_hair_tied.001_bun  删:hips,legs_upper,arms_upper,arms_lower,feet  皮肤:E4BCA2|F2D2BC
+  组长: M_top.010_shirtandtie / M_bot.001_pants / F_shoes.006_lowsneakers / 发:C_hair_short.001  删:hips,shoulders  皮肤:CD9E7E|E4BC9A
+  张知远: M_top.002_jacket / M_bot.004_skinnyjeans / F_shoes.002_sneakers / 发:C_hair_short.004  删:hips  皮肤:D8A886|ECC6A6
+  舍友A: F_top.005_shirtvest / F_bot.005_bigshorts / F_shoes.005_highboots / 发:C_hair_tied.001+C_hair_tied.001_ponytail  删:hips,feet  皮肤:EAC0A4|F7DAC6
+  舍友B: F_top.006_openshirt+T / F_bot.006_loosepants / F_shoes.004_sandals / 发:C_hair_curly.002  删:hips,torso.001  皮肤:C48E6E|DCAC8C
+测试场景里的徐夏已换成新模型

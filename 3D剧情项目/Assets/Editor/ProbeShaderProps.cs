@@ -20,12 +20,12 @@ public static class ProbeShaderProps
             for (int i = 0; i < n; i++) names.Add(ShaderUtil.GetPropertyName(sh, i));
             sb.AppendLine("==" + sh.name + "== (" + n + ") " + string.Join(", ", names.Take(70)));
         }
-        string mp = "Assets/assets/Materials/1_身体_Body/mat_base_F_body.mat";
+        string mp = "Assets/assets/02_角色_Character/Materials/1_身体_Body/mat_base_F_body.mat";
         string txt = File.ReadAllText(mp);
         sb.AppendLine("\n== mat_base_F_body stored props ==");
         foreach (Match m in Regex.Matches(txt, @"- (_[A-Za-z0-9_]+):"))
             sb.AppendLine("  " + m.Groups[1].Value);
-        File.WriteAllText("Assets/_props.txt", sb.ToString());
+        File.WriteAllText("Assets/assets/_报告/_props.txt", sb.ToString());
         Debug.Log("PROPS DONE");
     }
 }
