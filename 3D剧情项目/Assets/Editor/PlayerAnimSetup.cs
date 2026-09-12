@@ -126,7 +126,7 @@ public static class PlayerAnimAutoRun
         EditorApplication.delayCall += () =>
         {
             try { PlayerAnimSetup.Run(); Debug.Log("[PlayerAnimSetup] 自动执行完成"); }
-            catch (System.Exception e) { File.WriteAllText("Assets/_动画接入错误.txt", e.ToString()); Debug.LogError(e); }
+            catch (System.Exception e) { CharPreview.WriteAgentError(e); Debug.LogError(e); }
         };
     }
 }

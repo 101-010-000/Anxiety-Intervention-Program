@@ -17,6 +17,18 @@
 | `导出工具_Editor脚本/` | 给素材做加工的工具脚本（导出角色 FBX、测量与修复素材等） | ✅ 可改 |
 | `额外文件/` | **agent 副产物**：临时脚本、dump、备份、日志等，与项目运行无关 | ✅ 随便放（已 gitignore） |
 
+`额外文件/` 内部约定：
+
+```
+额外文件/
+  日志_构建/            Unity 构建/批处理日志（*.log，项目根不放日志）
+  历史Editor脚本/       旧的一次性 Editor 脚本（不参与编译，只做档案馆，别放回 Assets）
+  旧预览/               已作废的预览图（当前有效预览在项目 assets/_报告/预览/）
+  素材整理脚本/         整理原始素材时用的脚本与 dump
+  工具脚本/             通用小工具（如 检查CSharp.py）
+  错误_*.txt            Editor 工具运行出错时的异常堆栈（项目外的副产物）
+```
+
 ### 素材的使用方式：复制进项目，**必须连 `.meta` 一起复制**
 
 原始素材不直接参与项目运行。要用哪个文件，就把它复制到项目里对应目录：
@@ -38,11 +50,12 @@
 ## 二、项目内部结构（`3D剧情项目/Assets`）
 
 ```
-Editor/                        agent 工具（菜单 Tools/干预项目/…）
+Editor/                        agent 工具（菜单 Tools/干预项目/…），**只保留这 4 个**：
   CharRebuild.cs               角色重建：服装搭配 / 一人一色 / 身体删减
   PlayerAnimSetup.cs           主角动画：生成 AnimatorController 并挂到徐夏
   CharPreview.cs               渲染角色预览 / 材质诊断 / 全量强制重导
   AssetLocator.cs              在 Assets 里按名字找文件/目录
+  （历史脚本在 额外文件/历史Editor脚本/，不要放回这里）
 assets/
   01_场景_Scene/               环境模型（教室/走廊/宿舍/食堂/咨询室/图书馆…）
   02_角色_Character/
@@ -90,9 +103,13 @@ Scenes/Test_徐夏_动画.unity     测试场景（9 个角色实例 + 相机 + 
 4. **出现"洋红 / 空材质"**：先跑 `Tools/干预项目/全量强制重导`（等价 Assets → Reimport All），
    再用 `诊断角色材质` 核对（`_报告/_材质诊断.txt` 里应无 `MATERIAL_NULL`、无 `supported=False`）。
 5. **产物流向**：报告 / 清单 / 预览图 → `3D剧情项目/Assets/assets/_报告/`；
-   临时脚本、dump、备份、日志 → `额外文件/`（已 gitignore，不进版本库）。
-6. `Library/`、`Temp/`、`Logs/`、`UserSettings/` 都是缓存：别动、别提交。
-7. 提交信息用中文（一行标题 + 要点列表）；推送 `git push origin main`（大提交较慢，中断了直接重跑）。
+   临时脚本、dump、备份、日志、异常堆栈 → `额外文件/`（已 gitignore，不进版本库；
+   Editor 工具出错时会把堆栈写到 `额外文件/错误_*.txt`）。
+6. **别把垃圾留在项目里**：`3D剧情项目/` 根目录不放日志；`Assets/` 里不放临时 `.txt`、
+   用完的触发器；一次性/历史 Editor 脚本用完就移到 `额外文件/历史Editor脚本/`
+   （留在 `Assets/Editor/` 会被 Unity 编译，既容易误用也会拖慢导入）。
+7. `Library/`、`Temp/`、`Logs/`、`UserSettings/` 都是缓存：别动、别提交。
+8. 提交信息用中文（一行标题 + 要点列表）；推送 `git push origin main`（大提交较慢，中断了直接重跑）。
 
 ---
 

@@ -608,14 +608,14 @@ public static class CharRebuild
 
 // ------------------------------------------------------------- 一次性自动执行
 // 工程根目录存在 Assets/_rebuild_trigger.txt 时，编辑器下次刷新/重编译后自动跑一遍重建，
-// 跑完自己删掉触发器；出错则把异常写到 Assets/_角色重建错误.txt
+// 跑完自己删掉触发器；出错则把异常写到 额外文件/错误_角色重建.txt（项目外的副产物目录）
 [InitializeOnLoad]
 public static class CharRebuildAutoRun
 {
     const string Trigger = "Assets/_rebuild_trigger.txt";
     const string SaveTrigger = "Assets/_save_scene_trigger.txt";
     const string DumpTrigger = "Assets/_dump_trigger.txt";
-    const string ErrFile = "Assets/_角色重建错误.txt";
+    const string ErrFile = "../额外文件/错误_角色重建.txt";
 
     static CharRebuildAutoRun()
     {
@@ -646,6 +646,7 @@ public static class CharRebuildAutoRun
             }
             catch (System.Exception e)
             {
+                Directory.CreateDirectory("../额外文件");
                 File.WriteAllText(ErrFile, e.ToString());
                 Debug.LogError("[CharRebuild] 自动重建失败: " + e);
             }

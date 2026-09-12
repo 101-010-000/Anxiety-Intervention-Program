@@ -135,6 +135,18 @@ public static class CharPreview
         Debug.Log("[CharPreview] 全量重导 " + n);
     }
 
+    // 副产物统一写到仓库根的 额外文件/（项目外，不进版本库）
+    public static void WriteAgentError(System.Exception e)
+    {
+        try
+        {
+            string dir = "../额外文件";
+            Directory.CreateDirectory(dir);
+            File.WriteAllText(dir + "/错误_角色预览.txt", e.ToString());
+        }
+        catch { }
+    }
+
     static void SetLayer(GameObject go, int layer)
     {
         go.layer = layer;
@@ -202,24 +214,24 @@ public static class CharPreviewAutoRun
         if (File.Exists(FullTrigger))
         {
             File.Delete(FullTrigger);
-            EditorApplication.delayCall += () => { try { CharPreview.FullReimport(); } catch (System.Exception e) { File.WriteAllText("Assets/_预览错误.txt", e.ToString()); } };
+            EditorApplication.delayCall += () => { try { CharPreview.FullReimport(); } catch (System.Exception e) { WriteAgentError(e); } };
         }
         if (File.Exists(ReimportTrigger))
         {
             File.Delete(ReimportTrigger);
-            EditorApplication.delayCall += () => { try { CharPreview.ReimportMats(); } catch (System.Exception e) { File.WriteAllText("Assets/_预览错误.txt", e.ToString()); } };
+            EditorApplication.delayCall += () => { try { CharPreview.ReimportMats(); } catch (System.Exception e) { WriteAgentError(e); } };
         }
         if (File.Exists(DiagTrigger))
         {
             File.Delete(DiagTrigger);
-            EditorApplication.delayCall += () => { try { CharPreview.Diag(); } catch (System.Exception e) { File.WriteAllText("Assets/_预览错误.txt", e.ToString()); } };
+            EditorApplication.delayCall += () => { try { CharPreview.Diag(); } catch (System.Exception e) { WriteAgentError(e); } };
         }
         if (!File.Exists(Trigger)) return;
         File.Delete(Trigger);
         EditorApplication.delayCall += () =>
         {
             try { CharPreview.Run(); Debug.Log("[CharPreview] 完成"); }
-            catch (System.Exception e) { File.WriteAllText("Assets/_预览错误.txt", e.ToString()); Debug.LogError(e); }
+            catch (System.Exception e) { WriteAgentError(e); Debug.LogError(e); }
         };
     }
 }
