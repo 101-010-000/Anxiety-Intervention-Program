@@ -50,11 +50,14 @@
 ## 二、项目内部结构（`3D剧情项目/Assets`）
 
 ```
-Editor/                        agent 工具（菜单 Tools/干预项目/…），**只保留这 4 个**：
+Editor/                        agent 工具（菜单 Tools/干预项目/…），**只保留长期工具**（一次性脚本用完移到 额外文件/历史Editor脚本/）：
   CharRebuild.cs               角色重建：服装搭配 / 一人一色 / 身体删减
   PlayerAnimSetup.cs           主角动画：生成 AnimatorController 并挂到徐夏
   CharPreview.cs               渲染角色预览 / 材质诊断 / 全量强制重导
   AssetLocator.cs              在 Assets 里按名字找文件/目录
+  SceneBuilder.cs              剧情主场景 Game.unity：6 个地点拼装 + 场景总览渲染
+  MainMenuAssets.cs            主界面 UI 贴图：程序化生成 57 张 + 中文字体 + 20 张收录图导入
+  MainMenuBuilder.cs           主界面场景 MainMenu.unity：主菜单/设置/存读档/章节/概览/弹窗
   （历史脚本在 额外文件/历史Editor脚本/，不要放回这里）
 assets/
   01_场景_Scene/               环境模型（教室/走廊/宿舍/食堂/咨询室/图书馆…）
@@ -66,10 +69,14 @@ assets/
       角色_URP/<角色>_可动.prefab     ★ 场景/剧情里真正使用的角色
       角色_URP/材质/<角色>/           角色专属材质实例（一人一色）
   03_动作_Animation/           动画 FBX + Animators/PC_徐夏_测试.controller
-  04_音效_Audio/  05_UI/
+  04_音效_Audio/
+  05_UI/                       ★ 主界面 UI 素材：背景/界面/按钮/图标/字体 + 内容概览（20 张原图）
   11_着色器_Shaders/           角色套件 ShaderGraph（CharacterLit / Toon / 子图 / HLSL）
   _报告/                       ★ 所有报告、清单、预览图都写到这里
+Scripts/UI/                    主界面运行时脚本（MainMenuUI / UIPanel / GameSettings / SaveSystem …）
 Scenes/Test_徐夏_动画.unity     测试场景（9 个角色实例 + 相机 + 太阳）
+Scenes/MainMenu.unity          主界面（Build Settings 第 0 号：主菜单 + 设置/存读档/章节选择/内容概览）
+Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，SceneBuilder 生成）
 ```
 
 ---
@@ -99,6 +106,8 @@ Scenes/Test_徐夏_动画.unity     测试场景（9 个角色实例 + 相机 + 
    - `_diagmat_trigger.txt` → 材质诊断
    - `_reimport_trigger.txt` / `_fullreimport_trigger.txt` → 强制重导 / 全量重导
    - `_anim_trigger.txt` → 主角动画接入
+   - `_scene_trigger.txt` → 搭建剧情主场景 Game.unity
+   - `_menu_trigger.txt` → 重建主界面 MainMenu.unity
    > 触发器依赖"域重载"生效：改一下任意脚本文件、或让 Unity 窗口获得焦点/按 Ctrl+R 即可。
 4. **出现"洋红 / 空材质"**：先跑 `Tools/干预项目/全量强制重导`（等价 Assets → Reimport All），
    再用 `诊断角色材质` 核对（`_报告/_材质诊断.txt` 里应无 `MATERIAL_NULL`、无 `supported=False`）。
@@ -123,10 +132,36 @@ Scenes/Test_徐夏_动画.unity     测试场景（9 个角色实例 + 相机 + 
 | 查材质为什么洋红 | `Tools/干预项目/诊断角色材质` → `assets/_报告/_材质诊断.txt` |
 | 材质引用变空/洋红 | `Tools/干预项目/全量强制重导` |
 | 从素材里拿新配件 | 复制 FBX + **它的 .meta** 到 `assets/02_角色_Character/Meshes/…`，再在 `CharRebuild.cs` 里引用 |
+| 改主界面 UI（配色/布局） | 改 `Assets/Editor/MainMenuBuilder.cs`（布局）或 `MainMenuAssets.cs`（贴图/配色）→ `Tools/干预项目/搭建主界面UI场景` |
+| 看主界面长相 | `Tools/干预项目/渲染主界面预览` → `assets/_报告/预览/主界面/01~07*.png` |
+| 主界面工具报了什么 | `assets/_报告/_主界面搭建.txt`（层级树 + 越界/贴图/字体自检 + 按钮对照表） |
+| 主界面能不能点 | `Tools/干预项目/主界面运行自检`（真进 Play 模式点一遗 25 步）→ `assets/_报告/_主界面运行自检.txt` |
 
 ---
 
-## 六、角色一览（9 人，用于对照剧本/需求）
+## 六、主界面（MainMenu）要点
+
+- **入口场景**：`Scenes/MainMenu.unity`（Build Settings 第 0 号）。全部是 uGUI（`Canvas` + `Image` + `Text`），
+  **没装 TextMeshPro**，中文字体用 `assets/05_UI/字体_Font/中文_Deng.ttf`（等线；Unity 内置字体没有汉字）。
+- **贴图是程序化生成的**（`MainMenuAssets.cs`，SDF 画圆角/描边 + 1px 抗锯齿，清透治愈风）：
+  背景 4 张 / 面板与卡片 12 张 / 按钮与控件 18 张 / 图标 22 张，九宫格 border 写进了 TextureImporter。
+  删掉某个 png 再跑一次工具就会重新生成；想改颜色改 `MainMenuAssets.cs` 顶部的调色板。
+- **页面**：主菜单（开始游戏/读取存档/章节选择/内容概览/设置/退出）+ 4 个子页 + 大图查看 + 确认弹窗 + Toast，
+  ESC 逐层关闭；子页默认收起（场景里 `CanvasGroup.alpha=0`）。
+- **运行时脚本**（`Assets/Scripts/UI/`）：`MainMenuUI`（接线/切页/筛选/读档）、`UIPanel`（淡入淡出）、
+  `GameSettings`（PlayerPrefs：音量×4/文字速度/自动播放/自动存档/全屏）、`SaveSystem`（6 个存档槽 JSON + 章节进度）、
+  `OverviewDatabase`（内容概览 20 条，`assets/05_UI/内容概览/概览数据.asset`）。
+- **跳转**：所有"进游戏"都写 `GameProgress.SelectChapter(n)` 再 `LoadScene("Game")`；游戏场景启动时读 `GameProgress.SelectedChapter`。
+- 重建后**务必看报告里的"自动检查"**：应出现 `越界元素：无 ✓`、`贴图/字体/引用检查：全部通过 ✓`、
+  `自检（重开场景后）：MainMenuUI ✓`；若报 `MainMenuUI 引用丢失`，说明 Unity 把组件写成了缺脚本，重跑一次即可。
+- ⚠️ **踩过的坑**：刚改过/新拷进来的 `.cs`，`MonoScript.GetClass()` 可能是 `null`，
+  这时 `AddComponent` 出来的组件会被 Unity 写成"内联 MonoScript"——**新会话里就是缺脚本，整个菜单死掉**（不高亮、不报错）。
+  `MainMenuBuilder.PreloadScripts()` 会先 `ImportAsset(ForceUpdate)` 把这件事卡在搭场景之前；
+  如果你在别的脚本里 `AddComponent` 自己写的组件，也要先做这一步。
+
+---
+
+## 七、角色一览（9 人，用于对照剧本/需求）
 
 | 角色 | 性别 | 身份（参考 `项目文档/需求文档.docx`） | 出场 |
 |---|---|---|---|
