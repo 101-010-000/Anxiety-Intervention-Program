@@ -9,3 +9,7 @@
 *.log
 Thumbs.db
 .DS_Store
+
+# agent 副产物（与项目无直接关系）：临时脚本、dump、备份、日志
+额外文件/*
+!额外文件/.gitkeep
