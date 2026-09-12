@@ -214,24 +214,24 @@ public static class CharPreviewAutoRun
         if (File.Exists(FullTrigger))
         {
             File.Delete(FullTrigger);
-            EditorApplication.delayCall += () => { try { CharPreview.FullReimport(); } catch (System.Exception e) { WriteAgentError(e); } };
+            EditorApplication.delayCall += () => { try { CharPreview.FullReimport(); } catch (System.Exception e) { CharPreview.WriteAgentError(e); } };
         }
         if (File.Exists(ReimportTrigger))
         {
             File.Delete(ReimportTrigger);
-            EditorApplication.delayCall += () => { try { CharPreview.ReimportMats(); } catch (System.Exception e) { WriteAgentError(e); } };
+            EditorApplication.delayCall += () => { try { CharPreview.ReimportMats(); } catch (System.Exception e) { CharPreview.WriteAgentError(e); } };
         }
         if (File.Exists(DiagTrigger))
         {
             File.Delete(DiagTrigger);
-            EditorApplication.delayCall += () => { try { CharPreview.Diag(); } catch (System.Exception e) { WriteAgentError(e); } };
+            EditorApplication.delayCall += () => { try { CharPreview.Diag(); } catch (System.Exception e) { CharPreview.WriteAgentError(e); } };
         }
         if (!File.Exists(Trigger)) return;
         File.Delete(Trigger);
         EditorApplication.delayCall += () =>
         {
             try { CharPreview.Run(); Debug.Log("[CharPreview] 完成"); }
-            catch (System.Exception e) { WriteAgentError(e); Debug.LogError(e); }
+            catch (System.Exception e) { CharPreview.WriteAgentError(e); Debug.LogError(e); }
         };
     }
 }
