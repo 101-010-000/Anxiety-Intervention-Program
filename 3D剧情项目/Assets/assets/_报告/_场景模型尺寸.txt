@@ -1,0 +1,191 @@
+场景模型尺寸清单（单位：米）
+
+armchair.fbx                   [1 rend]  root((270, 0, 0))
+      rend.bounds     0.90 ×   1.20 ×    1.18   Y: -0.61~  0.59
+      mesh.bounds     0.90 ×   1.20 ×    1.18   Y: -0.61~  0.59
+bedside_table.fbx              [1 rend]  root((270, 0, 0))
+      rend.bounds     0.74 ×   0.55 ×    0.66   Y: -0.31~  0.24
+      mesh.bounds     0.74 ×   0.55 ×    0.66   Y: -0.31~  0.24
+cactus.fbx                     [1 rend]  root((270, 0, 0))
+      rend.bounds     0.25 ×   0.36 ×    0.25   Y: -0.12~  0.24
+      mesh.bounds     0.25 ×   0.36 ×    0.25   Y: -0.12~  0.24
+carpet.fbx                     [1 rend]  root((270, 0, 0))
+      rend.bounds     1.68 ×   0.01 ×    1.48   Y:  0.00~  0.01
+      mesh.bounds     1.68 ×   0.01 ×    1.48   Y:  0.00~  0.01
+coffee_table.fbx               [1 rend]  root((270, 0, 0))
+      rend.bounds     1.37 ×   0.95 ×    0.34   Y: -0.47~  0.48
+      mesh.bounds     1.37 ×   0.95 ×    0.34   Y: -0.47~  0.48
+couch.fbx                      [1 rend]  root((270, 0, 0))
+      rend.bounds     1.90 ×   0.90 ×    1.18   Y: -0.42~  0.48
+      mesh.bounds     1.90 ×   0.90 ×    1.18   Y: -0.42~  0.48
+double_bed.fbx                 [1 rend]  root((270, 0, 0))
+      rend.bounds     1.82 ×   0.79 ×    2.00   Y: -0.44~  0.35
+      mesh.bounds     1.82 ×   0.79 ×    2.00   Y: -0.44~  0.35
+frames.fbx                     [1 rend]  root((270, 0, 0))
+      rend.bounds     0.93 ×   0.75 ×    0.10   Y: -0.37~  0.37
+      mesh.bounds     0.93 ×   0.75 ×    0.10   Y: -0.37~  0.37
+high_table.fbx                 [1 rend]  root((270, 0, 0))
+      rend.bounds     0.58 ×   0.54 ×    1.02   Y: -0.27~  0.27
+      mesh.bounds     0.58 ×   0.54 ×    1.02   Y: -0.27~  0.27
+lamp.fbx                       [1 rend]  root((270, 0, 0))
+      rend.bounds     0.31 ×   0.42 ×    0.31   Y: -0.11~  0.30
+      mesh.bounds     0.31 ×   0.42 ×    0.31   Y: -0.11~  0.30
+plant.fbx                      [1 rend]  root((0, 0, 0))
+      rend.bounds     0.26 ×   0.46 ×    0.27   Y: -0.09~  0.38
+      mesh.bounds     0.26 ×   0.46 ×    0.27   Y: -0.09~  0.38
+pot.fbx                        [1 rend]  root((270, 0, 0))
+      rend.bounds     0.26 ×   0.27 ×    0.46   Y: -0.14~  0.13
+      mesh.bounds     0.26 ×   0.27 ×    0.46   Y: -0.14~  0.13
+rug.fbx                        [1 rend]  root((270, 0, 0))
+      rend.bounds     1.70 ×   1.70 ×    0.07   Y: -0.85~  0.85
+      mesh.bounds     1.70 ×   1.70 ×    0.07   Y: -0.85~  0.85
+shelf.fbx                      [1 rend]  root((270, 0, 0))
+      rend.bounds     0.36 ×   0.15 ×    1.23   Y: -0.07~  0.07
+      mesh.bounds     0.36 ×   0.15 ×    1.23   Y: -0.07~  0.07
+simple_chair.fbx               [1 rend]  root((270, 0, 0))
+      rend.bounds     0.55 ×   1.08 ×    0.56   Y: -0.53~  0.55
+      mesh.bounds     0.55 ×   1.08 ×    0.56   Y: -0.53~  0.55
+simple_desk_A.fbx              [1 rend]  root((270, 0, 0))
+      rend.bounds     0.86 ×   0.87 ×    2.15   Y: -0.85~  0.03
+      mesh.bounds     0.86 ×   0.87 ×    2.15   Y: -0.85~  0.03
+simple_desk_B.fbx              [1 rend]  root((270, 0, 0))
+      rend.bounds     0.85 ×   0.86 ×    1.61   Y: -0.41~  0.45
+      mesh.bounds     0.85 ×   0.86 ×    1.61   Y: -0.41~  0.45
+simple_double_bed.fbx          [1 rend]  root((270, 0, 0))
+      rend.bounds     1.88 ×   0.66 ×    2.01   Y: -0.35~  0.32
+      mesh.bounds     1.88 ×   0.66 ×    2.01   Y: -0.35~  0.32
+simple_footstool.fbx           [1 rend]  root((270, 0, 0))
+      rend.bounds     0.51 ×   0.44 ×    0.52   Y: -0.26~  0.18
+      mesh.bounds     0.51 ×   0.44 ×    0.52   Y: -0.26~  0.18
+simple_library_A.fbx           [1 rend]  root((270, 0, 0))
+      rend.bounds     0.73 ×   1.47 ×    0.65   Y: -0.57~  0.90
+      mesh.bounds     0.73 ×   1.47 ×    0.65   Y: -0.57~  0.90
+simple_library_B.fbx           [1 rend]  root((270, 0, 0))
+      rend.bounds     0.73 ×   1.47 ×    0.65   Y: -0.79~  0.68
+      mesh.bounds     0.73 ×   1.47 ×    0.65   Y: -0.79~  0.68
+simple_library_C.fbx           [1 rend]  root((270, 0, 0))
+      rend.bounds     0.73 ×   1.48 ×    0.65   Y: -0.02~  1.46
+      mesh.bounds     0.73 ×   1.48 ×    0.65   Y: -0.02~  1.46
+simple_rect_table_A.fbx        [1 rend]  root((270, 0, 0))
+      rend.bounds     0.75 ×   0.87 ×    1.63   Y: -0.84~  0.03
+      mesh.bounds     0.75 ×   0.87 ×    1.63   Y: -0.84~  0.03
+simple_rect_table_B.fbx        [1 rend]  root((270, 0, 0))
+      rend.bounds     1.14 ×   0.93 ×    1.75   Y: -0.64~  0.30
+      mesh.bounds     1.14 ×   0.93 ×    1.75   Y: -0.64~  0.30
+simple_single_bed.fbx          [1 rend]  root((270, 0, 0))
+      rend.bounds     1.87 ×   0.66 ×    1.48   Y: -0.35~  0.32
+      mesh.bounds     1.87 ×   0.66 ×    1.48   Y: -0.35~  0.32
+simple_square_table_A.fbx      [1 rend]  root((270, 0, 0))
+      rend.bounds     0.78 ×   0.85 ×    0.80   Y: -0.50~  0.36
+      mesh.bounds     0.78 ×   0.85 ×    0.80   Y: -0.50~  0.36
+simple_square_table_B.fbx      [1 rend]  root((270, 0, 0))
+      rend.bounds     1.62 ×   0.95 ×    1.77   Y: -0.64~  0.30
+      mesh.bounds     1.62 ×   0.95 ×    1.77   Y: -0.64~  0.30
+single_bed.fbx                 [1 rend]  root((270, 0, 0))
+      rend.bounds     1.79 ×   0.79 ×    1.36   Y: -0.39~  0.40
+      mesh.bounds     1.79 ×   0.79 ×    1.36   Y: -0.39~  0.40
+attic.fbx                      [1 rend]  root((0, 0, 0))
+      rend.bounds     4.29 ×   2.79 ×    4.25   Y:  0.66~  3.46
+      mesh.bounds     4.29 ×   2.79 ×    4.25   Y:  0.66~  3.46
+bathroom.fbx                   [1 rend]  root((90, 0, 0))
+      rend.bounds     4.25 ×   2.79 ×    4.25   Y:  0.66~  3.46
+      mesh.bounds     4.25 ×   2.79 ×    4.25   Y:  0.66~  3.46
+bedroom.fbx                    [1 rend]  root((0, 0, 0))
+      rend.bounds     4.35 ×   2.79 ×    4.25   Y:  0.66~  3.46
+      mesh.bounds     4.35 ×   2.79 ×    4.25   Y:  0.66~  3.46
+cellar.fbx                     [1 rend]  root((0, 0, 0))
+      rend.bounds     4.25 ×   2.80 ×    4.25   Y:  0.66~  3.46
+      mesh.bounds     4.25 ×   2.80 ×    4.25   Y:  0.66~  3.46
+kitchen.fbx                    [1 rend]  root((0, 0, 0))
+      rend.bounds     4.25 ×   2.79 ×    4.25   Y:  0.66~  3.46
+      mesh.bounds     4.25 ×   2.79 ×    4.25   Y:  0.66~  3.46
+room.fbx                       [1 rend]  root((0, 0, 0))
+      rend.bounds     4.25 ×   2.79 ×    4.25   Y:  0.66~  3.46
+      mesh.bounds     4.25 ×   2.79 ×    4.25   Y:  0.66~  3.46
+garage.fbx                     [1 rend]  root((0, 0, 0))
+      rend.bounds     4.25 ×   2.79 ×    4.25   Y:  0.66~  3.46
+      mesh.bounds     4.25 ×   2.79 ×    4.25   Y:  0.66~  3.46
+kitchen.fbx                    [1 rend]  root((0, 0, 0))
+      rend.bounds     4.25 ×   2.79 ×    4.26   Y:  0.66~  3.46
+      mesh.bounds     4.25 ×   2.79 ×    4.26   Y:  0.66~  3.46
+livingRoom.fbx                 [1 rend]  root((0, 0, 0))
+      rend.bounds     4.25 ×   2.79 ×    4.25   Y:  0.66~  3.46
+      mesh.bounds     4.25 ×   2.79 ×    4.25   Y:  0.66~  3.46
+briefingRoom.fbx               [1 rend]  root((0, 0, 0))
+      rend.bounds     4.25 ×   2.79 ×    4.25   Y:  0.66~  3.46
+      mesh.bounds     4.25 ×   2.79 ×    4.25   Y:  0.66~  3.46
+library.fbx                    [1 rend]  root((0, 0, 0))
+      rend.bounds     4.25 ×   2.79 ×    4.25   Y:  0.66~  3.46
+      mesh.bounds     4.25 ×   2.79 ×    4.25   Y:  0.66~  3.46
+school.fbx                     [1 rend]  root((0, 0, 0))
+      rend.bounds     4.25 ×   2.79 ×    4.25   Y:  0.66~  3.46
+      mesh.bounds     4.25 ×   2.79 ×    4.25   Y:  0.66~  3.46
+Office.fbx                     [1 rend]  root((0, 0, 0))
+      rend.bounds     4.25 ×   2.79 ×    4.25   Y:  0.66~  3.46
+      mesh.bounds     4.25 ×   2.79 ×    4.25   Y:  0.66~  3.46
+PrisonCell.fbx                 [1 rend]  root((0, 0, 0))
+      rend.bounds     4.25 ×   2.79 ×    4.25   Y:  0.66~  3.46
+      mesh.bounds     4.25 ×   2.79 ×    4.25   Y:  0.66~  3.46
+Interiors_A.fbx                [375 rend]  root((0, 0, 0))
+      rend.bounds    76.50 ×  13.83 ×   88.00   Y: -0.20~ 13.63
+      mesh.bounds    76.50 ×  13.83 ×   88.00   Y: -0.20~ 13.63
+一堆书.fbx                        [1 rend]  root((270, 0, 0))
+      rend.bounds     0.46 ×   0.37 ×    0.22   Y:  0.37~  0.74
+      mesh.bounds     0.46 ×   0.37 ×    0.22   Y:  0.37~  0.74
+一本书.fbx                        [1 rend]  root((270, 0, 0))
+      rend.bounds     0.06 ×   0.32 ×    0.22   Y:  1.60~  1.92
+      mesh.bounds     0.06 ×   0.32 ×    0.22   Y:  1.60~  1.92
+书架.fbx                         [1 rend]  root((270, 0, 0))
+      rend.bounds     2.00 ×   2.00 ×    0.35   Y:  0.00~  2.00
+      mesh.bounds     2.00 ×   2.00 ×    0.35   Y:  0.00~  2.00
+书架组合.fbx                       [48 rend]  root((270, 0, 0))
+      rend.bounds     2.00 ×   2.00 ×    0.36   Y:  0.00~  2.00
+      mesh.bounds     2.00 ×   2.00 ×    0.36   Y:  0.00~  2.00
+任务框架.fbx                       [1 rend]  root((270, 0, 0))
+      rend.bounds     1.39 ×   1.39 ×    0.08   Y:  1.07~  2.46
+      mesh.bounds     1.39 ×   1.39 ×    0.08   Y:  1.07~  2.46
+储物箱3乘3.fbx                     [1 rend]  root((270, 0, 0))
+      rend.bounds     1.77 ×   1.76 ×    0.64   Y:  0.00~  1.76
+      mesh.bounds     1.77 ×   1.76 ×    0.64   Y:  0.00~  1.76
+储物箱单个.fbx                      [1 rend]  root((270, 5, 0))
+      rend.bounds     0.68 ×   0.59 ×    1.16   Y:  1.17~  1.76
+      mesh.bounds     0.68 ×   0.59 ×    1.16   Y:  1.17~  1.76
+吊顶风扇.fbx                       [1 rend]  root((270, 0, 0))
+      rend.bounds     2.66 ×   0.63 ×    2.65   Y:  2.74~  3.37
+      mesh.bounds     2.66 ×   0.63 ×    2.65   Y:  2.74~  3.37
+墙.fbx                          [1 rend]  root((270, 0, 0))
+      rend.bounds     4.00 ×   4.00 ×    0.05   Y: -0.01~  3.99
+      mesh.bounds     4.00 ×   4.00 ×    0.05   Y: -0.01~  3.99
+木盒子.fbx                        [1 rend]  root((270, 0, 0))
+      rend.bounds     0.55 ×   0.30 ×    0.33   Y:  1.20~  1.50
+      mesh.bounds     0.55 ×   0.30 ×    0.33   Y:  1.20~  1.50
+相框横.fbx                        [1 rend]  root((0, 270, 90))
+      rend.bounds     0.69 ×   0.51 ×    0.06   Y:  1.54~  2.05
+      mesh.bounds     0.69 ×   0.51 ×    0.06   Y:  1.54~  2.05
+相框竖.fbx                        [1 rend]  root((270, 0, 0))
+      rend.bounds     0.51 ×   0.69 ×    0.06   Y:  1.84~  2.53
+      mesh.bounds     0.51 ×   0.69 ×    0.06   Y:  1.84~  2.53
+窗墙.fbx                         [2 rend]  root((270, 0, 0))
+      rend.bounds     4.00 ×   4.00 ×    0.14   Y: -0.01~  3.99
+      mesh.bounds     4.00 ×   4.00 ×    0.14   Y: -0.01~  3.99
+纸箱微开.fbx                       [1 rend]  root((270, 0, 0))
+      rend.bounds     0.70 ×   0.74 ×    0.70   Y: -0.01~  0.73
+      mesh.bounds     0.70 ×   0.74 ×    0.70   Y: -0.01~  0.73
+纸箱打开.fbx                       [1 rend]  root((270, 0, 0))
+      rend.bounds     0.70 ×   0.90 ×    0.99   Y: -0.01~  0.89
+      mesh.bounds     0.70 ×   0.90 ×    0.99   Y: -0.01~  0.89
+纸箱闭合.fbx                       [1 rend]  root((270, 0, 0))
+      rend.bounds     0.70 ×   0.70 ×    0.70   Y: -0.01~  0.69
+      mesh.bounds     0.70 ×   0.70 ×    0.70   Y: -0.01~  0.69
+衣杆.fbx                         [1 rend]  root((270, 0, 0))
+      rend.bounds     0.67 ×   1.97 ×    0.67   Y:  0.00~  1.97
+      mesh.bounds     0.67 ×   1.97 ×    0.67   Y:  0.00~  1.97
+走廊套件.fbx                       [69 rend]  root((0, 0, 0))
+      rend.bounds    13.18 ×   4.07 ×    3.13   Y: -0.07~  4.00
+      mesh.bounds    13.18 ×   4.07 ×    3.13   Y: -0.07~  4.00
+门.fbx                          [2 rend]  root((270, 180, 0))
+      rend.bounds     1.12 ×   2.42 ×    0.26   Y: -0.07~  2.35
+      mesh.bounds     1.12 ×   2.42 ×    0.26   Y: -0.07~  2.35
+门框墙.fbx                        [1 rend]  root((270, 180, 0))
+      rend.bounds     4.00 ×   4.00 ×    0.08   Y:  0.00~  4.00
+      mesh.bounds     4.00 ×   4.00 ×    0.08   Y:  0.00~  4.00

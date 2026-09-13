@@ -1,0 +1,14 @@
+阴影/抗锯齿设置  2026-09-14 00:28
+
+URP 资产：Assets/URP/URP_Pipeline.asset
+
+  m_ShadowDistance                   30  →  30
+  m_ShadowCascadeCount               4  →  4
+  m_SoftShadowsSupported             True  →  True
+  msaaSampleCount                    4  →  4
+  mainLightShadowmapResolution       4096  →  4096
+  shadowDepthBias                    0.6  →  0.6
+  shadowNormalBias                   1.2  →  1.2
+
+若阴影仍有细条纹（acne）就把 m_ShadowDepthBias 再调大一点；
+若阴影边缘跟物体脱开（peter-panning）就把 NormalBias 调小。

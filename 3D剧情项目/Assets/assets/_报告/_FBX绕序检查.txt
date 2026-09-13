@@ -1,0 +1,63 @@
+armchair.fbx                       verts=7980   tris=15808  vol=     0.75679  OUT_OK                   outw=0.533
+bedside_table.fbx                  verts=5228   tris=10416  vol=     0.05895  OUT_OK                   outw=-0.017
+cactus.fbx                         verts=1618   tris=3228   vol=     4.82639  OUT_OK                   outw=0.343
+carpet.fbx                         verts=296    tris=588    vol=     0.18197  OUT_OK                   outw=0.704
+coffee_table.fbx                   verts=2378   tris=4736   vol=     0.16222  OUT_OK                   outw=0.251
+couch.fbx                          verts=8848   tris=17536  vol=     1.18032  OUT_OK                   outw=0.420
+double_bed.fbx                     verts=16702  tris=33336  vol=   -10.88043  *** WINDING_FLIPPED ***  outw=-0.179  *** NORMAL_INWARD ***
+frames.fbx                         verts=4368   tris=8724   vol=     0.08136  OUT_OK                   outw=0.195
+high_table.fbx                     verts=5388   tris=10752  vol=     0.04677  OUT_OK                   outw=0.322
+lamp.fbx                           verts=1712   tris=3386   vol=     0.49183  OUT_OK                   outw=-0.428  *** NORMAL_INWARD ***
+plant.fbx                          verts=337    tris=590    vol=     0.01231  OUT_OK                   outw=0.190
+pot.fbx                            verts=337    tris=590    vol=     0.01021  OUT_OK                   outw=0.190
+rug.fbx                            verts=674    tris=1344   vol=     0.19142  OUT_OK                   outw=0.401
+shelf.fbx                          verts=384    tris=764    vol=     0.03122  OUT_OK                   outw=0.692
+simple_chair.fbx                   verts=4712   tris=9384   vol=     0.00717  OUT_OK                   outw=0.129
+simple_desk_A.fbx                  verts=5996   tris=11944  vol=     0.02128  OUT_OK                   outw=-0.031
+simple_desk_B.fbx                  verts=5996   tris=11944  vol=     0.05161  OUT_OK                   outw=-0.044
+simple_double_bed.fbx              verts=23428  tris=46684  vol=     0.28892  OUT_OK                   outw=0.044
+simple_footstool.fbx               verts=1920   tris=3820   vol=    -0.00887  *** WINDING_FLIPPED ***  outw=-0.187  *** NORMAL_INWARD ***
+simple_library_A.fbx               verts=8918   tris=17772  vol=     0.16055  OUT_OK                   outw=0.106
+simple_library_B.fbx               verts=7542   tris=15024  vol=     0.15792  OUT_OK                   outw=0.065
+simple_library_C.fbx               verts=6764   tris=13476  vol=     0.15264  OUT_OK                   outw=0.055
+simple_rect_table_A.fbx            verts=1920   tris=3820   vol=    -0.00097  *** WINDING_FLIPPED ***  outw=-0.107  *** NORMAL_INWARD ***
+simple_rect_table_B.fbx            verts=2808   tris=5584   vol=     0.01016  OUT_OK                   outw=-0.068  *** NORMAL_INWARD ***
+simple_single_bed.fbx              verts=17194  tris=34260  vol=  5967.33101  OUT_OK                   outw=0.024
+simple_square_table_A.fbx          verts=1920   tris=3820   vol=    -0.00501  *** WINDING_FLIPPED ***  outw=-0.150  *** NORMAL_INWARD ***
+simple_square_table_B.fbx          verts=2808   tris=5584   vol=     0.02316  OUT_OK                   outw=-0.056  *** NORMAL_INWARD ***
+single_bed.fbx                     verts=19630  tris=39196  vol=    -6.70549  *** WINDING_FLIPPED ***  outw=-0.214  *** NORMAL_INWARD ***
+attic.fbx                          verts=2741   tris=5320   vol=7298555.55886  OUT_OK                   outw=0.034
+bathroom.fbx                       verts=7043   tris=13826  vol=7563056959723.59961  OUT_OK                   outw=0.028
+bedroom.fbx                        verts=5193   tris=9720   vol=7610702.67159  OUT_OK                   outw=0.049
+cellar.fbx                         verts=4394   tris=8560   vol=12924444.14951  OUT_OK                   outw=0.055
+kitchen.fbx                        verts=4788   tris=9334   vol=13602552.75676  OUT_OK                   outw=0.008
+room.fbx                           verts=2844   tris=5630   vol=6957928.81592  OUT_OK                   outw=0.055
+garage.fbx                         verts=5731   tris=11100  vol=12260538.98483  OUT_OK                   outw=0.128
+kitchen.fbx                        verts=2755   tris=5282   vol=8929140.89458  OUT_OK                   outw=-0.007
+livingRoom.fbx                     verts=905    tris=1614   vol=7431366.77037  OUT_OK                   outw=0.045
+briefingRoom.fbx                   verts=5543   tris=10466  vol=6663523.67218  OUT_OK                   outw=0.056
+library.fbx                        verts=12244  tris=23840  vol=10120622.51583  OUT_OK                   outw=0.036
+school.fbx                         verts=4654   tris=8808   vol=8052649.16864  OUT_OK                   outw=0.038
+Office.fbx                         verts=14206  tris=26720  vol=6200175.72590  OUT_OK                   outw=0.025
+PrisonCell.fbx                     verts=3574   tris=6856   vol=6721631.03955  OUT_OK                   outw=0.077
+Interiors_A.fbx                    verts=55087  tris=66886  vol=   386.03733  OUT_OK                   outw=-0.167  *** NORMAL_INWARD ***
+一堆书.fbx                            verts=96     tris=168    vol=     0.02380  OUT_OK                   outw=0.360
+一本书.fbx                            verts=16     tris=28     vol=     0.00397  OUT_OK                   outw=0.435
+书架.fbx                             verts=48     tris=76     vol=     0.31930  OUT_OK                   outw=0.239
+书架组合.fbx                           verts=840    tris=1452   vol=     0.73818  OUT_OK                   outw=0.421
+任务框架.fbx                           verts=134    tris=126    vol=     0.01161  OUT_OK                   outw=-0.006
+储物箱3乘3.fbx                         verts=288    tris=432    vol=     0.78240  OUT_OK                   outw=0.152
+储物箱单个.fbx                          verts=32     tris=48     vol=     0.14153  OUT_OK                   outw=0.283
+吊顶风扇.fbx                           verts=47     tris=58     vol=     0.01861  OUT_OK                   outw=0.134
+墙.fbx                              verts=16     tris=12     vol=     0.14523  OUT_OK                   outw=0.001
+木盒子.fbx                            verts=8      tris=12     vol=     0.04649  OUT_OK                   outw=0.554
+相框横.fbx                            verts=16     tris=28     vol=    90.09704  OUT_OK                   outw=0.019
+相框竖.fbx                            verts=16     tris=28     vol=    90.09704  OUT_OK                   outw=0.019
+窗墙.fbx                             verts=100    tris=84     vol=     0.21374  OUT_OK                   outw=0.017
+纸箱微开.fbx                           verts=16     tris=22     vol=     0.35313  OUT_OK                   outw=0.649
+纸箱打开.fbx                           verts=16     tris=18     vol=     0.26383  OUT_OK                   outw=0.325
+纸箱闭合.fbx                           verts=12     tris=20     vol=     0.34939  OUT_OK                   outw=0.620
+衣杆.fbx                             verts=72     tris=92     vol=     0.02224  OUT_OK                   outw=0.231
+走廊套件.fbx                           verts=1097   tris=1460   vol=    93.29897  OUT_OK                   outw=0.179
+门.fbx                              verts=144    tris=182    vol=     0.34844  OUT_OK                   outw=0.069
+门框墙.fbx                            verts=32     tris=26     vol=     0.15426  OUT_OK                   outw=0.028

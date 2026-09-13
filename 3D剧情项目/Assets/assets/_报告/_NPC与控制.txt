@@ -1,0 +1,7 @@
+强制给玩家挂控制器  2026-09-14 00:28
+
+  跳过嵌套的 Player_徐夏/Base_F_body（只处理根）
+  Player_徐夏   controller: 无 → PC_徐夏_Walk
+       eyeHeight=1.4  walkSpeed=runSpeed=1.6  hideOwnBody=关  ShadowsOnly=[torso]
+
+已保存场景 Assets/Scenes/Game.unity

@@ -1,0 +1,8 @@
+回滚反转模型修正  2026-09-13 03:41
+
+场景 Assets/Scenes/Game.unity：还原 15 个
+场景 Assets/Scenes/MainMenu.unity：还原 0 个
+场景 Assets/Scenes/Test_徐夏_动画.unity：还原 0 个
+已删除修正网格资产：8 个
+
+回滚后场景引用的是 FBX 原始网格，与未修改时一致。
