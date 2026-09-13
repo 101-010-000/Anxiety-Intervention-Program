@@ -166,6 +166,13 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   这时 `AddComponent` 出来的组件会被 Unity 写成"内联 MonoScript"——**新会话里就是缺脚本，整个菜单死掉**（不高亮、不报错）。
   `MainMenuBuilder.PreloadScripts()` 会先 `ImportAsset(ForceUpdate)` 把这件事卡在搭场景之前；
   如果你在别的脚本里 `AddComponent` 自己写的组件，也要先做这一步。
+- ⚠️ **九宫格 border 要小于控件最小用量的高度**：按钮/页签这类贴图会用在 50~76px 的小控件上，
+  border 给 30 就会上下重叠、图形被压坏（踩过：关闭/返回/页签“看着不对”）。
+  改 border 后跑一次搭场景工具即可（`_生成版本.txt` 指纹变了会自动全量重生程序化贴图）。
+- 按钮悬停：贴图态用 Button 的 SpriteSwap（次按钮 `稿_列表_默认 → 选中`），
+  另挂 `UIButtonPolish` 负责手型光标（`光标_手`，导入时置为可读）+ 文字加深，别只换贴图。
+- 子页（设置/存读档/章节/概览）的整屏底按 ui-002 的样子：**深色底(0.94) + 中间浅色大圆角面板**
+  （面板就是 ui-002 切出来的 `稿_面板_弹窗`）。
 
 ---
 
