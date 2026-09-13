@@ -219,7 +219,7 @@ public static class MainMenuAssets
         var sb = new System.Text.StringBuilder();
         foreach (var c in new[] { ACCENT, ACCENT_LIGHT, ACCENT_DARK, ACCENT_PALE, INK, INK_SOFT, MUTED, LINE, WARM, BG_TOP, BG_MID, BG_BOTTOM })
             sb.Append(ColorUtility.ToHtmlStringRGBA(c)).Append('|');
-        sb.Append("v2");
+        sb.Append("v3");
         return sb.ToString();
     }
 
@@ -345,7 +345,7 @@ public static class MainMenuAssets
             Fill(img, r, A(Color.white, 0.96f));
             Stroke(img, r, A(LINE, 1f), 2f);
             Stroke(img, (x, y) => Box(64, 64, 55, 55, 24)(x, y), A(Color.white, 0.9f), 2f);
-        }, 30, 30, 30, 30));
+        }, 20, 20, 20, 20));
 
         list.Add(S(DIR_PANEL, "面板_暗", 96, 96, img =>
         {
@@ -388,7 +388,7 @@ public static class MainMenuAssets
         {
             var r = Box(96, 96, 90, 90, 20);
             StrokeDashed(img, r, A(MUTED, 0.85f), 3f);
-        }, 30, 30, 30, 30));
+        }, 20, 20, 20, 20));
 
         list.Add(S(DIR_PANEL, "分隔线", 64, 6, img =>
         {
@@ -401,60 +401,60 @@ public static class MainMenuAssets
             var r = Box(80, 28, 76, 24, 16);
             Fill(img, r, A(Color.white, 0.55f));
             Stroke(img, Box(80, 26, 76, 20, 14), A(LINE, 1f), 2f);
-        }, 22, 22, 22, 22));
+        }, 14, 14, 14, 14));
 
         list.Add(S(DIR_BUTTON, "页签_悬停", 160, 56, img =>
         {
             var r = Box(80, 28, 76, 24, 16);
             Fill(img, r, A(Color.white, 0.80f));
             Stroke(img, Box(80, 26, 76, 20, 14), A(ACCENT, 0.45f), 2f);
-        }, 22, 22, 22, 22));
+        }, 14, 14, 14, 14));
 
         list.Add(S(DIR_BUTTON, "页签_选中", 160, 56, img =>
         {
             var r = Box(80, 28, 76, 24, 16);
             Fill(img, r, A(ACCENT, 0.14f));
             Stroke(img, Box(80, 26, 76, 20, 14), A(ACCENT, 0.9f), 3f);
-        }, 22, 22, 22, 22));
+        }, 14, 14, 14, 14));
 
         // ---------------------------------------------------------- 主按钮
-        list.Add(S(DIR_BUTTON, "按钮_主_普通", 256, 84, img => Primary(img, ACCENT, ACCENT_DARK, false, false), 34, 30, 34, 30));
-        list.Add(S(DIR_BUTTON, "按钮_主_悬停", 256, 84, img => Primary(img, ACCENT_LIGHT, ACCENT, true, false), 34, 30, 34, 30));
-        list.Add(S(DIR_BUTTON, "按钮_主_按下", 256, 84, img => Primary(img, ACCENT, ACCENT_DARK, false, true), 34, 30, 34, 30));
+        list.Add(S(DIR_BUTTON, "按钮_主_普通", 256, 84, img => Primary(img, ACCENT, ACCENT_DARK, false, false), 22, 22, 22, 22));
+        list.Add(S(DIR_BUTTON, "按钮_主_悬停", 256, 84, img => Primary(img, ACCENT_LIGHT, ACCENT, true, false), 22, 22, 22, 22));
+        list.Add(S(DIR_BUTTON, "按钮_主_按下", 256, 84, img => Primary(img, ACCENT, ACCENT_DARK, false, true), 22, 22, 22, 22));
         list.Add(S(DIR_BUTTON, "按钮_主_禁用", 256, 84, img =>
         {
             var r = Box(128, 42, 122, 36, 30);
             FillGrad(img, r, (x, y) => Color.Lerp(Hex("CBD9D8"), Hex("B8C9C8"), y / 84f));
             Stroke(img, r, A(Color.white, 0.25f), 2f);
-        }, 34, 30, 34, 30));
+        }, 14, 14, 14, 14));
 
         // ---------------------------------------------------------- 次按钮
-        list.Add(S(DIR_BUTTON, "按钮_次_普通", 256, 72, img => Secondary(img, Color.white, ACCENT, 0.80f), 30, 26, 30, 26));
-        list.Add(S(DIR_BUTTON, "按钮_次_悬停", 256, 72, img => Secondary(img, Color.white, ACCENT, 0.94f), 30, 26, 30, 26));
-        list.Add(S(DIR_BUTTON, "按钮_次_按下", 256, 72, img => Secondary(img, ACCENT_PALE, ACCENT, 1f), 30, 26, 30, 26));
+        list.Add(S(DIR_BUTTON, "按钮_次_普通", 256, 72, img => Secondary(img, Color.white, ACCENT, 0.80f), 22, 20, 22, 20));
+        list.Add(S(DIR_BUTTON, "按钮_次_悬停", 256, 72, img => Secondary(img, Color.white, ACCENT, 0.94f), 22, 20, 22, 20));
+        list.Add(S(DIR_BUTTON, "按钮_次_按下", 256, 72, img => Secondary(img, ACCENT_PALE, ACCENT, 1f), 22, 20, 22, 20));
         list.Add(S(DIR_BUTTON, "按钮_次_禁用", 256, 72, img =>
         {
             var r = Box(128, 36, 122, 30, 24);
             Fill(img, r, A(Hex("DCE5E4"), 0.75f));
             Stroke(img, r, A(MUTED, 0.4f), 2f);
-        }, 30, 26, 30, 26));
+        }, 22, 20, 22, 20));
 
         // ---------------------------------------------------------- 图标按钮
         list.Add(S(DIR_BUTTON, "按钮_图标_普通", 72, 72, img =>
         {
             Fill(img, Circle(36, 36, 32), A(Color.white, 0.72f));
             Stroke(img, Circle(36, 36, 32), A(LINE, 1f), 2f);
-        }, 30, 30, 30, 30));
+        }, 20, 20, 20, 20));
         list.Add(S(DIR_BUTTON, "按钮_图标_悬停", 72, 72, img =>
         {
             Fill(img, Circle(36, 36, 32), A(Color.white, 0.95f));
             Stroke(img, Circle(36, 36, 32), A(ACCENT, 0.6f), 2f);
-        }, 30, 30, 30, 30));
+        }, 20, 20, 20, 20));
         list.Add(S(DIR_BUTTON, "按钮_图标_按下", 72, 72, img =>
         {
             Fill(img, Circle(36, 36, 32), A(ACCENT_PALE, 1f));
             Stroke(img, Circle(36, 36, 32), A(ACCENT, 0.8f), 2f);
-        }, 30, 30, 30, 30));
+        }, 20, 20, 20, 20));
 
         // ---------------------------------------------------------- 滑条 / 开关
         list.Add(S(DIR_BUTTON, "滑条_轨道", 64, 18, img =>
@@ -556,6 +556,24 @@ public static class MainMenuAssets
                                                      Poly(24, 26, 35, 30, 26, 21)), Color.white)));
         list.Add(Icon("更多", img => Fill(img, U(Circle(22, 36, 4.5f), U(Circle(36, 36, 4.5f), Circle(50, 36, 4.5f))), Color.white)));
         list.Add(Icon("刷新", img => Fill(img, U(Arc(36, 36, 15, 4f, 30, 300), Poly(45, 52, 58, 46, 44, 40)), Color.white)));
+        list.Add(Icon("退出", img => Fill(img, U(
+            Sub(StrokeShape(Box(29, 36, 13, 19, 3f), 3f), Box(40, 36, 9, 24, 2f)),      // 门（右边开口）
+            U(Seg(44, 36, 58, 36, 3.5f), U(Seg(58, 36, 50, 44, 3.5f), Seg(58, 36, 50, 28, 3.5f)))), Color.white)));
+
+        // 手型光标（按钮悬停时用）：白色手掌 + 深色描边，热点在指尖
+        list.Add(new Spec
+        {
+            Dir = DIR_ICON, Name = "光标_手", W = 40, H = 40,
+            Draw = img =>
+            {
+                Sd hand = U(
+                    Box(20, 16, 10, 9, 5f),                                              // 手掌
+                    U(U(Seg(13, 16, 13, 28, 3.6f), Seg(20, 16, 20, 33, 3.6f)),          // 手指
+                      U(Seg(27, 16, 27, 29, 3.6f), Seg(33, 14, 37, 20, 3.6f))));         // 拇指
+                Fill(img, (x, y) => hand(x - 1.2f, y + 1.2f), new Color(0.09f, 0.13f, 0.22f, 0.95f));
+                Fill(img, hand, Color.white);
+            }
+        });
 
         return list;
     }
@@ -596,6 +614,8 @@ public static class MainMenuAssets
         ti.filterMode          = FilterMode.Bilinear;
         ti.maxTextureSize      = Mathf.Clamp(Mathf.NextPowerOfTwo(Mathf.Max(maxSize, 32)), 32, 2048);
         ti.textureCompression  = compress ? TextureImporterCompression.CompressedHQ : TextureImporterCompression.Uncompressed;
+        // 光标贴图必须可读，否则 Cursor.SetCursor 报错
+        ti.isReadable = path.Contains("光标");
 
         var st = new TextureImporterSettings();
         ti.ReadTextureSettings(st);

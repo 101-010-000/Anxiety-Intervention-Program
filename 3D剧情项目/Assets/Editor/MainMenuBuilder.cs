@@ -371,13 +371,13 @@ public static class MainMenuBuilder
             new Vector2(0f, 52f), new Vector2(900f, 28f), 20, MUTED, TextAnchor.MiddleCenter);
 
         // 六个入口
-        R.btnStart = Btn(root.transform, "Btn_开始游戏", "开始游戏", new Vector2(0f, -20f), new Vector2(420f, 76f), true, out _, 32);
+        R.btnStart = Btn(root.transform, "Btn_开始游戏", "开始游戏", new Vector2(0f, -20f), new Vector2(420f, 76f), true, out _, 32, "图标_播放");
         float y = -104f;
-        R.btnLoad     = Btn(root.transform, "Btn_读取存档", "读取存档", new Vector2(0f, y),       new Vector2(420f, 64f), false, out _, 28); y -= 70f;
-        R.btnChapter  = Btn(root.transform, "Btn_章节选择", "章节选择", new Vector2(0f, y),       new Vector2(420f, 64f), false, out _, 28); y -= 70f;
-        R.btnOverview = Btn(root.transform, "Btn_内容概览", "内容概览", new Vector2(0f, y),       new Vector2(420f, 64f), false, out _, 28); y -= 70f;
-        R.btnSettings = Btn(root.transform, "Btn_设置",     "设置",     new Vector2(0f, y),       new Vector2(420f, 64f), false, out _, 28); y -= 70f;
-        R.btnQuit     = Btn(root.transform, "Btn_退出游戏", "退出游戏", new Vector2(0f, y),       new Vector2(420f, 64f), false, out _, 28);
+        R.btnLoad     = Btn(root.transform, "Btn_读取存档", "读取存档", new Vector2(0f, y),       new Vector2(420f, 64f), false, out _, 28, "图标_存档"); y -= 70f;
+        R.btnChapter  = Btn(root.transform, "Btn_章节选择", "章节选择", new Vector2(0f, y),       new Vector2(420f, 64f), false, out _, 28, "图标_章节"); y -= 70f;
+        R.btnOverview = Btn(root.transform, "Btn_内容概览", "内容概览", new Vector2(0f, y),       new Vector2(420f, 64f), false, out _, 28, "图标_概览"); y -= 70f;
+        R.btnSettings = Btn(root.transform, "Btn_设置",     "设置",     new Vector2(0f, y),       new Vector2(420f, 64f), false, out _, 28, "图标_设置"); y -= 70f;
+        R.btnQuit     = Btn(root.transform, "Btn_退出游戏", "退出游戏", new Vector2(0f, y),       new Vector2(420f, 64f), false, out _, 28, "图标_退出");
 
         R.txtVersion = Label(root.transform, "底部_版本", "v0.1 · Demo 版", Vector2.zero, new Vector2(400f, 26f), 18, MUTED, TextAnchor.MiddleLeft);
         Corner(R.txtVersion.gameObject, new Vector2(52f, 38f), new Vector2(400f, 26f), new Vector2(0f, 0f), new Vector2(0f, 0f));
@@ -437,9 +437,9 @@ public static class MainMenuBuilder
         }
         R.swFullscreen = sws[0]; R.swAutoPlay = sws[1]; R.swAutoSave = sws[2];
 
-        R.btnSettingsReset = Btn(card, "Btn_恢复默认", "恢复默认", new Vector2(-250f, -352f), new Vector2(220f, 54f), false, out _, 24);
-        R.btnSettingsApply = Btn(card, "Btn_应用",     "应用",     new Vector2(0f, -352f),    new Vector2(220f, 58f), true,  out _, 26);
-        R.btnSettingsBack  = Btn(card, "Btn_返回",     "返回",     new Vector2(250f, -352f),  new Vector2(220f, 54f), false, out _, 24);
+        R.btnSettingsReset = Btn(card, "Btn_恢复默认", "恢复默认", new Vector2(-250f, -352f), new Vector2(220f, 54f), false, out _, 24, "图标_刷新");
+        R.btnSettingsApply = Btn(card, "Btn_应用",     "应用",     new Vector2(0f, -352f),    new Vector2(220f, 58f), true,  out _, 26, "图标_对勾");
+        R.btnSettingsBack  = Btn(card, "Btn_返回",     "返回",     new Vector2(250f, -352f),  new Vector2(220f, 54f), false, out _, 24, "图标_返回");
         return panel;
     }
 
@@ -458,9 +458,9 @@ public static class MainMenuBuilder
             R.slots[i] = BuildSlot(card, i, new Vector2(-384f + col * 384f, 170f - row * 230f));
         }
 
-        R.btnSaveRead   = Btn(card, "Btn_读取", "读取", new Vector2(-430f, -330f), new Vector2(200f, 60f), true,  out _, 26);
-        R.btnSaveDelete = Btn(card, "Btn_删除", "删除", new Vector2(-210f, -330f), new Vector2(200f, 56f), false, out _, 24);
-        R.btnSaveBack   = Btn(card, "Btn_返回", "返回", new Vector2(510f, -330f),  new Vector2(200f, 56f), false, out _, 24);
+        R.btnSaveRead   = Btn(card, "Btn_读取", "读取", new Vector2(-430f, -330f), new Vector2(200f, 60f), true,  out _, 26, "图标_存档");
+        R.btnSaveDelete = Btn(card, "Btn_删除", "删除", new Vector2(-210f, -330f), new Vector2(200f, 56f), false, out _, 24, "图标_关闭");
+        R.btnSaveBack   = Btn(card, "Btn_返回", "返回", new Vector2(510f, -330f),  new Vector2(200f, 56f), false, out _, 24, "图标_返回");
 
         Label(card, "提示_说明", "存档 6 个槽位；做出选择后自动存档会覆盖最近一次的进度",
             new Vector2(-290f, -330f), new Vector2(460f, 26f), 18, MUTED, TextAnchor.MiddleLeft);
@@ -508,7 +508,7 @@ public static class MainMenuBuilder
             R.chapters[i] = BuildChapterCard(card, i, new Vector2(-584f + i * 292f, -20f));
 
         Label(card, "提示_章节", "未解锁的章节需要先通关上一章；已完成标 ✦", new Vector2(-420f, -276f), new Vector2(560f, 28f), 19, MUTED, TextAnchor.MiddleLeft);
-        R.btnChapterBack = Btn(card, "Btn_返回", "返回", new Vector2(600f, -276f), new Vector2(200f, 56f), false, out _, 24);
+        R.btnChapterBack = Btn(card, "Btn_返回", "返回", new Vector2(600f, -276f), new Vector2(200f, 56f), false, out _, 24, "图标_返回");
         return panel;
     }
 
@@ -572,7 +572,7 @@ public static class MainMenuBuilder
         Vector2[] cardPos = { new Vector2(-380f, 10f), new Vector2(380f, 10f), new Vector2(-380f, -285f), new Vector2(380f, -285f) };
         for (int i = 0; i < 4; i++) R.ovCards[i] = BuildOverviewCard(card, i, cardPos[i]);
 
-        R.btnOverviewBack = Btn(card, "Btn_返回", "返回", new Vector2(700f, 382f), new Vector2(150f, 50f), false, out _, 24);
+        R.btnOverviewBack = Btn(card, "Btn_返回", "返回", new Vector2(700f, 382f), new Vector2(150f, 50f), false, out _, 24, "图标_返回");
         return panel;
     }
 
@@ -621,7 +621,7 @@ public static class MainMenuBuilder
         var dimImg = dim.AddComponent<Image>();
         dimImg.sprite = MainMenuAssets.Sprite("遮罩_白");
         var deep = MainMenuAssets.MASK_DEEP;                    // 颜色取自 ui-004「加深遮罩」
-        dimImg.color  = new Color(deep.r, deep.g, deep.b, 0.82f);
+        dimImg.color  = new Color(deep.r, deep.g, deep.b, 0.92f);
         dimImg.raycastTarget = true;
         panel.dimmer = dim;
 
@@ -652,8 +652,8 @@ public static class MainMenuBuilder
         Stretch(dim);
         var dimImg = dim.AddComponent<Image>();
         dimImg.sprite = MainMenuAssets.Sprite("遮罩_白");
-        var mc = MainMenuAssets.MASK_NORMAL;
-        dimImg.color  = new Color(mc.r, mc.g, mc.b, 0.48f);
+        var mc = MainMenuAssets.MASK_DEEP;
+        dimImg.color  = new Color(mc.r, mc.g, mc.b, 0.78f);
         dimImg.raycastTarget = true;
         panel.dimmer = dim;
 
@@ -854,13 +854,21 @@ public static class MainMenuBuilder
         btn.colors = cb;
         go.AddComponent<UIHoverScale>();
 
-        float textX = iconName == null ? 0f : 16f;
-        labelText = Label(go.transform, "文字", label, new Vector2(textX, 0f), new Vector2(size.x - 30f, size.y - 8f),
-                          fontSize, primary ? Color.white : ACCENT, TextAnchor.MiddleCenter,
+        float textX = iconName == null ? 0f : 26f;
+        Color labelColor = primary ? Color.white : ACCENT;
+        labelText = Label(go.transform, "文字", label, new Vector2(textX, 0f), new Vector2(size.x - 44f, size.y - 8f),
+                          fontSize, labelColor, TextAnchor.MiddleCenter,
                           primary ? FontStyle.Bold : FontStyle.Normal);
         if (iconName != null)
-            Img(go.transform, "图标", iconName, new Vector2(-size.x * 0.5f + 34f, 0f), new Vector2(26f, 26f),
+            Img(go.transform, "图标", iconName, new Vector2(-size.x * 0.5f + 38f, 0f), new Vector2(26f, 26f),
                 primary ? Color.white : ACCENT);
+
+        // 悬停手感：手型光标 + 文字加深一点（贴图态仍由 Button 的 SpriteSwap 负责）
+        var polish = go.AddComponent<UIButtonPolish>();
+        polish.label = labelText;
+        polish.normalLabel = labelColor;
+        polish.hoverLabel = primary ? Color.white : MainMenuAssets.ACCENT_DARK;
+        polish.cursorTexture = CursorTexture();
         return btn;
     }
 
@@ -888,6 +896,8 @@ public static class MainMenuBuilder
 
         var icon = Img(go.transform, "图标", iconName, Vector2.zero, new Vector2(size * 0.5f, size * 0.5f), INK);
         icon.enabled = icon.sprite != null;
+        var polish = go.AddComponent<UIButtonPolish>();
+        polish.cursorTexture = CursorTexture();
         return btn;
     }
 
@@ -914,6 +924,11 @@ public static class MainMenuBuilder
 
         labelText = Label(go.transform, "文字", label, Vector2.zero, new Vector2(size.x - 12f, size.y - 6f), fontSize,
                           MUTED, TextAnchor.MiddleCenter);
+        var polish = go.AddComponent<UIButtonPolish>();
+        polish.label = labelText;
+        polish.normalLabel = MUTED;
+        polish.hoverLabel = MainMenuAssets.ACCENT_DARK;
+        polish.cursorTexture = CursorTexture();
         return btn;
     }
 
@@ -1008,8 +1023,9 @@ public static class MainMenuBuilder
         Stretch(dim);
         var dimImg = dim.AddComponent<Image>();
         dimImg.sprite = MainMenuAssets.Sprite("遮罩_白");
-        var mask = MainMenuAssets.MASK_NORMAL;                 // 颜色取自 ui-004「普通遮罩」
-        dimImg.color  = new Color(mask.r, mask.g, mask.b, 0.46f);
+        // 设置/存档/章节/概览这些子页按 ui-002 的样子做：深色底 + 中间一块浅色大圆角面板
+        var deepBg = MainMenuAssets.MASK_DEEP;
+        dimImg.color  = new Color(deepBg.r, deepBg.g, deepBg.b, 0.94f);
         dimImg.raycastTarget = true;
         panel.dimmer = dim;
 
@@ -1036,6 +1052,17 @@ public static class MainMenuBuilder
             closeBtn.onClick.AddListener(delegate { panel.Hide(); });
         }
         return panel;
+    }
+
+    static Texture2D _cursor;
+    static Texture2D CursorTexture()
+    {
+        if (_cursor == null)
+        {
+            var sp = MainMenuAssets.Sprite("光标_手");
+            if (sp != null) _cursor = sp.texture;
+        }
+        return _cursor;
     }
 
     /// 按钮贴图：主按钮用《ui素材》切出来的四态；次按钮用稿子的列表行（默认/选中）

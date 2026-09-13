@@ -22,6 +22,7 @@ public static class MainMenuSlices
         public string Src, Name, Dir;
         public int X, Y, W, H, Keep;
         public float Radius;
+        public float Border = -1; // 九宫格 border（不给就按圆角算）
         public bool Pill;        // 胶囊（半径 = 高度一半）
         public bool Raw;         // 原样输出（背景图）
         public string Note = "";
@@ -36,14 +37,14 @@ public static class MainMenuSlices
                     Note = "ui-012 插画风，可作备用背景" },
 
         // —— 按钮四态（ui-008 底部四个 172×62 的按钮：正常/悬停/拖动/禁用）——
-        new Slice { Src = "ui-008.png", Name = "稿_标签_1", Dir = MainMenuAssets.DIR_BUTTON, X = 179,  Y = 870, W = 172, H = 62, Pill = true, Keep = 8, Note = "ui-008 底部状态标签（正常）" },
-        new Slice { Src = "ui-008.png", Name = "稿_标签_2", Dir = MainMenuAssets.DIR_BUTTON, X = 512,  Y = 870, W = 171, H = 62, Pill = true, Keep = 8, Note = "ui-008 底部状态标签（悬停）" },
-        new Slice { Src = "ui-008.png", Name = "稿_标签_3", Dir = MainMenuAssets.DIR_BUTTON, X = 848,  Y = 870, W = 172, H = 62, Pill = true, Keep = 8, Note = "ui-008 底部状态标签（拖动）" },
-        new Slice { Src = "ui-008.png", Name = "稿_标签_4", Dir = MainMenuAssets.DIR_BUTTON, X = 1184, Y = 870, W = 169, H = 62, Pill = true, Keep = 8, Note = "ui-008 底部状态标签（禁用）" },
+        new Slice { Src = "ui-008.png", Name = "稿_标签_1", Border = 16, Dir = MainMenuAssets.DIR_BUTTON, X = 179,  Y = 870, W = 172, H = 62, Pill = true, Keep = 8, Note = "ui-008 底部状态标签（正常）" },
+        new Slice { Src = "ui-008.png", Name = "稿_标签_2", Border = 16, Dir = MainMenuAssets.DIR_BUTTON, X = 512,  Y = 870, W = 171, H = 62, Pill = true, Keep = 8, Note = "ui-008 底部状态标签（悬停）" },
+        new Slice { Src = "ui-008.png", Name = "稿_标签_3", Border = 16, Dir = MainMenuAssets.DIR_BUTTON, X = 848,  Y = 870, W = 172, H = 62, Pill = true, Keep = 8, Note = "ui-008 底部状态标签（拖动）" },
+        new Slice { Src = "ui-008.png", Name = "稿_标签_4", Border = 16, Dir = MainMenuAssets.DIR_BUTTON, X = 1184, Y = 870, W = 169, H = 62, Pill = true, Keep = 8, Note = "ui-008 底部状态标签（禁用）" },
 
         // —— 列表行 / 次按钮底（ui-009 左列=默认、右列=选中）——
-        new Slice { Src = "ui-009.png", Name = "稿_列表_默认", Dir = MainMenuAssets.DIR_BUTTON, X = 73, Y = 182, W = 665, H = 74, Radius = 30, Keep = 12, Note = "ui-009 左列（默认态）" },
-        new Slice { Src = "ui-009.png", Name = "稿_列表_选中", Dir = MainMenuAssets.DIR_BUTTON, X = 793, Y = 182, W = 669, H = 77, Radius = 30, Keep = 12, Note = "ui-009 右列（选中态，蓝）" },
+        new Slice { Src = "ui-009.png", Name = "稿_列表_默认", Dir = MainMenuAssets.DIR_BUTTON, X = 73, Y = 182, W = 665, H = 74, Radius = 30, Keep = 12, Border = 16, Note = "ui-009 左列（默认态）" },
+        new Slice { Src = "ui-009.png", Name = "稿_列表_选中", Dir = MainMenuAssets.DIR_BUTTON, X = 793, Y = 182, W = 669, H = 77, Radius = 30, Keep = 12, Border = 16, Note = "ui-009 右列（选中态，蓝）" },
 
         // —— 卡片（ui-007 四张卡）——
         new Slice { Src = "ui-007.png", Name = "稿_卡片_1", Dir = MainMenuAssets.DIR_PANEL, X = 63,  Y = 147, W = 777, H = 254, Radius = 28, Keep = 30, Note = "ui-007 左上卡（浅蓝）" },
@@ -110,7 +111,9 @@ public static class MainMenuSlices
             string outPath = s.Dir + "/" + s.Name + ".png";
             File.WriteAllBytes(outPath, tex.EncodeToPNG());
 
-            float b = radius + (s.Raw ? 0f : Mathf.Max(2f, s.Keep * 0.25f));
+            // 列表行/小标签这类会用在 34~64px 高的小控件上，border 必须小于最小用量的半径，
+            // 否则九宫格上下会重叠、图形被压坏（设计稿里它们只有 74px 高）
+            float b = s.Border > 0 ? s.Border : radius + (s.Raw ? 0f : Mathf.Max(2f, s.Keep * 0.25f));
             b = Mathf.Min(b, Mathf.Min(w, h) * 0.45f);
             var border = s.Raw ? Vector4.zero : new Vector4(Mathf.Round(b), Mathf.Round(b), Mathf.Round(b), Mathf.Round(b));
             MainMenuAssets.ImportAsSprite(outPath, border, 2048, s.Raw);
