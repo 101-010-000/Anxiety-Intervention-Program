@@ -18,21 +18,25 @@ public static class MainMenuAssets
     public const string DIR_ICON      = UI_ROOT + "/图标_Icon";
     public const string DIR_FONT      = UI_ROOT + "/字体_Font";
     public const string DIR_OVERVIEW  = UI_ROOT + "/内容概览";
+    public const string STAMP_PATH    = UI_ROOT + "/_生成版本.txt";   // 调色板/清单的指纹，变了就重生成
     public const string DB_PATH       = UI_ROOT + "/内容概览/概览数据.asset";
 
-    // ------------------------------------------------------------------ 配色（清透治愈）
-    public static readonly Color ACCENT       = Hex("3E9E96");
-    public static readonly Color ACCENT_LIGHT = Hex("6FCFC0");
-    public static readonly Color ACCENT_DARK  = Hex("2E7E78");
-    public static readonly Color ACCENT_PALE  = Hex("DFF1EE");
-    public static readonly Color INK          = Hex("2F454B");
-    public static readonly Color INK_SOFT     = Hex("5B747A");
-    public static readonly Color MUTED        = Hex("9DB4B6");
-    public static readonly Color LINE         = Hex("CFE7E4");
+    // ------------------------------------------------------------------ 配色（清透治愈；已对齐《ui素材》设计稿的淡蓝调）
+    public static readonly Color ACCENT       = Hex("4C9FE8");   // 主蓝（取自设计稿的按钮蓝）
+    public static readonly Color ACCENT_LIGHT = Hex("7CC0F5");
+    public static readonly Color ACCENT_DARK  = Hex("2C6FB5");
+    public static readonly Color ACCENT_PALE  = Hex("E4F1FD");
+    public static readonly Color INK          = Hex("23364F");   // 深蓝墨色（设计稿文字色）
+    public static readonly Color INK_SOFT     = Hex("4E6785");
+    public static readonly Color MUTED        = Hex("93AABF");
+    public static readonly Color LINE         = Hex("CFE4F5");
     public static readonly Color WARM         = Hex("F0A868");
-    public static readonly Color BG_TOP       = Hex("E3F2F6");
-    public static readonly Color BG_MID       = Hex("EDF8F2");
-    public static readonly Color BG_BOTTOM    = Hex("FCF8EF");
+    public static readonly Color BG_TOP       = Hex("E8F4FE");
+    public static readonly Color BG_MID       = Hex("F2F8FE");
+    public static readonly Color BG_BOTTOM    = Hex("FBFDFF");
+    // 遮罩色：取自 ui-004 的「普通遮罩 / 加深遮罩」
+    public static readonly Color MASK_NORMAL  = Hex("2A3F5F");
+    public static readonly Color MASK_DEEP    = Hex("16233A");
 
     public static Color Hex(string s)
     {
@@ -205,9 +209,18 @@ public static class MainMenuAssets
         public Action<Img> Draw;
     }
 
-    static Spec S(string dir, string name, int w, int h, Action<Img> draw, float l = 0, float b = 0, float r = 0, float t = 0)
-    {
+    static Spec S(string dir, string name, int w, int h, Action<Img> draw, float l = 0, float b = 0, float r = 0, float t = 0)    {
         return new Spec { Dir = dir, Name = name, W = w, H = h, Draw = draw, Border = new Vector4(l, b, r, t) };
+    }
+
+    /// 调色板 + 贴图数量的指纹：改了调色板，下次跑工具就会重生成全部贴图
+    static string Stamp()
+    {
+        var sb = new System.Text.StringBuilder();
+        foreach (var c in new[] { ACCENT, ACCENT_LIGHT, ACCENT_DARK, ACCENT_PALE, INK, INK_SOFT, MUTED, LINE, WARM, BG_TOP, BG_MID, BG_BOTTOM })
+            sb.Append(ColorUtility.ToHtmlStringRGBA(c)).Append('|');
+        sb.Append("v2");
+        return sb.ToString();
     }
 
     static Spec Icon(string name, Action<Img> draw)
@@ -245,6 +258,13 @@ public static class MainMenuAssets
         foreach (var d in new[] { DIR_BG, DIR_PANEL, DIR_BUTTON, DIR_ICON, DIR_FONT, DIR_OVERVIEW })
             Directory.CreateDirectory(d);
 
+        // 调色板或贴图清单变了 → 强制重生（否则旧的配色会一直留着）
+        string stamp = Stamp();
+        bool stale = true;
+        try { stale = !File.Exists(STAMP_PATH) || File.ReadAllText(STAMP_PATH).Trim() != stamp; }
+        catch { }
+        if (stale && !force) { force = true; log.Add("    调色板/贴图清单有变化 → 重新生成全部 UI 贴图"); }
+
         var specs = BuildSpecs();
         int made = 0, skipped = 0;
         log.Add("UI 贴图（程序化生成，9 宫格 border 已写进导入设置）");
@@ -262,6 +282,7 @@ public static class MainMenuAssets
             made++;
         }
         AssetDatabase.Refresh();
+        try { File.WriteAllText(STAMP_PATH, stamp); } catch { }
         log.Add(string.Format("    生成 {0} 张，跳过已存在 {1} 张", made, skipped));
         log.Add("    背景 4 / 面板与卡片 12 / 按钮与控件 18 / 图标 22（清单见下）");
         log.Add("");
@@ -599,6 +620,12 @@ public static class MainMenuAssets
     {
         string p = PathOf(name);
         return p == null ? null : AssetDatabase.LoadAssetAtPath<Sprite>(p);
+    }
+
+    /// 优先用《ui素材》设计稿切出来的贴图（稿_ 开头），没有就退回程序化生成的那套
+    public static string Pick(string fromArt, string fallback)
+    {
+        return Sprite(fromArt) != null ? fromArt : fallback;
     }
 
     // ================================================================== 字体

@@ -57,6 +57,7 @@ Editor/                        agent 工具（菜单 Tools/干预项目/…）�
   AssetLocator.cs              在 Assets 里按名字找文件/目录
   SceneBuilder.cs              剧情主场景 Game.unity：6 个地点拼装 + 场景总览渲染
   MainMenuAssets.cs            主界面 UI 贴图：程序化生成 57 张 + 中文字体 + 20 张收录图导入
+  MainMenuSlices.cs            切《ui素材》设计稿：圆角抠图 + 内部压平 + 九宫格 border（稿_*.png）
   MainMenuBuilder.cs           主界面场景 MainMenu.unity：主菜单/设置/存读档/章节/概览/弹窗
   （历史脚本在 额外文件/历史Editor脚本/，不要放回这里）
 assets/
@@ -70,7 +71,7 @@ assets/
       角色_URP/材质/<角色>/           角色专属材质实例（一人一色）
   03_动作_Animation/           动画 FBX + Animators/PC_徐夏_测试.controller
   04_音效_Audio/
-  05_UI/                       ★ 主界面 UI 素材：背景/界面/按钮/图标/字体 + 内容概览（20 张原图）
+  05_UI/                       ★ 主界面 UI 素材：背景/界面/按钮/图标/字体 + 内容概览（20 张原图）+ 设计稿_原图（《ui素材》12 张）
   11_着色器_Shaders/           角色套件 ShaderGraph（CharacterLit / Toon / 子图 / HLSL）
   _报告/                       ★ 所有报告、清单、预览图都写到这里
 Scripts/UI/                    主界面运行时脚本（MainMenuUI / UIPanel / GameSettings / SaveSystem …）
@@ -136,6 +137,7 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 | 看主界面长相 | `Tools/干预项目/渲染主界面预览` → `assets/_报告/预览/主界面/01~07*.png` |
 | 主界面工具报了什么 | `assets/_报告/_主界面搭建.txt`（层级树 + 越界/贴图/字体自检 + 按钮对照表） |
 | 主界面能不能点 | `Tools/干预项目/主界面运行自检`（真进 Play 模式点一遗 25 步）→ `assets/_报告/_主界面运行自检.txt` |
+| 重新切《ui素材》设计稿 | `Tools/干预项目/切分 UI 设计稿`（改切图框改 `MainMenuSlices.cs` 的 `TABLE`）→ `assets/_报告/预览/主界面/00_设计稿切图_对照.png` 看切得对不对 |
 
 ---
 
@@ -145,7 +147,13 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   **没装 TextMeshPro**，中文字体用 `assets/05_UI/字体_Font/中文_Deng.ttf`（等线；Unity 内置字体没有汉字）。
 - **贴图是程序化生成的**（`MainMenuAssets.cs`，SDF 画圆角/描边 + 1px 抗锯齿，清透治愈风）：
   背景 4 张 / 面板与卡片 12 张 / 按钮与控件 18 张 / 图标 22 张，九宫格 border 写进了 TextureImporter。
-  删掉某个 png 再跑一次工具就会重新生成；想改颜色改 `MainMenuAssets.cs` 顶部的调色板。
+  删掉某个 png 再跑一次工具就会重新生成；**改了调色板下次跑工具会自动全量重生**（`_生成版本.txt` 是调色板指纹）。
+- **《ui素材》的 12 张设计稿已入库并切成能用的贴图**：原稿在 `assets/05_UI/设计稿_原图/`，
+  由 `MainMenuSlices.cs`（`Tools/干预项目/切分 UI 设计稿`）按框切出 `稿_*.png`——
+  背景 `稿_背景_主菜单`、页面底 `稿_面板_弹窗`、卡片 `稿_卡片_1~4`、列表行/次按钮/页签 `稿_列表_默认|选中`。
+  切图会按圆角抠出透明外圈、并把原稿里画死的内部内容压平成纯色，所以拿到的底图干净可拉伸；
+  切图对不对看 `assets/_报告/预览/主界面/00_设计稿切图_对照.png`。
+  主按钮/图标/slider/开关/虚线槽位仍是程序化生成（设计稿里没有可用的一套），配色已改成稿子的淡蓝。
 - **页面**：主菜单（开始游戏/读取存档/章节选择/内容概览/设置/退出）+ 4 个子页 + 大图查看 + 确认弹窗 + Toast，
   ESC 逐层关闭；子页默认收起（场景里 `CanvasGroup.alpha=0`）。
 - **运行时脚本**（`Assets/Scripts/UI/`）：`MainMenuUI`（接线/切页/筛选/读档）、`UIPanel`（淡入淡出）、

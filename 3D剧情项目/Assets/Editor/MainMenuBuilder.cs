@@ -90,6 +90,7 @@ public static class MainMenuBuilder
         _font = MainMenuAssets.EnsureFont(log);
         MainMenuAssets.CopyOverviewFrames(false, log);
         MainMenuAssets.BuildDatabase(log);
+        MainMenuSlices.Run(log);
         PreloadScripts(log);
         log.Add("");
 
@@ -316,7 +317,7 @@ public static class MainMenuBuilder
         var bg = Node("BG_背景", canvas);
         Stretch(bg);
         var img = bg.AddComponent<Image>();
-        img.sprite = MainMenuAssets.Sprite("bg_渐变");
+        img.sprite = MainMenuAssets.Sprite(MainMenuAssets.Pick("稿_背景_主菜单", "bg_渐变"));
         img.color  = Color.white;
         img.raycastTarget = false;
         if (img.sprite == null) Warn("缺背景贴图 bg_渐变");
@@ -324,15 +325,25 @@ public static class MainMenuBuilder
         var deco = Node("BG_装饰", canvas);
         Stretch(deco);
 
-        Img(deco.transform, "光斑_左上", "bg_光斑", new Vector2(-620f, 380f), new Vector2(720f, 720f), new Color(1f, 1f, 1f, 0.75f));
-        Img(deco.transform, "光斑_右下", "bg_光斑", new Vector2(760f, -300f), new Vector2(560f, 560f), new Color(1f, 1f, 1f, 0.55f));
-        Img(deco.transform, "云_1", "bg_云", new Vector2(-560f, 120f), new Vector2(520f, 292f), new Color(1f, 1f, 1f, 0.85f));
-        Img(deco.transform, "云_2", "bg_云", new Vector2(640f, 250f), new Vector2(360f, 202f), new Color(1f, 1f, 1f, 0.65f));
-        Img(deco.transform, "云_3", "bg_云", new Vector2(280f, -430f), new Vector2(640f, 360f), new Color(1f, 1f, 1f, 0.55f));
-        Img(deco.transform, "光点_1", "bg_光点", new Vector2(-780f, -180f), new Vector2(60f, 60f), new Color(1f, 1f, 1f, 0.9f));
-        Img(deco.transform, "光点_2", "bg_光点", new Vector2(830f, 60f), new Vector2(44f, 44f), new Color(1f, 1f, 1f, 0.9f));
-        Img(deco.transform, "光点_3", "bg_光点", new Vector2(-360f, 460f), new Vector2(36f, 36f), new Color(1f, 1f, 1f, 0.8f));
-        Img(deco.transform, "光点_4", "bg_光点", new Vector2(500f, -180f), new Vector2(28f, 28f), new Color(1f, 1f, 1f, 0.8f));
+        bool artBg = MainMenuAssets.Sprite("稿_背景_主菜单") != null;
+        if (artBg)
+        {
+            // 用《ui素材》的背景稿：稿子自带氛围，只补一块柔光把中间压亮，保证文字可读
+            Img(deco.transform, "光斑_中央", "bg_光斑", new Vector2(0f, -40f), new Vector2(1500f, 1000f), new Color(1f, 1f, 1f, 0.30f));
+            Img(deco.transform, "光斑_右下", "bg_光斑", new Vector2(700f, -360f), new Vector2(560f, 560f), new Color(1f, 1f, 1f, 0.35f));
+        }
+        else
+        {
+            Img(deco.transform, "光斑_左上", "bg_光斑", new Vector2(-620f, 380f), new Vector2(720f, 720f), new Color(1f, 1f, 1f, 0.75f));
+            Img(deco.transform, "光斑_右下", "bg_光斑", new Vector2(760f, -300f), new Vector2(560f, 560f), new Color(1f, 1f, 1f, 0.55f));
+            Img(deco.transform, "云_1", "bg_云", new Vector2(-560f, 120f), new Vector2(520f, 292f), new Color(1f, 1f, 1f, 0.85f));
+            Img(deco.transform, "云_2", "bg_云", new Vector2(640f, 250f), new Vector2(360f, 202f), new Color(1f, 1f, 1f, 0.65f));
+            Img(deco.transform, "云_3", "bg_云", new Vector2(280f, -430f), new Vector2(640f, 360f), new Color(1f, 1f, 1f, 0.55f));
+            Img(deco.transform, "光点_1", "bg_光点", new Vector2(-780f, -180f), new Vector2(60f, 60f), new Color(1f, 1f, 1f, 0.9f));
+            Img(deco.transform, "光点_2", "bg_光点", new Vector2(830f, 60f), new Vector2(44f, 44f), new Color(1f, 1f, 1f, 0.9f));
+            Img(deco.transform, "光点_3", "bg_光点", new Vector2(-360f, 460f), new Vector2(36f, 36f), new Color(1f, 1f, 1f, 0.8f));
+            Img(deco.transform, "光点_4", "bg_光点", new Vector2(500f, -180f), new Vector2(28f, 28f), new Color(1f, 1f, 1f, 0.8f));
+        }
     }
 
     // ------------------------------------------------------------------ 主菜单层
@@ -462,11 +473,11 @@ public static class MainMenuBuilder
         At(go, pos, new Vector2(360f, 200f));
 
         var empty  = Img(go.transform, "空框",   "槽位_空",   Vector2.zero, new Vector2(360f, 200f));
-        var filled = Img(go.transform, "实底",   "卡片_普通", Vector2.zero, new Vector2(360f, 200f));
-        var sel    = Img(go.transform, "选中框", "卡片_选中", Vector2.zero, new Vector2(360f, 200f), new Color(1f, 1f, 1f, 0.9f));
+        var filled = Img(go.transform, "实底",   MainMenuAssets.Pick("稿_卡片_1", "卡片_普通"), Vector2.zero, new Vector2(360f, 200f));
+        var sel    = Img(go.transform, "选中框", MainMenuAssets.Pick("稿_卡片_2", "卡片_选中"), Vector2.zero, new Vector2(360f, 200f), new Color(1f, 1f, 1f, 0.9f));
         sel.enabled = false;
 
-        var thumb = Img(go.transform, "缩略图", "卡片_悬停", new Vector2(0f, 22f), new Vector2(316f, 140f));
+        var thumb = Img(go.transform, "缩略图", MainMenuAssets.Pick("稿_卡片_2", "卡片_悬停"), new Vector2(0f, 22f), new Vector2(316f, 140f));
         thumb.enabled = false;
 
         var chapter = Label(go.transform, "章节", "", new Vector2(0f, -52f), new Vector2(320f, 30f), 22, INK, TextAnchor.MiddleCenter);
@@ -506,8 +517,8 @@ public static class MainMenuBuilder
         var go = Node("章节_" + (index + 1), parent);
         At(go, pos, new Vector2(276f, 430f));
 
-        var bottom = Img(go.transform, "底", "卡片_普通", Vector2.zero, new Vector2(276f, 430f));
-        var lockOv = Img(go.transform, "锁定遮罩", "卡片_普通", Vector2.zero, new Vector2(276f, 430f), new Color(0.84f, 0.88f, 0.88f, 0.72f));
+        var bottom = Img(go.transform, "底", MainMenuAssets.Pick("稿_卡片_1", "卡片_普通"), Vector2.zero, new Vector2(276f, 430f));
+        var lockOv = Img(go.transform, "锁定遮罩", MainMenuAssets.Pick("稿_卡片_1", "卡片_普通"), Vector2.zero, new Vector2(276f, 430f), new Color(0.86f, 0.90f, 0.94f, 0.74f));
 
         var num   = Label(go.transform, "编号", "01", new Vector2(0f, 145f), new Vector2(240f, 96f), 64, ACCENT_LT, TextAnchor.MiddleCenter, FontStyle.Bold);
         var title = Label(go.transform, "标题", "", new Vector2(0f, 56f), new Vector2(240f, 76f), 26, INK, TextAnchor.MiddleCenter);
@@ -570,16 +581,16 @@ public static class MainMenuBuilder
         var go = Node("选择_" + (index + 1), parent);
         At(go, pos, new Vector2(736f, 270f));
 
-        var bottom = Img(go.transform, "底", "卡片_普通", Vector2.zero, new Vector2(736f, 270f));
-        var pic    = Img(go.transform, "配图", "卡片_悬停", new Vector2(-158f, 8f), new Vector2(380f, 214f));
+        var bottom = Img(go.transform, "底", MainMenuAssets.Pick("稿_卡片_1", "卡片_普通"), Vector2.zero, new Vector2(736f, 270f));
+        var pic    = Img(go.transform, "配图", MainMenuAssets.Pick("稿_卡片_2", "卡片_悬停"), new Vector2(-158f, 8f), new Vector2(380f, 214f));
         pic.preserveAspect = false;
 
-        var chip   = Img(go.transform, "视角底", "页签_选中", new Vector2(95f, 88f), new Vector2(90f, 34f));
+        var chip   = Img(go.transform, "视角底", MainMenuAssets.Pick("稿_列表_选中", "页签_选中"), new Vector2(95f, 88f), new Vector2(90f, 34f));
         var view   = Label(go.transform, "视角", "自我", new Vector2(95f, 88f), new Vector2(90f, 34f), 19, ACCENT, TextAnchor.MiddleCenter);
         var title  = Label(go.transform, "标题", "", new Vector2(200f, 40f), new Vector2(320f, 34f), 23, INK, TextAnchor.MiddleLeft);
         var body   = Label(go.transform, "概述", "", new Vector2(200f, -40f), new Vector2(320f, 130f), 18, INK_SOFT, TextAnchor.UpperLeft, FontStyle.Normal, 1.25f);
 
-        var sel = Img(go.transform, "选中框", "卡片_选中", Vector2.zero, new Vector2(736f, 270f), new Color(1f, 1f, 1f, 0.9f));
+        var sel = Img(go.transform, "选中框", MainMenuAssets.Pick("稿_卡片_2", "卡片_选中"), Vector2.zero, new Vector2(736f, 270f), new Color(1f, 1f, 1f, 0.9f));
         sel.enabled = false;
 
         var hit = Img(go.transform, "点击区", "遮罩_白", Vector2.zero, new Vector2(736f, 270f), new Color(1f, 1f, 1f, 0f));
@@ -609,7 +620,8 @@ public static class MainMenuBuilder
         Stretch(dim);
         var dimImg = dim.AddComponent<Image>();
         dimImg.sprite = MainMenuAssets.Sprite("遮罩_白");
-        dimImg.color  = new Color(0.06f, 0.13f, 0.15f, 0.80f);
+        var deep = MainMenuAssets.MASK_DEEP;                    // 颜色取自 ui-004「加深遮罩」
+        dimImg.color  = new Color(deep.r, deep.g, deep.b, 0.82f);
         dimImg.raycastTarget = true;
         panel.dimmer = dim;
 
@@ -619,9 +631,12 @@ public static class MainMenuBuilder
         R.bigBody    = Label(root.transform, "说明", "", new Vector2(0f, -462f), new Vector2(1400f, 60f), 20, new Color(1f, 1f, 1f, 0.88f), TextAnchor.UpperCenter, FontStyle.Normal, 1.2f);
         R.bigCounter = Label(root.transform, "计数", "1 / 4", new Vector2(0f, -508f), new Vector2(300f, 26f), 18, new Color(1f, 1f, 1f, 0.7f));
 
-        R.btnBigPrev  = IconBtn(root.transform, "Btn_上一张", "图标_回退", new Vector2(-812f, 10f), 64f);
-        R.btnBigNext  = IconBtn(root.transform, "Btn_下一张", "图标_播放", new Vector2(812f, 10f), 64f);
-        R.btnBigClose = IconBtn(root.transform, "Btn_关闭",   "图标_关闭", new Vector2(880f, 470f), 56f);
+        R.btnBigPrev  = IconBtn(root.transform, "Btn_上一张", "图标_回退", Vector2.zero, 64f);
+        Corner(R.btnBigPrev.gameObject, new Vector2(104f, 10f), new Vector2(64f, 64f), new Vector2(0f, 0.5f), new Vector2(0.5f, 0.5f));
+        R.btnBigNext  = IconBtn(root.transform, "Btn_下一张", "图标_播放", Vector2.zero, 64f);
+        Corner(R.btnBigNext.gameObject, new Vector2(-104f, 10f), new Vector2(64f, 64f), new Vector2(1f, 0.5f), new Vector2(0.5f, 0.5f));
+        R.btnBigClose = IconBtn(root.transform, "Btn_关闭",   "图标_关闭", Vector2.zero, 56f);
+        Corner(R.btnBigClose.gameObject, new Vector2(-28f, -28f), new Vector2(56f, 56f), new Vector2(1f, 1f), new Vector2(1f, 1f));
         return panel;
     }
 
@@ -637,14 +652,15 @@ public static class MainMenuBuilder
         Stretch(dim);
         var dimImg = dim.AddComponent<Image>();
         dimImg.sprite = MainMenuAssets.Sprite("遮罩_白");
-        dimImg.color  = new Color(0.06f, 0.13f, 0.15f, 0.45f);
+        var mc = MainMenuAssets.MASK_NORMAL;
+        dimImg.color  = new Color(mc.r, mc.g, mc.b, 0.48f);
         dimImg.raycastTarget = true;
         panel.dimmer = dim;
 
         var cardGO = Node("卡片", root.transform);
         At(cardGO, Vector2.zero, new Vector2(680f, 340f));
         var cardImg = cardGO.AddComponent<Image>();
-        cardImg.sprite = MainMenuAssets.Sprite("面板_亮");
+        cardImg.sprite = MainMenuAssets.Sprite(MainMenuAssets.Pick("稿_面板_弹窗", "面板_亮"));
         cardImg.type = Image.Type.Sliced;
         cardImg.raycastTarget = true;
 
@@ -815,9 +831,8 @@ public static class MainMenuBuilder
         At(go, pos, size);
 
         var img = go.AddComponent<Image>();
-        string prefix = primary ? "按钮_主_" : "按钮_次_";
-        img.sprite = MainMenuAssets.Sprite(prefix + "普通");
-        if (img.sprite == null) Warn("缺按钮贴图：" + prefix + "普通");
+        img.sprite = MainMenuAssets.Sprite(ButtonSprite(primary, "普通"));
+        if (img.sprite == null) Warn("缺按钮贴图：" + ButtonSprite(primary, "普通"));
         SetSliced(img);
         img.raycastTarget = true;
 
@@ -826,13 +841,17 @@ public static class MainMenuBuilder
         btn.transition = Selectable.Transition.SpriteSwap;
         var ss = new SpriteState
         {
-            highlightedSprite = MainMenuAssets.Sprite(prefix + "悬停"),
-            pressedSprite     = MainMenuAssets.Sprite(prefix + "按下"),
-            disabledSprite    = MainMenuAssets.Sprite(prefix + "禁用"),
-            selectedSprite    = MainMenuAssets.Sprite(prefix + "悬停"),
+            highlightedSprite = MainMenuAssets.Sprite(ButtonSprite(primary, "悬停")),
+            pressedSprite     = MainMenuAssets.Sprite(ButtonSprite(primary, "按下")),
+            disabledSprite    = MainMenuAssets.Sprite(ButtonSprite(primary, "禁用")),
+            selectedSprite    = MainMenuAssets.Sprite(ButtonSprite(primary, "悬停")),
         };
         btn.spriteState = ss;
-        btn.colors = ColorBlock.defaultColorBlock;
+        // 次按钮用的是浅色列表底，按下/悬停再用 ColorBlock 压一点，层次更清楚
+        var cb = ColorBlock.defaultColorBlock;
+        if (!primary) { cb.highlightedColor = new Color(0.97f, 0.99f, 1f); cb.pressedColor = new Color(0.88f, 0.94f, 1f); }
+        cb.disabledColor = new Color(0.80f, 0.85f, 0.89f, 0.6f);
+        btn.colors = cb;
         go.AddComponent<UIHoverScale>();
 
         float textX = iconName == null ? 0f : 16f;
@@ -878,7 +897,7 @@ public static class MainMenuBuilder
         At(go, pos, size);
 
         var img = go.AddComponent<Image>();
-        img.sprite = MainMenuAssets.Sprite("页签_普通");
+        img.sprite = MainMenuAssets.Sprite(MainMenuAssets.Pick("稿_列表_默认", "页签_普通"));
         SetSliced(img);
         img.raycastTarget = true;
 
@@ -887,9 +906,9 @@ public static class MainMenuBuilder
         btn.transition = Selectable.Transition.SpriteSwap;
         btn.spriteState = new SpriteState
         {
-            highlightedSprite = MainMenuAssets.Sprite("页签_悬停"),
-            pressedSprite     = MainMenuAssets.Sprite("页签_选中"),
-            selectedSprite    = MainMenuAssets.Sprite("页签_悬停"),
+            highlightedSprite = MainMenuAssets.Sprite(MainMenuAssets.Pick("稿_列表_选中", "页签_悬停")),
+            pressedSprite     = MainMenuAssets.Sprite(MainMenuAssets.Pick("稿_列表_选中", "页签_选中")),
+            selectedSprite    = MainMenuAssets.Sprite(MainMenuAssets.Pick("稿_列表_选中", "页签_悬停")),
         };
         btn.colors = ColorBlock.defaultColorBlock;
 
@@ -989,15 +1008,16 @@ public static class MainMenuBuilder
         Stretch(dim);
         var dimImg = dim.AddComponent<Image>();
         dimImg.sprite = MainMenuAssets.Sprite("遮罩_白");
-        dimImg.color  = new Color(0.07f, 0.15f, 0.17f, 0.40f);
+        var mask = MainMenuAssets.MASK_NORMAL;                 // 颜色取自 ui-004「普通遮罩」
+        dimImg.color  = new Color(mask.r, mask.g, mask.b, 0.46f);
         dimImg.raycastTarget = true;
         panel.dimmer = dim;
 
         var cardGO = Node("卡片", root.transform);
         At(cardGO, Vector2.zero, cardSize);
         var cardImg = cardGO.AddComponent<Image>();
-        cardImg.sprite = MainMenuAssets.Sprite("面板_亮");
-        if (cardImg.sprite == null) Warn("缺面板贴图：面板_亮");
+        cardImg.sprite = MainMenuAssets.Sprite(MainMenuAssets.Pick("稿_面板_弹窗", "面板_亮"));
+        if (cardImg.sprite == null) Warn("缺面板贴图");
         SetSliced(cardImg);
         cardImg.raycastTarget = true;
         card = (RectTransform)cardGO.transform;
@@ -1016,6 +1036,16 @@ public static class MainMenuBuilder
             closeBtn.onClick.AddListener(delegate { panel.Hide(); });
         }
         return panel;
+    }
+
+    /// 按钮贴图：主按钮用《ui素材》切出来的四态；次按钮用稿子的列表行（默认/选中）
+    static string ButtonSprite(bool primary, string state)
+    {
+        // 主按钮：设计稿里没有「文字按钮四态」这套（ui-008 是滚动条+状态标签），
+        // 所以主按钮用程序化生成的那套（配色已对齐设计稿的蓝）
+        if (primary) return "按钮_主_" + state;
+        string p = (state == "普通" || state == "禁用") ? "稿_列表_默认" : "稿_列表_选中";
+        return MainMenuAssets.Sprite(p) != null ? p : "按钮_次_" + state;
     }
 
     static void Warn(string msg)
@@ -1114,8 +1144,10 @@ public static class MainMenuBuilder
 
     static bool Inside(RectTransform canvasRT, RectTransform rt)
     {
-        // 用设计稿尺寸（和画布当前实际尺寸无关），坐标是画布局部坐标，1 单位 = 1 设计像素
-        var rect = new Rect(-960f, -540f, 1920f, 1080f);
+        // 用画布实际尺寸；拿不到（batch 里可能是 0×0）就退回设计稿尺寸。
+        // 注意不能写死 1920×1080：编辑器 Game 视图不是 16:9 时，全屏元素合法地会超出设计稿范围。
+        var rect = canvasRT.rect;
+        if (rect.width < 100f || rect.height < 100f) rect = new Rect(-960f, -540f, 1920f, 1080f);
         var corners = new Vector3[4];
         rt.GetWorldCorners(corners);
         foreach (var c in corners)
