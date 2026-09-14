@@ -138,6 +138,7 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 | 主界面工具报了什么 | `assets/_报告/_主界面搭建.txt`（层级树 + 越界/贴图/字体自检 + 按钮对照表） |
 | 主界面能不能点 | `Tools/干预项目/主界面运行自检`（真进 Play 模式点一遗 25 步）→ `assets/_报告/_主界面运行自检.txt` |
 | 重新切《ui素材》设计稿 | `Tools/干预项目/切分 UI 设计稿`（改切图框改 `MainMenuSlices.cs` 的 `TABLE`）→ `assets/_报告/预览/主界面/00_设计稿切图_对照.png` 看切得对不对 |
+| 在场景里直接手改弹层 | 打开 `Scenes/MainMenu.unity` 直接改（弹层默认展开可见）；若被收起/想一键恢复，丢 `Assets/_panels_visible_trigger.txt`，刷新后自动全展开并存盘 |
 
 ---
 
@@ -155,7 +156,8 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   切图对不对看 `assets/_报告/预览/主界面/00_设计稿切图_对照.png`。
   主按钮/图标/slider/开关/虚线槽位仍是程序化生成（设计稿里没有可用的一套），配色已改成稿子的淡蓝。
 - **页面**：主菜单（开始游戏/读取存档/章节选择/内容概览/设置/退出）+ 4 个子页 + 大图查看 + 确认弹窗 + Toast，
-  ESC 逐层关闭；子页默认收起（场景里 `CanvasGroup.alpha=0`）。
+  ESC 逐层关闭。**弹层在场景里默认展开**（`CanvasGroup.alpha=1`，重建也保持展开，就是为了能在 Scene 视图直接手改）；
+  **运行时仍从收起开始**（`UIPanel.Awake` 按 `openOnStart` 重置透明度/交互，和场景里存成什么样无关）；Toast 例外，场景里保持透明。
 - **运行时脚本**（`Assets/Scripts/UI/`）：`MainMenuUI`（接线/切页/筛选/读档）、`UIPanel`（淡入淡出）、
   `GameSettings`（PlayerPrefs：音量×4/文字速度/自动播放/自动存档/全屏）、`SaveSystem`（6 个存档槽 JSON + 章节进度）、
   `OverviewDatabase`（内容概览 20 条，`assets/05_UI/内容概览/概览数据.asset`）。
@@ -169,8 +171,12 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 - ⚠️ **九宫格 border 要小于控件最小用量的高度**：按钮/页签这类贴图会用在 50~76px 的小控件上，
   border 给 30 就会上下重叠、图形被压坏（踩过：关闭/返回/页签“看着不对”）。
   改 border 后跑一次搭场景工具即可（`_生成版本.txt` 指纹变了会自动全量重生程序化贴图）。
-- 按钮悬停：贴图态用 Button 的 SpriteSwap（次按钮 `稿_列表_默认 → 选中`），
-  另挂 `UIButtonPolish` 负责手型光标（`光标_手`，导入时置为可读）+ 文字加深，别只换贴图。
+- 按钮悬停：主按钮（开始游戏/应用/读取/确定）保留 SpriteSwap 换贴图（悬停=亮蓝发光；`selectedSprite` 留空，
+  点过回普通态）；白底按钮（次按钮/图标钮/页签）一律 ColorTint 相对提亮（normal 压暗 `(0.96,0.97,0.98)`、
+  悬停回白、按下压蓝、Selected=normal 不常亮），配色统一出自 `MainMenuBuilder.HoverTint()`；
+  按钮照旧挂 `UIButtonPolish`（手型光标 + 悬停文字变化）。
+  只改按钮悬停、不想动场景手改时，用 `Tools/干预项目/按钮悬停改成纯变色`（或丢 `_btnhover_trigger.txt`）——
+  **别为这事跑整场景重建**，会把手改冲掉（如已删的 Logo 徽标、标签微调）。
 - 子页（设置/存读档/章节/概览）的整屏底按 ui-002 的样子：**深色底(0.94) + 中间浅色大圆角面板**
   （面板就是 ui-002 切出来的 `稿_面板_弹窗`）。
 
