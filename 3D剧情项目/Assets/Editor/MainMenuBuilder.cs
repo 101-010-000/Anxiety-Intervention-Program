@@ -52,6 +52,19 @@ public static class MainMenuBuilder
         return cb;
     }
 
+    // 主按钮（深蓝底）的悬停配色：真提亮。乘法 tint 对深蓝底 >1 才提得动（白底提不动才用 HoverTint 的相对法）；
+    // 悬停微微偏蓝地亮起来，按下压蓝；Selected=normal，点过不常亮。
+    internal static ColorBlock PrimaryTint()
+    {
+        var cb = ColorBlock.defaultColorBlock;
+        cb.normalColor      = Color.white;
+        cb.highlightedColor = new Color(1.06f, 1.08f, 1.12f, 1f);
+        cb.pressedColor     = new Color(0.88f, 0.93f, 1f, 1f);
+        cb.selectedColor    = cb.normalColor;
+        cb.disabledColor    = DisabledTint;
+        return cb;
+    }
+
     // 收集起来的引用（搭完直接塞给 MainMenuUI）
     class Refs
     {
@@ -854,26 +867,9 @@ public static class MainMenuBuilder
 
         var btn = go.AddComponent<Button>();
         btn.targetGraphic = img;
-        if (primary)
-        {
-            // 主按钮保留换贴图：悬停=亮蓝发光；selectedSprite 留空 → 点过之后回普通态，不常亮
-            btn.transition = Selectable.Transition.SpriteSwap;
-            btn.spriteState = new SpriteState
-            {
-                highlightedSprite = MainMenuAssets.Sprite(ButtonSprite(primary, "悬停")),
-                pressedSprite     = MainMenuAssets.Sprite(ButtonSprite(primary, "按下")),
-                disabledSprite    = MainMenuAssets.Sprite(ButtonSprite(primary, "禁用")),
-            };
-            var pcb = ColorBlock.defaultColorBlock;
-            pcb.disabledColor = DisabledTint;
-            btn.colors = pcb;
-        }
-        else
-        {
-            // 白底按钮：相对提亮（普通压暗一点、悬停回白），不再换"选中"贴图
-            btn.transition = Selectable.Transition.ColorTint;
-            btn.colors = HoverTint();
-        }
+        // 主/次按钮统一 ColorTint 变色（不再换贴图）：主按钮深蓝底用 >1 真提亮，白底按钮用相对提亮
+        btn.transition = Selectable.Transition.ColorTint;
+        btn.colors = primary ? PrimaryTint() : HoverTint();
         go.AddComponent<UIHoverScale>();
 
         float textX = iconName == null ? 0f : 26f;
@@ -885,7 +881,7 @@ public static class MainMenuBuilder
             Img(go.transform, "图标", iconName, new Vector2(-size.x * 0.5f + 38f, 0f), new Vector2(26f, 26f),
                 primary ? Color.white : ACCENT);
 
-        // 悬停手感：手型光标 + 文字加深一点（贴图态仍由 Button 的 SpriteSwap 负责）
+        // 悬停手感：手型光标 + 文字加深一点（变色反馈由 Button 的 ColorTint 负责）
         var polish = go.AddComponent<UIButtonPolish>();
         polish.label = labelText;
         polish.normalLabel = labelColor;
@@ -1585,10 +1581,11 @@ public static class MainMenuBuilder
     }
 
     // ================================================================== 定向补丁：按钮悬停改纯变色（只改现有场景的 Button，不重建场景）
-    // 整场景重建会把场景里的手改冲掉（已删的 Logo 徽标、标签微调），所以对打开的场景逐个 Button 改过渡方案：
-    //   · 主按钮（贴图 按钮_主_*）：保留 SpriteSwap，selectedSprite 清空（点过回普通态）
-    //   · 白底按钮（按钮_图标_* / 按钮_次_* / 稿_列表_* / 页签_*）：改 ColorTint 相对提亮
-    //   · 顺手补挂 UIButtonPolish（手型光标 + 悬停文字变化；此前因脚本 guid 过期被当缺脚本清掉了）
+    // 整场景重建会把场景里的手改冲掉（已删的 Logo 徽标、换图、标签微调），所以对打开的场景逐个 Button 改过渡方案：
+    //   · 主按钮（按对象名识别：Btn_开始游戏/应用/读取/确定；用户换图后贴图名已不是 按钮_主_*）：ColorTint 真提亮
+    //   · 白底按钮（按钮_图标_* / 按钮_次_* / 稿_列表_* / 页签_* / 按钮_1|2 之外的浅底）：ColorTint 相对提亮
+    //   · Btn_读取/Btn_确定 的普通图若丢失（旧 按钮_主_普通 已删），补成 按钮_1（与另两个主按钮一致）
+    //   · 顺手补挂 UIButtonPolish（手型光标 + 悬停文字变化）并清掉缺脚本空壳
     // 用法：菜单 Tools/干预项目/按钮悬停改成纯变色
     [MenuItem("Tools/干预项目/按钮悬停改成纯变色")]
     public static void PatchBtnHover()
@@ -1598,29 +1595,31 @@ public static class MainMenuBuilder
         log.Add("");
 
         var scene = EditorSceneManager.OpenScene(OUT_SCENE, OpenSceneMode.Single);
-        int nPrimary = 0, nTint = 0, nPolish = 0, nGhost = 0;
+        int nPrimary = 0, nTint = 0, nPolish = 0, nGhost = 0, nSpriteFix = 0;
+        Sprite primarySprite = MainMenuAssets.Sprite("按钮_1");
         foreach (var btn in UnityEngine.Object.FindObjectsOfType<Button>(true))
         {
             // 先清掉按钮上的缺脚本空壳（老 UIButtonPolish 换 guid 后留下的尸体），不受下面类型判断影响
             nGhost += GameObjectUtility.RemoveMonoBehavioursWithMissingScript(btn.gameObject);
             var img = btn.targetGraphic as Image;
             string sp = img != null && img.sprite != null ? img.sprite.name : "";
-            if (sp.StartsWith("按钮_主_"))
+            bool isPrimary = Array.IndexOf(PrimaryButtonNames, btn.name) >= 0;
+            if (isPrimary)
             {
-                btn.transition = Selectable.Transition.SpriteSwap;
-                btn.spriteState = new SpriteState
+                btn.transition = Selectable.Transition.ColorTint;
+                btn.spriteState = new SpriteState();
+                btn.colors = PrimaryTint();
+                if (img != null && img.sprite == null && primarySprite != null)
                 {
-                    highlightedSprite = MainMenuAssets.Sprite("按钮_主_悬停"),
-                    pressedSprite     = MainMenuAssets.Sprite("按钮_主_按下"),
-                    disabledSprite    = MainMenuAssets.Sprite("按钮_主_禁用"),
-                };
-                var pcb = ColorBlock.defaultColorBlock;
-                pcb.disabledColor = DisabledTint;
-                btn.colors = pcb;
+                    img.sprite = primarySprite;   // 换素材后普通图还指着已删的 按钮_主_普通
+                    SetSliced(img);
+                    nSpriteFix++;
+                }
                 nPrimary++;
             }
             else if (sp.StartsWith("按钮_图标_") || sp.StartsWith("按钮_次_") ||
-                     sp.StartsWith("稿_列表_")  || sp.StartsWith("页签_"))
+                     sp.StartsWith("稿_列表_")  || sp.StartsWith("页签_") ||
+                     sp.StartsWith("按钮_2"))
             {
                 btn.transition = Selectable.Transition.ColorTint;
                 btn.spriteState = new SpriteState();
@@ -1641,19 +1640,22 @@ public static class MainMenuBuilder
             {
                 polish.label = label;
                 polish.normalLabel = label.color;
-                polish.hoverLabel  = sp.StartsWith("按钮_主_") ? Color.white : MainMenuAssets.ACCENT_DARK;
+                polish.hoverLabel  = isPrimary ? Color.white : MainMenuAssets.ACCENT_DARK;
             }
             nPolish++;
         }
 
         EditorSceneManager.MarkSceneDirty(scene);
         bool ok = EditorSceneManager.SaveScene(scene, OUT_SCENE);
-        log.Add(string.Format("    主按钮（保留换贴图）{0} 个；白底改 ColorTint {1} 个；UIButtonPolish 挂上 {2} 个；清掉缺脚本空壳 {3} 个；保存 {4}",
-                              nPrimary, nTint, nPolish, nGhost, ok ? "✓" : "失败"));
+        log.Add(string.Format("    主按钮改 ColorTint 提亮 {0} 个；白底 ColorTint {1} 个；补丢失普通图 {2} 个；UIButtonPolish 挂上 {3} 个；清掉缺脚本空壳 {4} 个；保存 {5}",
+                              nPrimary, nTint, nSpriteFix, nPolish, nGhost, ok ? "✓" : "失败"));
         Directory.CreateDirectory("Assets/assets/_报告");
         File.WriteAllText(REPORT_BTNHOVER, string.Join("\n", log.ToArray()));
-        Debug.Log("[MainMenuBuilder] 按钮悬停补丁完成：主按钮 " + nPrimary + " / 变色 " + nTint);
+        Debug.Log("[MainMenuBuilder] 按钮悬停补丁完成：主按钮 " + nPrimary + " / 白底 " + nTint + " / 补图 " + nSpriteFix);
     }
+
+    // 主按钮对象名（PatchBtnHover 按这个识别；与 Btn(primary:true) 的四个调用点对应）
+    static readonly string[] PrimaryButtonNames = { "Btn_开始游戏", "Btn_应用", "Btn_读取", "Btn_确定" };
 
     // ================================================================== 触发器
     // 把 MainMenu.unity 里的全部弹层（子页/大图/确认弹窗）改成“展开”并存盘，
