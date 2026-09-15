@@ -46,9 +46,11 @@ public class MainMenuUI : MonoBehaviour
     public Text[]          ovChapterTabLabels = new Text[5];
     public Button[]        ovViewTabs         = new Button[5];
     public Text[]          ovViewTabLabels    = new Text[5];
-    public OverviewCardUI[] ovCards           = new OverviewCardUI[4];
+    public OverviewCardUI[] ovCards           = new OverviewCardUI[2];
     public Text   ovChapterTitle, ovChapterDesc, ovEmptyHint;
     public Button btnOverviewBack;
+    public Button ovPrevPage, ovNextPage;      // 概览翻页：每页 2 张卡，同章其余选择翻页看
+    public Text   ovPageLabel;
 
     [Header("大图查看")]
     public Image  bigImage;
@@ -68,6 +70,7 @@ public class MainMenuUI : MonoBehaviour
     int    _selectedSlot = -1;
     int    _ovChapter    = 1;
     string _ovView       = "全部";
+    int    _ovPage       = 0;
     int    _bigIndex     = 0;
     List<OverviewEntry> _ovList = new List<OverviewEntry>();
 
@@ -154,6 +157,7 @@ public class MainMenuUI : MonoBehaviour
     void OnOpenOverview()
     {
         _ovChapter = Mathf.Clamp(GameProgress.SelectedChapter, 1, 5);
+        _ovPage = 0;
         RefreshOverview();
         if (overviewPanel != null) overviewPanel.Show();
     }
@@ -378,18 +382,20 @@ public class MainMenuUI : MonoBehaviour
         for (int i = 0; i < ovChapterTabs.Length; i++)
         {
             int chapter = i + 1;
-            if (ovChapterTabs[i] != null) ovChapterTabs[i].onClick.AddListener(delegate { _ovChapter = chapter; _ovView = "全部"; RefreshOverview(); });
+            if (ovChapterTabs[i] != null) ovChapterTabs[i].onClick.AddListener(delegate { _ovChapter = chapter; _ovView = "全部"; _ovPage = 0; RefreshOverview(); });
         }
         for (int i = 0; i < ovViewTabs.Length; i++)
         {
             int idx = i;
             if (ovViewTabs[i] != null) ovViewTabs[i].onClick.AddListener(delegate { SetView(OverviewDatabase.Views[idx]); });
         }
+        if (ovPrevPage != null) ovPrevPage.onClick.AddListener(delegate { StepOverviewPage(-1); });
+        if (ovNextPage != null) ovNextPage.onClick.AddListener(delegate { StepOverviewPage(1); });
         for (int i = 0; i < ovCards.Length; i++)
         {
             int idx = i;
             if (ovCards[i] != null && ovCards[i].button != null)
-                ovCards[i].button.onClick.AddListener(delegate { OpenBig(idx); });
+                ovCards[i].button.onClick.AddListener(delegate { OpenBig(ovCards[idx].index); });
         }
         if (btnOverviewBack != null) btnOverviewBack.onClick.AddListener(delegate { if (overviewPanel != null) overviewPanel.Hide(); });
     }
@@ -408,6 +414,15 @@ public class MainMenuUI : MonoBehaviour
                 _ovView = "全部";
             }
         }
+        _ovPage = 0;
+        RefreshOverview();
+    }
+
+    void StepOverviewPage(int delta)
+    {
+        int pageSize = Mathf.Max(1, ovCards.Length);
+        int pages    = Mathf.Max(1, Mathf.CeilToInt((_ovList == null ? 0 : _ovList.Count) / (float)pageSize));
+        _ovPage      = Mathf.Clamp(_ovPage + delta, 0, pages - 1);
         RefreshOverview();
     }
 
@@ -415,15 +430,21 @@ public class MainMenuUI : MonoBehaviour
     {
         _ovList = overviewDb == null ? new List<OverviewEntry>() : overviewDb.ForChapter(_ovChapter);
 
+        // 每页 ovCards.Length 张卡（=2），_ovPage 从 0 起
+        int pageSize = Mathf.Max(1, ovCards.Length);
+        int pages    = Mathf.Max(1, Mathf.CeilToInt(_ovList.Count / (float)pageSize));
+        if (_ovPage >= pages) _ovPage = pages - 1;
+
         for (int i = 0; i < ovCards.Length; i++)
         {
             var card = ovCards[i];
             if (card == null) continue;
-            if (i < _ovList.Count)
+            int listIdx = _ovPage * pageSize + i;
+            if (listIdx < _ovList.Count)
             {
-                var e = _ovList[i];
+                var e = _ovList[listIdx];
                 card.gameObject.SetActive(true);
-                card.index = i;
+                card.index = listIdx;
                 if (card.image != null)
                 {
                     card.image.sprite = e.frame;
@@ -437,6 +458,10 @@ public class MainMenuUI : MonoBehaviour
             else card.gameObject.SetActive(false);
         }
 
+        if (ovPageLabel != null) ovPageLabel.text = (_ovPage + 1) + " / " + pages;
+        if (ovPrevPage != null)  ovPrevPage.interactable = _ovPage > 0;
+        if (ovNextPage != null)  ovNextPage.interactable = _ovPage < pages - 1;
+
         if (ovChapterTitle != null) ovChapterTitle.text = GameProgress.ChapterTitle(_ovChapter);
         if (ovChapterDesc  != null) ovChapterDesc.text  = GameProgress.ChapterDesc(_ovChapter);
 
@@ -444,7 +469,7 @@ public class MainMenuUI : MonoBehaviour
         if (ovEmptyHint != null)
         {
             ovEmptyHint.gameObject.SetActive(!unlocked);
-            ovEmptyHint.text = "第 " + _ovChapter + " 章还没玩到，下面是它的 4 处选择记录";
+            ovEmptyHint.text = "第 " + _ovChapter + " 章还没玩到，下面是它的 " + _ovList.Count + " 处选择记录";
         }
 
         for (int i = 0; i < ovChapterTabs.Length; i++)

@@ -1,0 +1,10 @@
+概览页改每页2卡（2026-09-15 12:57:51）结果：成功 ✓
+脚本预热：14/14 个 MonoScript 就绪
+场景：Assets/Scenes/MainMenu.unity
+改造 选择_1 → 600×410 @ (-312.00, -47.00)
+改造 选择_2 → 600×410 @ (312.00, -47.00)
+新建翻页控件：Btn_上一页 / 页码 / Btn_下一页
+字体检查：页码/按钮文字字体 = 中文_Deng
+回写 MainMenuUI：ovCards[2] / ovPrevPage / ovNextPage / ovPageLabel
+场景已保存 ✓
+后续：渲染主界面预览 + 主界面运行自检

@@ -92,9 +92,11 @@ public static class MainMenuBuilder
         public Text[]         ovChapterTabLabels = new Text[5];
         public Button[]       ovViewTabs         = new Button[5];
         public Text[]         ovViewTabLabels    = new Text[5];
-        public OverviewCardUI[] ovCards          = new OverviewCardUI[4];
+        public OverviewCardUI[] ovCards          = new OverviewCardUI[2];
         public Text   ovChapterTitle, ovChapterDesc, ovEmptyHint;
         public Button btnOverviewBack;
+        public Button ovPrevPage, ovNextPage;
+        public Text   ovPageLabel;
 
         public UIPanel imagePanel;
         public Image   bigImage;
@@ -174,7 +176,7 @@ public static class MainMenuBuilder
     /// ★ 坑：如果 .cs 是新导入/刚改过，MonoScript.GetClass() 可能是 null，
     ///   这时 AddComponent 出来的组件会被 Unity 写成"内联 MonoScript"（= 新会话里就是缺脚本，菜单全死）。
     ///   强制重导一次脚本就能修好，必须卡在搭场景之前做。
-    static void PreloadScripts(List<string> log)
+    internal static void PreloadScripts(List<string> log)
     {
         AssetDatabase.Refresh();
         var paths = new List<string>();
@@ -597,9 +599,14 @@ public static class MainMenuBuilder
             R.ovViewTabLabels[i] = label;
         }
 
-        // 4 张选择卡
-        Vector2[] cardPos = { new Vector2(-380f, 10f), new Vector2(380f, 10f), new Vector2(-380f, -285f), new Vector2(380f, -285f) };
-        for (int i = 0; i < 4; i++) R.ovCards[i] = BuildOverviewCard(card, i, cardPos[i]);
+        // 每页 2 张选择大卡（同章 4 条分 2 页，底部翻页）
+        // 场景里此页的"卡片"容器被手改放大了 1.2808 倍，坐标按可视面板内能容纳的并排双卡设计
+        Vector2[] cardPos = { new Vector2(-312f, -47f), new Vector2(312f, -47f) };
+        for (int i = 0; i < 2; i++) R.ovCards[i] = BuildOverviewCard(card, i, cardPos[i]);
+
+        R.ovPrevPage  = Btn(card, "Btn_上一页", "上一页", new Vector2(-260f, -290f), new Vector2(150f, 44f), false, out _, 22);
+        R.ovPageLabel = Label(card, "页码", "1 / 2", new Vector2(0f, -290f), new Vector2(140f, 40f), 20, MUTED, TextAnchor.MiddleCenter);
+        R.ovNextPage  = Btn(card, "Btn_下一页", "下一页", new Vector2(260f, -290f), new Vector2(150f, 44f), false, out _, 22);
 
         R.btnOverviewBack = Btn(card, "Btn_返回", "返回", new Vector2(700f, 382f), new Vector2(150f, 50f), false, out _, 24, "图标_返回");
         return panel;
@@ -608,21 +615,21 @@ public static class MainMenuBuilder
     static OverviewCardUI BuildOverviewCard(Transform parent, int index, Vector2 pos)
     {
         var go = Node("选择_" + (index + 1), parent);
-        At(go, pos, new Vector2(736f, 270f));
+        At(go, pos, new Vector2(600f, 410f));
 
-        var bottom = Img(go.transform, "底", MainMenuAssets.Pick("稿_卡片_1", "卡片_普通"), Vector2.zero, new Vector2(736f, 270f));
-        var pic    = Img(go.transform, "配图", MainMenuAssets.Pick("稿_卡片_2", "卡片_悬停"), new Vector2(-158f, 8f), new Vector2(380f, 214f));
+        var bottom = Img(go.transform, "底", MainMenuAssets.Pick("内容概览卡片", "卡片_普通"), Vector2.zero, new Vector2(600f, 410f));
+        var pic    = Img(go.transform, "配图", MainMenuAssets.Pick("稿_卡片_2", "卡片_悬停"), new Vector2(0f, 50f), new Vector2(520f, 270f));
         pic.preserveAspect = false;
 
-        var chip   = Img(go.transform, "视角底", MainMenuAssets.Pick("稿_列表_选中", "页签_选中"), new Vector2(95f, 88f), new Vector2(90f, 34f));
-        var view   = Label(go.transform, "视角", "自我", new Vector2(95f, 88f), new Vector2(90f, 34f), 19, ACCENT, TextAnchor.MiddleCenter);
-        var title  = Label(go.transform, "标题", "", new Vector2(200f, 40f), new Vector2(320f, 34f), 23, INK, TextAnchor.MiddleLeft);
-        var body   = Label(go.transform, "概述", "", new Vector2(200f, -40f), new Vector2(320f, 130f), 18, INK_SOFT, TextAnchor.UpperLeft, FontStyle.Normal, 1.25f);
+        var chip   = Img(go.transform, "视角底", MainMenuAssets.Pick("稿_列表_选中", "页签_选中"), new Vector2(-200f, 157f), new Vector2(90f, 34f));
+        var view   = Label(go.transform, "视角", "自我", new Vector2(-200f, 157f), new Vector2(90f, 34f), 19, ACCENT, TextAnchor.MiddleCenter);
+        var title  = Label(go.transform, "标题", "", new Vector2(0f, -110f), new Vector2(540f, 34f), 24, INK, TextAnchor.MiddleCenter);
+        var body   = Label(go.transform, "概述", "", new Vector2(0f, -162f), new Vector2(540f, 60f), 18, INK_SOFT, TextAnchor.UpperLeft, FontStyle.Normal, 1.25f);
 
-        var sel = Img(go.transform, "选中框", MainMenuAssets.Pick("稿_卡片_2", "卡片_选中"), Vector2.zero, new Vector2(736f, 270f), new Color(1f, 1f, 1f, 0.9f));
+        var sel = Img(go.transform, "选中框", MainMenuAssets.Pick("稿_卡片_2", "卡片_选中"), Vector2.zero, new Vector2(600f, 410f), new Color(1f, 1f, 1f, 0.9f));
         sel.enabled = false;
 
-        var hit = Img(go.transform, "点击区", "遮罩_白", Vector2.zero, new Vector2(736f, 270f), new Color(1f, 1f, 1f, 0f));
+        var hit = Img(go.transform, "点击区", "遮罩_白", Vector2.zero, new Vector2(600f, 410f), new Color(1f, 1f, 1f, 0f));
         hit.raycastTarget = true;
 
         var btn = go.AddComponent<Button>();
@@ -762,6 +769,7 @@ public static class MainMenuBuilder
         ui.ovCards = R.ovCards;
         ui.ovChapterTitle = R.ovChapterTitle; ui.ovChapterDesc = R.ovChapterDesc; ui.ovEmptyHint = R.ovEmptyHint;
         ui.btnOverviewBack = R.btnOverviewBack;
+        ui.ovPrevPage = R.ovPrevPage; ui.ovNextPage = R.ovNextPage; ui.ovPageLabel = R.ovPageLabel;
         ui.tabNormalSprite   = MainMenuAssets.Sprite("页签_普通");
         ui.tabSelectedSprite = MainMenuAssets.Sprite("页签_选中");
 
@@ -776,14 +784,20 @@ public static class MainMenuBuilder
     }
 
     // ================================================================== 小工具
-    static GameObject Node(string name, Transform parent)
+    // 供一次性补丁工具在完整搭建之外调用：确保 Label/Btn 能拿到中文字体（_font 只在 Run() 里赋过值）
+    internal static void WarmFont()
+    {
+        if (_font == null) _font = MainMenuAssets.EnsureFont(new List<string>());
+    }
+
+    internal static GameObject Node(string name, Transform parent)
     {
         var go = new GameObject(name, typeof(RectTransform));
         go.transform.SetParent(parent, false);
         return go;
     }
 
-    static RectTransform At(GameObject go, Vector2 pos, Vector2 size)
+    internal static RectTransform At(GameObject go, Vector2 pos, Vector2 size)
     {
         var rt = (RectTransform)go.transform;
         rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
@@ -820,7 +834,7 @@ public static class MainMenuBuilder
         img.type = img.sprite.border != Vector4.zero ? Image.Type.Sliced : Image.Type.Simple;
     }
 
-    static Image Img(Transform parent, string name, string spriteName, Vector2 pos, Vector2 size, Color? tint = null)
+    internal static Image Img(Transform parent, string name, string spriteName, Vector2 pos, Vector2 size, Color? tint = null)
     {
         var go = Node(name, parent);
         At(go, pos, size);
@@ -833,7 +847,7 @@ public static class MainMenuBuilder
         return img;
     }
 
-    static Text Label(Transform parent, string name, string content, Vector2 pos, Vector2 size, int fontSize, Color color,
+    internal static Text Label(Transform parent, string name, string content, Vector2 pos, Vector2 size, int fontSize, Color color,
                       TextAnchor anchor = TextAnchor.MiddleCenter, FontStyle style = FontStyle.Normal, float lineSpacing = 1.2f)
     {
         var go = Node(name, parent);
@@ -854,7 +868,7 @@ public static class MainMenuBuilder
         return t;
     }
 
-    static Button Btn(Transform parent, string name, string label, Vector2 pos, Vector2 size, bool primary, out Text labelText, int fontSize = 28, string iconName = null)
+    internal static Button Btn(Transform parent, string name, string label, Vector2 pos, Vector2 size, bool primary, out Text labelText, int fontSize = 28, string iconName = null)
     {
         var go = Node(name, parent);
         At(go, pos, size);
@@ -1498,7 +1512,13 @@ public static class MainMenuBuilder
                 break;
             case 16:
                 SmokeCheck("切到第 3 章", ui.ovChapterTitle != null && ui.ovChapterTitle.text.Contains("第3章"));
-                SmokeCheck("第 3 章 4 张卡片都有图", CountEnabledImages(ui) == 4);
+                SmokeCheck("第 3 章 2 张卡片都有图", CountEnabledImages(ui) == 2);
+                SmokeCheck("翻页控件就绪，页码 1 / 2", ui.ovPrevPage != null && ui.ovNextPage != null
+                        && ui.ovPageLabel != null && ui.ovPageLabel.text == "1 / 2");
+                if (ui.ovNextPage != null) ui.ovNextPage.onClick.Invoke();
+                SmokeCheck("下一页 → 页码 2 / 2", ui.ovPageLabel != null && ui.ovPageLabel.text == "2 / 2");
+                if (ui.ovPrevPage != null) ui.ovPrevPage.onClick.Invoke();
+                SmokeCheck("上一页 → 回到 1 / 2", ui.ovPageLabel != null && ui.ovPageLabel.text == "1 / 2");
                 ui.ovViewTabs[3].onClick.Invoke();           // 未来视角
                 break;
             case 17:

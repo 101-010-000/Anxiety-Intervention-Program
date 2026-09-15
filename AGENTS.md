@@ -171,6 +171,16 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 - ⚠️ **九宫格 border 要小于控件最小用量的高度**：按钮/页签这类贴图会用在 50~76px 的小控件上，
   border 给 30 就会上下重叠、图形被压坏（踩过：关闭/返回/页签“看着不对”）。
   改 border 后跑一次搭场景工具即可（`_生成版本.txt` 指纹变了会自动全量重生程序化贴图）。
+- ⚠️ **手改面板时别把弹层根节点 SetActive(false)**：根节点禁用后 Play 模式下 `Awake` 不跑，
+  ConfirmDialog/按钮的监听全部挂不上——表面看场景正常，运行时点退出/取消**毫无反应且不报错**。
+  曾因此自检挂过"点取消 → 弹窗关闭"；`OverviewTwoPerPage.cs` 的手术工具会顺带把六个弹层根节点重新启用。
+- ⚠️ **补丁工具调 `MainMenuBuilder.Label/Btn` 前必须先 `MainMenuBuilder.WarmFont()`**：
+  builder 的静态 `_font` 只在整场景搭建 `Run()` 里赋值，补丁路径直接调会造出**没字体的 Text**
+  （场景里空白、不报错，运行时自检只查 text 值查不出来）。
+- 内容概览页是**每页 2 张选择大卡 + 底部翻页**（上一页/页码/下一页，`MainMenuUI._ovPage`）；
+  该页的"卡片"容器被手改放大了 1.2808 倍，概览页布局改动以
+  `Tools/干预项目/概览页改每页2卡`（`OverviewTwoPerPage.cs`，`_overview2_trigger.txt` 触发，
+  跑完自动渲染预览 + 运行自检）为准，**别跑整场景重建**（会冲掉其他页手改的缩放和布局）。
 - 按钮悬停：**全部按钮纯变色（ColorTint），不换贴图**。主按钮（开始游戏/应用/读取/确定，按对象名识别）
   用 `MainMenuBuilder.PrimaryTint()` 真提亮（normal 原色、悬停 `(1.06,1.08,1.12)` 微蓝提亮、按下压蓝）；
   白底按钮（次按钮/图标钮/页签）用 `HoverTint()` 相对提亮（normal 压暗 `(0.96,0.97,0.98)`、悬停回白；
