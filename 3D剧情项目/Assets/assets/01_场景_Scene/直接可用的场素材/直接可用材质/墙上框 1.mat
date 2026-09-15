@@ -7,14 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: "\u5929\u82B1\u677F"
+  m_Name: "\u5899\u4E0A\u6846 1"
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _EMISSION
+  m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 2
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -114,9 +113,9 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.72955966, g: 0.72955966, b: 0.72955966, a: 1}
-    - _Color: {r: 0.72955966, g: 0.72955966, b: 0.72955966, a: 1}
-    - _EmissionColor: {r: 0.28930807, g: 0.28930807, b: 0.28930807, a: 1}
+    - _BaseColor: {r: 0.51823163, g: 0.5176471, b: 0.7411765, a: 1}
+    - _Color: {r: 0.51823163, g: 0.5176471, b: 0.7411765, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &7291272412762145811
