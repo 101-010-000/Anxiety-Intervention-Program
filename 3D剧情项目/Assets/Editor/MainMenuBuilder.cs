@@ -600,13 +600,13 @@ public static class MainMenuBuilder
         }
 
         // 每页 2 张选择大卡（同章 4 条分 2 页，底部翻页）
-        // 场景里此页的"卡片"容器被手改放大了 1.2808 倍，坐标按可视面板内能容纳的并排双卡设计
-        Vector2[] cardPos = { new Vector2(-312f, -47f), new Vector2(312f, -47f) };
+        // 此页"卡片"容器被手改放大 1.2808 倍；坐标 = 场景手调基线（2026-09-15），勿随意改动
+        Vector2[] cardPos = { new Vector2(-319f, -63f), new Vector2(305f, -63f) };
         for (int i = 0; i < 2; i++) R.ovCards[i] = BuildOverviewCard(card, i, cardPos[i]);
 
-        R.ovPrevPage  = Btn(card, "Btn_上一页", "上一页", new Vector2(-260f, -290f), new Vector2(150f, 44f), false, out _, 22);
-        R.ovPageLabel = Label(card, "页码", "1 / 2", new Vector2(0f, -290f), new Vector2(140f, 40f), 20, MUTED, TextAnchor.MiddleCenter);
-        R.ovNextPage  = Btn(card, "Btn_下一页", "下一页", new Vector2(260f, -290f), new Vector2(150f, 44f), false, out _, 22);
+        R.ovPrevPage  = Btn(card, "Btn_上一页", "上一页", new Vector2(-289f, -291f), new Vector2(150f, 44f), false, out _, 22);
+        R.ovPageLabel = Label(card, "页码", "1 / 2", new Vector2(-29f, -293f), new Vector2(140f, 40f), 20, MUTED, TextAnchor.MiddleCenter);
+        R.ovNextPage  = Btn(card, "Btn_下一页", "下一页", new Vector2(231f, -291f), new Vector2(150f, 44f), false, out _, 22);
 
         R.btnOverviewBack = Btn(card, "Btn_返回", "返回", new Vector2(700f, 382f), new Vector2(150f, 50f), false, out _, 24, "图标_返回");
         return panel;
@@ -618,13 +618,15 @@ public static class MainMenuBuilder
         At(go, pos, new Vector2(600f, 410f));
 
         var bottom = Img(go.transform, "底", MainMenuAssets.Pick("内容概览卡片", "卡片_普通"), Vector2.zero, new Vector2(600f, 410f));
-        var pic    = Img(go.transform, "配图", MainMenuAssets.Pick("稿_卡片_2", "卡片_悬停"), new Vector2(0f, 50f), new Vector2(520f, 270f));
+        var pic    = Img(go.transform, "配图", MainMenuAssets.Pick("稿_卡片_2", "卡片_悬停"), new Vector2(0f, 29f), new Vector2(520f, 270f));
         pic.preserveAspect = false;
 
-        var chip   = Img(go.transform, "视角底", MainMenuAssets.Pick("稿_列表_选中", "页签_选中"), new Vector2(-200f, 157f), new Vector2(90f, 34f));
-        var view   = Label(go.transform, "视角", "自我", new Vector2(-200f, 157f), new Vector2(90f, 34f), 19, ACCENT, TextAnchor.MiddleCenter);
-        var title  = Label(go.transform, "标题", "", new Vector2(0f, -110f), new Vector2(540f, 34f), 24, INK, TextAnchor.MiddleCenter);
-        var body   = Label(go.transform, "概述", "", new Vector2(0f, -162f), new Vector2(540f, 60f), 18, INK_SOFT, TextAnchor.UpperLeft, FontStyle.Normal, 1.25f);
+        // 视角标签 x 两卡错位、文字比底低 3px、字号 25，均沿用场景手调
+        float chipX = index == 0 ? -200f : -173f;
+        var chip   = Img(go.transform, "视角底", MainMenuAssets.Pick("稿_列表_选中", "页签_选中"), new Vector2(chipX, 157f), new Vector2(90f, 34f));
+        var view   = Label(go.transform, "视角", "自我", new Vector2(chipX, 154f), new Vector2(90f, 34f), 25, ACCENT, TextAnchor.MiddleCenter);
+        var title  = Label(go.transform, "标题", "", new Vector2(0f, -100f), new Vector2(540f, 34f), 24, INK, TextAnchor.MiddleCenter);
+        var body   = Label(go.transform, "概述", "", new Vector2(0f, -156f), new Vector2(540f, 60f), 18, INK_SOFT, TextAnchor.UpperLeft, FontStyle.Normal, 1.25f);
 
         var sel = Img(go.transform, "选中框", MainMenuAssets.Pick("稿_卡片_2", "卡片_选中"), Vector2.zero, new Vector2(600f, 410f), new Color(1f, 1f, 1f, 0.9f));
         sel.enabled = false;

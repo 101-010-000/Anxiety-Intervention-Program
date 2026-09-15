@@ -751,35 +751,35 @@ public static class MainMenuAssets
 
     static readonly OvRow[] OV_ROWS =
     {
-        // 第 1 章
-        new OvRow { Chapter = 1, View = "自我", Title = "徐夏实际害怕的是什么", Body = "怕汇报差了：反复预演出错场景，纠结却不敢行动——真正害怕的是被否定、成为众矢之的；也怕所有后果只能自己一个人扛。" },
-        new OvRow { Chapter = 1, View = "其他", Title = "帮林溪补充一句鼓励的话", Body = "代入林溪的视角：如果是林溪，会怎样鼓励徐夏？（记录你替她写下的那句话）" },
-        new OvRow { Chapter = 1, View = "旁观", Title = "在张同学看来，她的焦虑是", Body = "放大失误、忽略信任：组长把任务交给她，本身就是一种信任；她也看不到自己平时做事有多靠谱。" },
-        new OvRow { Chapter = 1, View = "未来", Title = "未来的徐夏会说些什么", Body = "学会了勇敢面对与沟通；懂得了团队协作的意义——不用一个人扛下所有压力。" },
+        // 第 1 章（Body 压缩到一行以内，防止概览卡文字超出底图框线）
+        new OvRow { Chapter = 1, View = "自我", Title = "徐夏实际害怕的是什么", Body = "怕汇报出错被否定，更怕所有后果只能自己一个人扛。" },
+        new OvRow { Chapter = 1, View = "其他", Title = "帮林溪补充一句鼓励的话", Body = "代入林溪的视角：写一句鼓励徐夏的话。" },
+        new OvRow { Chapter = 1, View = "旁观", Title = "在张同学看来，她的焦虑是", Body = "放大了失误、忽略了信任：把任务交给她本就是认可。" },
+        new OvRow { Chapter = 1, View = "未来", Title = "未来的徐夏会说些什么", Body = "学会了勇敢面对与沟通，不必一个人扛下所有压力。" },
 
         // 第 2 章
-        new OvRow { Chapter = 2, View = "自我", Title = "她在焦虑的是什么", Body = "害怕拒绝邀约后被孤立、被排除在集体之外；也害怕去了之后融不进大家的话题。" },
+        new OvRow { Chapter = 2, View = "自我", Title = "她在焦虑的是什么", Body = "怕拒绝邀约后被孤立，也怕去了却融不进话题。" },
         new OvRow { Chapter = 2, View = "其他", Title = "帮林溪补充鼓励的话", Body = "代入林溪的视角：写一句让徐夏不再反复纠结的话。" },
-        new OvRow { Chapter = 2, View = "旁观", Title = "从陆宣雨的角度看", Body = "放大了拒绝的后果；忽略了自身感受的重要性——真正的朋友不会因为这点小事就疏远。" },
-        new OvRow { Chapter = 2, View = "未来", Title = "未来的自己会说些什么", Body = "学会坦然拒绝、不勉强自己；懂得真正的友谊从来不需要刻意讨好。" },
+        new OvRow { Chapter = 2, View = "旁观", Title = "从陆宣雨的角度看", Body = "放大了拒绝的后果；真朋友不会因小事疏远。" },
+        new OvRow { Chapter = 2, View = "未来", Title = "未来的自己会说些什么", Body = "学会坦然拒绝：真正的友谊不需要刻意讨好。" },
 
         // 第 3 章
-        new OvRow { Chapter = 3, View = "自我", Title = "她实际在焦虑什么", Body = "对考研和就业都没底气，感觉落后同学、怕被淘汰——真正害怕的是没有方向、一事无成。" },
+        new OvRow { Chapter = 3, View = "自我", Title = "她实际在焦虑什么", Body = "考研就业都没底气，怕的是没有方向、一事无成。" },
         new OvRow { Chapter = 3, View = "其他", Title = "帮李老师补充鼓励的话", Body = "代入老师的视角：写一句给迷茫中的学生的话。" },
-        new OvRow { Chapter = 3, View = "旁观", Title = "在老师看来，她的焦虑是", Body = "不自觉地和别人比进度，忽略了自身的积累；把暂时的迷茫当成了彻底的失败。" },
-        new OvRow { Chapter = 3, View = "未来", Title = "未来的自己会怎么看待迷茫", Body = "学会了不与他人攀比；懂得成长没有固定的节奏，按自己的步调走就很好。" },
+        new OvRow { Chapter = 3, View = "旁观", Title = "在老师看来，她的焦虑是", Body = "总和别人比进度，把暂时的迷茫当成了失败。" },
+        new OvRow { Chapter = 3, View = "未来", Title = "未来的自己会怎么看待迷茫", Body = "成长没有固定节奏，按自己的步调走就很好。" },
 
         // 第 4 章
-        new OvRow { Chapter = 4, View = "自我", Title = "焦虑的感觉是什么", Body = "担心考试复习不完、论文写不好，两件事一起压过来；也怕努力得不到回报。" },
+        new OvRow { Chapter = 4, View = "自我", Title = "焦虑的感觉是什么", Body = "怕复习不完、论文写不好，也怕努力没有回报。" },
         new OvRow { Chapter = 4, View = "其他", Title = "帮学姐补充鼓励的话", Body = "代入学姐的视角：写一句让人安心的话。" },
-        new OvRow { Chapter = 4, View = "旁观", Title = "图书馆里发现自己的焦虑是", Body = "把困难无限放大、自己吓自己；也忽略了身边愿意帮忙的同学和学姐。" },
-        new OvRow { Chapter = 4, View = "未来", Title = "未来的自己会对现在说什么", Body = "学会合理安排时间，把大任务拆成小目标；懂得对能力的不安并不会影响自己能做到的事。" },
+        new OvRow { Chapter = 4, View = "旁观", Title = "图书馆里发现自己的焦虑是", Body = "把困难无限放大，忽略了身边愿意帮忙的人。" },
+        new OvRow { Chapter = 4, View = "未来", Title = "未来的自己会对现在说什么", Body = "把大任务拆成小目标，不安并不代表做不到。" },
 
         // 第 5 章
-        new OvRow { Chapter = 5, View = "自我", Title = "她担心的是什么", Body = "怕背书太吵被舍友嫌弃、被排斥；也怕一点小事就破坏了宿舍里原本的好关系。" },
+        new OvRow { Chapter = 5, View = "自我", Title = "她担心的是什么", Body = "怕被舍友嫌弃排斥，也怕小事毁了宿舍关系。" },
         new OvRow { Chapter = 5, View = "其他", Title = "帮陆宣雨补充鼓励的话", Body = "代入宿舍长的视角：写一句让徐夏放下心的话。" },
-        new OvRow { Chapter = 5, View = "旁观", Title = "从舍友们的角度看", Body = "把一句随意的话、一个无心的眼神无限放大；也忘了沟通才是解开误会的关键。" },
-        new OvRow { Chapter = 5, View = "未来", Title = "未来的自己回看这次矛盾", Body = "学到了在内耗之前先主动沟通；懂得人际相处靠的是真诚，而不是刻意讨好。" },
+        new OvRow { Chapter = 5, View = "旁观", Title = "从舍友们的角度看", Body = "把无心之言无限放大，忘了沟通才能解开误会。" },
+        new OvRow { Chapter = 5, View = "未来", Title = "未来的自己回看这次矛盾", Body = "内耗之前先主动沟通：相处靠真诚不靠讨好。" },
     };
 
     public static OverviewDatabase LoadOverviewDb()

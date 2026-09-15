@@ -15,9 +15,10 @@ public static class OverviewTwoPerPage
     const string ReportPath = ReportDir + "/_概览页改造.txt";
 
     // 新布局（与 MainMenuBuilder.BuildOverviewPage/BuildOverviewCard 保持一致）
-    // 此页"卡片"容器被手改放大 1.2808 倍：并排双卡 600×410 + 底部翻页，全部落在可视面板内
+    // 此页"卡片"容器被手改放大 1.2808 倍。以下坐标 = 用户 2026-09-15 手调基线，勿随意改动
     static readonly Vector2   CardSize = new Vector2(600f, 410f);
-    static readonly Vector2[] CardPos  = { new Vector2(-312f, -47f), new Vector2(312f, -47f) };
+    static readonly Vector2[] CardPos  = { new Vector2(-319f, -63f), new Vector2(305f, -63f) };
+    static readonly float[]   ChipX    = { -200f, -173f };   // 视角标签 x：两张卡沿用用户手调的错位
 
     [MenuItem("Tools/干预项目/概览页改每页2卡")]
     public static void Run()
@@ -48,6 +49,9 @@ public static class OverviewTwoPerPage
     {
         MainMenuBuilder.PreloadScripts(log);
 
+        // 概览文案（MainMenuAssets.OV_ROWS）可能被更新，重建概览数据资产保持同步
+        MainMenuAssets.BuildDatabase(log);
+
         var sc = EditorSceneManager.GetActiveScene();
         if (!sc.IsValid() || sc.path != ScenePath)
             sc = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
@@ -76,7 +80,7 @@ public static class OverviewTwoPerPage
             if (i <= 2)
             {
                 if (t == null) throw new System.Exception("缺 选择_" + i + "，场景结构和预期不符");
-                ReshapeCard(t, CardPos[i - 1], log);
+                ReshapeCard(t, CardPos[i - 1], ChipX[i - 1], log);
                 kept.Add(t.GetComponent<OverviewCardUI>());
             }
             else if (t != null)
@@ -94,10 +98,10 @@ public static class OverviewTwoPerPage
         }
         MainMenuBuilder.WarmFont(); // Label/Btn 用的 _font 只在整场景搭建时赋值，补丁路径必须先预热
         Text lt, lc;
-        var prev = MainMenuBuilder.Btn(card, "Btn_上一页", "上一页", new Vector2(-260f, -290f), new Vector2(150f, 44f), false, out lt, 22);
-        var lbl  = MainMenuBuilder.Label(card, "页码", "1 / 2", new Vector2(0f, -290f), new Vector2(140f, 40f), 20,
+        var prev = MainMenuBuilder.Btn(card, "Btn_上一页", "上一页", new Vector2(-289f, -291f), new Vector2(150f, 44f), false, out lt, 22);
+        var lbl  = MainMenuBuilder.Label(card, "页码", "1 / 2", new Vector2(-29f, -293f), new Vector2(140f, 40f), 20,
                                          new Color(0.616f, 0.678f, 0.694f), TextAnchor.MiddleCenter); // 同 builder 的 MUTED
-        var next = MainMenuBuilder.Btn(card, "Btn_下一页", "下一页", new Vector2(260f, -290f), new Vector2(150f, 44f), false, out lc, 22);
+        var next = MainMenuBuilder.Btn(card, "Btn_下一页", "下一页", new Vector2(231f, -291f), new Vector2(150f, 44f), false, out lc, 22);
         log.Add("新建翻页控件：Btn_上一页 / 页码 / Btn_下一页");
         if (lbl == null || lbl.font == null) throw new System.Exception("页码 Text 缺字体（WarmFont 未生效）");
         log.Add("字体检查：页码/按钮文字字体 = " + lbl.font.name);
@@ -108,6 +112,11 @@ public static class OverviewTwoPerPage
         ui.ovNextPage  = next;
         ui.ovPageLabel = lbl;
         log.Add("回写 MainMenuUI：ovCards[2] / ovPrevPage / ovNextPage / ovPageLabel");
+
+        // 3.5) 概览数据重建后，把新文案刷进场景里的卡片文字（RefreshOverview 幂等，运行时会再刷）
+        ui.RefreshOverview();
+        EditorSceneManager.MarkSceneDirty(sc);
+        log.Add("已刷新概览卡文字（编辑器场景可见）");
 
         // 4) 修复：弹层根节点被禁用会让 Play 模式下 Awake 不跑、按钮监听挂不上
         //    （本机发现 Popup_确认 曾被禁用：运行时点退出/取消会完全没反应）
@@ -132,20 +141,20 @@ public static class OverviewTwoPerPage
         log.Add("后续：渲染主界面预览 + 主界面运行自检");
     }
 
-    static void ReshapeCard(Transform t, Vector2 pos, List<string> log)
+    static void ReshapeCard(Transform t, Vector2 pos, float chipX, List<string> log)
     {
         var rt = (RectTransform)t;
         rt.anchoredPosition = pos;
         rt.sizeDelta        = CardSize;
 
-        SetRect(t, "底",     Vector2.zero,        CardSize);
-        SetRect(t, "选中框", Vector2.zero,        CardSize);
-        SetRect(t, "点击区", Vector2.zero,        CardSize);
-        SetRect(t, "配图",   new Vector2(0f, 50f),  new Vector2(520f, 270f));
-        SetRect(t, "视角底", new Vector2(-200f, 157f), new Vector2(90f, 34f));
-        SetRect(t, "视角",   new Vector2(-200f, 157f), new Vector2(90f, 34f));
-        var title = SetRect(t, "标题", new Vector2(0f, -110f), new Vector2(540f, 34f));
-        var body  = SetRect(t, "概述", new Vector2(0f, -162f), new Vector2(540f, 60f));
+        SetRect(t, "底",     Vector2.zero,          CardSize);
+        SetRect(t, "选中框", Vector2.zero,          CardSize);
+        SetRect(t, "点击区", Vector2.zero,          CardSize);
+        SetRect(t, "配图",   new Vector2(0f, 29f),   new Vector2(520f, 270f));
+        SetRect(t, "视角底", new Vector2(chipX, 157f), new Vector2(90f, 34f));
+        SetRect(t, "视角",   new Vector2(chipX, 154f), new Vector2(90f, 34f));   // 文字比底低 3px = 用户手调
+        var title = SetRect(t, "标题", new Vector2(0f, -100f), new Vector2(540f, 34f));
+        var body  = SetRect(t, "概述", new Vector2(0f, -156f), new Vector2(540f, 60f));
         if (title != null) { title.fontSize = 24; title.alignment = TextAnchor.MiddleCenter; }
         if (body  != null) body.fontSize  = 18;
 
