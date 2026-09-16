@@ -1,0 +1,11 @@
+大图翻页按钮修复（2026-09-15 18:44:14）结果：成功 ✓
+脚本预热：14/14 个 MonoScript 就绪
+场景：Assets/Scenes/MainMenu.unity
+Btn_上一张：补回 Image（透明点击层）
+Btn_上一张：回填 Button.targetGraphic（悬停变色作用在透明层上，视觉反馈仍靠 UIHoverScale 缩放 + 手型光标）
+Btn_上一张 自检：Image ✓ raycastTarget=True targetGraphic=✓
+Btn_下一张：补回 Image（透明点击层）
+Btn_下一张：回填 Button.targetGraphic（悬停变色作用在透明层上，视觉反馈仍靠 UIHoverScale 缩放 + 手型光标）
+Btn_下一张 自检：Image ✓ raycastTarget=True targetGraphic=✓
+Btn_关闭 状态：Image=有 raycastTarget=1 targetGraphic=✓
+场景已保存 ✓

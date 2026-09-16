@@ -1,0 +1,75 @@
+存读档删除文字同读取（2026-09-15 19:19:07）结果：成功 ✓
+场景：Assets/Scenes/MainMenu.unity
+页面：UI_Canvas/Page_存读档
+── 页面层级 ──
+Page_存读档
+  遮罩 Image=遮罩_白
+  卡片 Image=面板背景
+    页面标题 Text="存档 / 读档" color=RGBA(0.137, 0.212, 0.31, 1) font=中文_Deng size=34 style=Bold
+    槽位_1
+      空框 Image=槽位_空
+      实底 Image=★空
+      选中框 Image=稿_卡片_2
+      缩略图 Image=稿_卡片_2
+      章节 Text="" color=RGBA(0.137, 0.212, 0.31, 1) font=中文_Deng size=22 style=Normal
+      时间 Text="" color=RGBA(0.576, 0.667, 0.749, 1) font=中文_Deng size=18 style=Normal
+      空存档 Text="空存档" color=RGBA(0.576, 0.667, 0.749, 1) font=中文_Deng size=24 style=Normal
+      点击区 Image=遮罩_白
+    槽位_2
+      空框 Image=槽位_空
+      实底 Image=★空
+      选中框 Image=稿_卡片_2
+      缩略图 Image=稿_卡片_2
+      章节 Text="" color=RGBA(0.137, 0.212, 0.31, 1) font=中文_Deng size=22 style=Normal
+      时间 Text="" color=RGBA(0.576, 0.667, 0.749, 1) font=中文_Deng size=18 style=Normal
+      空存档 Text="空存档" color=RGBA(0.576, 0.667, 0.749, 1) font=中文_Deng size=24 style=Normal
+      点击区 Image=遮罩_白
+    槽位_3
+      空框 Image=槽位_空
+      实底 Image=★空
+      选中框 Image=稿_卡片_2
+      缩略图 Image=稿_卡片_2
+      章节 Text="" color=RGBA(0.137, 0.212, 0.31, 1) font=中文_Deng size=22 style=Normal
+      时间 Text="" color=RGBA(0.576, 0.667, 0.749, 1) font=中文_Deng size=18 style=Normal
+      空存档 Text="空存档" color=RGBA(0.576, 0.667, 0.749, 1) font=中文_Deng size=24 style=Normal
+      点击区 Image=遮罩_白
+    槽位_4
+      空框 Image=槽位_空
+      实底 Image=★空
+      选中框 Image=稿_卡片_2
+      缩略图 Image=稿_卡片_2
+      章节 Text="" color=RGBA(0.137, 0.212, 0.31, 1) font=中文_Deng size=22 style=Normal
+      时间 Text="" color=RGBA(0.576, 0.667, 0.749, 1) font=中文_Deng size=18 style=Normal
+      空存档 Text="空存档" color=RGBA(0.576, 0.667, 0.749, 1) font=中文_Deng size=24 style=Normal
+      点击区 Image=遮罩_白
+    槽位_5
+      空框 Image=槽位_空
+      实底 Image=★空
+      选中框 Image=稿_卡片_2
+      缩略图 Image=稿_卡片_2
+      章节 Text="" color=RGBA(0.137, 0.212, 0.31, 1) font=中文_Deng size=22 style=Normal
+      时间 Text="" color=RGBA(0.576, 0.667, 0.749, 1) font=中文_Deng size=18 style=Normal
+      空存档 Text="空存档" color=RGBA(0.576, 0.667, 0.749, 1) font=中文_Deng size=24 style=Normal
+      点击区 Image=遮罩_白
+    槽位_6
+      空框 Image=槽位_空
+      实底 Image=★空
+      选中框 Image=稿_卡片_2
+      缩略图 Image=稿_卡片_2
+      章节 Text="" color=RGBA(0.137, 0.212, 0.31, 1) font=中文_Deng size=22 style=Normal
+      时间 Text="" color=RGBA(0.576, 0.667, 0.749, 1) font=中文_Deng size=18 style=Normal
+      空存档 Text="空存档" color=RGBA(0.576, 0.667, 0.749, 1) font=中文_Deng size=24 style=Normal
+      点击区 Image=遮罩_白
+    Btn_读取 Image=按钮_1
+      文字 Text="读取" color=RGBA(1, 1, 1, 1) font=中文_Deng size=26 style=Bold
+    Btn_删除 Image=按钮_1
+      文字 Text="删除" color=RGBA(1, 1, 1, 1) font=中文_Deng size=24 style=Normal
+    Btn_返回 Image=按钮_2
+      文字 Text="返回" color=RGBA(0.298, 0.624, 0.91, 1) font=中文_Deng size=24 style=Normal
+定位：读取按钮 = UI_Canvas/Page_存读档/卡片/Btn_读取/文字（父：Btn_读取）
+定位：删除按钮 = UI_Canvas/Page_存读档/卡片/Btn_删除/文字（父：Btn_删除）
+读取（源）：color=RGBA(1, 1, 1, 1) font=中文_Deng size=26 style=Bold
+删除（改前）：color=RGBA(1, 1, 1, 1) font=中文_Deng size=24 style=Normal
+UIButtonPolish：normal=RGBA(1, 1, 1, 1) hover=RGBA(1, 1, 1, 1)
+删除（改后）：color=RGBA(1, 1, 1, 1) font=中文_Deng size=26 style=Bold
+场景已保存 ✓
