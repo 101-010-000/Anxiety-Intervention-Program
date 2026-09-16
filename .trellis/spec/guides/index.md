@@ -23,6 +23,7 @@ These guides help you **ask the right questions before coding**.
 |-------|---------|-------------|
 | [Code Reuse Thinking Guide](./code-reuse-thinking-guide.md) | Identify patterns and reduce duplication | When you notice repeated patterns |
 | [Cross-Layer Thinking Guide](./cross-layer-thinking-guide.md) | Think through data flow across layers | Features spanning multiple layers |
+| [Unity MainMenu 场景手术约定](./unity-mainmenu-scene-surgery.md) | MainMenu.unity 增量修改的硬性约定与几何基线 | 任何对主菜单场景的程序化修改 |
 
 ---
 
