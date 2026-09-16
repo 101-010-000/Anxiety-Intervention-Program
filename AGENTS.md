@@ -59,6 +59,7 @@ Editor/                        agent 工具（菜单 Tools/干预项目/…）�
   MainMenuAssets.cs            主界面 UI 贴图：程序化生成 57 张 + 中文字体 + 20 张收录图导入
   MainMenuSlices.cs            切《ui素材》设计稿：圆角抠图 + 内部压平 + 九宫格 border（稿_*.png）
   MainMenuBuilder.cs           主界面场景 MainMenu.unity：主菜单/设置/存读档/章节/概览/弹窗
+  SceneViewReset.cs            场景视图（编辑器摄像机）复位：摆正/回到默认 3/4 视角/聚焦选中
   （历史脚本在 额外文件/历史Editor脚本/，不要放回这里）
 assets/
   01_场景_Scene/               环境模型（教室/走廊/宿舍/食堂/咨询室/图书馆…）
@@ -109,6 +110,7 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
    - `_anim_trigger.txt` → 主角动画接入
    - `_scene_trigger.txt` → 搭建剧情主场景 Game.unity
    - `_menu_trigger.txt` → 重建主界面 MainMenu.unity
+   - `_camera_trigger.txt` → 场景视图相机复位（视角斜了/跑飞了）
    > 触发器依赖"域重载"生效：改一下任意脚本文件、或让 Unity 窗口获得焦点/按 Ctrl+R 即可。
 4. **出现"洋红 / 空材质"**：先跑 `Tools/干预项目/全量强制重导`（等价 Assets → Reimport All），
    再用 `诊断角色材质` 核对（`_报告/_材质诊断.txt` 里应无 `MATERIAL_NULL`、无 `supported=False`）。
@@ -132,6 +134,7 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 | 看角色长相 | `Tools/干预项目/渲染角色预览` → `assets/_报告/预览/*.png` |
 | 查材质为什么洋红 | `Tools/干预项目/诊断角色材质` → `assets/_报告/_材质诊断.txt` |
 | 材质引用变空/洋红 | `Tools/干预项目/全量强制重导` |
+| 编辑器视角斜了/乱转/跑飞 | `Tools/干预项目/场景视图相机/…`（1 完全复位 / 2 只摆正 / 3 回原点 / 4 聚焦选中）→ `assets/_报告/_场景视图相机.txt`；或丢 `_camera_trigger.txt` 自动跑 |
 | 从素材里拿新配件 | 复制 FBX + **它的 .meta** 到 `assets/02_角色_Character/Meshes/…`，再在 `CharRebuild.cs` 里引用 |
 | 改主界面 UI（配色/布局） | 改 `Assets/Editor/MainMenuBuilder.cs`（布局）或 `MainMenuAssets.cs`（贴图/配色）→ `Tools/干预项目/搭建主界面UI场景` |
 | 看主界面长相 | `Tools/干预项目/渲染主界面预览` → `assets/_报告/预览/主界面/01~07*.png` |
