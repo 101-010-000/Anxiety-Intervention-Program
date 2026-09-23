@@ -55,7 +55,9 @@ Editor/                        agent 工具（菜单 Tools/干预项目/…）�
   PlayerAnimSetup.cs           主角动画：生成 AnimatorController 并挂到徐夏
   CharPreview.cs               渲染角色预览 / 材质诊断 / 全量强制重导
   AssetLocator.cs              在 Assets 里按名字找文件/目录
-  SceneBuilder.cs              剧情主场景 Game.unity：6 个地点拼装 + 场景总览渲染
+  SceneBuilder.cs              剧情主场景 Game.unity：6 个地点拼装 + 场景总览渲染（末尾会自动调 ScenePostFx）
+  ScenePostFx.cs               剧情场景后期：辉光/模糊/抬黑/雾 + 6 个地点各自的氛围 Volume（见第五节）
+  GameDoorBuilder.cs           门口传送：给场景里已有的门触发盒挂交互 + 「按 F 开门」+ 地点选择面板（见第五节）
   MainMenuAssets.cs            主界面 UI 贴图：程序化生成 57 张 + 中文字体 + 20 张收录图导入
   MainMenuSlices.cs            切《ui素材》设计稿：圆角抠图 + 内部压平 + 九宫格 border（稿_*.png）
   MainMenuBuilder.cs           主界面场景 MainMenu.unity：主菜单/设置/存读档/章节/概览/弹窗
@@ -76,6 +78,9 @@ assets/
   11_着色器_Shaders/           角色套件 ShaderGraph（CharacterLit / Toon / 子图 / HLSL）
   _报告/                       ★ 所有报告、清单、预览图都写到这里
 Scripts/UI/                    主界面运行时脚本（MainMenuUI / UIPanel / GameSettings / SaveSystem …）
+Scripts/Player/                FirstPersonController.cs（第一人称移动/视角/动画）
+Scripts/Visual/                DreamyFocus.cs（景深同步）、SceneOutline.shader + OutlineFeature.cs（描边，见第五节）
+Scripts/Game/                  DoorInteractable.cs / DoorTravelSystem.cs / DoorSmokeDriver.cs（门口传送，见第五节）
 Scenes/Test_徐夏_动画.unity     测试场景（9 个角色实例 + 相机 + 太阳）
 Scenes/MainMenu.unity          主界面（Build Settings 第 0 号：主菜单 + 设置/存读档/章节选择/内容概览）
 Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，SceneBuilder 生成）
@@ -108,7 +113,10 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
    - `_diagmat_trigger.txt` → 材质诊断
    - `_reimport_trigger.txt` / `_fullreimport_trigger.txt` → 强制重导 / 全量重导
    - `_anim_trigger.txt` → 主角动画接入
-   - `_scene_trigger.txt` → 搭建剧情主场景 Game.unity
+   - `_scene_trigger.txt` → 搭建剧情主场景 Game.unity（会顺带跑一次后期）
+   - `_postfxfull_trigger.txt` → 后期布置 + 渲染每屋一张「原/后」对比预览（一次搞定，推荐）
+   - `_postfx_trigger.txt` → 只布置后期；`_postfxpreview_trigger.txt` → 只渲染后期预览
+   - `_doors_trigger.txt` → 搭/刷新门口传送；`_doorssmoke_trigger.txt` → 门口传送运行自检
    - `_menu_trigger.txt` → 重建主界面 MainMenu.unity
    - `_camera_trigger.txt` → 场景视图相机复位（视角斜了/跑飞了）
    > 触发器依赖"域重载"生效：改一下任意脚本文件、或让 Unity 窗口获得焦点/按 Ctrl+R 即可。
@@ -125,7 +133,115 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 
 ---
 
-## 五、常用操作速查
+## 五、剧情场景后期（ScenePostFx）要点
+
+- **入口**：`Tools/干预项目/场景后期效果/`（① 一键布置 / ② 只刷新资产 / ③ 渲染后期预览 / ④ 关闭）。
+  也可丢 `Assets/_postfxfull_trigger.txt`（自动跑 ①＋③，最省事）。
+- **资产**：`Assets/URP/后期/Post_全局.asset` + `Post_<地点>.asset`×6；预览图在
+  `assets/_报告/预览/场景/后期_*.png`（开后期），成对的 `原始_*.png` 是同一机位的关后期版。
+- ⚠ **最大的坑**：`URP_Renderer.asset` 的 `postProcessData` 如果是空的，**URP 会静默跳过所有后期** ——
+  相机勾了 Post Processing、Volume 里 Bloom 调多大都没用，不报错也不提示。
+  工具每次都会自己检查并填上（只改项目自己的 renderer，不碰 URP 包里的）。
+- **当前基调（梦核 / 朦胧，用户明确要的方向）**：
+  近处实、越远越蒙 —— 靠 **Gaussian 景深**（6.5m 内完全不动，6.5→24m 逐步化开）+ **雾**（0.065，4%/13%/38%/70%）
+  来做纵深；调色保持对比（contrast +10、饱和 +4），**不用“全场变灰”冒充朦胧**（那会把远近糊成一团）。
+  · ⚠ 景深别调太猛：3→9m 那版把整张图都糊了，用户反馈“太模糊”。现在 6.5→24m 是合适的。
+  + Neutral 色调映射 + Bloom（阈值 0.95 / 强度 0.42 / 散射 0.78）+ LiftGammaGain 抬黑 +0.028
+  + 偏品红 + 冷影暖高光 + 胶片颗粒。
+  · **四角压暗（Vignette）默认 intensity = 0**：用户明确不要，别再开。
+  · **不往场景里加任何自发光物体**：Bloom 靠场景自身的亮部。
+- ⚠ **景深只能用 Gaussian，不要改回 Bokeh**：Bokeh 是“以对焦点为中心、前后都糊”，
+  模糊度和 |1-对焦/深度| 挂钩 —— 对焦 5m 时 1m 处就直接糊到顶，物理上做不到“近处一大片清晰”。
+  Gaussian 只糊 gaussianStart 以后，前面完全不动。两者最大模糊半径都被写死在 shader 里（14px）。
+- **抬黑（Lift）**：套件里的衣服本来就深色，而场景只有 2 盏无影平行光 + 环境光，室内一盏灯都没有
+  （`Area_灯组` 是空节点）→ 角色暗部会成一团黑。现在靠 `BLACK_LIFT=0.028` + `AMBIENT=0.25` 顶住；
+  **不要再把 BLACK_LIFT 调到 0.05 以上**（那是上一版“全场发灰”的根源），要真正解决得给房间加灯。
+- **`Assets/Scripts/Visual/DreamyFocus.cs`**：挂在 `FP_相机` 上，把 `hazeStart / hazeEnd`
+  同步到运行期 Volume（改的是 `volume.profile` 实例，不会污染 .asset）；
+  Play 模式里可以直接拖这两个值看效果，剧情系统也可以调 `SetHaze(start, end)` 把说话的人拉清楚。
+- **雾**走 `RenderSettings`（Exp2，浓度 0.065）；角色 Shader 是 URP Lit 模板，**本来就吃雾**。
+
+### 轮廓描边（OutlineFeature）
+
+- **需求**：只给**角色 + 道具**描黑边，墙 / 天花板 / 地板不描；而且描边要贴在物体表面上，
+  **不能是“跟随摄像机”的屏幕空间效果**。
+- **做法：反向外壳（inverted hull）**，不是屏幕空间边缘检测。
+  `Outline.shader` 把顶点沿法线外推 → `Cull Front` 只画背面 → 物体正面已经在不透明阶段画过，
+  壳上被挡住的像素 ZTest 失败，只留轮廓外那一圈 = 描边。
+  · 是真实几何体 → **贴在物体表面上，视角怎么转都是那一条**；
+  · 走正常深度测试 → **被墙挡住的部分自动不描**（不用额外算遮挡）；
+  · 蒙皮后的顶点也外推 → 角色动起来描边跟着动。
+- **怎么做到“只描角色和道具”**：工具会自动建一个叫 `Outline` 的层，
+  把每个 `Loc_*/Content`（道具）与 `Loc_*/第X章角色`（角色）整棵子树放进去；
+  Feature 只画这一层。`Shell*`（地板/墙）不动。想多描就把物体 Layer 改成 `Outline`。
+- **参数改哪儿：只改 `Assets/URP/后期/描边.mat` 一个地方。**
+  Feature 运行期**不会**写这个材质，而是直接把它当 `overrideMaterial` 用，
+  所以 Inspector 里拖 `_OutlineWidth / _OutlineColor / _FadeStart / _FadeEnd` 是**立刻生效**的（Play 模式也行）。
+  · ⚠ 踩过的坑：之前版本在 `Create()` 里 `new Material(...)` 克隆一份、每帧再用 settings 覆盖参数，
+    所以改材质完全没反应 —— 已经改成“材质是唯一参数源”。
+  · 跑一次 ① 会把 `ScenePostFx.cs` 顶部的 `OUTLINE_*` 常量写回材质，重置成设计值。
+- **线宽**是屏幕像素（`_OutlineWidth`，默认 2.0）：顶点 shader 里用
+  `2*dist*tan(fov/2)/屏幕高` 换算成世界距离，所以离得远外壳自动变粗、看起来粗细稳定。
+- ⚠ **两个把线弄脏的坑（已修，别再踩）**：
+  · **线宽千万不要乘淡出系数** —— 中远距离线宽掉到 1 像素以下就会碎成一串虚点，看着全是噪点。
+    远处淡出要交给 **alpha**（`Blend SrcAlpha OneMinusSrcAlpha`），线宽恒定不变。
+  · **要加 `Offset -1, -1`** —— 外壳和物体自己的表面会 z-fighting，不定程度地冒噪点/麻点。
+- **遮挡/时序**：`RenderPassEvent.AfterRenderingOpaques`，和普通不透明物体同阶段，
+  后面还有雾/调色/景深，所以黑边会一起被糊，不会“背景糊但边很锐”。
+- **为什么不用屏幕空间边缘检测**（试过，已弃）：那是“画面上的线”，随相机移动而变；
+  而且要把墙/天花板一起纳入判断才能算清楚，和“只描角色道具”的需求相冲。
+- **参考**：`Assets/Scripts/Visual/SceneOutline.shader` + `OutlineFeature.cs`。
+
+### 角色碰撞体（第 8 节）
+
+- 玩家是 `CharacterController`，要撞不过 NPC，就需要 NPC 身上有碰撞体。
+- 工具（`ScenePostFx.cs` 的 `EnsureCharacterColliders`）会给每个 `Loc_*/第X章角色/*` 实例
+  加一个 **CapsuleCollider**（共 52 个）：
+  · 尺寸由角色的渲染包围盒算：`高 = 包围盒高×0.96`、`半径 = 高×0.16`（**不拿 X 跨度** ——
+    角色是 T-pose，手臂张开会算出一个巨大的胶囊）；
+  · 放在角色**根节点**上（根节点只有 yaw、scale 1），所以跟着角色动；
+  · **不碰 `Player_徐夏`** —— 它挂在 `GameRoot` 下、不在 `第X章角色` 里，而且它自己有 CharacterController。
+- 层就是 `Outline` 层，跟其它层默认碰撞，不需要改 Physics 矩阵。
+- **每个地点一套氛围**（走进去平滑换）：本地 Volume 是「覆盖」不是「叠加」，所以 `Moods()` 里写的是绝对值；
+  **别把 DepthOfField 放进本地面板**，会盖掉全局的、远近分层就失效。
+- 改完记得看报告：`assets/_报告/_后期效果.txt`（布置明细）、`_后期预览.txt`（带亮度 + **近/远两段清晰度**；
+  同一机位还会渲一张 `原始_*.png` 作为“关后期”对照。若“清晰度 远”和“关景深时”几乎一样，说明景深没生效）。
+
+### 门口传送（DoorTravelSystem）
+
+- **需求**：走到**真正的那扇门**前面 → 弹「按 F 开门」→ 按 F 选地点 → 传过去。
+- **注意：是传送不是 LoadScene** —— 6 个地点本来就在同一个 `Game.unity` 里（按 `GAP=40m` 并排摆成片场），
+  所以"切换场景"= 传送到另一个地点的门口。以后要真换 Unity 场景，改 `DoorTravelSystem.TravelTo()` 一行。
+- **门触发盒由人自己放在场景里**（勾了 `Is Trigger` 的 BoxCollider，挂在 `Loc_*` 下面）。
+  ⚠ **工具不自己凭空摆位** —— 早期版本按"南墙正中"瞎猜，位置全是错的（真的门在 `Content/门` 之类的地方）。
+  工具每次会重新扫一遍，新加的门只要勾了 Is Trigger 就会被识别。
+- **资产 / 脚本**：
+  · `Assets/Scripts/Game/DoorInteractable.cs`（挂在门触发盒上，只负责报名字 + 给落点）
+  · `Assets/Scripts/Game/DoorTravelSystem.cs`（单例：提示 / F 键 / 选择面板 / 传送）
+  · `Assets/Scripts/Game/DoorSmokeDriver.cs`（Play 模式自检驱动，平时不动）
+  · `Assets/Editor/GameDoorBuilder.cs`（`Tools/干预项目/搭建门口传送`，或丢 `_doors_trigger.txt`）
+  · 自检：`Tools/干预项目/门口传送运行自检`（或丢 `_doorssmoke_trigger.txt`）→ `assets/_报告/_门口传送运行自检.txt`
+- **自动搭什么**：给每个门触发盒挂 `DoorInteractable` + 按 `Loc_*` 推导地点/标题；
+  每间房建一个 `Arrive_<地点>` 落点（摆在触发盒**前方朝屋内 1.4m**）；再加 `UI_门口交互` Canvas（提示 + 选择面板）
+  和一个 `EventSystem`（**Game.unity 原本没有 EventSystem，没有它 UI 按钮点不动**）。
+- **落点必须放在触发盒外面**：不然传送落地正好落进触发盒里，提示会卡住不消失。
+- **目标列表按地点去重**：一间房可能有好几个门（教室 2 个、走廊 2 个），但目标只该出一个。
+- **四个容易踩的坑（都已处理，别改回去）**：
+  · **判定要用"胸口高度"的探针点，不能用脚底** —— 门触发盒底面往往离地几厘米，
+    拿脚底去比会差之毫厘判成"在外"（实际踩过：盒底 `y=0.05`、脚底 `y=0.03`）。
+    `DoorTravelSystem.probeHeight`（默认 0.9m）+ `Contains()` 里 5cm 容差。
+  · 面板打开时必须同时 `SetLocked(true)` + `SetCursorLocked(false)` + **把 `allowEscToUnlock` 设 false**；
+    不然鼠标一解锁、点一下按钮，`FirstPersonController` 会把鼠标重新锁回去，UI 点不动。
+  · 传送前要把 `CharacterController.enabled = false`，挪完再开 —— 不然位置会被它拽回去。
+  · **写自检别用 `EditorApplication.update` 的 tick 当等待单位** —— tick ≠ 游戏帧，
+    "等 6 tick"时游戏可能才跑几帧，扫描还没生效就断言了。
+    现在自检跑在 Play 模式的协程里（`DoorSmokeDriver`，用 `yield return null` 等真游戏帧），
+    编辑器只负责置标志 → 进 Play → 轮询 `Finished` → 写报告 → 退出。
+- 想改门位/触发范围：直接改那个门自己的 BoxCollider；想改显示名/章节：改它上面的 `DoorInteractable`。
+
+---
+
+## 六、常用操作速查
 
 | 目的 | 怎么做 |
 |---|---|
@@ -138,6 +254,11 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 | 从素材里拿新配件 | 复制 FBX + **它的 .meta** 到 `assets/02_角色_Character/Meshes/…`，再在 `CharRebuild.cs` 里引用 |
 | 改主界面 UI（配色/布局） | 改 `Assets/Editor/MainMenuBuilder.cs`（布局）或 `MainMenuAssets.cs`（贴图/配色）→ `Tools/干预项目/搭建主界面UI场景` |
 | 看主界面长相 | `Tools/干预项目/渲染主界面预览` → `assets/_报告/预览/主界面/01~07*.png` |
+| 调剧情场景的后期（辉光/模糊/雾/氛围） | 改 `Assets/Editor/ScenePostFx.cs` 顶部常量或 `Moods()` 表 → `Tools/干预项目/场景后期效果/① 一键布置`（或丢 `_postfxfull_trigger.txt`） |
+| 看后期效果 / 对比开关后期 | `Tools/干预项目/场景后期效果/③ 渲染后期预览` → `assets/_报告/预览/场景/后期_*.png`（开）与 `原始_*.png`（关）成对出现；报告 `_后期预览.txt` 里带平均亮度差值 |
+| 不要后期了 | `Tools/干预项目/场景后期效果/④ 关闭后期效果`（停用不是删除，跑一次 ① 就回来） |
+| 搭/刷新门口传送（按 F 选地点传走） | `Tools/干预项目/搭建门口传送`（或丢 `_doors_trigger.txt`） |
+| 验证门口传送能不能用 | `Tools/干预项目/门口传送运行自检`（真进 Play 模式走一遍）→ `assets/_报告/_门口传送运行自检.txt` |
 | 主界面工具报了什么 | `assets/_报告/_主界面搭建.txt`（层级树 + 越界/贴图/字体自检 + 按钮对照表） |
 | 主界面能不能点 | `Tools/干预项目/主界面运行自检`（真进 Play 模式点一遗 25 步）→ `assets/_报告/_主界面运行自检.txt` |
 | 重新切《ui素材》设计稿 | `Tools/干预项目/切分 UI 设计稿`（改切图框改 `MainMenuSlices.cs` 的 `TABLE`）→ `assets/_报告/预览/主界面/00_设计稿切图_对照.png` 看切得对不对 |
@@ -145,7 +266,7 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 
 ---
 
-## 六、主界面（MainMenu）要点
+## 七、主界面（MainMenu）要点
 
 - **入口场景**：`Scenes/MainMenu.unity`（Build Settings 第 0 号）。全部是 uGUI（`Canvas` + `Image` + `Text`），
   **没装 TextMeshPro**，中文字体用 `assets/05_UI/字体_Font/中文_Deng.ttf`（等线；Unity 内置字体没有汉字）。
@@ -196,7 +317,7 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 
 ---
 
-## 七、角色一览（9 人，用于对照剧本/需求）
+## 八、角色一览（9 人，用于对照剧本/需求）
 
 | 角色 | 性别 | 身份（参考 `项目文档/需求文档.docx`） | 出场 |
 |---|---|---|---|

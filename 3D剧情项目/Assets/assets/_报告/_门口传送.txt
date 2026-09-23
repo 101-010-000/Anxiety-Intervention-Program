@@ -1,0 +1,34 @@
+门口传送搭建报告  2026-09-21 01:16
+
+字体：Assets/assets/05_UI/字体_Font/中文_Deng.ttf
+脚本预热：7/7 个 MonoScript 就绪
+发现门触发盒 8 个：
+  GameRoot/Locations/Loc_办公室/Content/门 (1)  尺寸 1.0×2.0×1.0  →  咨询办公室（新挂）  落点 Arrive_办公室
+  GameRoot/Locations/Loc_图书馆/Content/Door_G_Frame (1)  尺寸 2.0×2.1×1.2  →  图书馆 / 自习区（新挂）  落点 Arrive_图书馆
+  GameRoot/Locations/Loc_宿舍/Content/门 (1)  尺寸 1.7×2.5×1.0  →  女生宿舍（新挂）  落点 Arrive_宿舍
+  GameRoot/Locations/Loc_教室/content/门  尺寸 1.4×1.9×1.0  →  大学教室（新挂）  落点 Arrive_教室
+  GameRoot/Locations/Loc_教室/content/门 (2)  尺寸 1.4×1.9×1.0  →  大学教室（新挂）  落点 Arrive_教室
+  GameRoot/Locations/Loc_走廊/Content/Door_B_Frame  尺寸 1.3×2.1×0.7  →  教室外走廊（新挂）  落点 Arrive_走廊
+  GameRoot/Locations/Loc_走廊/Content/门 (2)  尺寸 1.0×1.8×1.1  →  教室外走廊（新挂）  落点 Arrive_走廊
+  GameRoot/Locations/Loc_食堂/Content/Door_G_Frame (1)  尺寸 2.0×2.1×0.5  →  食堂（新挂）  落点 Arrive_食堂
+
+交互 UI：提示（底部居中）+ 选择面板 760×720（预建 8 个目标按钮）
+面板在场景里是收起状态；想手改就在 Hierarchy 里选中 UI_门口交互/面板_选择地点 打开看看
+
+保存场景：Assets/Scenes/Game.unity  成功
+
+怎么用：
+  · 走到任意一间房的门前 → 底部弹「按 F 开门」→ 按 F → 选地点 → 传送
+  · 6 个地点都在同一个 Game.unity 里，所以是传送不是 LoadScene
+    （以后要真换 Unity 场景，改 DoorTravelSystem.TravelTo 里那一行就行）
+  · 门触发盒是场景里【已有】的（你手动加的 Is Trigger BoxCollider），本工具只是给它挂上交互
+  · 想改门位/触发范围：直接改那个门自己的 BoxCollider；想改显示名/章节：改它上面的 DoorInteractable
+
+———————————————————————————— 怎么改 ————————————————————————————
+· 门位/触发范围：在场景里直接改那个门自己的 BoxCollider（Is Trigger），一般就够用
+  工具每次会重新扫一遍，新加的门只要勾了 Is Trigger 就会被识别（必须挂在 Loc_* 下面）
+· 落点：Loc_*/Arrive_<地点>，工具自动摆在触发盒前方朝屋内 1.4m；嫌不好就直接拖
+· 显示名/章节：改 Door_<地点> 上 DoorInteractable 的 title / chapter
+· 交互键：门口传送/DoorTravelSystem 的 interactKey（默认 F）
+· 面板高亮色/尺寸：改 Assets/Editor/GameDoorBuilder.cs 的 BuildUI()，再跑一次
+· UI 在场景里默认收起；想手改就在 Hierarchy 里选中 UI_门口交互/面板_选择地点 打开 CanvasGroup

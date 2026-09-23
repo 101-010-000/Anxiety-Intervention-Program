@@ -236,6 +236,13 @@ public static class SceneBuilder
 
         Directory.CreateDirectory(OUT_DIR);
         AssetDatabase.Refresh();
+
+        // 后期效果（ACES 色调映射 + 辉光 + 冷暖调色 + 暗角 + 颗粒 + 雾 + 窗光片）。
+        // 详见 Assets/Editor/ScenePostFx.cs；不想要后期就把这两行注释掉。
+        log.Add("———————————————————————— 后期效果 ————————————————————————");
+        try { ScenePostFx.ApplyToScene(scene, log); }
+        catch (System.Exception e) { log.Add("★ 后期效果布置失败：" + e.Message); Debug.LogError(e); }
+
         bool ok = EditorSceneManager.SaveScene(scene, OUT_SCENE);
         AssetDatabase.Refresh();
         log.Add("保存场景：" + OUT_SCENE + "  " + (ok ? "成功" : "★失败"));
