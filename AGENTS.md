@@ -239,6 +239,34 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
     编辑器只负责置标志 → 进 Play → 轮询 `Finished` → 写报告 → 退出。
 - 想改门位/触发范围：直接改那个门自己的 BoxCollider；想改显示名/章节：改它上面的 `DoorInteractable`。
 
+### 第一章剧情（Chapter1Story）
+
+- **搭建工具已归档**（2026-09-23 用户定稿）：`Chapter1StoryBuilder`（连同它的自动触发器）已移到
+  `额外文件/历史Editor脚本/`。场景里的接线/UI 已序列化落盘，**不依赖工具**，游戏照跑。
+  需要重建时：把文件拷回 `Assets/Editor/` → 手动跑菜单 → **用完再移走**。
+  ⚠ **不要再用 `Assets/_xxx_trigger.txt` 自动触发器**：它会在刷新/重载时自己跑，把用户在场景里的手改覆盖掉
+  （踩过：用户手调的对话 UI 被重跑写回）。
+- **UI 挂在用户手搭的画布 `UI交互` 下**（sortingOrder 100）：
+  · `对话`（子：`遮罩` + `对话框` → `名字` / `对话内容`）——底部对话框；
+  · `交互提示`（子：`键位`(F) / `文字`）——“按 F 交谈”提示（**复用它，不另建 TalkPrompt**）。
+  · ⚠ **这两个节点在场景里默认 `SetActive(false)` 是约定，不是遗漏**：运行时由 `DialogueUI.ShowNode()` / `StoryRunner` 按需启用。
+  · 工具**不动任何布局数值**，只做四件事：挂脚本、**把 Text 字体换成 `中文_Deng`**（用户节点默认是 Unity 内置 Arial，无中文字形 → 字全是空白）、补 CanvasGroup、补 `Indicator(▼)`。
+- **运行时节点**：`StorySystem`（场景根，挂 `StoryRunner` + `StorySmokeDriver`）、`Loc_教室/StoryStart|TalkPoint|BumpPoint`。
+- **交互点 `StoryInteractable`**：`InteractF`（组长：进半径出提示、按 F 触发）与 `Touch`（张知远撞人）。
+  · ⚠ `armed` 由 runner 控制：**只有走到对应等待步骤才允许触发**。不加这个开关，开场旁白段（自由走动）路过组长按一下 F 就会把交互点消费掉，之后按 F 没反应。
+- **三语态**：`dlg` 名牌 + 深色；`nar` 无名牌 + 中灰；`mon` 无名牌 + 浅蓝灰斜体（都走同一个 `对话` 框）。
+- **数据**：`Assets/数据/剧情/第1章.json`（117 步：card/nar/dlg/mon/interact/walk/choice/end）。
+- **自检**：`Tools/干预项目/第一章剧情运行自检`（真进 Play 跑完 117 步）→ `assets/_报告/_第一章剧情运行自检.txt`。
+- ★ **用户定稿（2026-09-23）：「对话框 / 名字 / 对话内容」的大小·相对位置·颜色一律不准再改。**
+  工具对这三个节点只做**只读快照**（`LayoutDialogue` → 报告里列当前值），**一个字都不写回**；
+  字体也只在“真的没有中文字形”时才补（`font.HasCharacter('中')` 判断）。
+  运行时的正文颜色由三语态（dlg/nar/mon）切换 —— 那是演出需求，不是工具覆盖。
+- `遮罩`（全屏黑 68%）已从「对话」下提到 `UI交互` 最前（= UI 最底层，才铺得满全屏、也压不到对话条）。
+  **运行时按语态启用：`dlg` 对话 / `mon` 内心独白 → 开；`nar` 旁白 → 关**（`DialogueUI.SetDim`）。场景里默认禁用。
+- `BlackFade` 与 `遮罩` 职责不同、**层级不能互换**：
+  · `BlackFade` = 章节转场黑幕（不透明，**最上层**，开场淡出 / 章末淡入，`StoryRunner` 驱动）；
+  · `遮罩` = 对话压暗层（半透明 68%，**最底层**，按语态开关）。
+
 ---
 
 ## 六、常用操作速查
@@ -259,6 +287,8 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 | 不要后期了 | `Tools/干预项目/场景后期效果/④ 关闭后期效果`（停用不是删除，跑一次 ① 就回来） |
 | 搭/刷新门口传送（按 F 选地点传走） | `Tools/干预项目/搭建门口传送`（或丢 `_doors_trigger.txt`） |
 | 验证门口传送能不能用 | `Tools/干预项目/门口传送运行自检`（真进 Play 模式走一遍）→ `assets/_报告/_门口传送运行自检.txt` |
+| 重建/改第一章剧情 UI（谨慎） | 把 `额外文件/历史Editor脚本/Chapter1StoryBuilder.cs` 拷回 `Assets/Editor/` → **手动**跑菜单（会重建 `ChoicePanel`/`WalkHint`/`ChapterCard`/`BlackFade`；`对话/对话框/名字/对话内容` 已冻结只读）→ 用完移走 |
+| 第一章剧情运行自检 | 入口随工具一起归档了；要跑就先把 builder 拷回 `Assets/Editor/` 再走菜单 |
 | 主界面工具报了什么 | `assets/_报告/_主界面搭建.txt`（层级树 + 越界/贴图/字体自检 + 按钮对照表） |
 | 主界面能不能点 | `Tools/干预项目/主界面运行自检`（真进 Play 模式点一遗 25 步）→ `assets/_报告/_主界面运行自检.txt` |
 | 重新切《ui素材》设计稿 | `Tools/干预项目/切分 UI 设计稿`（改切图框改 `MainMenuSlices.cs` 的 `TABLE`）→ `assets/_报告/预览/主界面/00_设计稿切图_对照.png` 看切得对不对 |

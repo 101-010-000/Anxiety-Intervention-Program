@@ -1,0 +1,440 @@
+// 剧情总控：按 json 步骤驱动第一章全流程（状态机 + 控制权限 + 推进输入）。
+// 方案一（v3 重做）：微信段直接用用户的 Dialog 对话框（名牌显示"林溪（微信）"），
+// 没有手机聊天 UI、没有独立剧情画布——新 UI 全部挂在 UI_门口交互 下（Chapter1StoryBuilder）。
+//
+// 控制权限（设计定稿）：
+//   打字机播放中  = 锁视角 + 锁移动
+//   间隙（一句说完）= 可转视角、不可移动（FirstPersonController.moveLocked）
+//   开场旁白段    = 不锁移动，边走边听，定时/点击进下一句
+//   走动段/F交互段 = 恢复移动（等触发盒）
+//   干预面板       = 全锁 + 解锁鼠标（allowEscToUnlock 关掉，照抄门口面板的坑）
+// 剧情期间 DoorTravelSystem 整个禁用，防止"按 F 开门"跟剧情交互打架。
+// "说完话"的判定 = 该句打字机播完（DialogueUI.onLineTyped）→ 进入间隙。
+// 打字中点击 = 先补全全句；再点才推进。
+using System.Collections;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public class StoryRunner : MonoBehaviour
+{
+    public static StoryRunner Instance;
+
+    public const string END_HINT = "查看本章核心内容...请前往填写实验者发的问卷链接~";
+
+    [Header("数据与引用（工具自动接）")]
+    public TextAsset chapterJson;
+    public DialogueUI dialogue;
+    public ChoicePanel choicePanel;
+    public GameObject promptRoot;          // "按 F 交谈"提示（挂在 UI_门口交互 下，样式照门口提示）
+    public Text promptLabel;
+    public GameObject walkHintRoot;        // 走动段 HUD 提示
+    public Text walkHintLabel;
+    public CanvasGroup chapterCardGroup;   // 结束卡
+    public Text cardTitle;
+    public Text cardSubtitle;
+    public Image blackFade;                // 全屏黑幕
+    public Transform startAnchor;          // 章节起点
+
+    [Header("行为")]
+    public bool runOnStart = true;
+    public int chapterIndex = 1;
+    [Tooltip("自检用：结束卡不真跳回主菜单")]
+    public bool debugStayInScene;
+
+    public enum State
+    {
+        Idle, Card, Typing, Gap,
+        NarFree, WaitInteract, WaitWalk, Choice, EndCard, Done
+    }
+
+    public State CurrState { get; private set; }
+    public int StepIndex { get; private set; }
+    public int TotalSteps { get { return _ch != null ? _ch.steps.Count : 0; } }
+    public bool Finished { get { return CurrState == State.Done; } }
+    public StoryChapter Chapter { get { return _ch; } }
+
+    StoryChapter _ch;
+    FirstPersonController _player;
+    DoorTravelSystem _doors;
+    bool _savedEsc;
+    bool _nodeOpen;
+    bool _openingNar;        // 开场旁白段：不锁移动，边走边听（第一次遇到非旁白步骤即结束）
+    float _gapTimer;
+    float _pendingNextAt = -1f;
+    StoryInteractable _currentF;
+    StoryInteractable _currentTouch;
+    int _choiceCounter;
+    int _lastLineLen;
+    Coroutine _cardRt;
+
+    void Awake() { Instance = this; }
+
+    void Start()
+    {
+        GameSettings.EnsureLoaded();
+        HideAuxUI();
+        // 只在"从主菜单选了本章进游戏"时自动开跑（编辑器直接 Play 其它章节/场景不被劫持；
+        // 想彻底不自动跑：取消勾选 剧情系统 上 StoryRunner 的 runOnStart）
+        if (runOnStart && chapterJson != null)
+        {
+            if (GameProgress.SelectedChapter == chapterIndex) Begin();
+            else Debug.Log("[StoryRunner] 跳过：当前选定第 " + GameProgress.SelectedChapter + " 章，本 runner 只管第 " + chapterIndex + " 章");
+        }
+    }
+
+    void OnDestroy() { if (Instance == this) Instance = null; }
+
+    // ------------------------------------------------------------------ 开始
+    public void Begin()
+    {
+        _ch = StoryChapter.FromTextAsset(chapterJson);
+        if (_ch == null || _ch.steps.Count == 0)
+        {
+            Debug.LogError("[StoryRunner] 章节数据为空：" + (chapterJson != null ? chapterJson.name : "json 未绑定"));
+            CurrState = State.Done;
+            return;
+        }
+
+        _player = FindObjectOfType<FirstPersonController>();
+        if (_player == null) { Debug.LogError("[StoryRunner] 场景里没有 FirstPersonController"); CurrState = State.Done; return; }
+
+        // 门系统抑制 + ESC 惯例保存
+        _doors = DoorTravelSystem.Instance;
+        if (_doors != null) _doors.enabled = false;
+        _savedEsc = _player.allowEscToUnlock;
+        _player.allowEscToUnlock = false;
+
+        // 传送玩家到章节起点（CharacterController 关了再挪，不然会被拽回去）
+        if (startAnchor != null)
+        {
+            var cc = _player.GetComponent<CharacterController>();
+            if (cc != null) cc.enabled = false;
+            _player.transform.position = startAnchor.position;
+            _player.transform.rotation = Quaternion.Euler(0f, startAnchor.eulerAngles.y, 0f);
+            if (cc != null) cc.enabled = true;
+        }
+
+        // 接线场景里所有剧情交互点（★ 初始一律 unarm：只有走到对应的等待步骤才允许触发）
+        foreach (var si in FindObjectsOfType<StoryInteractable>()) { si.onTriggered = OnInteractableFired; si.armed = false; }
+
+        _openingNar = true;
+        StepIndex = 0;
+        _choiceCounter = 0;
+        if (blackFade != null) blackFade.canvasRenderer.SetAlpha(1f);   // 进场：从黑淡入
+        Next();
+    }
+
+    // ------------------------------------------------------------------ 步骤推进
+    public void Next()
+    {
+        _pendingNextAt = -1f;
+        if (_ch == null || StepIndex >= _ch.steps.Count) { ToDone(); return; }
+        var step = _ch.steps[StepIndex++];
+        bool isText = step.t == "nar" || step.t == "dlg" || step.t == "mon";
+        if (_openingNar && step.t != "nar") _openingNar = false;   // 开场旁白段结束
+
+        // 3D 文本节点：进入非文本步骤时收框
+        if (!isText && _nodeOpen) { dialogue.HideNode(); _nodeOpen = false; }
+
+        switch (step.t)
+        {
+            case "card": DoCard(step); break;
+            case "end": DoEnd(); break;
+            case "choice": DoChoice(step); break;
+
+            case "walk":
+                _currentTouch = FindFree(StoryInteractable.Mode.Touch);
+                if (_currentTouch == null) { Debug.LogWarning("[StoryRunner] 没有 Touch 触发盒，跳过走动段"); Next(); return; }
+                _currentTouch.armed = true;
+                ShowWalkHint(step.x);
+                SetPerms(State.WaitWalk);
+                break;
+
+            case "interact":
+                _currentF = FindFree(StoryInteractable.Mode.InteractF);
+                if (_currentF == null) { Debug.LogWarning("[StoryRunner] 没有 F 交互点，跳过"); Next(); return; }
+                _currentF.armed = true;
+                ShowWalkHint(step.x);
+                SetPerms(State.WaitInteract);
+                break;
+
+            default: PlayText(step); break;      // nar / dlg / mon
+        }
+    }
+
+    void PlayText(StoryStep step)
+    {
+        // 徐夏"拿起手机"那步驱动拿手机动画；"肩膀放松"那步放下手机
+        if (_player != null && _player.animator != null && !string.IsNullOrEmpty(step.x))
+        {
+            if (step.t == "nar" && step.x.Contains("拿起手机"))
+            { _player.animator.SetTrigger("TakePhone"); _player.animator.SetBool("Phone", true); }
+            else if (step.t == "nar" && step.x.Contains("紧绷的肩膀也慢慢放松"))
+                _player.animator.SetBool("Phone", false);
+        }
+
+        // 开场旁白段：照常走对话框打字机，但不锁人——边走边听，到点自动下一句
+        if (_openingNar && step.t == "nar")
+        {
+            if (!_nodeOpen && dialogue != null) { dialogue.ShowNode(); _nodeOpen = true; }
+            _lastLineLen = step.x != null ? step.x.Length : 0;
+            _gapTimer = 0f;
+            dialogue.PlayLine(step);
+            SetPerms(State.NarFree);
+            return;
+        }
+
+        if (!_nodeOpen && dialogue != null) { dialogue.ShowNode(); _nodeOpen = true; }
+        SetPerms(State.Typing);
+        _lastLineLen = step.x != null ? step.x.Length : 0;
+        dialogue.PlayLine(step);
+    }
+
+    // ------------------------------------------------------------------ 入场 / 结束卡
+    // 用户反馈定稿：进场不出"第一章"标题黑屏，直接从黑淡入进场景。
+    // "card" 步骤现在只做一件事：黑幕 1→0 淡出后立刻进入下一步。
+    void DoCard(StoryStep step)
+    {
+        if (_cardRt != null) StopCoroutine(_cardRt);
+        _cardRt = StartCoroutine(FadeInRoutine());
+    }
+
+    IEnumerator FadeInRoutine()
+    {
+        CurrState = State.Card;
+        SetPerms(State.Card);
+        if (blackFade != null)
+        {
+            float t = 0f;
+            while (t < 1f)
+            {
+                t += Time.unscaledDeltaTime / 0.6f;
+                blackFade.canvasRenderer.SetAlpha(1f - Mathf.Clamp01(t));
+                yield return null;
+            }
+            blackFade.canvasRenderer.SetAlpha(0f);
+        }
+        Next();
+    }
+
+    void DoEnd()
+    {
+        if (_cardRt != null) StopCoroutine(_cardRt);
+        _cardRt = StartCoroutine(EndRoutine());
+    }
+
+    IEnumerator EndRoutine()
+    {
+        CurrState = State.EndCard;
+        SetPerms(State.EndCard);
+        if (blackFade != null)
+        {
+            float t = 0f;
+            while (t < 1f) { t += Time.unscaledDeltaTime / 0.5f; blackFade.canvasRenderer.SetAlpha(Mathf.Clamp01(t)); yield return null; }
+        }
+        if (cardTitle != null) cardTitle.text = (_ch != null ? _ch.chapter : "第一章") + "  完";
+        if (cardSubtitle != null)
+        {
+            cardSubtitle.text = END_HINT;
+            cardSubtitle.gameObject.SetActive(true);
+        }
+        if (chapterCardGroup != null)
+        {
+            chapterCardGroup.gameObject.SetActive(true);
+            float t = 0f;
+            while (t < 1f) { t += Time.unscaledDeltaTime / 0.6f; chapterCardGroup.alpha = Mathf.Clamp01(t); yield return null; }
+            chapterCardGroup.alpha = 1f;
+        }
+    }
+
+    void ToDone()
+    {
+        CurrState = State.Done;
+        if (_player != null) { _player.allowEscToUnlock = _savedEsc; _player.SetLocked(false); _player.moveLocked = false; }
+    }
+
+    void ToMainMenu()
+    {
+        GameProgress.MarkCompleted(chapterIndex);
+        ToDone();
+        if (debugStayInScene) return;
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    // ------------------------------------------------------------------ 干预题
+    void DoChoice(StoryStep step)
+    {
+        int idx = _choiceCounter++;
+        SetPerms(State.Choice);
+        choicePanel.Open(step, idx, order =>
+        {
+            // ②在微信段（收框状态下面板出）：面板收档后停一拍再继续，给"替林溪把话说完"留节奏
+            if (order != null && order.Count > 0) { _pendingNextAt = Time.time + 0.4f; SetPerms(State.Gap); _gapTimer = 0f; return; }
+            Next();
+        });
+    }
+
+    // ------------------------------------------------------------------ 交互触发
+    StoryInteractable FindFree(StoryInteractable.Mode m)
+    {
+        var all = FindObjectsOfType<StoryInteractable>();
+        StoryInteractable best = null;
+        foreach (var si in all)
+        {
+            if (si == null || si.mode != m || si.Consumed) continue;
+            if (best == null) best = si;
+        }
+        return best;
+    }
+
+    void OnInteractableFired(StoryInteractable si)
+    {
+        if (si.mode == StoryInteractable.Mode.Touch && CurrState == State.WaitWalk)
+        {
+            si.armed = false;
+            HideWalkHint();
+            _currentTouch = null;
+            Next();
+        }
+        else if (si.mode == StoryInteractable.Mode.InteractF && CurrState == State.WaitInteract)
+        {
+            si.armed = false;
+            HideWalkHint();
+            HidePrompt();
+            _currentF = null;
+            Next();
+        }
+    }
+
+    // ------------------------------------------------------------------ 每帧
+    void Update()
+    {
+        switch (CurrState)
+        {
+            case State.EndCard:
+                if (AdvancePressed()) ToMainMenu();
+                break;
+
+            case State.NarFree:      // 开场旁白：自由走动，定时/点击都能进下一句
+                if (AdvancePressed()) { Next(); break; }
+                _gapTimer += Time.deltaTime;
+                if (_gapTimer >= 1.2f + _lastLineLen * 0.055f) Next();
+                break;
+
+            case State.Typing:
+                if (AdvancePressed() && dialogue != null && dialogue.IsTyping) dialogue.SkipTyping();
+                break;
+
+            case State.Gap:
+                if (_pendingNextAt > 0f && Time.time >= _pendingNextAt) { Next(); break; }
+                if (AdvancePressed()) { Next(); break; }
+                if (GameSettings.AutoPlay)
+                {
+                    _gapTimer += Time.deltaTime;
+                    if (_gapTimer >= GameSettings.AutoDelaySeconds + _lastLineLen * 0.02f + 0.6f) Next();
+                }
+                break;
+
+            case State.WaitInteract:
+                if (promptRoot != null && _currentF != null)
+                {
+                    bool show = _currentF.PlayerInRange;
+                    if (promptRoot.activeSelf != show) promptRoot.SetActive(show);
+                    if (show && promptLabel != null)
+                        promptLabel.text = "与" + (string.IsNullOrEmpty(_currentF.displayName) ? "他" : _currentF.displayName) + "交谈";
+                }
+                break;
+        }
+    }
+
+    static bool AdvancePressed()
+    {
+        return Input.GetMouseButtonDown(0)
+            || Input.GetKeyDown(KeyCode.Space)
+            || Input.GetKeyDown(KeyCode.Return);
+    }
+
+    // ------------------------------------------------------------------ 权限与 HUD
+    void SetPerms(State s)
+    {
+        CurrState = s;
+        if (_player == null) return;
+        switch (s)
+        {
+            case State.Choice:
+                _player.SetLocked(true);
+                _player.moveLocked = false;
+                _player.SetCursorLocked(false);          // 面板要鼠标（allowEscToUnlock 已在 Begin 关掉）
+                break;
+            case State.Gap:
+                _player.SetLocked(false);
+                _player.moveLocked = true;               // ★ 间隙：能转不能走
+                _player.SetCursorLocked(true);
+                break;
+            case State.NarFree:                          // 开场旁白：能走能转
+            case State.WaitInteract:
+            case State.WaitWalk:
+                _player.SetLocked(false);
+                _player.moveLocked = false;
+                _player.SetCursorLocked(true);
+                break;
+            default:                                      // Card/Typing/EndCard/Idle：全锁
+                _player.SetLocked(true);
+                _player.moveLocked = false;
+                _player.SetCursorLocked(true);
+                break;
+        }
+        if (s != State.WaitInteract) HidePrompt();
+        if (dialogue != null) dialogue.SetIndicator(s == State.Gap);
+    }
+
+    void ShowWalkHint(string text)
+    {
+        if (walkHintRoot != null) walkHintRoot.SetActive(true);
+        if (walkHintLabel != null) walkHintLabel.text = "→  " + text;
+    }
+
+    void HideWalkHint() { if (walkHintRoot != null) walkHintRoot.SetActive(false); }
+    void HidePrompt() { if (promptRoot != null) promptRoot.SetActive(false); }
+
+    void HideAuxUI()
+    {
+        HideWalkHint(); HidePrompt();
+        if (chapterCardGroup != null) { chapterCardGroup.alpha = 0f; chapterCardGroup.gameObject.SetActive(false); }
+        if (blackFade != null) blackFade.canvasRenderer.SetAlpha(0f);
+    }
+
+    // ------------------------------------------------------------------ 自检接口
+    /// 自检/调试用：替玩家做当前状态该做的事
+    public void DebugAdvance()
+    {
+        switch (CurrState)
+        {
+            case State.EndCard: ToMainMenu(); break;
+            case State.Typing: if (dialogue != null) dialogue.SkipTyping(); break;
+            case State.Gap:
+            case State.NarFree: Next(); break;
+            case State.WaitInteract: if (_currentF != null) _currentF.Fire(); break;
+            case State.WaitWalk: if (_currentTouch != null) _currentTouch.Fire(); break;
+            case State.Choice:
+                if (choicePanel != null)
+                {
+                    if (!choicePanel.AllSelected) choicePanel.DebugSelectNext();
+                    else choicePanel.DebugConfirm();
+                }
+                break;
+        }
+    }
+
+    /// 打字机播完回调（DialogueUI 接线）
+    public void OnLineTyped()
+    {
+        if (CurrState != State.Typing) return;
+        _gapTimer = 0f;
+        SetPerms(State.Gap);
+    }
+
+    void OnEnable() { if (dialogue != null) dialogue.onLineTyped += OnLineTyped; }
+    void OnDisable() { if (dialogue != null) dialogue.onLineTyped -= OnLineTyped; }
+}

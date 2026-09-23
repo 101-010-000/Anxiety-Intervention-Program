@@ -70,6 +70,8 @@ public class FirstPersonController : MonoBehaviour
     [Header("状态")]
     [Tooltip("勾上 = 剧情对话中，禁止移动和转视角")]
     public bool locked;
+    [Tooltip("true = 只锁移动、仍可转视角（剧情台词间隙用；locked=true 时本开关无效）")]
+    public bool moveLocked;
     public bool lockCursorOnStart = true;
     [Tooltip("按 Esc 临时解锁鼠标，点回画面重新锁定")]
     public bool allowEscToUnlock = true;
@@ -130,6 +132,14 @@ public class FirstPersonController : MonoBehaviour
         }
 
         Look();
+
+        if (moveLocked)            // 剧情台词间隙：能转视角，不能走
+        {
+            Step(true);
+            DriveAnim(idleAnimSpeed);
+            return;
+        }
+
         Move();
     }
 
