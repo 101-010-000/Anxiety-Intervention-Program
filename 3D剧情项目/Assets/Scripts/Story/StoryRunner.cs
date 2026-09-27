@@ -1,6 +1,10 @@
 // 剧情总控：按 json 步骤驱动第一章全流程（状态机 + 控制权限 + 推进输入）。
-// 方案一（v3 重做）：微信段直接用用户的 Dialog 对话框（名牌显示"林溪（微信）"），
-// 没有手机聊天 UI、没有独立剧情画布——新 UI 全部挂在 UI_门口交互 下（Chapter1StoryBuilder）。
+// 方案 v5（2026-09-27 用户定稿）：微信段「二选一」显示 ——
+//   · （微信）台词：只落在手机聊天 UI（PhoneChatUI，居中放大），气泡即时报；对话框收着不出现，
+//     打字机隐形跑维持节奏，onLineTyped 照常进间隙 → 点击推进；
+//   · 旁白/独白：走用户的 Dialog 对话框，此时手机暂时收起；点完再遇微信台词 → 对话框让位、手机回屏。
+//   干预题②收档 → 第一个选中的鼓励语以「林溪（微信）」补一条，多停一拍再走。
+//   全部剧情 UI 挂用户手搭的「UI交互」画布下（没有独立剧情画布）。
 //
 // 控制权限（设计定稿）：
 //   打字机播放中  = 锁视角 + 锁移动
@@ -35,6 +39,7 @@ public class StoryRunner : MonoBehaviour
     public Text cardSubtitle;
     public Image blackFade;                // 全屏黑幕
     public Transform startAnchor;          // 章节起点
+    public PhoneChatUI phoneChat;          // 手机聊天 UI（微信段展示层；场景没接也能跑，全 null 保护）
 
     [Header("行为")]
     public bool runOnStart = true;
@@ -67,6 +72,7 @@ public class StoryRunner : MonoBehaviour
     int _choiceCounter;
     int _lastLineLen;
     Coroutine _cardRt;
+    Coroutine _walkHintRt;
 
     void Awake() { Instance = this; }
 
@@ -121,6 +127,7 @@ public class StoryRunner : MonoBehaviour
         _openingNar = true;
         StepIndex = 0;
         _choiceCounter = 0;
+        if (phoneChat != null) phoneChat.HideImmediate();   // 万一上次没收干净
         if (blackFade != null) blackFade.canvasRenderer.SetAlpha(1f);   // 进场：从黑淡入
         Next();
     }
@@ -165,14 +172,36 @@ public class StoryRunner : MonoBehaviour
 
     void PlayText(StoryStep step)
     {
-        // 徐夏"拿起手机"那步驱动拿手机动画；"肩膀放松"那步放下手机
-        if (_player != null && _player.animator != null && !string.IsNullOrEmpty(step.x))
+        bool wechat = step.t == "dlg" && !string.IsNullOrEmpty(step.s) && step.s.Contains("（微信）");
+
+        // 徐夏"拿起手机 / 肩膀放松"两步驱动 3D 拿手机动画（手机 UI 的显隐与它解耦，见下）
+        if (!string.IsNullOrEmpty(step.x) && step.t == "nar" && _player != null && _player.animator != null)
         {
-            if (step.t == "nar" && step.x.Contains("拿起手机"))
+            if (step.x.Contains("拿起手机"))
             { _player.animator.SetTrigger("TakePhone"); _player.animator.SetBool("Phone", true); }
-            else if (step.t == "nar" && step.x.Contains("紧绷的肩膀也慢慢放松"))
+            else if (step.x.Contains("紧绷的肩膀也慢慢放松"))
                 _player.animator.SetBool("Phone", false);
         }
+
+        // ★ 微信段定稿（用户 2026-09-27）：（微信）台词只落在手机聊天 UI，不进对话框；
+        //   旁白/独白走对话框，此时手机暂时收起；点完再遇微信台词 → 对话框让位、手机回到屏幕。
+        if (wechat)
+        {
+            if (_nodeOpen && dialogue != null) { dialogue.HideNode(); _nodeOpen = false; }
+            if (phoneChat != null && !phoneChat.IsShown) phoneChat.Show();
+
+            SetPerms(State.Typing);
+            _lastLineLen = step.x != null ? step.x.Length : 0;
+            if (dialogue != null)
+            {
+                dialogue.PlayLine(step);     // 打字机照跑（框收着，玩家看不见），维持节奏与 onLineTyped
+                dialogue.HideNode();         // 框与压暗层都不出现（PlayLine 会按 dlg 开遮罩，这里立刻关掉）
+            }
+            if (phoneChat != null) phoneChat.Append(step.s, step.x);   // 气泡立即落进聊天流
+            return;
+        }
+
+        if (phoneChat != null && phoneChat.IsShown) phoneChat.Hide();   // 旁白/独白：手机让位给对话框
 
         // 开场旁白段：照常走对话框打字机，但不锁人——边走边听，到点自动下一句
         if (_openingNar && step.t == "nar")
@@ -270,7 +299,18 @@ public class StoryRunner : MonoBehaviour
         choicePanel.Open(step, idx, order =>
         {
             // ②在微信段（收框状态下面板出）：面板收档后停一拍再继续，给"替林溪把话说完"留节奏
-            if (order != null && order.Count > 0) { _pendingNextAt = Time.time + 0.4f; SetPerms(State.Gap); _gapTimer = 0f; return; }
+            if (order != null && order.Count > 0)
+            {
+                // 微信段的选择题：把【第一个选中】的鼓励语以林溪名义补进手机聊天（替林溪把话说完），
+                // 手机在屏上就多停一拍让气泡被看见（下一步旁白会把手机收起）
+                bool phoneOn = phoneChat != null && phoneChat.IsShown;
+                if (phoneOn && step.options != null
+                    && order[0] >= 0 && order[0] < step.options.Count
+                    && !string.IsNullOrEmpty(step.options[order[0]].body))
+                    phoneChat.Append("林溪（微信）", step.options[order[0]].body);
+                _pendingNextAt = Time.time + (phoneOn ? 1.2f : 0.4f);
+                SetPerms(State.Gap); _gapTimer = 0f; return;
+            }
             Next();
         });
     }
@@ -386,16 +426,83 @@ public class StoryRunner : MonoBehaviour
                 break;
         }
         if (s != State.WaitInteract) HidePrompt();
-        if (dialogue != null) dialogue.SetIndicator(s == State.Gap);
+    }
+
+    // 走动段 HUD（左上角目标卡）：淡入 0→1（0.35s）→ 停 4s → 降到 0.55（0.6s）常驻；
+    // 显示期间再次 Show = 停掉旧协程、alpha 重置回 1 重新计时；Hide = 淡出（0.3s）后收起。
+    CanvasGroup WalkHintGroup()
+    {
+        return walkHintRoot != null ? walkHintRoot.GetComponent<CanvasGroup>() : null;
     }
 
     void ShowWalkHint(string text)
     {
-        if (walkHintRoot != null) walkHintRoot.SetActive(true);
-        if (walkHintLabel != null) walkHintLabel.text = "→  " + text;
+        if (walkHintLabel != null) walkHintLabel.text = text;   // 目标卡自带竖条引导，不再拼 "→  " 前缀
+        if (walkHintRoot == null) return;
+        bool reshown = walkHintRoot.activeSelf;                 // 显示期间再次提示：从 1 重新计时，不重头淡入
+        if (_walkHintRt != null) { StopCoroutine(_walkHintRt); _walkHintRt = null; }
+        walkHintRoot.SetActive(true);
+        _walkHintRt = StartCoroutine(WalkHintShowRoutine(reshown ? 1f : 0f));
     }
 
-    void HideWalkHint() { if (walkHintRoot != null) walkHintRoot.SetActive(false); }
+    IEnumerator WalkHintShowRoutine(float from)
+    {
+        var g = WalkHintGroup();
+        if (g != null)
+        {
+            float t = 0f;
+            while (t < 1f)
+            {
+                if (g == null) yield break;                     // 步骤跳跃/场景卸载时引用可能已被销毁
+                t += Time.unscaledDeltaTime / 0.35f;
+                g.alpha = Mathf.Lerp(from, 1f, Mathf.Clamp01(t));
+                yield return null;
+            }
+            g.alpha = 1f;
+        }
+        yield return new WaitForSecondsRealtime(4f);
+        if (g != null)
+        {
+            float t = 0f;
+            while (t < 1f)
+            {
+                if (g == null) yield break;
+                t += Time.unscaledDeltaTime / 0.6f;
+                g.alpha = Mathf.Lerp(1f, 0.55f, Mathf.Clamp01(t));
+                yield return null;
+            }
+            g.alpha = 0.55f;                                    // 半透明常驻，等 HideWalkHint 淡出
+        }
+        _walkHintRt = null;
+    }
+
+    void HideWalkHint()
+    {
+        if (walkHintRoot == null) return;
+        if (_walkHintRt != null) { StopCoroutine(_walkHintRt); _walkHintRt = null; }
+        if (WalkHintGroup() == null) { walkHintRoot.SetActive(false); return; }   // 旧场景没补 CanvasGroup：退化为直接收
+        _walkHintRt = StartCoroutine(WalkHintHideRoutine());
+    }
+
+    IEnumerator WalkHintHideRoutine()
+    {
+        var g = WalkHintGroup();
+        if (g != null)
+        {
+            float from = g.alpha;
+            float t = 0f;
+            while (t < 1f)
+            {
+                if (walkHintRoot == null || g == null) yield break;   // 同上：销毁保护，不得抛空引用
+                t += Time.unscaledDeltaTime / 0.3f;
+                g.alpha = Mathf.Lerp(from, 0f, Mathf.Clamp01(t));
+                yield return null;
+            }
+        }
+        if (walkHintRoot != null) walkHintRoot.SetActive(false);
+        _walkHintRt = null;
+    }
+
     void HidePrompt() { if (promptRoot != null) promptRoot.SetActive(false); }
 
     void HideAuxUI()

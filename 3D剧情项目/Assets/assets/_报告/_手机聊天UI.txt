@@ -1,0 +1,19 @@
+手机聊天 UI 搭建   2026-09-27 06:46
+素材：assets/05_UI/手机_Phone/（用户设计稿，样式/比例不改；机身等比缩放 ×0.9）
+
+  贴图 图层 2.png → frame
+  贴图 图层 5.png → bubbleL（9-slice 边框 左30/下25/右30/上57）
+  贴图 图层 7.png → bubbleR（9-slice 边框 左30/下28/右44/上58）
+  贴图 图层 6.png → avatarL
+  贴图 图层 8.png → avatarR
+  贴图 1.png → sticker0
+  贴图 2.png → sticker1
+  贴图 3.png → sticker2
+画布：复用现有 UI交互（sortingOrder/缩放原样不动）
+接线：StoryRunner.phoneChat ✓
+
+自检：
+  · 手机聊天 在画布下 siblingIndex=1（遮罩之上，对话/选择题之下）✓
+  · 默认 SetActive(false)，运行时由 Show()/Hide() 接管 ✓
+  · CanvasGroup.blocksRaycasts=false，点击穿透不打断剧情推进 ✓
+  · 既有节点（对话/对话框/名字/对话内容/遮罩/交互提示/ChoicePanel）一个值都没动 ✓

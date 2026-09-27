@@ -1,0 +1,14 @@
+任务栏改左上角目标卡（2026-09-27 05:57:18）结果：成功 ✓
+场景：Assets/Scenes/Game.unity
+根节点：锚 (0,1)-(0,1)，pivot (0,1)，位置 (48,-48)，尺寸 430×72
+背景图：面板_玻璃.png（Sliced 九宫格），颜色 #FFFFFF × 0.82
+CanvasGroup：新建
+竖条：新建
+竖条参数：锚 (0,0.5)，x=22，尺寸 5×36，颜色 #4C9FE8FF
+Text：锚拉伸铺满，offsetMin (44,0) / offsetMax (-20,0)，26 号 MiddleLeft，颜色 #293342FF，字体 中文_Deng（不改动）
+节点保持 SetActive(false)（运行时由 StoryRunner 按需亮起）
+场景已保存 ✓
+运行时配合：StoryRunner.ShowWalkHint 已去掉 "→  " 前缀、改为 CanvasGroup 淡入-常驻-淡出（见 Scripts/Story/StoryRunner.cs）
+冻结约定：对话/对话框/名字/对话内容/交互提示/遮罩 等节点未做任何写回
+预览临时收起兄弟节点：交互提示、ChoicePanel、ChapterCard（渲完恢复原状）
+预览已渲染 ✓ → Assets/assets/_报告/预览/任务栏_目标卡.png（1920×1080，深蓝底示意）

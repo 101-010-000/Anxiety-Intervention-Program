@@ -1,4 +1,4 @@
-// 底部对话框：三语态渲染（对话/旁白/独白）+ 打字机 + 淡入淡出 + ▼ 继续指示。
+// 底部对话框：三语态渲染（对话/旁白/独白）+ 打字机 + 淡入淡出。
 //
 // 层级适配（两种都支持，优先用户在场景里手搭的那套）：
 //   ① UI交互 / 对话 → 对话框 → 名字、对话内容        ← 用户 2026-09-23 手搭，布局一律不动
@@ -26,7 +26,6 @@ public class DialogueUI : MonoBehaviour
     Text _name;
     Text _content;
     CanvasGroup _nameGroup;
-    RectTransform _indicator;
     Coroutine _boxRt;      // 框体淡入淡出
     Coroutine _lineRt;     // 当前这句的打字机
     bool _refsReady;
@@ -35,8 +34,6 @@ public class DialogueUI : MonoBehaviour
     string _full = "";
     bool _typing;
     float _nameTarget;
-    float _indBaseY;
-    bool _indOn;
 
     public bool IsTyping { get { return _typing; } }
     public bool NodeVisible { get { return _box != null && _box.alpha > 0.01f; } }
@@ -71,18 +68,6 @@ public class DialogueUI : MonoBehaviour
             _nameGroup.blocksRaycasts = false;
         }
 
-        var ind = transform.Find("Indicator");
-        if (ind != null)
-        {
-            _indicator = ind as RectTransform;
-            _indBaseY = _indicator.anchoredPosition.y;
-            _indicator.gameObject.SetActive(false);
-        }
-        else if (_content != null)
-        {
-            EnsureIndicator();              // 场景里没有就运行期补一个（不落盘，不动任何布局）
-        }
-
         // 遮罩（用户规则）：只有【对话 dlg / 内心独白 mon】才启用，旁白 nar 不压暗。
         // 工具已把它提到画布最前（UI 最底层）；这里兼容它挂在「对话」下或画布下两种位置。
         Transform dimT = transform.Find("遮罩");
@@ -99,29 +84,6 @@ public class DialogueUI : MonoBehaviour
             Debug.LogError("[DialogueUI] 对话下没找到「名字 / 对话内容」的 uGUI Text —— 先跑 Tools/干预项目/搭建第一章剧情");
         else if (_content.font == null || !_content.font.HasCharacter('中'))
             Debug.LogWarning("[DialogueUI] 对话内容 用的不是中文字体（中文会成方块/空白）—— 重跑一次 Tools/干预项目/搭建第一章剧情 即可");
-    }
-
-    void EnsureIndicator()
-    {
-        Transform host = transform.Find("对话框");
-        if (host == null) host = transform;
-        var go = new GameObject("Indicator", typeof(RectTransform));
-        go.transform.SetParent(host, false);
-        var rt = (RectTransform)go.transform;
-        rt.anchorMin = rt.anchorMax = new Vector2(1f, 0f);
-        rt.pivot = new Vector2(1f, 0f);
-        rt.anchoredPosition = new Vector2(-6f, 2f);
-        rt.sizeDelta = new Vector2(40f, 32f);
-        var t = go.AddComponent<Text>();
-        t.font = _content.font;
-        t.text = "▼";
-        t.fontSize = 24;
-        t.alignment = TextAnchor.MiddleCenter;
-        t.color = COL_MON;
-        t.raycastTarget = false;
-        _indicator = rt;
-        _indBaseY = rt.anchoredPosition.y;
-        go.SetActive(false);
     }
 
     static Text FindText(Transform parent, string childName)
@@ -145,7 +107,6 @@ public class DialogueUI : MonoBehaviour
     {
         EnsureRefs();
         FadeBox(0f, 0.25f);
-        SetIndicator(false);
         SetDim(false);
     }
 
@@ -201,7 +162,6 @@ public class DialogueUI : MonoBehaviour
 
         _full = step.x ?? "";
         _typing = true;
-        SetIndicator(false);
 
         float cps = Mathf.Max(2f, GameSettings.TextCharsPerSecond);
         int n = 0; float acc = 0f;
@@ -228,24 +188,11 @@ public class DialogueUI : MonoBehaviour
         if (onLineTyped != null) onLineTyped.Invoke();
     }
 
-    // ------------------------------------------------------------------ 名牌 / ▼
+    // ------------------------------------------------------------------ 名牌
     void Update()
     {
         if (_nameGroup != null)
             _nameGroup.alpha = Mathf.MoveTowards(_nameGroup.alpha, _nameTarget, Time.unscaledDeltaTime / 0.15f);
-        if (_indicator != null && _indOn)
-        {
-            var p = _indicator.anchoredPosition;
-            p.y = _indBaseY + Mathf.Sin(Time.unscaledTime * Mathf.PI) * 6f;
-            _indicator.anchoredPosition = p;
-        }
-    }
-
-    /// 间隙时显示"▼"呼吸指示
-    public void SetIndicator(bool on)
-    {
-        _indOn = on;
-        if (_indicator != null) _indicator.gameObject.SetActive(on);
     }
 
     /// 遮罩开关（用户规则：对话 dlg / 内心独白 mon 开，旁白 nar 关）

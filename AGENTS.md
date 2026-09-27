@@ -119,6 +119,7 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
    - `_doors_trigger.txt` → 搭/刷新门口传送；`_doorssmoke_trigger.txt` → 门口传送运行自检
    - `_menu_trigger.txt` → 重建主界面 MainMenu.unity
    - `_camera_trigger.txt` → 场景视图相机复位（视角斜了/跑飞了）
+   - `_phonechat_trigger.txt` → 搭建手机聊天UI（第1章微信段）+ 渲染预览
    > 触发器依赖"域重载"生效：改一下任意脚本文件、或让 Unity 窗口获得焦点/按 Ctrl+R 即可。
 4. **出现"洋红 / 空材质"**：先跑 `Tools/干预项目/全量强制重导`（等价 Assets → Reimport All），
    再用 `诊断角色材质` 核对（`_报告/_材质诊断.txt` 里应无 `MATERIAL_NULL`、无 `supported=False`）。
@@ -256,7 +257,9 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   · ⚠ `armed` 由 runner 控制：**只有走到对应等待步骤才允许触发**。不加这个开关，开场旁白段（自由走动）路过组长按一下 F 就会把交互点消费掉，之后按 F 没反应。
 - **三语态**：`dlg` 名牌 + 深色；`nar` 无名牌 + 中灰；`mon` 无名牌 + 浅蓝灰斜体（都走同一个 `对话` 框）。
 - **数据**：`Assets/数据/剧情/第1章.json`（117 步：card/nar/dlg/mon/interact/walk/choice/end）。
-- **自检**：`Tools/干预项目/第一章剧情运行自检`（真进 Play 跑完 117 步）→ `assets/_报告/_第一章剧情运行自检.txt`。
+- **自检**：`Tools/干预项目/第一章剧情运行自检`（`PhoneChatSmoke.cs`，真进 Play 跑完 117 步；或丢
+  `_story1smoke_trigger.txt`）→ `assets/_报告/_第一章剧情运行自检.txt`。
+  （旧入口在归档的 Chapter1StoryBuilder 里，已与现在的 ChoicePanel API 脱节，别再拷回来用。）
 - ★ **用户定稿（2026-09-23）：「对话框 / 名字 / 对话内容」的大小·相对位置·颜色一律不准再改。**
   工具对这三个节点只做**只读快照**（`LayoutDialogue` → 报告里列当前值），**一个字都不写回**；
   字体也只在“真的没有中文字形”时才补（`font.HasCharacter('中')` 判断）。
@@ -266,6 +269,35 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 - `BlackFade` 与 `遮罩` 职责不同、**层级不能互换**：
   · `BlackFade` = 章节转场黑幕（不透明，**最上层**，开场淡出 / 章末淡入，`StoryRunner` 驱动）；
   · `遮罩` = 对话压暗层（半透明 68%，**最底层**，按语态开关）。
+- **干预选择题（ChoicePanel，2026-09-27 定稿「按钮⇄解释」互斥）**：
+  · 全选流程：一题内所有选项各选一遍才能交卷；选择顺序存 `story.choice.<题号>`（第1章 4 题 = 0~3）。
+  · 交互闭环：点选项 → 该行**只变灰**（Button ColorTint 的 disabled 态，★不换贴图，`rowSelected` 字段已删）
+    → 进解释态：选项行 + Confirm + **面板自己的 Dim** 全部临时隐藏，解释借**底部对话框**播 mon 独白
+    （`DialogueUI.PlayLine(new StoryStep{t="mon", x=解释})`，对话框 UI 零改动）→ **点任意处**（运行时懒建的
+    全屏透明捕获层「解释点击层」接住，不落盘）→ 行/Confirm/Dim 恢复（已选行保持灰）→ 循环；
+    全选后「记入焦虑记录本」点亮 → 交卷回剧情。
+  · ★ **解释期必须藏面板 Dim**：ChoicePanel 子树在 `对话` 之后渲染，Dim 不藏会把解释文字压暗
+    （踩过：解释发灰就是它）。藏掉后解释直接坐在最底层 `遮罩` 之上，清晰可读。
+  · ★ **选项行是场景预置**（`ChoicePanel.rows` 序列化引用，最多 3 行 `选项_0/1/2`，挂 `List/View/Content` 下）：
+    用户可在 Scene 视图直接手调贴图/字号/颜色；运行时**绝不 Destroy、绝不覆盖手调样式**（只写文字、
+    开关行、禁按钮）。行的生成/接线/清理用 `Tools/干预项目/生成选择题按钮行（预置3行 / 强制重建 /
+    选择题行去掉解释块）`，报告 `assets/_报告/_选择题按钮行.txt`。
+  · 选择题期间剧情零推进：`State.Choice` 下 StoryRunner 点击 switch 无分支、`OnLineTyped` 只在 Typing 态动作
+    → 解释播/收都不会误触发推进。
+- **手机聊天 UI（PhoneChatUI，2026-09-27）**：微信段（徐夏 ↔ 林溪）的展示层，素材 = 用户设计稿
+  `assets/05_UI/手机_Phone/`（8 张图：图层 2 机身 / 图层 5 白泡·尾巴左 / 图层 7 蓝泡·尾巴右 /
+  图层 6、8 头像 / 1、2、3.png 贴纸）。
+  · ★ **铁律：素材样式与比例一律不改** —— 机身只等比缩放（根 localScale 0.9，屏幕正中），
+    内部按素材原生像素摆；气泡 9-slice 的 border 按像素测量写死（尾巴整体包进"上"角块 →
+    拉伸只发生在纯色中段，永不变形）；贴纸 1:1 显示；贴图只改 Sprite 导入方式，像素零改动。
+  · ★ **显示规则 v5（用户定稿）**：微信段"二选一"——（微信）台词只落在手机 UI（对话框不出现，
+    打字机隐形跑维持节奏，气泡即时报）；旁白/独白走对话框，此时手机暂时收起；点完再遇微信台词
+    → 对话框让位、手机回屏。干预题②收档 → 第一个选中的鼓励语以「林溪（微信）」补一条并多停一拍。
+    `[比心]` 整句 → 1.png 贴纸。
+  · 搭建：`Tools/干预项目/搭建手机聊天UI`（或 `_phonechat_trigger.txt`）→ 在 `UI交互` 下建唯一节点
+    `手机聊天`（siblingIndex=1：遮罩之上、对话/选择题之下，默认禁用），接线 + 存场景 +
+    报告 `assets/_报告/_手机聊天UI.txt` + 预览 `预览/场景/手机聊天UI_预览.png`。
+  · CanvasGroup.blocksRaycasts=false：点击穿透手机，不打断"点击推进剧情"。
 
 ---
 
@@ -288,7 +320,9 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 | 搭/刷新门口传送（按 F 选地点传走） | `Tools/干预项目/搭建门口传送`（或丢 `_doors_trigger.txt`） |
 | 验证门口传送能不能用 | `Tools/干预项目/门口传送运行自检`（真进 Play 模式走一遍）→ `assets/_报告/_门口传送运行自检.txt` |
 | 重建/改第一章剧情 UI（谨慎） | 把 `额外文件/历史Editor脚本/Chapter1StoryBuilder.cs` 拷回 `Assets/Editor/` → **手动**跑菜单（会重建 `ChoicePanel`/`WalkHint`/`ChapterCard`/`BlackFade`；`对话/对话框/名字/对话内容` 已冻结只读）→ 用完移走 |
-| 第一章剧情运行自检 | 入口随工具一起归档了；要跑就先把 builder 拷回 `Assets/Editor/` 再走菜单 |
+| 第一章剧情运行自检 | `Tools/干预项目/第一章剧情运行自检`（PhoneChatSmoke.cs，独立入口）→ `assets/_报告/_第一章剧情运行自检.txt` |
+| 生成/修复选择题选项行 | `Tools/干预项目/生成选择题按钮行`（预置3行 = 补缺接线 / 强制重建 = 弃手调重建 / 选择题行去掉解释块）→ `assets/_报告/_选择题按钮行.txt`；选项行样式直接在 Scene 里改 |
+| 搭/看手机聊天 UI（微信段） | `Tools/干预项目/搭建手机聊天UI`（或丢 `_phonechat_trigger.txt`，自动搭+出预览）→ 报告 `assets/_报告/_手机聊天UI.txt`、预览 `预览/场景/手机聊天UI_预览.png` |
 | 主界面工具报了什么 | `assets/_报告/_主界面搭建.txt`（层级树 + 越界/贴图/字体自检 + 按钮对照表） |
 | 主界面能不能点 | `Tools/干预项目/主界面运行自检`（真进 Play 模式点一遗 25 步）→ `assets/_报告/_主界面运行自检.txt` |
 | 重新切《ui素材》设计稿 | `Tools/干预项目/切分 UI 设计稿`（改切图框改 `MainMenuSlices.cs` 的 `TABLE`）→ `assets/_报告/预览/主界面/00_设计稿切图_对照.png` 看切得对不对 |
