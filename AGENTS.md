@@ -298,6 +298,16 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
     `手机聊天`（siblingIndex=1：遮罩之上、对话/选择题之下，默认禁用），接线 + 存场景 +
     报告 `assets/_报告/_手机聊天UI.txt` + 预览 `预览/场景/手机聊天UI_预览.png`。
   · CanvasGroup.blocksRaycasts=false：点击穿透手机，不打断"点击推进剧情"。
+- **任务栏 WalkHint（2026-09-27 定稿「左上角目标卡」）**：走动段的目标提示条（如「走到教室门口」），
+  `UI交互/WalkHint`，默认禁用、由 StoryRunner 按需亮起。
+  · 样式：距屏上/左各 48px 的 430×72 玻璃卡（`面板_玻璃.png` 九宫格，白×0.82）+ 左缘 5×36 淡蓝竖条
+  （#4C9FE8，MainMenuAssets.ACCENT）+ 左对齐 26 号深蓝灰文字。**别再用 `F_交互.png` 当底图**——
+  那是键帽整图且 border=0，Sliced 拉伸必压扁（旧版任务栏难看的根源）。
+  · 运行时（`StoryRunner.ShowWalkHint/HideWalkHint`）：无「→ 」前缀；0.35s 淡入 → 常驻 4s →
+  收到 55% 透明度；隐藏 0.3s 淡出。重复触发重置计时。
+  · 改样式跑 `Tools/干预项目/任务栏样式/改为左上角目标卡`（`Assets/Editor/WalkHintRestyle.cs`，
+  幂等、只写 WalkHint 子树、会覆盖该节点手调值）→ 报告 `assets/_报告/_任务栏改造.txt` +
+  预览 `预览/任务栏_目标卡.png`。
 
 ---
 
@@ -323,6 +333,7 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 | 第一章剧情运行自检 | `Tools/干预项目/第一章剧情运行自检`（PhoneChatSmoke.cs，独立入口）→ `assets/_报告/_第一章剧情运行自检.txt` |
 | 生成/修复选择题选项行 | `Tools/干预项目/生成选择题按钮行`（预置3行 = 补缺接线 / 强制重建 = 弃手调重建 / 选择题行去掉解释块）→ `assets/_报告/_选择题按钮行.txt`；选项行样式直接在 Scene 里改 |
 | 搭/看手机聊天 UI（微信段） | `Tools/干预项目/搭建手机聊天UI`（或丢 `_phonechat_trigger.txt`，自动搭+出预览）→ 报告 `assets/_报告/_手机聊天UI.txt`、预览 `预览/场景/手机聊天UI_预览.png` |
+| 改走动段任务栏样式（左上角目标卡） | `Tools/干预项目/任务栏样式/改为左上角目标卡`（幂等，只写 WalkHint 子树，覆盖其手调值）→ 报告 `assets/_报告/_任务栏改造.txt`、预览 `预览/任务栏_目标卡.png` |
 | 主界面工具报了什么 | `assets/_报告/_主界面搭建.txt`（层级树 + 越界/贴图/字体自检 + 按钮对照表） |
 | 主界面能不能点 | `Tools/干预项目/主界面运行自检`（真进 Play 模式点一遗 25 步）→ `assets/_报告/_主界面运行自检.txt` |
 | 重新切《ui素材》设计稿 | `Tools/干预项目/切分 UI 设计稿`（改切图框改 `MainMenuSlices.cs` 的 `TABLE`）→ `assets/_报告/预览/主界面/00_设计稿切图_对照.png` 看切得对不对 |

@@ -92,9 +92,15 @@ public static class ChoiceRowsBuilder
         var rowNormal = cp.rowNormal;
         if (rowNormal == null)
         {
-            rowNormal = MainMenuAssets.Sprite("卡片_普通");
-            if (rowNormal != null) log.Add("组件 rowNormal 为空，按名字补用：" + rowNormal.name);
-            else log.Add("★ rowNormal 为空也找不到 卡片_普通，头的 Image 先留空（可在场景里手动指定）");
+            // 卡片_普通.png 已删（行改用 选择_1/2/3），断链的 rowNormal 在这里顺手治好并写回场景
+            rowNormal = MainMenuAssets.Sprite("选择_1");
+            if (rowNormal != null)
+            {
+                cp.rowNormal = rowNormal;
+                EditorUtility.SetDirty(cp);
+                log.Add("组件 rowNormal 断链/为空，已补用并写回：" + rowNormal.name);
+            }
+            else log.Add("★ rowNormal 为空也找不到 选择_1，头的 Image 先留空（可在场景里手动指定）");
         }
         var font = cp.font;
         if (font == null)
