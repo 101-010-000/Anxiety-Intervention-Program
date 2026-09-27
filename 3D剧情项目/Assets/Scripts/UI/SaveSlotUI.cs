@@ -11,7 +11,8 @@ public class SaveSlotUI : MonoBehaviour
     public Text   chapterText;
     public Text   timeText;
     public Text   emptyText;     // "空存档"
-    public Image  selectFrame;   // 选中态外框
+    public Image  selectFrame;   // 选中态描边（显隐由 SlotSelectFx 的淡入驱动）
+    public SlotSelectFx selectFx;// 选中/悬停动效
 
     public int index;
 
@@ -40,7 +41,8 @@ public class SaveSlotUI : MonoBehaviour
             thumb.enabled = sprite != null;
             if (sprite != null) thumb.sprite = sprite;
         }
-        if (selectFrame != null) selectFrame.enabled = selected;
+        if (selectFx != null) selectFx.SetSelected(selected);
+        else if (selectFrame != null) selectFrame.enabled = selected;   // 未接动效的旧场景兜底
     }
 }
 
