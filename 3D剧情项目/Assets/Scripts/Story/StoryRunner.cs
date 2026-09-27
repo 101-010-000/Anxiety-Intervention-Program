@@ -376,9 +376,30 @@ public class StoryRunner : MonoBehaviour
     void ToMainMenu()
     {
         GameProgress.MarkCompleted(chapterIndex);
+        AutoSave("章节通关", force: true);   // 章末兜底存档不受"选择后自动存档"开关控制
         ToDone();
         if (debugStayInScene) return;
         SceneManager.LoadScene("MainMenu");
+    }
+
+    // ------------------------------------------------------------------ 自动存档（2026-09-27 接线）
+    // 时机：每道干预题交卷后（受设置"选择后自动存档"开关控制）+ 章节通关（始终存，进度兜底）。
+    // 槽位：最近使用的手动槽，从没存过 → 1 号槽。存到章级（读档 = 从该章第 1 步重播；
+    // nodeId/step 先留档，章内续播以后要再做）。自检（StorySmokeDriver 在场）不写档，防污染真实存档。
+    void AutoSave(string reason, bool force = false)
+    {
+        if (!force && !GameSettings.AutoSave) return;
+        if (FindObjectOfType<StorySmokeDriver>() != null) return;
+        int slot = SaveSystem.LatestSlot();
+        if (slot < 0) slot = 0;
+        var d = new SaveData
+        {
+            chapter = chapterIndex,
+            step    = StepIndex,
+            nodeId  = "step" + StepIndex,
+        };
+        SaveSystem.Write(slot, d);
+        Debug.Log("[StoryRunner] 自动存档（" + reason + "）→ 槽 " + (slot + 1) + " · 第" + chapterIndex + "章 step " + StepIndex);
     }
 
     // ------------------------------------------------------------------ 干预题
@@ -390,6 +411,7 @@ public class StoryRunner : MonoBehaviour
         if (choicePanel != null) choicePanel.chapter = chapterIndex;    // 记录键按章隔离 story.choice.ch<N>.<idx>
         choicePanel.Open(step, idx, order =>
         {
+            AutoSave("干预题交卷");
             // ②在微信段（收框状态下面板出）：面板收档后停一拍再继续，给"替林溪把话说完"留节奏
             if (order != null && order.Count > 0) { _pendingNextAt = Time.time + 0.4f; SetPerms(State.Gap); _gapTimer = 0f; return; }
             Next();
