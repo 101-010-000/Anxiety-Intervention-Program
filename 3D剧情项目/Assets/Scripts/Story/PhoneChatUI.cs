@@ -56,11 +56,13 @@ public class PhoneChatUI : MonoBehaviour
     static readonly Color COL_SENT = new Color32(0x17, 0x4A, 0x74, 0xFF);   // 发出（浅蓝底）→ 深藏青字（白字压不住浅蓝底）
 
     RectTransform _content;
+    Text _title;                           // 「标题」下的联系人名（SetContact 换聊天对象用）
     CanvasGroup _group;
     float _homeX;                            // 滑入/滑出的基准位（首次接线时记录，防多次开关漂移）
     readonly List<Coroutine> _pops = new List<Coroutine>();
 
     public bool IsShown { get { return gameObject.activeSelf; } }
+    public string CurrentContact { get { return headerName; } }
 
     void EnsureRefs()
     {
@@ -72,6 +74,21 @@ public class PhoneChatUI : MonoBehaviour
         _homeX = ((RectTransform)transform).anchoredPosition.x;
         var area = transform.Find("消息区");
         if (area != null) _content = area.Find("内容") as RectTransform;
+        var titleT = transform.Find("标题");
+        if (titleT != null) _title = titleT.GetComponent<Text>();
+    }
+
+    /// 换聊天对象（第2章 李同学↔林溪、第4章 班群/学姐）：只换标题文字并清空聊天流。
+    /// ★ 头像暂用现有两张占位（用户约定：缺的素材先占位）——将来给了头像，直接在
+    ///   Inspector 换 avatarLeft 即可，布局/样式铁律不动。
+    public void SetContact(string name)
+    {
+        if (string.IsNullOrEmpty(name)) return;
+        EnsureRefs();
+        if (headerName == name && _content != null && _content.childCount > 0) return;   // 同一段聊天：不重置
+        if (headerName != name) headerName = name;
+        if (_title != null) _title.text = name;
+        Clear();
     }
 
     // -------------------------------------------------------------- 开合

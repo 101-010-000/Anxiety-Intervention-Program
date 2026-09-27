@@ -57,6 +57,9 @@ public class ChoicePanel : MonoBehaviour
     [Header("选项行（场景预置，最多 3 行；用 Editor 工具生成/接线）")]
     public List<ChoiceRow> rows = new List<ChoiceRow>();
 
+    [Tooltip("第几章（StoryRunner.Open 前设置）。选择顺序记录键按章隔离：story.choice.ch<N>.<题号>")]
+    public int chapter = 1;
+
     StoryStep _step;
     System.Action<List<int>> _onDone;
     readonly List<int> _order = new List<int>();
@@ -211,7 +214,7 @@ public class ChoicePanel : MonoBehaviour
         _explaining = false;
         if (_clickCatcher != null) _clickCatcher.SetActive(false);
 
-        PlayerPrefs.SetString("story.choice." + _choiceIndex, string.Join(",", _order));
+        PlayerPrefs.SetString("story.choice.ch" + chapter + "." + _choiceIndex, string.Join(",", _order));
         PlayerPrefs.Save();
         if (panel != null) panel.Hide();
         var d = Box();

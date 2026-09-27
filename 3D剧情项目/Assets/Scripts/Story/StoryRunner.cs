@@ -1,4 +1,8 @@
-// 剧情总控：按 json 步骤驱动第一章全流程（状态机 + 控制权限 + 推进输入）。
+// 剧情总控：按 json 步骤驱动单章全流程（状态机 + 控制权限 + 推进输入）。
+// 多章并存（第2-5章，2026-09-27）：场景 StorySystem 下每章一个 runner 子节点（chapterIndex 区分），
+// 主菜单选章写 GameProgress.SelectedChapter → 只有匹配章的 runner 会 Begin，其余静默。
+// UI 全部共享「UI交互」画布下同一套节点（对话/选择题/手机/WalkHint/结束卡/黑幕），多章零新建。
+//
 // 方案 v5（2026-09-27 用户定稿）：微信段「二选一」显示 ——
 //   · （微信）台词：只落在手机聊天 UI（PhoneChatUI，居中放大），气泡即时报；对话框收着不出现，
 //     打字机隐形跑维持节奏，onLineTyped 照常进间隙 → 点击推进；
@@ -40,6 +44,7 @@ public class StoryRunner : MonoBehaviour
     public Image blackFade;                // 全屏黑幕
     public Transform startAnchor;          // 章节起点
     public PhoneChatUI phoneChat;          // 手机聊天 UI（微信段展示层；场景没接也能跑，全 null 保护）
+    public Transform[] fadeAnchors;        // fade 步骤的传送锚点（元素名 = json 里 to 的值）
 
     [Header("行为")]
     public bool runOnStart = true;
@@ -50,7 +55,7 @@ public class StoryRunner : MonoBehaviour
     public enum State
     {
         Idle, Card, Typing, Gap,
-        NarFree, WaitInteract, WaitWalk, Choice, EndCard, Done
+        NarFree, WaitInteract, WaitWalk, Choice, Fade, EndCard, Done
     }
 
     public State CurrState { get; private set; }
@@ -72,7 +77,14 @@ public class StoryRunner : MonoBehaviour
     int _choiceCounter;
     int _lastLineLen;
     Coroutine _cardRt;
+    Coroutine _fadeRt;
     Coroutine _walkHintRt;
+
+    // 拿/放手机的 3D 动画钩子（第1章是逐字硬编码；多章后改关键词数组，旁白原文即可命中）：
+    //   拿起 → animator TakePhone(Trigger) + Phone=true；放下（关键词或转入当面对话）→ Phone=false。
+    //   微信台词本身也会自动补"拿手机"（防漏），所以这里只放剧本原文实际出现的说法。
+    static readonly string[] PHONE_TAKE_KEYS = { "拿起手机", "拿过手机", "拿出手机", "把手机从桌角拿过来" };
+    static readonly string[] PHONE_DOWN_KEYS = { "紧绷的肩膀也慢慢放松", "紧绷的肩膀彻底放松", "放下手机", "爬上了床" };
 
     void Awake() { Instance = this; }
 
@@ -81,8 +93,9 @@ public class StoryRunner : MonoBehaviour
         GameSettings.EnsureLoaded();
         HideAuxUI();
         // 只在"从主菜单选了本章进游戏"时自动开跑（编辑器直接 Play 其它章节/场景不被劫持；
-        // 想彻底不自动跑：取消勾选 剧情系统 上 StoryRunner 的 runOnStart）
-        if (runOnStart && chapterJson != null)
+        // 想彻底不自动跑：取消勾选 剧情系统 上 StoryRunner 的 runOnStart）。
+        // CurrState != Idle = 已被自检驱动 Begin 过 → 不重复开跑（防执行顺序导致的从头重放）
+        if (runOnStart && chapterJson != null && CurrState == State.Idle)
         {
             if (GameProgress.SelectedChapter == chapterIndex) Begin();
             else Debug.Log("[StoryRunner] 跳过：当前选定第 " + GameProgress.SelectedChapter + " 章，本 runner 只管第 " + chapterIndex + " 章");
@@ -149,6 +162,7 @@ public class StoryRunner : MonoBehaviour
             case "card": DoCard(step); break;
             case "end": DoEnd(); break;
             case "choice": DoChoice(step); break;
+            case "fade": DoFade(step); break;
 
             case "walk":
                 _currentTouch = FindFree(StoryInteractable.Mode.Touch);
@@ -172,23 +186,38 @@ public class StoryRunner : MonoBehaviour
 
     void PlayText(StoryStep step)
     {
-        bool wechat = step.t == "dlg" && !string.IsNullOrEmpty(step.s) && step.s.Contains("（微信）");
+        // （微信）/（通知）台词 = 手机聊天段（第2-5章扩展：班群通知也走手机 UI）
+        bool wechat = step.t == "dlg" && !string.IsNullOrEmpty(step.s)
+                      && (step.s.Contains("（微信）") || step.s.Contains("（通知）"));
 
-        // 徐夏"拿起手机 / 肩膀放松"两步驱动 3D 拿手机动画（手机 UI 的显隐与它解耦，见下）
+        // 旁白关键词 → 3D 拿/放手机动画（第1章逐字判定的多章通用版）
         if (!string.IsNullOrEmpty(step.x) && step.t == "nar" && _player != null && _player.animator != null)
         {
-            if (step.x.Contains("拿起手机"))
+            if (HitsAny(step.x, PHONE_TAKE_KEYS) && !_player.animator.GetBool("Phone"))
             { _player.animator.SetTrigger("TakePhone"); _player.animator.SetBool("Phone", true); }
-            else if (step.x.Contains("紧绷的肩膀也慢慢放松"))
+            else if (HitsAny(step.x, PHONE_DOWN_KEYS))
                 _player.animator.SetBool("Phone", false);
         }
+        // 转入当面对话（非微信的 dlg）= 手机收起来（第2章陆宣雨/第4章林溪进场都靠它）
+        if (step.t == "dlg" && !wechat && _player != null && _player.animator != null
+            && _player.animator.GetBool("Phone"))
+            _player.animator.SetBool("Phone", false);
 
         // ★ 微信段定稿（用户 2026-09-27）：（微信）台词只落在手机聊天 UI，不进对话框；
         //   旁白/独白走对话框，此时手机暂时收起；点完再遇微信台词 → 对话框让位、手机回到屏幕。
         if (wechat)
         {
             if (_nodeOpen && dialogue != null) { dialogue.HideNode(); _nodeOpen = false; }
-            if (phoneChat != null && !phoneChat.IsShown) phoneChat.Show();
+            if (phoneChat != null)
+            {
+                // 收到方决定聊天对象（徐夏发出不换段）：换段自动清空旧聊天、换标题
+                if (!step.s.Contains("徐夏"))
+                    phoneChat.SetContact(step.s.Replace("（微信）", "").Replace("（通知）", ""));
+                if (!phoneChat.IsShown) phoneChat.Show();
+            }
+            // 微信台词出现 = 徐夏在看手机：动画兜底补拿（nar 关键词没命中也不穿帮）
+            if (_player != null && _player.animator != null && !_player.animator.GetBool("Phone"))
+            { _player.animator.SetTrigger("TakePhone"); _player.animator.SetBool("Phone", true); }
 
             SetPerms(State.Typing);
             _lastLineLen = step.x != null ? step.x.Length : 0;
@@ -283,6 +312,67 @@ public class StoryRunner : MonoBehaviour
         if (_player != null) { _player.allowEscToUnlock = _savedEsc; _player.SetLocked(false); _player.moveLocked = false; }
     }
 
+    // ------------------------------------------------------------------ 黑屏转场（第2-5章"黑屏/刷新"跳转）
+    // fade：黑幕淡入 → 传送玩家到 to 同名锚点 → 淡出 → 继续。
+    // BlackFade 在 UI 最上层，黑屏期间对话框不可见 → 时间流逝旁白用独立的 nar 步骤（放 fade 前后皆可）。
+    void DoFade(StoryStep step)
+    {
+        if (_fadeRt != null) StopCoroutine(_fadeRt);
+        _fadeRt = StartCoroutine(FadeRoutine(step));
+    }
+
+    IEnumerator FadeRoutine(StoryStep step)
+    {
+        CurrState = State.Fade;
+        SetPerms(State.Fade);                          // 全锁（同 Card）
+        if (phoneChat != null && phoneChat.IsShown) phoneChat.HideImmediate();   // 转场手机不挂屏
+
+        if (blackFade != null)
+        {
+            float t = 0f;
+            while (t < 1f) { t += Time.unscaledDeltaTime / 0.4f; blackFade.canvasRenderer.SetAlpha(Mathf.Clamp01(t)); yield return null; }
+            blackFade.canvasRenderer.SetAlpha(1f);
+        }
+
+        Transform target = FindFadeAnchor(step.to);
+        if (target != null && _player != null)
+        {
+            var cc = _player.GetComponent<CharacterController>();
+            if (cc != null) cc.enabled = false;        // 照抄门口传送的坑：不关会被拽回去
+            _player.transform.position = target.position;
+            _player.transform.rotation = Quaternion.Euler(0f, target.eulerAngles.y, 0f);
+            if (cc != null) cc.enabled = true;
+        }
+        else if (!string.IsNullOrEmpty(step.to))
+            Debug.LogWarning("[StoryRunner] fade 找不到锚点「" + step.to + "」——检查 fadeAnchors 接线 / 锚点命名");
+
+        yield return null;                             // 让传送落地一帧再开淡出
+
+        if (blackFade != null)
+        {
+            float t = 0f;
+            while (t < 1f) { t += Time.unscaledDeltaTime / 0.4f; blackFade.canvasRenderer.SetAlpha(1f - Mathf.Clamp01(t)); yield return null; }
+            blackFade.canvasRenderer.SetAlpha(0f);
+        }
+        _fadeRt = null;
+        Next();
+    }
+
+    Transform FindFadeAnchor(string name)
+    {
+        if (fadeAnchors == null || string.IsNullOrEmpty(name)) return null;
+        foreach (var a in fadeAnchors)
+            if (a != null && a.name == name) return a;
+        return null;
+    }
+
+    static bool HitsAny(string text, string[] keys)
+    {
+        if (keys == null) return false;
+        foreach (var k in keys) if (!string.IsNullOrEmpty(k) && text.Contains(k)) return true;
+        return false;
+    }
+
     void ToMainMenu()
     {
         GameProgress.MarkCompleted(chapterIndex);
@@ -297,6 +387,7 @@ public class StoryRunner : MonoBehaviour
         int idx = _choiceCounter++;
         SetPerms(State.Choice);
         if (phoneChat != null && phoneChat.IsShown) phoneChat.Hide();   // 干预面板与手机不同屏（用户 2026-09-27）
+        if (choicePanel != null) choicePanel.chapter = chapterIndex;    // 记录键按章隔离 story.choice.ch<N>.<idx>
         choicePanel.Open(step, idx, order =>
         {
             // ②在微信段（收框状态下面板出）：面板收档后停一拍再继续，给"替林溪把话说完"留节奏
@@ -306,6 +397,7 @@ public class StoryRunner : MonoBehaviour
     }
 
     // ------------------------------------------------------------------ 交互触发
+    // 多章并存：只认本章（chapterTag）且未消费的交互点，防止第2章等待时抓走第3章的触发盒
     StoryInteractable FindFree(StoryInteractable.Mode m)
     {
         var all = FindObjectsOfType<StoryInteractable>();
@@ -313,6 +405,7 @@ public class StoryRunner : MonoBehaviour
         foreach (var si in all)
         {
             if (si == null || si.mode != m || si.Consumed) continue;
+            if (si.chapterTag != chapterIndex) continue;
             if (best == null) best = si;
         }
         return best;
@@ -372,7 +465,9 @@ public class StoryRunner : MonoBehaviour
                     bool show = _currentF.PlayerInRange;
                     if (promptRoot.activeSelf != show) promptRoot.SetActive(show);
                     if (show && promptLabel != null)
-                        promptLabel.text = "与" + (string.IsNullOrEmpty(_currentF.displayName) ? "他" : _currentF.displayName) + "交谈";
+                        promptLabel.text = string.IsNullOrEmpty(_currentF.promptText)
+                            ? "与" + (string.IsNullOrEmpty(_currentF.displayName) ? "他" : _currentF.displayName) + "交谈"
+                            : _currentF.promptText;
                 }
                 break;
         }
@@ -409,7 +504,7 @@ public class StoryRunner : MonoBehaviour
                 _player.moveLocked = false;
                 _player.SetCursorLocked(true);
                 break;
-            default:                                      // Card/Typing/EndCard/Idle：全锁
+            default:                                      // Card/Typing/Fade/EndCard/Idle：全锁
                 _player.SetLocked(true);
                 _player.moveLocked = false;
                 _player.SetCursorLocked(true);

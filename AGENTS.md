@@ -309,6 +309,37 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   幂等、只写 WalkHint 子树、会覆盖该节点手调值）→ 报告 `assets/_报告/_任务栏改造.txt` +
   预览 `预览/任务栏_目标卡.png`。
 
+### 多章剧情（第 2–5 章，2026-09-27）
+
+- **结构**：`StorySystem` 下每章一个 runner 子节点（`第2章`~`第5章`；第1章 runner 仍在根上，原样不动）：
+  各绑 `Assets/数据/剧情/第N章.json` + `chapterIndex=N` + 各自 startAnchor/fadeAnchors，
+  **11 个 UI 引用全部指向 `UI交互` 画布下同一套节点**（工具从第1章 runner 复制）——多章零新建 UI。
+  主菜单选章写 `GameProgress.SelectedChapter`，只有匹配章的 runner `Begin()`，其余静默。
+- **数据**：`第2章.json`~`第5章.json`（78/104/79/92 步）。★ 正文体以
+  `项目文档/剧本更新.docx`（提取稿 `额外文件/剧本更新_extract.txt`）为唯一权威源，旧版剧本只作对照。
+  步骤类型在第1章八种之外新增 `fade`（`to`=锚点名）；微信台词 `s` 带「（微信）」，
+  班群通知 `s="班群（通知）"` 同样落手机 UI。
+- **fade（黑屏转场）**：黑幕淡入 → 传送玩家到 `fadeAnchors` 里与 `to` 同名的锚点 → 淡出。
+  用于更新版剧本的「黑屏/刷新」跳转（第3章进办公室、第5章宿舍↔图书馆等）。
+  ⚠ BlackFade 在 UI 最上层，黑屏期间对话框不可见 → 时间流逝旁白用独立 nar 步骤（放 fade 前后）。
+- **交互点章节归属**：`StoryInteractable.chapterTag`（默认1）；`FindFree()` 只取本章未消费的点。
+  `promptText` 非空时 F 提示整句显示它（如「拿起手机」），空则默认「与<displayName>交谈」。
+- **手机换聊天对象**：微信台词里非「徐夏」的说话人 → 自动推导联系人名 → `PhoneChatUI.SetContact()`
+  （换标题+清空聊天流）。第2章 李同学↔林溪、第4章 班群/学姐 自动切换。★ 头像占位：沿用第一章
+  两张（用户约定缺素材先占位），有新头像在 `手机聊天` 节点 Inspector 换 `avatarLeft` 即可。
+- **拿/放手机动画**：关键词数组（`拿起手机/拿过手机/拿出手机/把手机从桌角拿过来` 等）+ 兜底
+  （微信台词出现自动补拿、转入当面对话自动放下）。
+- **干预题记录键**：`story.choice.ch<N>.<题号>`（按章隔离；第1章旧键 `story.choice.<题号>` 已废弃）。
+- **搭建工具**：`Assets/Editor/ChapterStoriesSetup.cs`，菜单 `Tools/干预项目/多章剧情/`：
+  「一键搭建第2-5章（幂等）」建 runner×4 + `Loc_*/多章锚点/`（起点/交互点/fade落点）+ 接线 + 存场景 +
+  报告 `assets/_报告/_多章剧情搭建.txt`；「只看接线状态」诊断。**幂等规则：节点已存在只补缺引用，
+  绝不动位置/朝向**（手调优先）；摆位默认坐标按 Loc 中心估，跑完进 Scene 手调。
+- **自检**：`Tools/干预项目/第N章剧情运行自检`（N=1..5，`PhoneChatSmoke.cs`；或丢
+  `Assets/_storyNsmoke_trigger.txt`）→ `assets/_报告/_第N章剧情运行自检.txt`。
+  ⚠ 自检会重开 Game 场景——跑之前场景必须先保存。
+- **待补（用户黄亮标注，内容等用户提供后加 json 步骤即可）**：第3章食堂隔壁桌外人对话、
+  第4章宿舍舍友抱怨对话——预留 `dlg s=旁人甲/旁人乙`（名牌对话，无实体）。
+
 ---
 
 ## 六、常用操作速查
@@ -331,6 +362,8 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 | 验证门口传送能不能用 | `Tools/干预项目/门口传送运行自检`（真进 Play 模式走一遍）→ `assets/_报告/_门口传送运行自检.txt` |
 | 重建/改第一章剧情 UI（谨慎） | 把 `额外文件/历史Editor脚本/Chapter1StoryBuilder.cs` 拷回 `Assets/Editor/` → **手动**跑菜单（会重建 `ChoicePanel`/`WalkHint`/`ChapterCard`/`BlackFade`；`对话/对话框/名字/对话内容` 已冻结只读）→ 用完移走 |
 | 第一章剧情运行自检 | `Tools/干预项目/第一章剧情运行自检`（PhoneChatSmoke.cs，独立入口）→ `assets/_报告/_第一章剧情运行自检.txt` |
+| 搭建第2-5章剧情（runner/锚点/接线） | `Tools/干预项目/多章剧情/一键搭建第2-5章（幂等）`（ChapterStoriesSetup.cs）→ 报告 `assets/_报告/_多章剧情搭建.txt`；摆位默认值可随后在 Scene 里手调（重跑不覆盖） |
+| 第N章剧情运行自检（N=1..5） | `Tools/干预项目/第N章剧情运行自检`（或丢 `Assets/_storyNsmoke_trigger.txt`）→ `assets/_报告/_第N章剧情运行自检.txt`；⚠ 自检前场景要先保存（会重开场景） |
 | 生成/修复选择题选项行 | `Tools/干预项目/生成选择题按钮行`（预置3行 = 补缺接线 / 强制重建 = 弃手调重建 / 选择题行去掉解释块）→ `assets/_报告/_选择题按钮行.txt`；选项行样式直接在 Scene 里改 |
 | 搭/看手机聊天 UI（微信段） | `Tools/干预项目/搭建手机聊天UI`（或丢 `_phonechat_trigger.txt`，自动搭+出预览）→ 报告 `assets/_报告/_手机聊天UI.txt`、预览 `预览/场景/手机聊天UI_预览.png` |
 | 改走动段任务栏样式（左上角目标卡） | `Tools/干预项目/任务栏样式/改为左上角目标卡`（幂等，只写 WalkHint 子树，覆盖其手调值）→ 报告 `assets/_报告/_任务栏改造.txt`、预览 `预览/任务栏_目标卡.png` |
