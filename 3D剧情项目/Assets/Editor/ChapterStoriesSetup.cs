@@ -319,4 +319,88 @@ public static class ChapterStoriesSetup
     static void Log(string s) { _log.AppendLine(s); }
     static void Warn(string s) { _log.AppendLine("★ " + s); Debug.LogWarning("[ChapterStoriesSetup] " + s); }
     static void Error(string s) { _log.AppendLine("★ 失败：" + s); Debug.LogError("[ChapterStoriesSetup] " + s); }
+
+    // ================================================================== NPC 入场接线（第2章陆宣雨"门口虚影渐显走近"，2026-09-27）
+    // 三件事（全幂等）：
+    //   1) 宿舍南门内建「第2章_陆宣雨门口」锚点（enter 步骤 from）；
+    //   2) 锚点补进第2章 runner 的锚点池（fadeAnchors 与 enter 共用）；
+    //   3) 陆宣雨 prefab 换挂 PC_徐夏_Walk.controller（Speed 驱动的待机+行走混合树，
+    //      humanoid 跨角色重定向；关 applyRootMotion——位移由 NpcEntrance 驱动）。
+    // 落点不设锚点：enter 缺省动态走到玩家面前 1.3m（见 StoryRunner.EnterRoutine）。
+    const string WALK_CTRL = "Assets/assets/03_动作_Animation/Animators/PC_徐夏_Walk.controller";
+    const string LXY_PREFAB = "Assets/assets/02_角色_Character/角色_URP/陆宣雨_可动.prefab";
+    const string ENTRANCE_REPORT = "Assets/assets/_报告/_NPC入场接线.txt";
+
+    [MenuItem(MENU + "NPC入场接线（第2章陆宣雨）", false, 52)]
+    public static void SetupEntrance()
+    {
+        _log.Clear();
+        _log.AppendLine("NPC 入场接线（第2章陆宣雨）  " + System.DateTime.Now.ToString("yyyy-MM-dd HH:mm"));
+        _log.AppendLine();
+
+        foreach (var p in new[] { "Assets/Scripts/Story/NpcEntrance.cs", "Assets/Scripts/Story/StoryRunner.cs" })
+            AssetDatabase.ImportAsset(p, ImportAssetOptions.ForceUpdate);
+
+        var scene = EditorSceneManager.OpenScene(GAME_SCENE, OpenSceneMode.Single);
+        var system = GameObject.Find("StorySystem");
+        if (system == null) { Error("场景里没有 StorySystem"); return; }
+
+        // 1) 门口起点锚点（南门内，朝 +Z 面向屋内）
+        var anchor = EnsureAnchor("Loc_宿舍", "第2章_陆宣雨门口", new Vector3(2.0f, 0f, -5.4f), 0f);
+
+        // 2) 接进第2章 runner 锚点池（只补缺，不覆盖已有数组）
+        var runnerT = system.transform.Find("第2章");
+        var runner = runnerT != null ? runnerT.GetComponent<StoryRunner>() : null;
+        if (runner == null) { Warn("StorySystem/第2章 runner 不存在——先跑「一键搭建第2-5章」再回来跑本菜单"); }
+        else if (anchor != null)
+        {
+            bool has = false;
+            if (runner.fadeAnchors != null)
+                foreach (var a in runner.fadeAnchors) if (a != null && a.name == anchor.name) { has = true; break; }
+            if (!has)
+            {
+                var list = runner.fadeAnchors != null ? new List<Transform>(runner.fadeAnchors) : new List<Transform>();
+                list.Add(anchor);
+                runner.fadeAnchors = list.ToArray();
+                EditorUtility.SetDirty(runner);
+                Log("  + 第2章 runner 锚点池 += " + anchor.name + "（共 " + list.Count + " 个）");
+            }
+            else Log("  = 第2章 runner 锚点池已含 " + anchor.name);
+        }
+
+        // 3) 陆宣雨 prefab 换挂行走 controller（LoadPrefabContents → SaveAsPrefabAsset 才落盘）
+        var ctrl = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(WALK_CTRL);
+        if (ctrl == null) Warn("找不到 " + WALK_CTRL + " —— 入场将退化为纯位移（无走路动画）");
+        else
+        {
+            var contents = PrefabUtility.LoadPrefabContents(LXY_PREFAB);
+            var an = contents.GetComponentInChildren<Animator>(true);
+            if (an == null) { Warn(LXY_PREFAB + " 没有 Animator"); }
+            else
+            {
+                bool changed = an.runtimeAnimatorController != ctrl || an.applyRootMotion;
+                if (changed)
+                {
+                    an.runtimeAnimatorController = ctrl;
+                    an.applyRootMotion = false;                              // 位移由 NpcEntrance 驱动
+                    an.cullingMode = AnimatorCullingMode.AlwaysAnimate;     // 入场时可能不在视野，仍要播
+                    PrefabUtility.SaveAsPrefabAsset(contents, LXY_PREFAB);
+                    Log("  + 陆宣雨_可动.prefab → 挂 " + System.IO.Path.GetFileName(WALK_CTRL) + "（rootMotion 关）");
+                }
+                else Log("  = 陆宣雨_可动.prefab 已挂行走 controller，未改动");
+            }
+            PrefabUtility.UnloadPrefabContents(contents);
+        }
+
+        EditorSceneManager.MarkSceneDirty(scene);
+        EditorSceneManager.SaveScene(scene);
+
+        _log.AppendLine();
+        _log.AppendLine("【下一步】Play 第2章到微信段结束 → 陆宣雨从南门虚影渐显走到玩家面前落定。");
+        _log.AppendLine("观感可调：NpcEntrance 顶部 SPEED / ALPHA_MAX；虚影颜色在 CharacterGhost.shader 默认值。");
+        Directory.CreateDirectory(Path.GetDirectoryName(ENTRANCE_REPORT).Replace('/', Path.DirectorySeparatorChar));
+        File.WriteAllText(ENTRANCE_REPORT, _log.ToString());
+        Debug.Log("[ChapterStoriesSetup] NPC 入场接线完成，报告：" + ENTRANCE_REPORT);
+        EditorUtility.DisplayDialog("NPC入场接线", "完成，详见：\n" + ENTRANCE_REPORT, "好");
+    }
 }

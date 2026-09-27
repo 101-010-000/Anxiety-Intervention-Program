@@ -16,7 +16,7 @@ public class StorySmokeDriver : MonoBehaviour
     public static readonly List<string> Lines = new List<string>();
     public static readonly List<string> Errors = new List<string>();
 
-    int _sawTyping, _sawGap, _sawNarFree, _sawChoice, _sawWalk, _sawInteract, _sawFade;
+    int _sawTyping, _sawGap, _sawNarFree, _sawChoice, _sawWalk, _sawInteract, _sawFade, _sawEnter;
 
     void Awake()
     {
@@ -69,6 +69,7 @@ public class StorySmokeDriver : MonoBehaviour
                 case StoryRunner.State.WaitWalk: _sawWalk++; break;
                 case StoryRunner.State.WaitInteract: _sawInteract++; break;
                 case StoryRunner.State.Fade: _sawFade++; break;
+                case StoryRunner.State.Enter: _sawEnter++; break;
             }
 
             // 防卡死：步骤号长时间不动 → 失败
@@ -83,7 +84,8 @@ public class StorySmokeDriver : MonoBehaviour
         {
             Lines.Add("走完全部 " + r.StepIndex + "/" + r.TotalSteps + " 步 ✓");
             Lines.Add("状态计数：Typing " + _sawTyping + " / Gap " + _sawGap + " / 开场旁白 " + _sawNarFree
-                      + " / Choice " + _sawChoice + " / Walk " + _sawWalk + " / Interact " + _sawInteract + " / Fade " + _sawFade);
+                      + " / Choice " + _sawChoice + " / Walk " + _sawWalk + " / Interact " + _sawInteract
+                      + " / Fade " + _sawFade + " / Enter " + _sawEnter);
             if (_sawChoice == 0) Fail("干预面板没开过");
             if (TargetChapter == 1)
             {   // 第1章既有门槛：walk/interact 必须都等待过；其它章按各自剧本可无

@@ -20,6 +20,7 @@
 // "说完话"的判定 = 该句打字机播完（DialogueUI.onLineTyped）→ 进入间隙。
 // 打字中点击 = 先补全全句；再点才推进。
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -55,7 +56,7 @@ public class StoryRunner : MonoBehaviour
     public enum State
     {
         Idle, Card, Typing, Gap,
-        NarFree, WaitInteract, WaitWalk, Choice, Fade, EndCard, Done
+        NarFree, WaitInteract, WaitWalk, Choice, Fade, Enter, EndCard, Done
     }
 
     public State CurrState { get; private set; }
@@ -78,7 +79,10 @@ public class StoryRunner : MonoBehaviour
     int _lastLineLen;
     Coroutine _cardRt;
     Coroutine _fadeRt;
+    Coroutine _enterRt;
     Coroutine _walkHintRt;
+    NpcEntrance _entrance;                                  // 当前入场演出（DebugAdvance 快进用）
+    readonly Dictionary<string, GameObject> _entranceNpcs = new Dictionary<string, GameObject>();
 
     // 拿/放手机的 3D 动画钩子（第1章是逐字硬编码；多章后改关键词数组，旁白原文即可命中）：
     //   拿起 → animator TakePhone(Trigger) + Phone=true；放下（关键词或转入当面对话）→ Phone=false。
@@ -140,9 +144,33 @@ public class StoryRunner : MonoBehaviour
         _openingNar = true;
         StepIndex = 0;
         _choiceCounter = 0;
+        CollectAndHideEntranceNpcs();   // enter 步骤的角色开场先禁用（第2章陆宣雨：她不在宿舍）
         if (phoneChat != null) phoneChat.HideImmediate();   // 万一上次没收干净
         if (blackFade != null) blackFade.canvasRenderer.SetAlpha(1f);   // 进场：从黑淡入
         Next();
+    }
+
+    // ------------------------------------------------------------------ NPC 入场（第2章陆宣雨"门口虚影渐显走近"，机制通用）
+    // json 是唯一事实源：Begin 时扫本章所有 enter 步骤的 who → 预禁用这些角色（记录引用，
+    // enter 时再启用——FindObjectsOfType 找不到禁用对象，所以必须先存）。
+    void CollectAndHideEntranceNpcs()
+    {
+        _entranceNpcs.Clear();
+        foreach (var step in _ch.steps)
+        {
+            if (step.t != "enter" || string.IsNullOrEmpty(step.who) || _entranceNpcs.ContainsKey(step.who)) continue;
+            var t = FindCharacterTransform(step.who);
+            if (t == null) { Debug.LogWarning("[StoryRunner] enter 角色没找到：" + step.who + "（enter 时会再找一次）"); continue; }
+            _entranceNpcs[step.who] = t.gameObject;
+            if (t.gameObject.activeSelf) t.gameObject.SetActive(false);
+        }
+    }
+
+    Transform FindCharacterTransform(string name)
+    {
+        foreach (var t in FindObjectsOfType<Transform>(true))     // true：含禁用对象
+            if (t.name == name) return t;
+        return null;
     }
 
     // ------------------------------------------------------------------ 步骤推进
@@ -163,6 +191,7 @@ public class StoryRunner : MonoBehaviour
             case "end": DoEnd(); break;
             case "choice": DoChoice(step); break;
             case "fade": DoFade(step); break;
+            case "enter": DoEnter(step); break;
 
             case "walk":
                 _currentTouch = FindFree(StoryInteractable.Mode.Touch);
@@ -366,6 +395,64 @@ public class StoryRunner : MonoBehaviour
         return null;
     }
 
+    // ------------------------------------------------------------------ NPC 入场演出（enter 步骤，2026-09-27）
+    // who 从预禁用表启用 → 虚影渐显 + 从 from 锚点走到玩家面前（缺省落点；to 显式锚点可覆盖）
+    // → 落定（换回真实材质/恢复描边碰撞/面向玩家）→ 接对话。演出细节见 NpcEntrance。
+    void DoEnter(StoryStep step)
+    {
+        if (_enterRt != null) StopCoroutine(_enterRt);
+        _enterRt = StartCoroutine(EnterRoutine(step));
+    }
+
+    IEnumerator EnterRoutine(StoryStep step)
+    {
+        CurrState = State.Enter;
+        SetPerms(State.Enter);                          // 全锁（同 Fade）
+
+        GameObject go = null;
+        _entranceNpcs.TryGetValue(step.who, out go);
+        if (go == null)
+        {
+            var t = FindCharacterTransform(step.who);   // 没预禁用过（如 json 后补的 enter）也能兜底
+            go = t != null ? t.gameObject : null;
+        }
+        if (go == null)
+        {
+            Debug.LogWarning("[StoryRunner] enter 找不到角色「" + step.who + "」——跳过入场");
+            Next(); yield break;
+        }
+
+        Transform from = FindFadeAnchor(step.from);
+        if (from == null)
+        {
+            Debug.LogWarning("[StoryRunner] enter 找不到起点锚点「" + step.from + "」——检查锚点接线/命名");
+            if (!go.activeSelf) go.SetActive(true);
+            Next(); yield break;
+        }
+
+        // 落点：to 显式锚点优先；缺省 = 玩家面前 1.3m（沿"起点→玩家"来向退 1.3m，用户 2026-09-27 定：
+        // 玩家此刻在交互点半径内但位置不精确，不能写死落点）
+        Vector3 target;
+        Transform toT = FindFadeAnchor(step.to);
+        if (toT != null) target = toT.position;
+        else if (_player != null)
+        {
+            Vector3 p = _player.transform.position;
+            Vector3 dir = p - from.position; dir.y = 0f;
+            target = dir.sqrMagnitude > 0.01f ? p - dir.normalized * 1.3f : p;
+        }
+        else target = from.position;
+
+        if (!go.activeSelf) go.SetActive(true);
+        _entrance = go.GetComponent<NpcEntrance>();
+        if (_entrance == null) _entrance = go.AddComponent<NpcEntrance>();
+        yield return _entrance.Run(from.position, target, _player != null ? _player.transform : null);
+
+        _entrance = null;
+        _enterRt = null;
+        Next();
+    }
+
     static bool HitsAny(string text, string[] keys)
     {
         if (keys == null) return false;
@@ -526,7 +613,7 @@ public class StoryRunner : MonoBehaviour
                 _player.moveLocked = false;
                 _player.SetCursorLocked(true);
                 break;
-            default:                                      // Card/Typing/Fade/EndCard/Idle：全锁
+            default:                                      // Card/Typing/Fade/Enter/EndCard/Idle：全锁
                 _player.SetLocked(true);
                 _player.moveLocked = false;
                 _player.SetCursorLocked(true);
@@ -631,6 +718,7 @@ public class StoryRunner : MonoBehaviour
             case State.NarFree: Next(); break;
             case State.WaitInteract: if (_currentF != null) _currentF.Fire(); break;
             case State.WaitWalk: if (_currentTouch != null) _currentTouch.Fire(); break;
+            case State.Enter: if (_entrance != null) _entrance.Skip(); break;   // 自检不等演出，直接终态
             case State.Choice:
                 if (choicePanel != null)
                 {

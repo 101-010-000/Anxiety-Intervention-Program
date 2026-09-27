@@ -8,19 +8,23 @@
 json 形态（插在「她抬头看了看宿舍门……」nar 之后、陆宣雨第一句 dlg 之前）：
 
 ```json
-{ "t": "enter", "who": "陆宣雨_可动", "from": "第2章_陆宣雨门口", "to": "第2章_陆宣雨落点", "x": "dur=3.2" }
+{ "t": "enter", "who": "陆宣雨_可动", "from": "第2章_陆宣雨门口" }
 ```
 
-- 字段：`who`=场景里角色实例名（在 `Loc_宿舍/第二章角色/` 下找，或全局按名找——实现取
-  `FindObjectsOfType` + 名字匹配，避免 GameObject.Find 找不到禁用对象）；`from`/`to`=
-  runner.fadeAnchors 同源的锚点名（复用同一个锚点数组，不再开新数组）；`x`=可选参数串
-  （`dur=秒`，默认按距离/1.6m/s 估）。
+- 字段：`who`=场景里角色实例名（`FindObjectsOfType` + 名字匹配，避免 GameObject.Find
+  找不到禁用对象）；`from`=门口起点锚点名（接在 runner 锚点池里，与 fade 共用）；
+  `to`=**可选**——缺省时落点为**玩家面前**：enter 开始快照玩家位置 P，
+  终点 = P + (from→P 方向单位向量) × 1.3m（从她的来向走到玩家跟前），
+  到位转身面向玩家。★ 不写死落点坐标：玩家此刻在手机交互点 2.2m 半径内但位置不精确
+  （用户 2026-09-27 指出"万一玩家不在书桌旁"）。显式给 `to` 锚点名时才走固定落点（特殊演出预留）。
+  `x`=可选参数串（`dur=秒`，默认按距离/1.6m/s 估）。
 - 运行：`State.Enter`（全锁，同 Fade）→ 协程 `EnterRoutine(step)`：
-  1. 找到角色 + from/to 锚点；角色 SetActive(true)（若已激活，先瞬移到 from）。
-  2. 摘描边（Layer → `Outline` 暂改为默认层，记原值）、禁 CapsuleCollider。
+  1. 找到角色 + from 锚点；算终点（玩家面前或 to 锚点）；角色 SetActive(true)
+     （若已激活，先瞬移到 from）。
+  2. 摘描边（Layer 暂改为默认层，记原值）、禁 CapsuleCollider。
   3. 换虚影材质（D2），alpha 从 0 起。
-  4. 位移插值 from→to（面朝移动方向），alpha 随进度升到 0.75；播行走动画（D3）。
-  5. 到位：切回待机动画 → 换回原材质 → 恢复 Layer/碰撞 → 面向主角（玩家）。
+  4. 位移插值 from→终点（面朝移动方向），alpha 随进度升到 0.75；播行走动画（D3）。
+  5. 到位：切回待机动画 → 换回原材质 → 恢复 Layer/碰撞 → 面向玩家。
   6. `Next()`。
 - `DebugAdvance()`：Enter 态 = 立即跳到终态（自检不等待演出）——协程加 `_fast` 标志或
   DebugAdvance 直接调组件的 `Skip()`。
@@ -66,8 +70,8 @@ json 形态（插在「她抬头看了看宿舍门……」nar 之后、陆宣�
 
 - 新锚点（进 `Loc_宿舍/多章锚点/`，跑一次工具补上）：
   - `第2章_陆宣雨门口`：南门内 (2.0, 0, -5.4)，朝北（面向屋内）。
-  - `第2章_陆宣雨落点`：书桌旁 (1.0, 0, -1.6)，朝西（面向主角起点）。
-  - 两个锚点同时接进第2章 runner 的 fadeAnchors（enter 与 fade 共用锚点池，名字索引）。
+  - 落点**不设锚点**：缺省动态走到玩家面前 1.3m（见 D1）；`to` 只在特殊演出需要固定落点时才建锚点。
+  - 锚点接进第2章 runner 的锚点池（enter 与 fade 共用，名字索引）。
 - 工具新菜单/并入现有菜单：`多章剧情/NPC入场接线（第2章陆宣雨）`：
   建锚点 + 生成 controller + 改 prefab 挂 controller + 报告。重跑不覆盖手调位置
   （幂等规则同现有）。
@@ -78,7 +82,7 @@ json 形态（插在「她抬头看了看宿舍门……」nar 之后、陆宣�
 在 `{ "t": "nar", "x": "她抬头看了看宿舍门，刚好看到宿舍长端着水杯走进来。" }` 之后插入：
 
 ```json
-{ "t": "enter", "who": "陆宣雨_可动", "from": "第2章_陆宣雨门口", "to": "第2章_陆宣雨落点" },
+{ "t": "enter", "who": "陆宣雨_可动", "from": "第2章_陆宣雨门口" },
 ```
 
 其余 77 步零改动。`end` 后无需清理（章节结束即场景卸载/回主菜单）。
@@ -100,5 +104,5 @@ json 形态（插在「她抬头看了看宿舍门……」nar 之后、陆宣�
 | `Assets/Editor/ChapterStoriesSetup.cs` | 改：NPC 入场接线菜单（锚点+controller+prefab） |
 | `Assets/assets/03_动作_Animation/Animators/NPC_待机女_含走.controller` | 新（工具生成） |
 | `Assets/数据/剧情/第2章.json` | 改：插 1 步 enter（78→79 步） |
-| `Game.unity` | 工具写入：锚点 ×2 + runner 锚点接线 |
+| `Game.unity` | 工具写入：锚点 ×1（门口）+ runner 锚点接线 |
 | `assets/_报告/_NPC入场接线.txt` | 报告 |
