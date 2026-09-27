@@ -3,7 +3,7 @@
 //   · （微信）台词：只落在手机聊天 UI（PhoneChatUI，居中放大），气泡即时报；对话框收着不出现，
 //     打字机隐形跑维持节奏，onLineTyped 照常进间隙 → 点击推进；
 //   · 旁白/独白：走用户的 Dialog 对话框，此时手机暂时收起；点完再遇微信台词 → 对话框让位、手机回屏。
-//   干预题②收档 → 第一个选中的鼓励语以「林溪（微信）」补一条，多停一拍再走。
+//   · 干预面板：出现时手机也收起（选项与手机不同屏）；收档后照常回剧情（鼓励语选题时已借对话框读过）。
 //   全部剧情 UI 挂用户手搭的「UI交互」画布下（没有独立剧情画布）。
 //
 // 控制权限（设计定稿）：
@@ -296,21 +296,11 @@ public class StoryRunner : MonoBehaviour
     {
         int idx = _choiceCounter++;
         SetPerms(State.Choice);
+        if (phoneChat != null && phoneChat.IsShown) phoneChat.Hide();   // 干预面板与手机不同屏（用户 2026-09-27）
         choicePanel.Open(step, idx, order =>
         {
             // ②在微信段（收框状态下面板出）：面板收档后停一拍再继续，给"替林溪把话说完"留节奏
-            if (order != null && order.Count > 0)
-            {
-                // 微信段的选择题：把【第一个选中】的鼓励语以林溪名义补进手机聊天（替林溪把话说完），
-                // 手机在屏上就多停一拍让气泡被看见（下一步旁白会把手机收起）
-                bool phoneOn = phoneChat != null && phoneChat.IsShown;
-                if (phoneOn && step.options != null
-                    && order[0] >= 0 && order[0] < step.options.Count
-                    && !string.IsNullOrEmpty(step.options[order[0]].body))
-                    phoneChat.Append("林溪（微信）", step.options[order[0]].body);
-                _pendingNextAt = Time.time + (phoneOn ? 1.2f : 0.4f);
-                SetPerms(State.Gap); _gapTimer = 0f; return;
-            }
+            if (order != null && order.Count > 0) { _pendingNextAt = Time.time + 0.4f; SetPerms(State.Gap); _gapTimer = 0f; return; }
             Next();
         });
     }
