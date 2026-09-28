@@ -129,10 +129,7 @@ public static class ChapterStoriesSetup
         _log.AppendLine("多章剧情搭建（第2-5章）  " + System.DateTime.Now.ToString("yyyy-MM-dd HH:mm"));
         _log.AppendLine();
 
-        // AGENTS 第七节坑：AddComponent 前先强制导入脚本，防 MonoScript 缓存 → 缺脚本组件
-        foreach (var p in new[] { "Assets/Scripts/Story/StoryRunner.cs", "Assets/Scripts/Story/StoryInteractable.cs" })
-            AssetDatabase.ImportAsset(p, ImportAssetOptions.ForceUpdate);
-        AssetDatabase.Refresh();
+        WarmScripts(new[] { "Assets/Scripts/Story/StoryRunner.cs", "Assets/Scripts/Story/StoryInteractable.cs" });
 
         var scene = EditorSceneManager.OpenScene(GAME_SCENE, OpenSceneMode.Single);
         var system = GameObject.Find("StorySystem");
@@ -235,6 +232,23 @@ public static class ChapterStoriesSetup
     {
         Directory.CreateDirectory(Path.GetDirectoryName(REPORT).Replace('/', Path.DirectorySeparatorChar));
         File.WriteAllText(REPORT, _log.ToString());
+    }
+
+    /// 脚本预热（照 MainMenuBuilder.PreloadScripts 的正确姿势）：
+    /// 先 LoadAssetAtPath 查 MonoScript.GetClass()，【失联才】ForceUpdate 重导。
+    /// ★ 别盲目重导：刚 ForceUpdate 完的 MonoScript 会短暂失联，紧接着 AddComponent
+    ///   就写出"缺脚本"组件（2026-09-28 第5章门口节点踩过——上一版无脑重导是帮凶）。
+    static void WarmScripts(string[] paths)
+    {
+        foreach (var p in paths)
+        {
+            var mono = AssetDatabase.LoadAssetAtPath<MonoScript>(p);
+            if (mono != null && mono.GetClass() != null) continue;
+            AssetDatabase.ImportAsset(p, ImportAssetOptions.ForceUpdate);
+            mono = AssetDatabase.LoadAssetAtPath<MonoScript>(p);
+            if (mono == null || mono.GetClass() == null) Warn("脚本类型没编译进来：" + p + "（本次 AddComponent 可能得到缺脚本组件，重跑一次）");
+            else Log("  脚本预热（重导后就绪）：" + p);
+        }
     }
 
     [MenuItem(MENU + "只看接线状态（不改动）", false, 51)]
@@ -387,7 +401,7 @@ public static class ChapterStoriesSetup
         _log.AppendLine();
 
         foreach (var p in new[] { "Assets/Scripts/Story/NpcEntrance.cs", "Assets/Scripts/Story/StoryRunner.cs" })
-            AssetDatabase.ImportAsset(p, ImportAssetOptions.ForceUpdate);
+            WarmScripts(new[] { p });
 
         var scene = EditorSceneManager.OpenScene(GAME_SCENE, OpenSceneMode.Single);
         var system = GameObject.Find("StorySystem");
