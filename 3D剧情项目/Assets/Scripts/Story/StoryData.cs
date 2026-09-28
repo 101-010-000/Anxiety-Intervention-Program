@@ -27,6 +27,8 @@ public class StoryStep
     public string s = "";
     public string x = "";
     public string to = "";                   // fade：目标锚点名（runner.fadeAnchors 里同名元素）
+    public string who = "";                  // enter：角色实例名（Begin 时预禁用，enter 时启用入场）
+    public string from = "";                 // enter：门口起点锚点名
     public string title = "";
     public List<StoryOption> options = new List<StoryOption>();
 }
