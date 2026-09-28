@@ -146,6 +146,10 @@ public class NpcEntrance : MonoBehaviour
             cloneGo.name = "幽灵层_" + r.name;
             foreach (var col in cloneGo.GetComponentsInChildren<Collider>()) col.enabled = false;
             var smr = cloneGo.GetComponent<SkinnedMeshRenderer>();
+            // ★ Instantiate 会连"禁用"状态一起复制（克隆时原身刚被 enabled=false）——
+            //   不显式启用，幽灵层全程一个像素都不渲染，观感=她"突然出现"（2026-09-28 踩坑）。
+            cloneGo.SetActive(true);
+            smr.enabled = true;
             smr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             smr.updateWhenOffscreen = true;
             var mats = new Material[smr.sharedMaterials.Length];
@@ -155,6 +159,8 @@ public class NpcEntrance : MonoBehaviour
         }
         if (_ghostClones.Count == 0)
             Debug.LogWarning("[NpcEntrance] 没有可复制的 SkinnedMeshRenderer —— 虚影层为空，将直接显示真身");
+        else
+            Debug.Log("[NpcEntrance] 幽灵层就绪：" + _ghostClones.Count + " 个克隆（已启用，浓度 " + GHOST_ALPHA + "）");
     }
 
     void ShowReal()
