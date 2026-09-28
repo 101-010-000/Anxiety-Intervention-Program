@@ -523,6 +523,18 @@ public class StoryRunner : MonoBehaviour
         else target = from.position;
 
         if (!go.activeSelf) go.SetActive(true);
+
+        // ★ 镜头先看向门口（用户 2026-09-28 反馈"入场完全看不见"的根因：她出生在玩家视野外，
+        //   而演出期锁视角导致全程看不见、走到面前才"突然出现"）。台词本就写着"她抬头看了看
+        //   宿舍门"——把玩家（第一人称=镜头）转向入场锚点，她从第一帧就在画面里。
+        //   Look() 只对 transform 做增量旋转，直接设朝向不会在解锁后回弹。
+        if (_player != null)
+        {
+            Vector3 d = from.position - _player.transform.position; d.y = 0f;
+            if (d.sqrMagnitude > 0.01f)
+                _player.transform.rotation = Quaternion.LookRotation(d.normalized);
+        }
+
         _entrance = go.GetComponent<NpcEntrance>();
         if (_entrance == null) _entrance = go.AddComponent<NpcEntrance>();
         yield return _entrance.Run(from.position, target, _player != null ? _player.transform : null);
@@ -690,6 +702,11 @@ public class StoryRunner : MonoBehaviour
             case State.WaitWalk:
                 _player.SetLocked(false);
                 _player.moveLocked = false;
+                _player.SetCursorLocked(true);
+                break;
+            case State.Enter:                            // 入场演出：能转视角（看她走过来），不能走
+                _player.SetLocked(false);
+                _player.moveLocked = true;
                 _player.SetCursorLocked(true);
                 break;
             default:                                      // Card/Typing/Fade/Enter/EndCard/Idle：全锁
