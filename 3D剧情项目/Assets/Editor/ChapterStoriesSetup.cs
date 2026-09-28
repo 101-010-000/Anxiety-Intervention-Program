@@ -459,7 +459,7 @@ public static class ChapterStoriesSetup
 
         _log.AppendLine();
         _log.AppendLine("【下一步】Play 第2章到微信段结束 → 陆宣雨从南门虚影渐显走到玩家面前落定。");
-        _log.AppendLine("观感可调：NpcEntrance 顶部 SPEED / ALPHA_MAX；虚影颜色在 CharacterGhost.shader 默认值。");
+        _log.AppendLine("观感可调：NpcEntrance 顶部 SPEED（步速）。虚实渐变已移除（2026-09-28，全程真实形象）。");
         Directory.CreateDirectory(Path.GetDirectoryName(ENTRANCE_REPORT).Replace('/', Path.DirectorySeparatorChar));
         File.WriteAllText(ENTRANCE_REPORT, _log.ToString());
         Debug.Log("[ChapterStoriesSetup] NPC 入场接线完成，报告：" + ENTRANCE_REPORT);
