@@ -1,0 +1,47 @@
+『测试跑动画』试用 + A/B 对比  2026-09-27 23:32
+
+【1】导入设置（改之前）
+   animationType = Generic   avatarSetup = NoAvatar   importCameras = True   importLights = True
+   （animationType: 0=None 1=Legacy 2=Generic 3=Humanoid；avatarSetup: 0=NoAvatar 1=CreateFromThisModel 2=Copy）
+   → 已改成 Humanoid + CreateFromThisModel，并关掉相机/灯光导入
+
+【2】新动画
+   剪辑 mixamo.com  长度 0.53s  帧率 30
+   Avatar 测试跑动画Avatar  isHuman=True  isValid=True
+     Hips           → Root_M
+     LeftUpperLeg   → Hip_L
+     LeftLowerLeg   → Knee_L
+     LeftFoot       → Ankle_L
+     LeftToes       → Toes_L
+     RightUpperLeg  → Hip_R
+     RightLowerLeg  → Knee_R
+     RightFoot      → Ankle_R
+     RightToes      → Toes_R
+   —— 跟角色（徐夏）的骨骼命名对比 ——
+     LeftFoot     新动画→Ankle_L                  角色→CC_BaseFoot_L
+     LeftToes     新动画→Toes_L                   角色→CC_BaseToeBase_L
+     RightFoot    新动画→Ankle_R                  角色→CC_BaseFoot_R
+     RightToes    新动画→Toes_R                   角色→CC_BaseToeBase_R
+   —— 腿脚骨骼的绑定缩放（不是 1 就会把人拉变形）——
+     Ankle_R                        scale=(1, 1, 1)
+     Toes_R                         scale=(1, 1, 1)
+     ToesEnd_R                      scale=(1, 1, 1)
+     Ankle_L                        scale=(1, 1, 1)
+     Toes_L                         scale=(1, 1, 1)
+     ToesEnd_L                      scale=(1, 1, 1)
+
+【3】已把新动画挂到「徐夏」：mixamo.com  →  徐夏   存场景 成功
+
+【4】A/B 渲染（同一角色、同一机位）
+   A_新动画_mixamo.com：采样 t=0.19s（片段长 0.53s）
+   B_旧动画_mixamo.com：采样 t=0.39s（片段长 1.10s）
+
+图片目录：Assets/assets/_报告/预览/腿脚/A_新动画_*.png 与 B_旧动画_*.png
+看图时看两件事：① 左脚/左小腿有没有被拉长或压扁；② 鞋子的形状有没有被拉扯。
+
+————————————————————————————————————
+结论怎么看：
+· 如果 A（新动画）脚正常、B（旧动画）脚变形 → 是【动画文件】的问题（旧那批 FBX 的骨架/导出格式不合适）
+· 如果 A 和 B 都变形 → 不是动画文件的事，是【角色骨架 / Avatar 映射】的问题，
+  多半在 CC_Base 那套 twist 骨（CC_BaseCalfTwist/ThighTwist）上 —— mixamo 不动它，
+  它会停在绑定姿势，小腿/脚的蒙皮就被拧住。

@@ -1,0 +1,38 @@
+鞋网格权重统计  2026-09-27 23:49
+（把每块网格的顶点权重按骨头汇总，看权重压在哪些骨上）
+
+=== 徐夏 / Shoes_shoes.006_lowsneakers   顶点 556
+     CC_BaseFoot.R                      权重占比    28.6%
+     CC_BaseFoot.L                      权重占比    28.6%
+     CC_BaseToeBase.R                   权重占比    15.2%
+     CC_BaseToeBase.L                   权重占比    15.2%
+     CC_BaseCalfTwist02.R               权重占比     6.2%
+     CC_BaseCalfTwist02.L               权重占比     6.2%
+
+=== 组长_可动 / Shoes_shoes.006_lowsneakers   顶点 556
+     CC_BaseFoot.R                      权重占比    28.6%
+     CC_BaseFoot.L                      权重占比    28.6%
+     CC_BaseToeBase.R                   权重占比    15.2%
+     CC_BaseToeBase.L                   权重占比    15.2%
+     CC_BaseCalfTwist02.R               权重占比     6.2%
+     CC_BaseCalfTwist02.L               权重占比     6.2%
+
+=== 陆宣雨_可动 / Shoes_shoes.007_chelsea   顶点 544
+     CC_BaseFoot.R                      权重占比    22.6%
+     CC_BaseFoot.L                      权重占比    22.6%
+     CC_BaseCalfTwist02.R               权重占比    15.5%
+     CC_BaseCalfTwist02.L               权重占比    15.5%
+     CC_BaseToeBase.R                   权重占比    11.8%
+     CC_BaseToeBase.L                   权重占比    11.8%
+     CC_BaseCalfTwist01.R               权重占比     0.0%
+     CC_BaseCalfTwist01.L               权重占比     0.0%
+
+=== 李老师_可动 / Shoes_shoes.005_highboots   顶点 1008
+     CC_BaseCalfTwist02.R               权重占比    26.2%
+     CC_BaseCalfTwist02.L               权重占比    26.2%
+     CC_BaseFoot.R                      权重占比    14.5%
+     CC_BaseFoot.L                      权重占比    14.5%
+     CC_BaseToeBase.R                   权重占比     8.3%
+     CC_BaseToeBase.L                   权重占比     8.3%
+     CC_BaseCalfTwist01.R               权重占比     1.0%
+     CC_BaseCalfTwist01.L               权重占比     1.0%

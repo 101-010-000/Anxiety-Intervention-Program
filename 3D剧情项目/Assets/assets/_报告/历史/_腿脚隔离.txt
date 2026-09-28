@@ -1,0 +1,24 @@
+徐夏 各网格包围盒（世界，采样后）：
+   medium.001_low                             中心y=1.413 高=0.356 宽=0.292 深=0.319
+   bangs.001_low                              中心y=1.398 高=0.255 宽=0.241 深=0.224
+   F_body_arms_lower                          中心y=1.270 高=0.058 宽=1.013 深=0.068
+   F_body_arms_upper                          中心y=1.221 高=0.161 宽=0.721 深=0.113
+   F_body_feet                                中心y=0.025 高=0.209 宽=0.225 深=0.232
+   F_body_hands                               中心y=1.255 高=0.071 宽=1.293 深=0.117
+   F_body_hips                                中心y=0.887 高=0.218 宽=0.306 深=0.203
+   F_body_legs_knee                           中心y=0.436 高=0.155 宽=0.228 深=0.116
+   F_body_legs_lower                          中心y=0.219 高=0.302 宽=0.222 深=0.141
+   F_body_legs_upper                          中心y=0.661 高=0.315 宽=0.298 深=0.172
+   F_body_shoulders                           中心y=1.253 高=0.124 宽=0.366 深=0.136
+   F_body_torso                               中心y=1.055 高=0.169 宽=0.265 深=0.167
+   Head_F_head.001_mesh                       中心y=1.390 高=0.425 宽=0.196 深=0.207
+   Top_F_top.003_sweatshirt                   中心y=1.137 高=0.427 宽=1.171 深=0.244
+   Bot_F_bot_003_skirt                        中心y=0.814 高=0.372 宽=0.387 深=0.268
+   Shoes_shoes.006_lowsneakers                中心y=0.014 高=0.241 宽=0.239 深=0.258
+
+裸体脚网格：F_body_feet（1 块）
+裸体腿网格：F_body_legs_knee、F_body_legs_lower、F_body_legs_upper（3 块）
+鞋/袜网格：Shoes_shoes.006_lowsneakers（1 块）
+
+图片：Assets/assets/_报告/预览/腿脚/隔离_*.png（都是侧面同一机位）
+看 4 和 5：肿包出现在哪一张里，它就是『多余的那块网格』。

@@ -1,0 +1,1017 @@
+腿脚蒙皮形变量化 v2  2026-09-28 02:39
+stretch = 动画中的边长 ÷ 绑定姿势的边长。1.00 = 完全没变形，>1.5 = 肉眼可见畸变。
+（只读工具：不写资产、不存场景；分析完自动把姿势还原）
+
+================ 0) 场景里到底挂的是哪块网格（「改了没有」的硬证据）================
+
+==== 张知远_可动
+   C_hair_short.004                         Mesh=C_hair_short.004                 Assets/assets/02_角色_Character/Meshes/3_发型_Hair/C_hair_short.004.fbx
+   M_body_arms_lower                        Mesh=M_body_arms_lower_fix            Assets/assets/02_角色_Character/Meshes/修复权重/M_body_arms_lower_fix.asset
+   M_body_arms_upper                        Mesh=M_body_arms_upper_fix            Assets/assets/02_角色_Character/Meshes/修复权重/M_body_arms_upper_fix.asset
+   M_body_feet                              Mesh=M_body_feet_fix                  Assets/assets/02_角色_Character/Meshes/修复权重/M_body_feet_fix.asset
+   M_body_hands                             Mesh=M_body_hands_fix                 Assets/assets/02_角色_Character/Meshes/修复权重/M_body_hands_fix.asset
+   M_body_legs_knee                         Mesh=M_body_legs_knee_fix             Assets/assets/02_角色_Character/Meshes/修复权重/M_body_legs_knee_fix.asset
+   M_body_legs_lower                        Mesh=M_body_legs_lower_fix            Assets/assets/02_角色_Character/Meshes/修复权重/M_body_legs_lower_fix.asset
+   M_body_legs_upper                        Mesh=M_body_legs_upper_fix            Assets/assets/02_角色_Character/Meshes/修复权重/M_body_legs_upper_fix.asset
+   M_body_shoulders                         Mesh=M_body_shoulders_fix             Assets/assets/02_角色_Character/Meshes/修复权重/M_body_shoulders_fix.asset
+   M_body_torso                             Mesh=M_body_torso                     Assets/assets/02_角色_Character/Meshes/1_身体_Body/M_body.fbx
+   M_body_torso.001                         Mesh=M_body_torso.001_fix             Assets/assets/02_角色_Character/Meshes/修复权重/M_body_torso.001_fix.asset
+   Head_M_head.002_mesh                     Mesh=M_head.002_mesh                  Assets/assets/02_角色_Character/Meshes/2_头部_Head/M_head.002.fbx
+   Top_M_top_002_jacket                     Mesh=M_top_002_jacket_fix             Assets/assets/02_角色_Character/Meshes/修复权重/M_top_002_jacket_fix.asset
+   Bot_M_bot_004_skinny                     Mesh=M_bot_004_skinny_fix             Assets/assets/02_角色_Character/Meshes/修复权重/M_bot_004_skinny_fix.asset
+   Shoes_shoes_002_sneaker                  Mesh=shoes_002_sneaker_fix            Assets/assets/02_角色_Character/Meshes/修复权重/shoes_002_sneaker_fix.asset
+
+==== 徐夏
+   medium.001_low                           Mesh=medium.001_low                   Assets/assets/02_角色_Character/Meshes/3_发型_Hair/C_hair_medium.001.fbx
+   bangs.001_low                            Mesh=bangs.001_low                    Assets/assets/02_角色_Character/Meshes/3_发型_Hair/C_hair_bangs.001.fbx
+   F_body_arms_lower                        Mesh=F_body_arms_lower_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_arms_lower_fix.asset
+   F_body_arms_upper                        Mesh=F_body_arms_upper_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_arms_upper_fix.asset
+   F_body_feet                              Mesh=F_body_feet_fix                  Assets/assets/02_角色_Character/Meshes/修复权重/F_body_feet_fix.asset
+   F_body_hands                             Mesh=F_body_hands_fix                 Assets/assets/02_角色_Character/Meshes/修复权重/F_body_hands_fix.asset
+   F_body_hips                              Mesh=F_body_hips_fix                  Assets/assets/02_角色_Character/Meshes/修复权重/F_body_hips_fix.asset
+   F_body_legs_knee                         Mesh=F_body_legs_knee_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_body_legs_knee_fix.asset
+   F_body_legs_lower                        Mesh=F_body_legs_lower_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_legs_lower_fix.asset
+   F_body_legs_upper                        Mesh=F_body_legs_upper_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_legs_upper_fix.asset
+   F_body_shoulders                         Mesh=F_body_shoulders_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_body_shoulders_fix.asset
+   F_body_torso                             Mesh=F_body_torso                     Assets/assets/02_角色_Character/Meshes/1_身体_Body/F_body.fbx
+   Head_F_head.001_mesh                     Mesh=F_head.001_mesh                  Assets/assets/02_角色_Character/Meshes/2_头部_Head/F_head.001.fbx
+   Top_F_top.003_sweatshirt                 Mesh=F_top.003_sweatshirt_fix         Assets/assets/02_角色_Character/Meshes/修复权重/F_top.003_sweatshirt_fix.asset
+   Bot_F_bot_003_skirt                      Mesh=F_bot_003_skirt_fix              Assets/assets/02_角色_Character/Meshes/修复权重/F_bot_003_skirt_fix.asset
+   Shoes_shoes.006_lowsneakers              Mesh=shoes.006_lowsneakers_fix        Assets/assets/02_角色_Character/Meshes/修复权重/shoes.006_lowsneakers_fix.asset
+
+==== 李老师_可动
+   tied.01.down                             Mesh=tied.01.down                     Assets/assets/02_角色_Character/Meshes/3_发型_Hair/C_hair_tied.001.fbx
+   bangs.002                                Mesh=bangs.002                        Assets/assets/02_角色_Character/Meshes/3_发型_Hair/C_hair_bangs.002.fbx
+   tied.01.downbun                          Mesh=tied.01.downbun                  Assets/assets/02_角色_Character/Meshes/3_发型_Hair/C_hair_tied.001_bun.fbx
+   F_body_hands                             Mesh=F_body_hands_fix                 Assets/assets/02_角色_Character/Meshes/修复权重/F_body_hands_fix.asset
+   F_body_legs_knee                         Mesh=F_body_legs_knee_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_body_legs_knee_fix.asset
+   F_body_legs_lower                        Mesh=F_body_legs_lower_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_legs_lower_fix.asset
+   F_body_shoulders                         Mesh=F_body_shoulders_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_body_shoulders_fix.asset
+   F_body_torso                             Mesh=F_body_torso                     Assets/assets/02_角色_Character/Meshes/1_身体_Body/F_body.fbx
+   F_body_torso.001                         Mesh=F_body_torso.001_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_body_torso.001_fix.asset
+   Head_F_head.004_mesh                     Mesh=F_head.004_mesh                  Assets/assets/02_角色_Character/Meshes/2_头部_Head/F_head.004.fbx
+   Top_F_top.011_blazer                     Mesh=F_top.011_blazer_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_top.011_blazer_fix.asset
+   Bot_F_bot_001_pants                      Mesh=F_bot_001_pants_fix              Assets/assets/02_角色_Character/Meshes/修复权重/F_bot_001_pants_fix.asset
+   Shoes_shoes.005_highboots                Mesh=shoes.005_highboots_fix          Assets/assets/02_角色_Character/Meshes/修复权重/shoes.005_highboots_fix.asset
+
+==== 林溪_可动
+   tied.02.updouble                         Mesh=tied.02.updouble                 Assets/assets/02_角色_Character/Meshes/3_发型_Hair/C_hair_tied.002.fbx
+   bangs.002                                Mesh=bangs.002                        Assets/assets/02_角色_Character/Meshes/3_发型_Hair/C_hair_bangs.002.fbx
+   tied.02..updouble.pigtails               Mesh=tied.02..updouble.pigtails       Assets/assets/02_角色_Character/Meshes/3_发型_Hair/C_hair_tied.002_twintails.fbx
+   F_body_arms_lower                        Mesh=F_body_arms_lower_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_arms_lower_fix.asset
+   F_body_arms_upper                        Mesh=F_body_arms_upper_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_arms_upper_fix.asset
+   F_body_feet                              Mesh=F_body_feet_fix                  Assets/assets/02_角色_Character/Meshes/修复权重/F_body_feet_fix.asset
+   F_body_hands                             Mesh=F_body_hands_fix                 Assets/assets/02_角色_Character/Meshes/修复权重/F_body_hands_fix.asset
+   F_body_legs_knee                         Mesh=F_body_legs_knee_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_body_legs_knee_fix.asset
+   F_body_legs_lower                        Mesh=F_body_legs_lower_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_legs_lower_fix.asset
+   F_body_legs_upper                        Mesh=F_body_legs_upper_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_legs_upper_fix.asset
+   F_body_shoulders                         Mesh=F_body_shoulders_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_body_shoulders_fix.asset
+   F_body_torso                             Mesh=F_body_torso                     Assets/assets/02_角色_Character/Meshes/1_身体_Body/F_body.fbx
+   Head_F_head.002_mesh                     Mesh=F_head.002_mesh                  Assets/assets/02_角色_Character/Meshes/2_头部_Head/F_head.002.fbx
+   Top_F_top_002_jacket                     Mesh=F_top_002_jacket_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_top_002_jacket_fix.asset
+   Bot_F_bot_002_shorts                     Mesh=F_bot_002_shorts_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_bot_002_shorts_fix.asset
+   Shoes_shoes_002_sneaker                  Mesh=shoes_002_sneaker_fix            Assets/assets/02_角色_Character/Meshes/修复权重/shoes_002_sneaker_fix.asset
+
+==== 王含_可动
+   long.001_low                             Mesh=long.001_low                     Assets/assets/02_角色_Character/Meshes/3_发型_Hair/C_hair_long.001.fbx
+   bangs.003                                Mesh=bangs.003                        Assets/assets/02_角色_Character/Meshes/3_发型_Hair/C_hair_bangs.003.fbx
+   F_body_arms_lower                        Mesh=F_body_arms_lower_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_arms_lower_fix.asset
+   F_body_arms_upper                        Mesh=F_body_arms_upper_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_arms_upper_fix.asset
+   F_body_hands                             Mesh=F_body_hands_fix                 Assets/assets/02_角色_Character/Meshes/修复权重/F_body_hands_fix.asset
+   F_body_legs_knee                         Mesh=F_body_legs_knee_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_body_legs_knee_fix.asset
+   F_body_shoulders                         Mesh=F_body_shoulders_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_body_shoulders_fix.asset
+   F_body_torso                             Mesh=F_body_torso                     Assets/assets/02_角色_Character/Meshes/1_身体_Body/F_body.fbx
+   F_body_torso.001                         Mesh=F_body_torso.001_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_body_torso.001_fix.asset
+   Head_F_head.001_mesh                     Mesh=F_head.001_mesh                  Assets/assets/02_角色_Character/Meshes/2_头部_Head/F_head.001.fbx
+   Top_F_top_004_shirt                      Mesh=F_top_004_shirt_fix              Assets/assets/02_角色_Character/Meshes/修复权重/F_top_004_shirt_fix.asset
+   Bot_F_bot_004_skinny                     Mesh=F_bot_004_skinny_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_bot_004_skinny_fix.asset
+   Shoes_shoes_001_boots+socks              Mesh=shoes_001_boots+socks_fix        Assets/assets/02_角色_Character/Meshes/修复权重/shoes_001_boots+socks_fix.asset
+   Scarf_F_acc.001_scarf                    Mesh=F_acc.001_scarf                  Assets/assets/02_角色_Character/Meshes/6_围巾_Scarf/C_acc.001_scarf.fbx
+
+==== 组长_可动
+   short.001_low                            Mesh=short.001_low                    Assets/assets/02_角色_Character/Meshes/3_发型_Hair/C_hair_short.001.fbx
+   M_body_arms_lower                        Mesh=M_body_arms_lower_fix            Assets/assets/02_角色_Character/Meshes/修复权重/M_body_arms_lower_fix.asset
+   M_body_arms_upper                        Mesh=M_body_arms_upper_fix            Assets/assets/02_角色_Character/Meshes/修复权重/M_body_arms_upper_fix.asset
+   M_body_feet                              Mesh=M_body_feet_fix                  Assets/assets/02_角色_Character/Meshes/修复权重/M_body_feet_fix.asset
+   M_body_hands                             Mesh=M_body_hands_fix                 Assets/assets/02_角色_Character/Meshes/修复权重/M_body_hands_fix.asset
+   M_body_legs_knee                         Mesh=M_body_legs_knee_fix             Assets/assets/02_角色_Character/Meshes/修复权重/M_body_legs_knee_fix.asset
+   M_body_legs_lower                        Mesh=M_body_legs_lower_fix            Assets/assets/02_角色_Character/Meshes/修复权重/M_body_legs_lower_fix.asset
+   M_body_legs_upper                        Mesh=M_body_legs_upper_fix            Assets/assets/02_角色_Character/Meshes/修复权重/M_body_legs_upper_fix.asset
+   M_body_torso                             Mesh=M_body_torso                     Assets/assets/02_角色_Character/Meshes/1_身体_Body/M_body.fbx
+   M_body_torso.001                         Mesh=M_body_torso.001_fix             Assets/assets/02_角色_Character/Meshes/修复权重/M_body_torso.001_fix.asset
+   Head_M_head.001_mesh                     Mesh=M_head.001_mesh                  Assets/assets/02_角色_Character/Meshes/2_头部_Head/M_head.001.fbx
+   Top_M_top.010_shirttie                   Mesh=M_top.010_shirttie_fix           Assets/assets/02_角色_Character/Meshes/修复权重/M_top.010_shirttie_fix.asset
+   Bot_M_bot_001_pants                      Mesh=M_bot_001_pants_fix              Assets/assets/02_角色_Character/Meshes/修复权重/M_bot_001_pants_fix.asset
+   Shoes_shoes.006_lowsneakers              Mesh=shoes.006_lowsneakers_fix        Assets/assets/02_角色_Character/Meshes/修复权重/shoes.006_lowsneakers_fix.asset
+
+==== 舍友A_可动
+   tied.01.down                             Mesh=tied.01.down                     Assets/assets/02_角色_Character/Meshes/3_发型_Hair/C_hair_tied.001.fbx
+   bangs.001_low                            Mesh=bangs.001_low                    Assets/assets/02_角色_Character/Meshes/3_发型_Hair/C_hair_bangs.001.fbx
+   tied.01.downloose                        Mesh=tied.01.downloose                Assets/assets/02_角色_Character/Meshes/3_发型_Hair/C_hair_tied.001_ponytail.fbx
+   F_body_arms_lower                        Mesh=F_body_arms_lower_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_arms_lower_fix.asset
+   F_body_arms_upper                        Mesh=F_body_arms_upper_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_arms_upper_fix.asset
+   F_body_hands                             Mesh=F_body_hands_fix                 Assets/assets/02_角色_Character/Meshes/修复权重/F_body_hands_fix.asset
+   F_body_legs_knee                         Mesh=F_body_legs_knee_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_body_legs_knee_fix.asset
+   F_body_legs_lower                        Mesh=F_body_legs_lower_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_legs_lower_fix.asset
+   F_body_legs_upper                        Mesh=F_body_legs_upper_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_legs_upper_fix.asset
+   F_body_shoulders                         Mesh=F_body_shoulders_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_body_shoulders_fix.asset
+   F_body_torso                             Mesh=F_body_torso                     Assets/assets/02_角色_Character/Meshes/1_身体_Body/F_body.fbx
+   F_body_torso.001                         Mesh=F_body_torso.001_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_body_torso.001_fix.asset
+   Head_F_head.002_mesh                     Mesh=F_head.002_mesh                  Assets/assets/02_角色_Character/Meshes/2_头部_Head/F_head.002.fbx
+   Top_F_top_005_shirt+vest                 Mesh=F_top_005_shirt+vest_fix         Assets/assets/02_角色_Character/Meshes/修复权重/F_top_005_shirt+vest_fix.asset
+   Bot_F_bot_005_shorts                     Mesh=F_bot_005_shorts_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_bot_005_shorts_fix.asset
+   Shoes_shoes.005_highboots                Mesh=shoes.005_highboots_fix          Assets/assets/02_角色_Character/Meshes/修复权重/shoes.005_highboots_fix.asset
+
+==== 舍友B_可动
+   hair_curly.002 mesh                      Mesh=hair_curly.002 mesh              Assets/assets/02_角色_Character/Meshes/3_发型_Hair/C_hair_curly.002.fbx
+   bangs.003                                Mesh=bangs.003                        Assets/assets/02_角色_Character/Meshes/3_发型_Hair/C_hair_bangs.003.fbx
+   F_body_arms_lower                        Mesh=F_body_arms_lower_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_arms_lower_fix.asset
+   F_body_arms_upper                        Mesh=F_body_arms_upper_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_arms_upper_fix.asset
+   F_body_feet                              Mesh=F_body_feet_fix                  Assets/assets/02_角色_Character/Meshes/修复权重/F_body_feet_fix.asset
+   F_body_hands                             Mesh=F_body_hands_fix                 Assets/assets/02_角色_Character/Meshes/修复权重/F_body_hands_fix.asset
+   F_body_legs_knee                         Mesh=F_body_legs_knee_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_body_legs_knee_fix.asset
+   F_body_legs_lower                        Mesh=F_body_legs_lower_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_legs_lower_fix.asset
+   F_body_shoulders                         Mesh=F_body_shoulders_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_body_shoulders_fix.asset
+   F_body_torso                             Mesh=F_body_torso                     Assets/assets/02_角色_Character/Meshes/1_身体_Body/F_body.fbx
+   Head_F_head.003_mesh                     Mesh=F_head.003_mesh                  Assets/assets/02_角色_Character/Meshes/2_头部_Head/F_head.003.fbx
+   Top_F_top_006_openshirt+T                Mesh=F_top_006_openshirt+T_fix        Assets/assets/02_角色_Character/Meshes/修复权重/F_top_006_openshirt+T_fix.asset
+   Bot_F_bot_006_loosepants+belt            Mesh=F_bot_006_loosepants+belt_fix    Assets/assets/02_角色_Character/Meshes/修复权重/F_bot_006_loosepants+belt_fix.asset
+   Shoes_shoes.004_sandals                  Mesh=shoes.004_sandals_fix            Assets/assets/02_角色_Character/Meshes/修复权重/shoes.004_sandals_fix.asset
+
+==== 陆宣雨_可动
+   medium.02_low                            Mesh=medium.02_low                    Assets/assets/02_角色_Character/Meshes/3_发型_Hair/C_hair_medium.002.fbx
+   bangs.002                                Mesh=bangs.002                        Assets/assets/02_角色_Character/Meshes/3_发型_Hair/C_hair_bangs.002.fbx
+   F_body_arms_lower                        Mesh=F_body_arms_lower_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_arms_lower_fix.asset
+   F_body_arms_upper                        Mesh=F_body_arms_upper_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_arms_upper_fix.asset
+   F_body_feet                              Mesh=F_body_feet_fix                  Assets/assets/02_角色_Character/Meshes/修复权重/F_body_feet_fix.asset
+   F_body_hands                             Mesh=F_body_hands_fix                 Assets/assets/02_角色_Character/Meshes/修复权重/F_body_hands_fix.asset
+   F_body_legs_knee                         Mesh=F_body_legs_knee_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_body_legs_knee_fix.asset
+   F_body_legs_lower                        Mesh=F_body_legs_lower_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_legs_lower_fix.asset
+   F_body_legs_upper                        Mesh=F_body_legs_upper_fix            Assets/assets/02_角色_Character/Meshes/修复权重/F_body_legs_upper_fix.asset
+   F_body_shoulders                         Mesh=F_body_shoulders_fix             Assets/assets/02_角色_Character/Meshes/修复权重/F_body_shoulders_fix.asset
+   F_body_torso                             Mesh=F_body_torso                     Assets/assets/02_角色_Character/Meshes/1_身体_Body/F_body.fbx
+   Head_F_head.003_mesh                     Mesh=F_head.003_mesh                  Assets/assets/02_角色_Character/Meshes/2_头部_Head/F_head.003.fbx
+   Outfit_F_outfit.003                      Mesh=F_outfit.003_fix                 Assets/assets/02_角色_Character/Meshes/修复权重/F_outfit.003_fix.asset
+   Shoes_shoes.007_chelsea                  Mesh=shoes.007_chelsea_fix            Assets/assets/02_角色_Character/Meshes/修复权重/shoes.007_chelsea_fix.asset
+
+================ 1) 每块网格的形变量（动画中最大边长拉伸）================
+   网格                                    最坏stretch  平均  >1.5的边 >2.0的边  时刻
+
+==== 张知远_可动   动画 Walk
+   Top_M_top_002_jacket                      2.557   1.011       35        3  t=0.25
+   Bot_M_bot_004_skinny                      2.300   1.001        4        1  t=0.25
+   M_body_shoulders                          1.766   1.022        3        0  t=0.25
+   M_body_legs_knee                          1.578   0.995        2        0  t=0.45
+   M_body_hands                              1.558   1.000        2        0  t=0.75
+   M_body_torso.001                          1.450   1.008        0        0  t=0.25
+   M_body_arms_upper                         1.390   1.006        0        0  t=0.85
+   M_body_legs_upper                         1.226   1.001        0        0  t=0.05
+   Head_M_head.002_mesh                      1.205   1.000        0        0  t=0.65
+   M_body_legs_lower                         1.195   0.995        0        0  t=0.35
+   Shoes_shoes_002_sneaker                   1.191   0.997        0        0  t=0.35
+   M_body_torso                              1.159   1.001        0        0  t=0.35
+   M_body_feet                               1.086   0.999        0        0  t=0.35
+   M_body_arms_lower                         1.061   1.002        0        0  t=0.85
+   C_hair_short.004                          1.000   1.000        0        0  t=0.75
+
+==== 徐夏   动画 待机女
+   Top_F_top.003_sweatshirt                  6.714   1.022       45       22  t=0.25
+   Bot_F_bot_003_skirt                       2.840   1.029       26       10  t=0.25
+   F_body_shoulders                          1.837   1.037        5        0  t=0.25
+   F_body_hips                               1.689   1.003        2        0  t=0.35
+   F_body_hands                              1.512   1.001        2        0  t=0.05
+   F_body_arms_upper                         1.171   1.006        0        0  t=0.15
+   Head_F_head.001_mesh                      1.164   1.000        0        0  t=0.05
+   F_body_legs_upper                         1.089   0.998        0        0  t=0.35
+   F_body_torso                              1.049   1.002        0        0  t=0.25
+   F_body_legs_lower                         1.045   0.997        0        0  t=0.85
+   F_body_feet                               1.033   1.000        0        0  t=0.35
+   F_body_legs_knee                          1.030   1.000        0        0  t=0.85
+   Shoes_shoes.006_lowsneakers               1.029   1.000        0        0  t=0.35
+   F_body_arms_lower                         1.027   1.001        0        0  t=0.15
+   medium.001_low                            1.000   1.000        0        0  t=0.05
+   bangs.001_low                             1.000   1.000        0        0  t=0.85
+
+==== 李老师_可动   动画 待机男
+   Top_F_top.011_blazer                      3.856   1.009       14        7  t=0.85
+   F_body_hands                              1.914   1.000        3        0  t=0.55
+   F_body_shoulders                          1.601   1.024        2        0  t=0.85
+   Bot_F_bot_001_pants                       1.367   1.002        0        0  t=0.15
+   F_body_torso.001                          1.286   1.003        0        0  t=0.85
+   Head_F_head.004_mesh                      1.277   1.000        0        0  t=0.85
+   F_body_legs_knee                          1.122   1.000        0        0  t=0.15
+   F_body_torso                              1.068   1.001        0        0  t=0.15
+   Shoes_shoes.005_highboots                 1.066   0.996        0        0  t=0.15
+   F_body_legs_lower                         1.029   0.998        0        0  t=0.15
+   tied.01.down                              1.000   1.000        0        0  t=0.45
+   bangs.002                                 1.000   1.000        0        0  t=0.65
+   tied.01.downbun                           1.000   1.000        0        0  t=0.05
+
+==== 林溪_可动   动画 快速跑
+   Top_F_top_002_jacket                      3.715   1.029      105       30  t=0.55
+   Bot_F_bot_002_shorts                      3.079   1.029       56        9  t=0.45
+   F_body_shoulders                          2.840   1.047       23       12  t=0.05
+   F_body_hands                              2.744   1.002        3        1  t=0.15
+   F_body_legs_knee                          2.062   0.986        5        1  t=0.35
+   F_body_arms_upper                         1.935   1.011       11        0  t=0.55
+   F_body_legs_upper                         1.721   1.030        8        0  t=0.45
+   F_body_legs_lower                         1.598   0.989        6        0  t=0.25
+   Head_F_head.002_mesh                      1.406   0.999        0        0  t=0.75
+   Shoes_shoes_002_sneaker                   1.263   0.969        0        0  t=0.05
+   F_body_torso                              1.238   1.004        0        0  t=0.55
+   F_body_arms_lower                         1.130   1.009        0        0  t=0.65
+   F_body_feet                               1.072   0.998        0        0  t=0.25
+   tied.02..updouble.pigtails                1.000   1.000        0        0  t=0.65
+   bangs.002                                 1.000   1.000        0        0  t=0.65
+   tied.02.updouble                          1.000   1.000        0        0  t=0.15
+
+==== 王含_可动   动画 慢跑
+   Bot_F_bot_004_skinny                      4.259   1.000       51       10  t=0.05
+   Top_F_top_004_shirt                       4.256   1.036      121       44  t=0.15
+   F_body_hands                              4.208   1.024       66       18  t=0.85
+   F_body_shoulders                          2.338   1.049       26        9  t=0.15
+   F_body_legs_knee                          2.002   0.993        8        1  t=0.05
+   F_body_arms_upper                         1.923   1.017        9        0  t=0.25
+   Shoes_shoes_001_boots+socks               1.761   0.960        9        0  t=0.55
+   Head_F_head.001_mesh                      1.625   1.000        2        0  t=0.25
+   F_body_torso.001                          1.384   1.009        0        0  t=0.15
+   Scarf_F_acc.001_scarf                     1.282   1.010        0        0  t=0.55
+   F_body_torso                              1.259   1.003        0        0  t=0.25
+   F_body_arms_lower                         1.129   1.009        0        0  t=0.75
+   bangs.003                                 1.001   1.000        0        0  t=0.85
+   long.001_low                              1.000   1.000        0        0  t=0.55
+
+==== 组长_可动   动画 拿手机
+   M_body_hands                              3.484   1.005       18        6  t=0.35
+   Top_M_top.010_shirttie                    2.601   1.012       31        3  t=0.75
+   Head_M_head.001_mesh                      2.093   1.004       20        4  t=0.85
+   M_body_arms_upper                         1.967   1.003        4        0  t=0.85
+   Bot_M_bot_001_pants                       1.486   1.002        0        0  t=0.55
+   M_body_torso.001                          1.406   1.009        0        0  t=0.75
+   M_body_arms_lower                         1.117   1.004        0        0  t=0.85
+   M_body_legs_upper                         1.084   0.998        0        0  t=0.45
+   M_body_legs_knee                          1.064   1.000        0        0  t=0.85
+   M_body_torso                              1.046   1.003        0        0  t=0.15
+   M_body_legs_lower                         1.043   0.997        0        0  t=0.15
+   M_body_feet                               1.029   1.000        0        0  t=0.55
+   Shoes_shoes.006_lowsneakers               1.027   1.000        0        0  t=0.55
+   short.001_low                             1.000   1.000        0        0  t=0.15
+
+==== 舍友A_可动   动画 拿手机待机
+   F_body_hands                              2.784   1.021       70       16  t=0.15
+   Top_F_top_005_shirt+vest                  2.755   1.022       90       18  t=0.15
+   Head_F_head.002_mesh                      2.245   1.004       18        5  t=0.05
+   F_body_arms_upper                         1.916   1.011       12        0  t=0.25
+   F_body_shoulders                          1.764   1.013        7        0  t=0.15
+   Bot_F_bot_005_shorts                      1.333   1.003        0        0  t=0.15
+   F_body_torso.001                          1.330   0.994        0        0  t=0.15
+   F_body_arms_lower                         1.126   1.010        0        0  t=0.45
+   F_body_legs_knee                          1.088   1.000        0        0  t=0.55
+   F_body_torso                              1.080   1.000        0        0  t=0.05
+   F_body_legs_upper                         1.069   1.001        0        0  t=0.55
+   Shoes_shoes.005_highboots                 1.048   0.998        0        0  t=0.05
+   F_body_legs_lower                         1.028   1.001        0        0  t=0.25
+   tied.01.downloose                         1.000   1.000        0        0  t=0.75
+   bangs.001_low                             1.000   1.000        0        0  t=0.35
+   tied.01.down                              1.000   1.000        0        0  t=0.85
+
+==== 舍友B_可动   动画 行走
+   Top_F_top_006_openshirt+T                 3.324   1.018       30       10  t=0.25
+   Bot_F_bot_006_loosepants+belt             2.168   1.003        9        1  t=0.15
+   F_body_shoulders                          2.065   1.031       11        1  t=0.65
+   F_body_hands                              1.783   1.000        5        0  t=0.85
+   F_body_legs_knee                          1.696   0.991        2        0  t=0.45
+   F_body_arms_upper                         1.492   1.016        0        0  t=0.75
+   Head_F_head.003_mesh                      1.266   1.000        0        0  t=0.55
+   F_body_legs_lower                         1.124   1.004        0        0  t=0.65
+   F_body_torso                              1.113   1.001        0        0  t=0.15
+   F_body_arms_lower                         1.089   1.003        0        0  t=0.85
+   F_body_feet                               1.062   1.000        0        0  t=0.65
+   Shoes_shoes.004_sandals                   1.035   1.000        0        0  t=0.35
+   bangs.003                                 1.001   1.000        0        0  t=0.75
+   hair_curly.002 mesh                       1.000   1.000        0        0  t=0.65
+
+==== 陆宣雨_可动   动画 行走男
+   Outfit_F_outfit.003                       7.111   1.056       97       59  t=0.75
+   F_body_hands                              2.137   1.004        9        2  t=0.15
+   F_body_legs_knee                          1.637   0.994        1        0  t=0.25
+   F_body_shoulders                          1.551   1.016        3        0  t=0.25
+   F_body_legs_upper                         1.358   1.006        0        0  t=0.65
+   F_body_arms_upper                         1.290   1.007        0        0  t=0.15
+   Head_F_head.003_mesh                      1.240   1.000        0        0  t=0.25
+   F_body_legs_lower                         1.134   0.996        0        0  t=0.35
+   Shoes_shoes.007_chelsea                   1.115   1.000        0        0  t=0.65
+   F_body_torso                              1.096   0.999        0        0  t=0.25
+   F_body_feet                               1.062   1.000        0        0  t=0.35
+   F_body_arms_lower                         1.050   1.001        0        0  t=0.75
+   medium.02_low                             1.001   1.000        0        0  t=0.05
+   bangs.002                                 1.000   1.000        0        0  t=0.65
+
+---- 全部角色合计：形变最严重的 15 块网格 ----
+   陆宣雨_可动         Outfit_F_outfit.003                    max=7.111  >1.5的边 97
+   徐夏             Top_F_top.003_sweatshirt               max=6.714  >1.5的边 45
+   王含_可动          Bot_F_bot_004_skinny                   max=4.259  >1.5的边 51
+   王含_可动          Top_F_top_004_shirt                    max=4.256  >1.5的边 121
+   王含_可动          F_body_hands                           max=4.208  >1.5的边 66
+   李老师_可动         Top_F_top.011_blazer                   max=3.856  >1.5的边 14
+   林溪_可动          Top_F_top_002_jacket                   max=3.715  >1.5的边 105
+   组长_可动          M_body_hands                           max=3.484  >1.5的边 18
+   舍友B_可动         Top_F_top_006_openshirt+T              max=3.324  >1.5的边 30
+   林溪_可动          Bot_F_bot_002_shorts                   max=3.079  >1.5的边 56
+   徐夏             Bot_F_bot_003_skirt                    max=2.840  >1.5的边 26
+   林溪_可动          F_body_shoulders                       max=2.840  >1.5的边 23
+   舍友A_可动         F_body_hands                           max=2.784  >1.5的边 70
+   舍友A_可动         Top_F_top_005_shirt+vest               max=2.755  >1.5的边 90
+   林溪_可动          F_body_hands                           max=2.744  >1.5的边 3
+
+================ 深挖 A：徐夏的鞋 ================
+网格 Shoes_shoes.006_lowsneakers  顶点 556  骨 71  场景里挂的动画 待机女；下面的数字一律用固定对照动画【快速跑】量（可跨次比较）
+· 绑定自检（rest 姿势下，骨骼世界矩阵 × bindpose 应当 = 渲染器变换 × 顶点）：
+   误差 >1cm 的顶点 0/556   最大 0.0057m   中位 0.0056m  ✓ 绑定姿势 = 模型 rest 姿势
+     最差顶点 y=-0.013 误差 0.006m  (0.068,-0.013,-0.069)  CC_BaseFoot.R 100.0%
+     最差顶点 y=0.030 误差 0.006m  (0.068,0.030,-0.072)  CC_BaseFoot.R 100.0%
+     最差顶点 y=0.011 误差 0.006m  (0.069,0.011,-0.068)  CC_BaseFoot.R 100.0%
+· rest 姿势 stretch（拿原始顶点当基准）：max=1.000 平均=1.000
+· 逐骨 bind 偏差（|骨环境 × bindpose| 偏离单位阵）：71/71 根超过阈值
+     CC_BaseFoot.L                  旋转差  154.3°  位移 5.403m
+     CC_BaseToeBase.L               旋转差  154.3°  位移 5.403m
+     CC_BaseCalf.L                  旋转差  122.5°  位移 5.345m
+     CC_BaseCalfTwist01.L           旋转差  122.5°  位移 5.345m
+     CC_BaseCalfTwist02.L           旋转差  122.4°  位移 5.345m
+· 各时刻： 0.05→1.11  0.15→1.08  0.25→1.09  0.35→1.08  0.45→1.06  0.55→1.12  0.65→1.13  0.75→1.12  0.85→1.11
+· 最坏一帧 t=0.65×clip：max=1.127 平均=0.999  >1.5 的边 0 条，>2.0 的边 0 条
+   L 侧：max=1.127 平均=0.998 >1.5 的边 0（共 676 条）
+   R 侧：max=1.028 平均=1.000 >1.5 的边 0（共 676 条）
+· 踝部权重剖面（网格空间按高度分层）
+   网格 y 范围 -0.015 ~ 0.096，脚踝骨 bind y = 0.077
+     y 区间           顶点   小腿Calf  Twist01  Twist02   脚Foot  脚趾Toe   ← 左右平均(%)
+     -0.015~-0.003    60      0.0      0.0      0.0    100.0      0.0
+     -0.003~ 0.008    50      0.0      0.0      0.0    100.0      0.0
+      0.008~ 0.019    74      0.0      0.0      0.0    100.0      0.0
+      0.019~ 0.030    42      0.0      0.0      0.0    100.0      0.0
+      0.030~ 0.041    36      0.0      0.0      0.0    100.0      0.0
+      0.041~ 0.052    82      0.0      0.0      0.0    100.0      0.0
+      0.052~ 0.063    70      0.0      0.0      0.0    100.0      0.0
+      0.063~ 0.074    80      0.4      0.0      0.0     99.6      0.0
+      0.074~ 0.085    46      2.9      0.0      0.0     97.1      0.0
+      0.085~ 0.096    14      7.3      0.0      0.0     92.7      0.0
+· 相对「刚性地绑在自己那只脚」的偏差：最大 0.0064m（y=0.096）  平均 0.0001m
+· 逐骨归因（顶点被哪根骨从「共识位置」拉开多少；单位 m）
+     骨头                            最大拉开   平均拉开  顶点数   这些顶点的平均位置(网格空间)
+     CC_BaseFoot.L                    0.0056    0.0002     278   (-0.072, 0.038, 0.031)
+     CC_BaseCalf.L                    0.0056    0.0012      55   (-0.071, 0.076, -0.003)
+     CC_BaseFoot.R                    0.0009    0.0000     278   (0.072, 0.038, 0.031)
+     CC_BaseCalf.R                    0.0009    0.0002      55   (0.071, 0.076, -0.003)
+· 最坏的 6 条边（拉得最狠的地方 + 两端的权重）
+   拉伸 ×1.13  两端距脚踝 0.046m / 0.041m  边长 0.010→0.012
+      a (-0.097,0.076,0.011)  CC_BaseFoot.L 97.9%  CC_BaseCalf.L 2.1%
+      b (-0.091,0.084,0.009)  CC_BaseFoot.L 95.0%  CC_BaseCalf.L 5.0%
+   拉伸 ×1.12  两端距脚踝 0.046m / 0.039m  边长 0.014→0.016
+      a (-0.102,0.068,0.005)  CC_BaseFoot.L 99.9%  CC_BaseCalf.L 0.1%
+      b (-0.096,0.081,0.003)  CC_BaseFoot.L 96.1%  CC_BaseCalf.L 3.9%
+   拉伸 ×1.11  两端距脚踝 0.039m / 0.034m  边长 0.011→0.012
+      a (-0.096,0.081,0.003)  CC_BaseFoot.L 96.1%  CC_BaseCalf.L 3.9%
+      b (-0.089,0.089,0.001)  CC_BaseFoot.L 92.5%  CC_BaseCalf.L 7.5%
+   拉伸 ×1.09  两端距脚踝 0.041m / 0.038m  边长 0.009→0.010
+      a (-0.071,0.090,0.015)  CC_BaseFoot.L 92.7%  CC_BaseCalf.L 7.3%
+      b (-0.071,0.096,0.009)  CC_BaseFoot.L 88.9%  CC_BaseCalf.L 11.1%
+   拉伸 ×1.09  两端距脚踝 0.030m / 0.037m  边长 0.009→0.010
+      a (-0.096,0.079,-0.012)  CC_BaseFoot.L 96.4%  CC_BaseCalf.L 3.6%
+      b (-0.102,0.073,-0.009)  CC_BaseFoot.L 98.6%  CC_BaseCalf.L 1.4%
+   拉伸 ×1.08  两端距脚踝 0.056m / 0.052m  边长 0.011→0.012
+      a (-0.098,0.067,0.022)  CC_BaseFoot.L 100.0%
+      b (-0.093,0.078,0.022)  CC_BaseFoot.L 98.2%  CC_BaseCalf.L 1.8%
+· 假设 A/B（只改内存，不动资产）：
+     方案                                                  最大stretch  >1.5的边  平均
+     ① 原样（不修）                                                  1.127        0   0.999
+     ② CalfTwist01/02 → 小腿 Calf                                1.127        0   0.999
+     ③ CalfTwist01/02 → 脚 Foot                                 1.127        0   0.999
+     ④ CalfTwist01/02 → Calf+Foot 各半                           1.127        0   0.999
+     ⑤ ToeBase → 脚 Foot                                        1.127        0   0.999
+     ⑥ ③＋⑤                                                     1.127        0   0.999
+     ⑦ 扭转骨+脚趾骨 全并到 Foot                                        1.127        0   0.999
+     ⑧ 全部并到 Foot（刚性上界，仅供参考）                                    1.002        0   1.000
+     ⑨ 扭转骨按高度：踝下→Foot 踝上→Calf（跨度 6cm）                          1.127        0   0.999
+     ⑨b 同上，跨度拉长到 14cm                                          1.127        0   0.999
+     ⑨c 同上，跨度 10cm 但起点抬高 2cm                                   1.127        0   0.999
+     ⑬【推荐】小腿侧全权重按高度坡道（踝下1cm→踝上14cm）                            1.127        0   0.999
+     ⑬b 同上，坡道缩短到 8cm                                           1.127        0   0.999
+     ⑬c 同上，坡道拉长到 20cm                                          1.127        0   0.999
+     ⑭【粗绑】膝下只留腿三根：扭转→大小腿、脚趾→脚（硬切在踝）                            1.127        0   0.999
+     ⑭b【粗绑】同上，但踝口缓一下（踝下1cm→踝上16cm 坡道）                          1.127        0   0.999
+     ⑮【粗绑】膝下全归脚（整只鞋刚性）                                         1.002        0   1.000
+· 权重平滑假设（小腿/脚/扭转骨这几根之间做拉普拉斯平滑）：
+     ⑫ 平滑  2 轮                                1.116        0   0.999
+     ⑫ 平滑  5 轮                                1.109        0   0.999
+     ⑫ 平滑 10 轮                                1.079        0   0.999
+     ⑫ 平滑 20 轮                                1.045        0   0.998
+     ③+⑫ 先并到Foot再平滑  5 轮                       1.109        0   0.999
+     ③+⑫ 先并到Foot再平滑 20 轮                       1.045        0   0.998
+     ⑬+⑫ 坡道后再平滑  2 轮                          1.116        0   0.999
+     ⑬+⑫ 坡道后再平滑  5 轮                          1.109        0   0.999
+     ⑬+⑫ 坡道后再平滑 10 轮                          1.079        0   0.999
+· 姿势级假设（改的是骨头朝向，权重不动）：
+     ⑪ 扭转骨 = Slerp(小腿, 脚, 0.5/0.8)                     1.127        0   0.999
+     ⑪ 扭转骨 = Slerp(小腿, 脚, 0.3/0.5)                     1.127        0   0.999
+     ⑪ 扭转骨 = Slerp(小腿, 脚, 0.8/1.0)                     1.127        0   0.999
+
+================ 深挖 B：徐夏的裸体脚 ================
+网格 F_body_feet  顶点 600  骨 71  场景里挂的动画 待机女；下面的数字一律用固定对照动画【快速跑】量（可跨次比较）
+· 绑定自检（rest 姿势下，骨骼世界矩阵 × bindpose 应当 = 渲染器变换 × 顶点）：
+   误差 >1cm 的顶点 0/600   最大 0.0057m   中位 0.0055m  ✓ 绑定姿势 = 模型 rest 姿势
+     最差顶点 y=0.033 误差 0.006m  (0.067,0.033,-0.066)  CC_BaseFoot.R 100.0%
+     最差顶点 y=0.017 误差 0.006m  (0.068,0.017,-0.064)  CC_BaseFoot.R 100.0%
+     最差顶点 y=0.033 误差 0.006m  (0.053,0.033,-0.062)  CC_BaseFoot.R 100.0%
+· rest 姿势 stretch（拿原始顶点当基准）：max=1.002 平均=1.000
+· 逐骨 bind 偏差（|骨环境 × bindpose| 偏离单位阵）：71/71 根超过阈值
+     CC_BaseFoot.L                  旋转差  154.3°  位移 5.405m
+     CC_BaseToeBase.L               旋转差  154.3°  位移 5.405m
+     CC_BaseCalf.L                  旋转差  122.5°  位移 5.345m
+     CC_BaseCalfTwist01.L           旋转差  122.5°  位移 5.345m
+     CC_BaseCalfTwist02.L           旋转差  122.4°  位移 5.345m
+· 各时刻： 0.05→1.06  0.15→1.07  0.25→1.07  0.35→1.07  0.45→1.06  0.55→1.05  0.65→1.06  0.75→1.06  0.85→1.04
+· 最坏一帧 t=0.25×clip：max=1.074 平均=0.998  >1.5 的边 0 条，>2.0 的边 0 条
+   L 侧：max=1.052 平均=0.996 >1.5 的边 0（共 779 条）
+   R 侧：max=1.074 平均=0.999 >1.5 的边 0（共 779 条）
+· 踝部权重剖面（网格空间按高度分层）
+   网格 y 范围 0.001 ~ 0.100，脚踝骨 bind y = 0.078
+     y 区间           顶点   小腿Calf  Twist01  Twist02   脚Foot  脚趾Toe   ← 左右平均(%)
+      0.001~ 0.011   274      0.0      0.0      0.0    100.0      0.0
+      0.011~ 0.021   168      0.0      0.0      0.0    100.0      0.0
+      0.021~ 0.031    48      0.0      0.0      0.0    100.0      0.0
+      0.031~ 0.041    30      0.0      0.0      0.0    100.0      0.0
+      0.041~ 0.051    10      0.0      0.0      0.0    100.0      0.0
+      0.051~ 0.061    18      0.0      0.0      0.0    100.0      0.0
+      0.061~ 0.071     6      0.1      0.0      0.0     99.9      0.0
+      0.071~ 0.081    18      2.4      0.0      0.0     97.6      0.0
+      0.081~ 0.090     8      6.9      0.0      0.0     93.1      0.0
+      0.090~ 0.100    18     10.6      0.0      0.0     89.4      0.0
+· 相对「刚性地绑在自己那只脚」的偏差：最大 0.0068m（y=0.100）  平均 0.0001m
+· 逐骨归因（顶点被哪根骨从「共识位置」拉开多少；单位 m）
+     骨头                            最大拉开   平均拉开  顶点数   这些顶点的平均位置(网格空间)
+     CC_BaseCalf.L                    0.0059    0.0022      24   (-0.066, 0.086, -0.025)
+     CC_BaseFoot.L                    0.0059    0.0002     300   (-0.076, 0.020, 0.058)
+     CC_BaseFoot.R                    0.0027    0.0001     300   (0.076, 0.020, 0.058)
+     CC_BaseCalf.R                    0.0027    0.0010      24   (0.066, 0.086, -0.025)
+· 最坏的 6 条边（拉得最狠的地方 + 两端的权重）
+   拉伸 ×1.07  两端距脚踝 0.140m / 0.142m  边长 0.011→0.012
+      a (0.068,0.090,0.008)  CC_BaseFoot.R 92.4%  CC_BaseCalf.R 7.6%
+      b (0.069,0.100,0.006)  CC_BaseFoot.R 86.5%  CC_BaseCalf.R 13.5%
+   拉伸 ×1.07  两端距脚踝 0.142m / 0.140m  边长 0.017→0.018
+      a (0.069,0.075,0.014)  CC_BaseFoot.R 98.5%  CC_BaseCalf.R 1.5%
+      b (0.068,0.090,0.008)  CC_BaseFoot.R 92.4%  CC_BaseCalf.R 7.6%
+   拉伸 ×1.05  两端距脚踝 0.153m / 0.153m  边长 0.013→0.013
+      a (0.083,0.098,-0.003)  CC_BaseFoot.R 88.2%  CC_BaseCalf.R 11.8%
+      b (0.083,0.085,-0.001)  CC_BaseFoot.R 94.3%  CC_BaseCalf.R 5.7%
+   拉伸 ×1.05  两端距脚踝 0.029m / 0.029m  边长 0.019→0.019
+      a (-0.088,0.090,-0.040)  CC_BaseFoot.L 92.0%  CC_BaseCalf.L 8.0%
+      b (-0.091,0.072,-0.040)  CC_BaseFoot.L 99.0%  CC_BaseCalf.L 1.0%
+   拉伸 ×1.05  两端距脚踝 0.153m / 0.156m  边长 0.018→0.019
+      a (0.083,0.085,-0.001)  CC_BaseFoot.R 94.3%  CC_BaseCalf.R 5.7%
+      b (0.084,0.069,0.007)  CC_BaseFoot.R 99.7%  CC_BaseCalf.R 0.3%
+   拉伸 ×1.03  两端距脚踝 0.032m / 0.044m  边长 0.023→0.023
+      a (-0.079,0.076,-0.053)  CC_BaseFoot.L 97.6%  CC_BaseCalf.L 2.4%
+      b (-0.080,0.053,-0.057)  CC_BaseFoot.L 100.0%
+· 假设 A/B（只改内存，不动资产）：
+     方案                                                  最大stretch  >1.5的边  平均
+     ① 原样（不修）                                                  1.074        0   0.998
+     ② CalfTwist01/02 → 小腿 Calf                                1.074        0   0.998
+     ③ CalfTwist01/02 → 脚 Foot                                 1.074        0   0.998
+     ④ CalfTwist01/02 → Calf+Foot 各半                           1.074        0   0.998
+     ⑤ ToeBase → 脚 Foot                                        1.074        0   0.998
+     ⑥ ③＋⑤                                                     1.074        0   0.998
+     ⑦ 扭转骨+脚趾骨 全并到 Foot                                        1.074        0   0.998
+     ⑧ 全部并到 Foot（刚性上界，仅供参考）                                    1.002        0   1.000
+     ⑨ 扭转骨按高度：踝下→Foot 踝上→Calf（跨度 6cm）                          1.074        0   0.998
+     ⑨b 同上，跨度拉长到 14cm                                          1.074        0   0.998
+     ⑨c 同上，跨度 10cm 但起点抬高 2cm                                   1.074        0   0.998
+     ⑬【推荐】小腿侧全权重按高度坡道（踝下1cm→踝上14cm）                            1.074        0   0.998
+     ⑬b 同上，坡道缩短到 8cm                                           1.074        0   0.998
+     ⑬c 同上，坡道拉长到 20cm                                          1.074        0   0.998
+     ⑭【粗绑】膝下只留腿三根：扭转→大小腿、脚趾→脚（硬切在踝）                            1.074        0   0.998
+     ⑭b【粗绑】同上，但踝口缓一下（踝下1cm→踝上16cm 坡道）                          1.074        0   0.998
+     ⑮【粗绑】膝下全归脚（整只鞋刚性）                                         1.002        0   1.000
+· 权重平滑假设（小腿/脚/扭转骨这几根之间做拉普拉斯平滑）：
+     ⑫ 平滑  2 轮                                1.060        0   0.998
+     ⑫ 平滑  5 轮                                1.041        0   0.998
+     ⑫ 平滑 10 轮                                1.028        0   0.998
+     ⑫ 平滑 20 轮                                1.027        0   0.998
+     ③+⑫ 先并到Foot再平滑  5 轮                       1.041        0   0.998
+     ③+⑫ 先并到Foot再平滑 20 轮                       1.027        0   0.998
+     ⑬+⑫ 坡道后再平滑  2 轮                          1.060        0   0.998
+     ⑬+⑫ 坡道后再平滑  5 轮                          1.041        0   0.998
+     ⑬+⑫ 坡道后再平滑 10 轮                          1.028        0   0.998
+· 姿势级假设（改的是骨头朝向，权重不动）：
+     ⑪ 扭转骨 = Slerp(小腿, 脚, 0.5/0.8)                     1.074        0   0.998
+     ⑪ 扭转骨 = Slerp(小腿, 脚, 0.3/0.5)                     1.074        0   0.998
+     ⑪ 扭转骨 = Slerp(小腿, 脚, 0.8/1.0)                     1.074        0   0.998
+
+================ 深挖 C：王含的靴子 ================
+网格 Shoes_shoes_001_boots+socks  顶点 1016  骨 71  场景里挂的动画 慢跑；下面的数字一律用固定对照动画【快速跑】量（可跨次比较）
+· 绑定自检（rest 姿势下，骨骼世界矩阵 × bindpose 应当 = 渲染器变换 × 顶点）：
+   误差 >1cm 的顶点 1016/1016   最大 0.0185m   中位 0.0183m  ★
+     最差顶点 y=0.196 误差 0.018m  (-0.088,0.196,0.015)  CC_BaseCalf.L 69.2%  CC_BaseFoot.L 30.8%
+     最差顶点 y=0.197 误差 0.018m  (0.088,0.197,0.014)  CC_BaseCalf.R 68.9%  CC_BaseFoot.R 31.1%
+     最差顶点 y=0.190 误差 0.018m  (-0.088,0.190,0.013)  CC_BaseCalf.L 65.2%  CC_BaseFoot.L 34.8%
+· rest 姿势 stretch（拿原始顶点当基准）：max=1.007 平均=1.000
+· 逐骨 bind 偏差（|骨环境 × bindpose| 偏离单位阵）：71/71 根超过阈值
+     CC_BaseFoot.L                  旋转差  154.3°  位移 5.980m
+     CC_BaseToeBase.L               旋转差  154.3°  位移 5.980m
+     CC_BaseCalf.L                  旋转差  122.5°  位移 5.858m
+     CC_BaseCalfTwist01.L           旋转差  122.5°  位移 5.858m
+     CC_BaseCalfTwist02.L           旋转差  122.4°  位移 5.858m
+· 各时刻： 0.05→1.64  0.15→1.72  0.25→1.73  0.35→1.69  0.45→1.75  0.55→1.70  0.65→1.64  0.75→1.64  0.85→1.69
+· 最坏一帧 t=0.45×clip：max=1.748 平均=0.964  >1.5 的边 4 条，>2.0 的边 0 条
+   L 侧：max=1.748 平均=0.918 >1.5 的边 4（共 1239 条）
+   R 侧：max=1.195 平均=1.010 >1.5 的边 0（共 1217 条）
+· 踝部权重剖面（网格空间按高度分层）
+   网格 y 范围 0.001 ~ 0.211，脚踝骨 bind y = 0.095
+     y 区间           顶点   小腿Calf  Twist01  Twist02   脚Foot  脚趾Toe   ← 左右平均(%)
+      0.001~ 0.022   118      0.0      0.0      0.0    100.0      0.0
+      0.022~ 0.043    78      0.0      0.0      0.0    100.0      0.0
+      0.043~ 0.064    70      0.0      0.0      0.0    100.0      0.0
+      0.064~ 0.085    92      0.0      0.0      0.0    100.0      0.0
+      0.085~ 0.106   118      5.2      0.0      0.0     94.8      0.0
+      0.106~ 0.127   204     17.5      0.0      0.0     82.5      0.0
+      0.127~ 0.148   159     30.6      0.0      0.0     69.4      0.0
+      0.148~ 0.169    21     42.3      0.0      0.0     57.7      0.0
+      0.169~ 0.190    64     61.2      0.0      0.0     38.8      0.0
+      0.190~ 0.211    90     75.1      0.0      0.0     24.9      0.0
+· 相对「刚性地绑在自己那只脚」的偏差：最大 0.1429m（y=0.210）  平均 0.0161m
+· 逐骨归因（顶点被哪根骨从「共识位置」拉开多少；单位 m）
+     骨头                            最大拉开   平均拉开  顶点数   这些顶点的平均位置(网格空间)
+     CC_BaseCalf.L                    0.0359    0.0156     333   (-0.073, 0.139, 0.003)
+     CC_BaseFoot.L                    0.0359    0.0101     512   (-0.073, 0.105, 0.018)
+     CC_BaseCalf.R                    0.0112    0.0049     325   (0.073, 0.139, 0.005)
+     CC_BaseFoot.R                    0.0112    0.0032     504   (0.073, 0.104, 0.019)
+· 最坏的 6 条边（拉得最狠的地方 + 两端的权重）
+   拉伸 ×1.75  两端距脚踝 0.114m / 0.122m  边长 0.010→0.017
+      a (-0.106,0.199,-0.047)  CC_BaseCalf.L 71.1%  CC_BaseFoot.L 28.9%
+      b (-0.103,0.209,-0.048)  CC_BaseCalf.L 76.7%  CC_BaseFoot.L 23.3%
+   拉伸 ×1.73  两端距脚踝 0.118m / 0.127m  边长 0.011→0.019
+      a (-0.087,0.200,-0.074)  CC_BaseCalf.L 71.4%  CC_BaseFoot.L 28.6%
+      b (-0.086,0.210,-0.071)  CC_BaseCalf.L 77.9%  CC_BaseFoot.L 22.1%
+   拉伸 ×1.69  两端距脚踝 0.118m / 0.109m  边长 0.011→0.019
+      a (-0.104,0.208,-0.022)  CC_BaseCalf.L 76.1%  CC_BaseFoot.L 23.9%
+      b (-0.107,0.197,-0.021)  CC_BaseCalf.L 69.5%  CC_BaseFoot.L 30.5%
+   拉伸 ×1.64  两端距脚踝 0.119m / 0.108m  边长 0.012→0.020
+      a (-0.097,0.208,0.001)  CC_BaseCalf.L 76.2%  CC_BaseFoot.L 23.8%
+      b (-0.100,0.196,0.001)  CC_BaseCalf.L 68.9%  CC_BaseFoot.L 31.1%
+   拉伸 ×1.50  两端距脚踝 0.110m / 0.120m  边长 0.012→0.018
+      a (-0.088,0.196,0.015)  CC_BaseCalf.L 69.2%  CC_BaseFoot.L 30.8%
+      b (-0.088,0.208,0.012)  CC_BaseCalf.L 76.2%  CC_BaseFoot.L 23.8%
+   拉伸 ×1.48  两端距脚踝 0.119m / 0.125m  边长 0.010→0.015
+      a (-0.055,0.201,-0.074)  CC_BaseCalf.L 72.3%  CC_BaseFoot.L 27.7%
+      b (-0.057,0.210,-0.070)  CC_BaseCalf.L 77.7%  CC_BaseFoot.L 22.3%
+· 假设 A/B（只改内存，不动资产）：
+     方案                                                  最大stretch  >1.5的边  平均
+     ① 原样（不修）                                                  1.748        4   0.964
+     ② CalfTwist01/02 → 小腿 Calf                                1.748        4   0.964
+     ③ CalfTwist01/02 → 脚 Foot                                 1.748        4   0.964
+     ④ CalfTwist01/02 → Calf+Foot 各半                           1.748        4   0.964
+     ⑤ ToeBase → 脚 Foot                                        1.748        4   0.964
+     ⑥ ③＋⑤                                                     1.748        4   0.964
+     ⑦ 扭转骨+脚趾骨 全并到 Foot                                        1.748        4   0.964
+     ⑧ 全部并到 Foot（刚性上界，仅供参考）                                    1.005        0   1.000
+     ⑨ 扭转骨按高度：踝下→Foot 踝上→Calf（跨度 6cm）                          1.748        4   0.964
+     ⑨b 同上，跨度拉长到 14cm                                          1.748        4   0.964
+     ⑨c 同上，跨度 10cm 但起点抬高 2cm                                   1.748        4   0.964
+     ⑬【推荐】小腿侧全权重按高度坡道（踝下1cm→踝上14cm）                            1.748        4   0.964
+     ⑬b 同上，坡道缩短到 8cm                                           1.748        4   0.964
+     ⑬c 同上，坡道拉长到 20cm                                          1.748        4   0.964
+     ⑭【粗绑】膝下只留腿三根：扭转→大小腿、脚趾→脚（硬切在踝）                            1.748        4   0.964
+     ⑭b【粗绑】同上，但踝口缓一下（踝下1cm→踝上16cm 坡道）                          1.748        4   0.964
+     ⑮【粗绑】膝下全归脚（整只鞋刚性）                                         1.005        0   1.000
+· 权重平滑假设（小腿/脚/扭转骨这几根之间做拉普拉斯平滑）：
+     ⑫ 平滑  2 轮                                2.163        6   0.962
+     ⑫ 平滑  5 轮                                2.332        5   0.960
+     ⑫ 平滑 10 轮                                2.177        4   0.959
+     ⑫ 平滑 20 轮                                1.830        3   0.955
+     ③+⑫ 先并到Foot再平滑  5 轮                       2.332        5   0.960
+     ③+⑫ 先并到Foot再平滑 20 轮                       1.830        3   0.955
+     ⑬+⑫ 坡道后再平滑  2 轮                          2.163        6   0.962
+     ⑬+⑫ 坡道后再平滑  5 轮                          2.332        5   0.960
+     ⑬+⑫ 坡道后再平滑 10 轮                          2.177        4   0.959
+· 姿势级假设（改的是骨头朝向，权重不动）：
+     ⑪ 扭转骨 = Slerp(小腿, 脚, 0.5/0.8)                     1.748        4   0.964
+     ⑪ 扭转骨 = Slerp(小腿, 脚, 0.3/0.5)                     1.748        4   0.964
+     ⑪ 扭转骨 = Slerp(小腿, 脚, 0.8/1.0)                     1.748        4   0.964
+
+================ 深挖 D：林溪的运动鞋 ================
+网格 Shoes_shoes_002_sneaker  顶点 610  骨 71  场景里挂的动画 快速跑；下面的数字一律用固定对照动画【快速跑】量（可跨次比较）
+· 绑定自检（rest 姿势下，骨骼世界矩阵 × bindpose 应当 = 渲染器变换 × 顶点）：
+   误差 >1cm 的顶点 0/610   最大 0.0057m   中位 0.0056m  ✓ 绑定姿势 = 模型 rest 姿势
+     最差顶点 y=0.006 误差 0.006m  (0.069,0.006,-0.086)  CC_BaseFoot.R 100.0%
+     最差顶点 y=0.006 误差 0.006m  (0.069,0.006,-0.086)  CC_BaseFoot.R 100.0%
+     最差顶点 y=-0.006 误差 0.006m  (0.070,-0.006,-0.085)  CC_BaseFoot.R 100.0%
+· rest 姿势 stretch（拿原始顶点当基准）：max=1.004 平均=1.000
+· 逐骨 bind 偏差（|骨环境 × bindpose| 偏离单位阵）：71/71 根超过阈值
+     CC_BaseFoot.L                  旋转差  154.3°  位移 5.509m
+     CC_BaseToeBase.L               旋转差  154.3°  位移 5.509m
+     CC_BaseCalf.L                  旋转差  122.5°  位移 5.410m
+     CC_BaseCalfTwist01.L           旋转差  122.5°  位移 5.410m
+     CC_BaseCalfTwist02.L           旋转差  122.4°  位移 5.410m
+· 各时刻： 0.05→1.26  0.15→1.26  0.25→1.25  0.35→1.23  0.45→1.15  0.55→1.25  0.65→1.26  0.75→1.26  0.85→1.25
+· 最坏一帧 t=0.05×clip：max=1.269 平均=0.969  >1.5 的边 0 条，>2.0 的边 0 条
+   L 侧：max=1.269 平均=0.937 >1.5 的边 0（共 691 条）
+   R 侧：max=1.115 平均=1.000 >1.5 的边 0（共 691 条）
+· 踝部权重剖面（网格空间按高度分层）
+   网格 y 范围 -0.016 ~ 0.148，脚踝骨 bind y = 0.077
+     y 区间           顶点   小腿Calf  Twist01  Twist02   脚Foot  脚趾Toe   ← 左右平均(%)
+     -0.016~ 0.000   168      0.0      0.0      0.0    100.0      0.0
+      0.000~ 0.016    84      0.0      0.0      0.0    100.0      0.0
+      0.016~ 0.033    24      0.0      0.0      0.0    100.0      0.0
+      0.033~ 0.049    20      0.0      0.0      0.0    100.0      0.0
+      0.049~ 0.066    34      0.0      0.0      0.0    100.0      0.0
+      0.066~ 0.082    28      0.8      0.0      0.0     99.2      0.0
+      0.082~ 0.099    34      8.5      0.0      0.0     91.5      0.0
+      0.099~ 0.115    42     19.0      0.0      0.0     81.0      0.0
+      0.115~ 0.132   138     30.7      0.0      0.0     69.3      0.0
+      0.132~ 0.148    36     42.7      0.0      0.0     57.3      0.0
+· 相对「刚性地绑在自己那只脚」的偏差：最大 0.0564m（y=0.148）  平均 0.0061m
+· 逐骨归因（顶点被哪根骨从「共识位置」拉开多少；单位 m）
+     骨头                            最大拉开   平均拉开  顶点数   这些顶点的平均位置(网格空间)
+     CC_BaseFoot.L                    0.0306    0.0062     305   (-0.068, 0.057, 0.013)
+     CC_BaseCalf.L                    0.0306    0.0137     139   (-0.068, 0.117, -0.010)
+     CC_BaseCalf.R                    0.0083    0.0042     139   (0.068, 0.117, -0.010)
+     CC_BaseFoot.R                    0.0083    0.0019     305   (0.068, 0.057, 0.013)
+· 最坏的 6 条边（拉得最狠的地方 + 两端的权重）
+   拉伸 ×1.27  两端距脚踝 0.076m / 0.064m  边长 0.015→0.019
+      a (-0.096,0.143,0.000)  CC_BaseFoot.L 56.7%  CC_BaseCalf.L 43.3%
+      b (-0.096,0.128,0.002)  CC_BaseFoot.L 68.3%  CC_BaseCalf.L 31.7%
+   拉伸 ×1.27  两端距脚踝 0.076m / 0.064m  边长 0.015→0.019
+      a (-0.096,0.143,0.000)  CC_BaseFoot.L 56.7%  CC_BaseCalf.L 43.3%
+      b (-0.096,0.128,0.002)  CC_BaseFoot.L 68.3%  CC_BaseCalf.L 31.7%
+   拉伸 ×1.24  两端距脚踝 0.064m / 0.071m  边长 0.015→0.018
+      a (-0.096,0.132,-0.007)  CC_BaseFoot.L 65.6%  CC_BaseCalf.L 34.4%
+      b (-0.089,0.144,-0.012)  CC_BaseFoot.L 55.8%  CC_BaseCalf.L 44.2%
+   拉伸 ×1.23  两端距脚踝 0.064m / 0.075m  边长 0.013→0.016
+      a (-0.096,0.132,-0.007)  CC_BaseFoot.L 65.6%  CC_BaseCalf.L 34.4%
+      b (-0.096,0.145,-0.008)  CC_BaseFoot.L 55.2%  CC_BaseCalf.L 44.8%
+   拉伸 ×1.18  两端距脚踝 0.061m / 0.057m  边长 0.015→0.018
+      a (-0.095,0.081,0.031)  CC_BaseFoot.L 98.0%  CC_BaseCalf.L 2.0%
+      b (-0.086,0.093,0.028)  CC_BaseFoot.L 92.2%  CC_BaseCalf.L 7.8%
+   拉伸 ×1.17  两端距脚踝 0.059m / 0.058m  边长 0.009→0.010
+      a (-0.084,0.120,0.014)  CC_BaseFoot.L 74.4%  CC_BaseCalf.L 25.6%
+      b (-0.086,0.113,0.018)  CC_BaseFoot.L 79.1%  CC_BaseCalf.L 20.9%
+· 假设 A/B（只改内存，不动资产）：
+     方案                                                  最大stretch  >1.5的边  平均
+     ① 原样（不修）                                                  1.269        0   0.969
+     ② CalfTwist01/02 → 小腿 Calf                                1.269        0   0.969
+     ③ CalfTwist01/02 → 脚 Foot                                 1.269        0   0.969
+     ④ CalfTwist01/02 → Calf+Foot 各半                           1.269        0   0.969
+     ⑤ ToeBase → 脚 Foot                                        1.269        0   0.969
+     ⑥ ③＋⑤                                                     1.269        0   0.969
+     ⑦ 扭转骨+脚趾骨 全并到 Foot                                        1.269        0   0.969
+     ⑧ 全部并到 Foot（刚性上界，仅供参考）                                    1.005        0   1.000
+     ⑨ 扭转骨按高度：踝下→Foot 踝上→Calf（跨度 6cm）                          1.269        0   0.969
+     ⑨b 同上，跨度拉长到 14cm                                          1.269        0   0.969
+     ⑨c 同上，跨度 10cm 但起点抬高 2cm                                   1.269        0   0.969
+     ⑬【推荐】小腿侧全权重按高度坡道（踝下1cm→踝上14cm）                            1.269        0   0.969
+     ⑬b 同上，坡道缩短到 8cm                                           1.269        0   0.969
+     ⑬c 同上，坡道拉长到 20cm                                          1.269        0   0.969
+     ⑭【粗绑】膝下只留腿三根：扭转→大小腿、脚趾→脚（硬切在踝）                            1.269        0   0.969
+     ⑭b【粗绑】同上，但踝口缓一下（踝下1cm→踝上16cm 坡道）                          1.269        0   0.969
+     ⑮【粗绑】膝下全归脚（整只鞋刚性）                                         1.005        0   1.000
+· 权重平滑假设（小腿/脚/扭转骨这几根之间做拉普拉斯平滑）：
+     ⑫ 平滑  2 轮                                1.260        0   0.965
+     ⑫ 平滑  5 轮                                1.198        0   0.963
+     ⑫ 平滑 10 轮                                1.177        0   0.961
+     ⑫ 平滑 20 轮                                1.133        0   0.960
+     ③+⑫ 先并到Foot再平滑  5 轮                       1.198        0   0.963
+     ③+⑫ 先并到Foot再平滑 20 轮                       1.133        0   0.960
+     ⑬+⑫ 坡道后再平滑  2 轮                          1.260        0   0.965
+     ⑬+⑫ 坡道后再平滑  5 轮                          1.198        0   0.963
+     ⑬+⑫ 坡道后再平滑 10 轮                          1.177        0   0.961
+· 姿势级假设（改的是骨头朝向，权重不动）：
+     ⑪ 扭转骨 = Slerp(小腿, 脚, 0.5/0.8)                     1.269        0   0.969
+     ⑪ 扭转骨 = Slerp(小腿, 脚, 0.3/0.5)                     1.269        0   0.969
+     ⑪ 扭转骨 = Slerp(小腿, 脚, 0.8/1.0)                     1.269        0   0.969
+
+================ 深挖 E：徐夏的裙摆（stretch 最大的一块） ================
+网格 Bot_F_bot_003_skirt  顶点 393  骨 71  场景里挂的动画 待机女；下面的数字一律用固定对照动画【快速跑】量（可跨次比较）
+· 绑定自检（rest 姿势下，骨骼世界矩阵 × bindpose 应当 = 渲染器变换 × 顶点）：
+   误差 >1cm 的顶点 0/393   最大 0.0080m   中位 0.0064m  ✓ 绑定姿势 = 模型 rest 姿势
+     最差顶点 y=0.777 误差 0.008m  (-0.026,0.777,-0.128)  CC_BaseThigh.L 88.6%  CC_BaseThigh.R 11.4%
+     最差顶点 y=0.782 误差 0.008m  (-0.028,0.782,-0.106)  CC_BaseThigh.L 92.5%  CC_BaseThigh.R 7.5%
+     最差顶点 y=0.781 误差 0.008m  (0.021,0.781,-0.103)  CC_BaseThigh.R 78.6%  CC_BaseThigh.L 21.4%
+· rest 姿势 stretch（拿原始顶点当基准）：max=1.059 平均=0.997   （≠1 → 网格是别的姿势建的，下面的数字改用 rest 形状当基准）
+· 逐骨 bind 偏差（|骨环境 × bindpose| 偏离单位阵）：71/71 根超过阈值
+     CC_BaseFoot.L                  旋转差  154.3°  位移 5.403m
+     CC_BaseToeBase.L               旋转差  154.3°  位移 5.403m
+     CC_BaseCalf.L                  旋转差  122.5°  位移 5.345m
+     CC_BaseCalfTwist01.L           旋转差  122.5°  位移 5.345m
+     CC_BaseCalfTwist02.L           旋转差  122.4°  位移 5.345m
+· 各时刻： 0.05→10.85  0.15→8.40  0.25→4.23  0.35→4.16  0.45→13.91  0.55→16.93  0.65→14.88  0.75→10.37  0.85→7.42
+· 最坏一帧 t=0.55×clip：max=19.134 平均=1.368  >1.5 的边 127 条，>2.0 的边 85 条
+   L 侧：max=6.712 平均=1.289 >1.5 的边 41（共 309 条）
+   R 侧：max=15.518 平均=1.330 >1.5 的边 40（共 311 条）
+· 踝部权重剖面（网格空间按高度分层）
+   网格 y 范围 0.635 ~ 0.997，脚踝骨 bind y = 0.077
+     y 区间           顶点   小腿Calf  Twist01  Twist02   脚Foot  脚趾Toe   ← 左右平均(%)
+      0.635~ 0.671    82      0.0      0.0      0.0      0.0      0.0
+      0.671~ 0.707    62      0.0      0.0      0.0      0.0      0.0
+      0.707~ 0.744    28      0.0      0.0      0.0      0.0      0.0
+      0.744~ 0.780    52      0.0      0.0      0.0      0.0      0.0
+      0.780~ 0.816    21      0.0      0.0      0.0      0.0      0.0
+      0.816~ 0.852    22      0.0      0.0      0.0      0.0      0.0
+      0.852~ 0.888    21      0.0      0.0      0.0      0.0      0.0
+      0.888~ 0.925    12      0.0      0.0      0.0      0.0      0.0
+      0.925~ 0.961    21      0.0      0.0      0.0      0.0      0.0
+      0.961~ 0.997    71      0.0      0.0      0.0      0.0      0.0
+· 相对「刚性地绑在自己那只脚」的偏差：最大 1.5044m（y=0.977）  平均 0.9481m
+· 逐骨归因（顶点被哪根骨从「共识位置」拉开多少；单位 m）
+     骨头                            最大拉开   平均拉开  顶点数   这些顶点的平均位置(网格空间)
+     CC_BaseThigh.R                   0.0992    0.0212     219   (0.044, 0.734, 0.017)
+     CC_BaseThigh.L                   0.0992    0.0171     224   (-0.054, 0.741, 0.004)
+     CC_Base_Hip                      0.0458    0.0147     223   (-0.005, 0.865, 0.027)
+     CC_Base_Waist                    0.0136    0.0089      89   (-0.003, 0.976, 0.005)
+     CC_Base_Spine01                  0.0054    0.0043      64   (-0.005, 0.988, 0.002)
+· 最坏的 6 条边（拉得最狠的地方 + 两端的权重）
+   拉伸 ×19.13  两端距脚踝 0.576m / 0.574m  边长 0.012→0.207
+      a (0.000,0.635,0.100)  CC_BaseThigh.R 77.3%  CC_BaseThigh.L 22.7%
+      b (-0.012,0.635,0.097)  CC_BaseThigh.L 67.7%  CC_BaseThigh.R 32.3%
+   拉伸 ×17.55  两端距脚踝 0.581m / 0.579m  边长 0.012→0.186
+      a (0.000,0.641,0.095)  CC_BaseThigh.R 70.7%  CC_BaseThigh.L 19.0%  CC_Base_Hip 10.4%
+      b (-0.011,0.642,0.092)  CC_BaseThigh.L 61.7%  CC_BaseThigh.R 29.8%  CC_Base_Hip 8.5%
+   拉伸 ×17.55  两端距脚踝 0.579m / 0.581m  边长 0.012→0.186
+      a (-0.011,0.642,0.092)  CC_BaseThigh.L 61.7%  CC_BaseThigh.R 29.8%  CC_Base_Hip 8.5%
+      b (0.000,0.641,0.095)  CC_BaseThigh.R 70.7%  CC_BaseThigh.L 19.0%  CC_Base_Hip 10.4%
+   拉伸 ×16.36  两端距脚踝 0.583m / 0.581m  边长 0.015→0.215
+      a (0.000,0.640,0.113)  CC_BaseThigh.R 71.1%  CC_BaseThigh.L 18.4%  CC_Base_Hip 10.5%
+      b (-0.015,0.640,0.109)  CC_BaseThigh.L 72.2%  CC_BaseThigh.R 27.7%  CC_Base_Hip 0.2%
+   拉伸 ×15.52  两端距脚踝 0.615m / 0.611m  边长 0.008→0.124
+      a (0.027,0.677,-0.122)  CC_BaseThigh.R 61.5%  CC_BaseThigh.L 38.5%
+      b (0.027,0.672,-0.128)  CC_BaseThigh.R 92.0%  CC_BaseThigh.L 8.0%
+   拉伸 ×14.67  两端距脚踝 0.581m / 0.574m  边长 0.014→0.187
+      a (0.000,0.641,0.095)  CC_BaseThigh.R 70.7%  CC_BaseThigh.L 19.0%  CC_Base_Hip 10.4%
+      b (-0.012,0.635,0.097)  CC_BaseThigh.L 67.7%  CC_BaseThigh.R 32.3%
+· 假设 A/B（只改内存，不动资产）：
+     方案                                                  最大stretch  >1.5的边  平均
+     ① 原样（不修）                                                 19.134      127   1.368
+     ② CalfTwist01/02 → 小腿 Calf                               19.134      127   1.368
+     ③ CalfTwist01/02 → 脚 Foot                                19.134      127   1.368
+     ④ CalfTwist01/02 → Calf+Foot 各半                          19.134      127   1.368
+     ⑤ ToeBase → 脚 Foot                                       19.134      127   1.368
+     ⑥ ③＋⑤                                                    19.134      127   1.368
+     ⑦ 扭转骨+脚趾骨 全并到 Foot                                       19.134      127   1.368
+     ⑧ 全部并到 Foot（刚性上界，仅供参考）                                   72.884      418   4.214
+     ⑨ 扭转骨按高度：踝下→Foot 踝上→Calf（跨度 6cm）                         19.134      127   1.368
+     ⑨b 同上，跨度拉长到 14cm                                         19.134      127   1.368
+     ⑨c 同上，跨度 10cm 但起点抬高 2cm                                  19.134      127   1.368
+     ⑬【推荐】小腿侧全权重按高度坡道（踝下1cm→踝上14cm）                           19.134      127   1.368
+     ⑬b 同上，坡道缩短到 8cm                                          19.134      127   1.368
+     ⑬c 同上，坡道拉长到 20cm                                         19.134      127   1.368
+     ⑭【粗绑】膝下只留腿三根：扭转→大小腿、脚趾→脚（硬切在踝）                           19.134      127   1.368
+     ⑭b【粗绑】同上，但踝口缓一下（踝下1cm→踝上16cm 坡道）                         19.134      127   1.368
+     ⑮【粗绑】膝下全归脚（整只鞋刚性）                                        72.884      418   4.214
+· 权重平滑假设（小腿/脚/扭转骨这几根之间做拉普拉斯平滑）：
+     ⑫ 平滑  2 轮                               19.134      127   1.368
+     ⑫ 平滑  5 轮                               19.134      127   1.368
+     ⑫ 平滑 10 轮                               19.134      127   1.368
+     ⑫ 平滑 20 轮                               19.134      127   1.368
+     ③+⑫ 先并到Foot再平滑  5 轮                      19.134      127   1.368
+     ③+⑫ 先并到Foot再平滑 20 轮                      19.134      127   1.368
+     ⑬+⑫ 坡道后再平滑  2 轮                         19.134      127   1.368
+     ⑬+⑫ 坡道后再平滑  5 轮                         19.134      127   1.368
+     ⑬+⑫ 坡道后再平滑 10 轮                         19.134      127   1.368
+· 姿势级假设（改的是骨头朝向，权重不动）：
+     ⑪ 扭转骨 = Slerp(小腿, 脚, 0.5/0.8)                    19.134      127   1.368
+     ⑪ 扭转骨 = Slerp(小腿, 脚, 0.3/0.5)                    19.134      127   1.368
+     ⑪ 扭转骨 = Slerp(小腿, 脚, 0.8/1.0)                    19.134      127   1.368
+
+================ 深挖 F：徐夏的上衣 ================
+网格 Top_F_top.003_sweatshirt  顶点 1482  骨 71  场景里挂的动画 待机女；下面的数字一律用固定对照动画【快速跑】量（可跨次比较）
+· 绑定自检（rest 姿势下，骨骼世界矩阵 × bindpose 应当 = 渲染器变换 × 顶点）：
+   误差 >1cm 的顶点 973/1482   最大 0.4030m   中位 0.0430m  ★
+     最差顶点 y=0.906 误差 0.403m  (-0.366,0.906,-0.029)  CC_BaseHand.L 97.7%  CC_BasePinky1.L 1.0%  CC_BaseRing1.L 0.9%  CC_BaseThumb1.L 0.4%
+     最差顶点 y=0.906 误差 0.403m  (0.366,0.906,-0.029)  CC_BaseHand.R 97.7%  CC_BasePinky1.R 1.0%  CC_BaseRing1.R 0.9%  CC_BaseThumb1.R 0.4%
+     最差顶点 y=0.910 误差 0.403m  (-0.372,0.910,-0.029)  CC_BaseHand.L 98.4%  CC_BasePinky1.L 1.1%  CC_BaseRing1.L 0.5%
+· rest 姿势 stretch（拿原始顶点当基准）：max=9.321 平均=1.050   （≠1 → 网格是别的姿势建的，下面的数字改用 rest 形状当基准）
+· 逐骨 bind 偏差（|骨环境 × bindpose| 偏离单位阵）：71/71 根超过阈值
+     CC_BaseFoot.L                  旋转差  154.3°  位移 5.403m
+     CC_BaseToeBase.L               旋转差  154.3°  位移 5.403m
+     CC_BaseCalf.L                  旋转差  122.5°  位移 5.345m
+     CC_BaseCalfTwist01.L           旋转差  122.5°  位移 5.345m
+     CC_BaseCalfTwist02.L           旋转差  122.4°  位移 5.345m
+· 各时刻： 0.05→12.67  0.15→12.12  0.25→10.04  0.35→7.14  0.45→8.55  0.55→10.47  0.65→10.11  0.75→8.36  0.85→8.69
+· 最坏一帧 t=0.05×clip：max=2.363 平均=1.008  >1.5 的边 65 条，>2.0 的边 6 条
+   L 侧：max=2.363 平均=1.024 >1.5 的边 32（共 1156 条）
+   R 侧：max=2.017 平均=1.014 >1.5 的边 25（共 1168 条）
+· 踝部权重剖面（网格空间按高度分层）
+   网格 y 范围 0.895 ~ 1.343，脚踝骨 bind y = 0.077
+     y 区间           顶点   小腿Calf  Twist01  Twist02   脚Foot  脚趾Toe   ← 左右平均(%)
+      0.895~ 0.940   208      0.0      0.0      0.0      0.0      0.0
+      0.940~ 0.985   263      0.0      0.0      0.0      0.0      0.0
+      0.985~ 1.030   137      0.0      0.0      0.0      0.0      0.0
+      1.030~ 1.075   130      0.0      0.0      0.0      0.0      0.0
+      1.075~ 1.119   120      0.0      0.0      0.0      0.0      0.0
+      1.119~ 1.164   135      0.0      0.0      0.0      0.0      0.0
+      1.164~ 1.209   122      0.0      0.0      0.0      0.0      0.0
+      1.209~ 1.254   104      0.0      0.0      0.0      0.0      0.0
+      1.254~ 1.299   115      0.0      0.0      0.0      0.0      0.0
+      1.299~ 1.343   147      0.0      0.0      0.0      0.0      0.0
+· 相对「刚性地绑在自己那只脚」的偏差：最大 1.1095m（y=1.323）  平均 0.7463m
+· 逐骨归因（顶点被哪根骨从「共识位置」拉开多少；单位 m）
+     骨头                            最大拉开   平均拉开  顶点数   这些顶点的平均位置(网格空间)
+     CC_BaseUpperarm.L                0.0310    0.0083     375   (-0.178, 1.148, -0.002)
+     CC_Base_Spine02                  0.0293    0.0038     737   (0.002, 1.198, -0.002)
+     CC_BaseForearm.R                 0.0231    0.0030     320   (0.285, 1.016, -0.001)
+     CC_BaseUpperarm.R                0.0231    0.0038     386   (0.183, 1.143, -0.001)
+     CC_BaseForearm.L                 0.0150    0.0027     326   (-0.283, 1.018, 0.000)
+     CC_BaseClavicle.L                0.0101    0.0027     279   (-0.098, 1.233, 0.002)
+     CC_BaseHand.L                    0.0061    0.0015     209   (-0.332, 0.958, 0.002)
+     CC_BaseClavicle.R                0.0051    0.0016     264   (0.100, 1.230, 0.001)
+· 最坏的 6 条边（拉得最狠的地方 + 两端的权重）
+   拉伸 ×2.36  两端距脚踝 0.893m / 0.904m  边长 0.016→0.031
+      a (-0.342,0.925,0.037)  CC_BaseHand.L 58.5%  CC_BaseThumb1.L 25.1%  CC_BaseThumb2.L 13.9%  CC_BaseForearm.L 2.6%
+      b (-0.334,0.939,0.037)  CC_BaseForearm.L 65.3%  CC_BaseHand.L 32.6%  CC_BaseThumb1.L 2.1%
+   拉伸 ×2.07  两端距脚踝 0.894m / 0.888m  边长 0.007→0.012
+      a (-0.320,0.934,0.017)  CC_BaseForearm.L 78.3%  CC_BaseHand.L 20.8%  CC_BaseThumb1.L 0.9%
+      b (-0.321,0.927,0.019)  CC_BaseHand.L 54.4%  CC_BaseForearm.L 40.8%  CC_BaseThumb1.L 4.4%  CC_BaseThumb2.L 0.3%
+   拉伸 ×2.06  两端距脚踝 0.885m / 0.895m  边长 0.016→0.031
+      a (-0.335,0.919,0.032)  CC_BaseHand.L 56.1%  CC_BaseThumb1.L 26.6%  CC_BaseThumb2.L 14.8%  CC_BaseForearm.L 2.5%
+      b (-0.326,0.933,0.031)  CC_BaseForearm.L 58.4%  CC_BaseHand.L 38.8%  CC_BaseThumb1.L 2.8%
+   拉伸 ×2.05  两端距脚踝 1.202m / 1.209m  边长 0.013→0.015
+      a (-0.143,1.275,0.031)  CC_BaseUpperarm.L 62.8%  CC_BaseClavicle.L 24.3%  CC_Base_Spine02 12.8%
+      b (-0.133,1.283,0.031)  CC_BaseUpperarm.L 46.1%  CC_BaseClavicle.L 36.0%  CC_Base_Spine02 17.9%
+   拉伸 ×2.02  两端距脚踝 0.953m / 0.944m  边长 0.016→0.027
+      a (0.334,0.939,0.037)  CC_BaseForearm.R 65.3%  CC_BaseHand.R 32.6%  CC_BaseThumb1.R 2.1%
+      b (0.342,0.925,0.037)  CC_BaseHand.R 58.5%  CC_BaseThumb1.R 25.1%  CC_BaseThumb2.R 13.9%  CC_BaseForearm.R 2.6%
+   拉伸 ×2.01  两端距脚踝 1.032m / 1.039m  边长 0.010→0.021
+      a (0.229,1.065,-0.048)  CC_BaseForearm.R 77.6%  CC_BaseUpperarm.R 22.4%
+      b (0.224,1.074,-0.047)  CC_BaseForearm.R 62.0%  CC_BaseUpperarm.R 38.0%
+· 假设 A/B（只改内存，不动资产）：
+     方案                                                  最大stretch  >1.5的边  平均
+     ① 原样（不修）                                                  2.363       65   1.008
+     ② CalfTwist01/02 → 小腿 Calf                                2.363       65   1.008
+     ③ CalfTwist01/02 → 脚 Foot                                 2.363       65   1.008
+     ④ CalfTwist01/02 → Calf+Foot 各半                           2.363       65   1.008
+     ⑤ ToeBase → 脚 Foot                                        2.363       65   1.008
+     ⑥ ③＋⑤                                                     2.363       65   1.008
+     ⑦ 扭转骨+脚趾骨 全并到 Foot                                        2.363       65   1.008
+     ⑧ 全部并到 Foot（刚性上界，仅供参考）                                   49.469      517   1.676
+     ⑨ 扭转骨按高度：踝下→Foot 踝上→Calf（跨度 6cm）                          2.363       65   1.008
+     ⑨b 同上，跨度拉长到 14cm                                          2.363       65   1.008
+     ⑨c 同上，跨度 10cm 但起点抬高 2cm                                   2.363       65   1.008
+     ⑬【推荐】小腿侧全权重按高度坡道（踝下1cm→踝上14cm）                            2.363       65   1.008
+     ⑬b 同上，坡道缩短到 8cm                                           2.363       65   1.008
+     ⑬c 同上，坡道拉长到 20cm                                          2.363       65   1.008
+     ⑭【粗绑】膝下只留腿三根：扭转→大小腿、脚趾→脚（硬切在踝）                            2.363       65   1.008
+     ⑭b【粗绑】同上，但踝口缓一下（踝下1cm→踝上16cm 坡道）                          2.363       65   1.008
+     ⑮【粗绑】膝下全归脚（整只鞋刚性）                                        49.469      517   1.676
+· 权重平滑假设（小腿/脚/扭转骨这几根之间做拉普拉斯平滑）：
+     ⑫ 平滑  2 轮                                2.363       65   1.008
+     ⑫ 平滑  5 轮                                2.363       65   1.008
+     ⑫ 平滑 10 轮                                2.363       65   1.008
+     ⑫ 平滑 20 轮                                2.363       65   1.008
+     ③+⑫ 先并到Foot再平滑  5 轮                       2.363       65   1.008
+     ③+⑫ 先并到Foot再平滑 20 轮                       2.363       65   1.008
+     ⑬+⑫ 坡道后再平滑  2 轮                          2.363       65   1.008
+     ⑬+⑫ 坡道后再平滑  5 轮                          2.363       65   1.008
+     ⑬+⑫ 坡道后再平滑 10 轮                          2.363       65   1.008
+· 姿势级假设（改的是骨头朝向，权重不动）：
+     ⑪ 扭转骨 = Slerp(小腿, 脚, 0.5/0.8)                     2.363       65   1.008
+     ⑪ 扭转骨 = Slerp(小腿, 脚, 0.3/0.5)                     2.363       65   1.008
+     ⑪ 扭转骨 = Slerp(小腿, 脚, 0.8/1.0)                     2.363       65   1.008
+
+================ 深挖 G：林溪的外套 ================
+网格 Top_F_top_002_jacket  顶点 1870  骨 71  场景里挂的动画 快速跑；下面的数字一律用固定对照动画【快速跑】量（可跨次比较）
+· 绑定自检（rest 姿势下，骨骼世界矩阵 × bindpose 应当 = 渲染器变换 × 顶点）：
+   误差 >1cm 的顶点 752/1870   最大 0.3933m   中位 0.0041m  ★
+     最差顶点 y=0.926 误差 0.393m  (-0.377,0.926,-0.014)  CC_BaseHand.L 99.7%  CC_BaseThumb1.L 0.3%
+     最差顶点 y=0.926 误差 0.393m  (0.377,0.926,-0.014)  CC_BaseHand.R 99.7%  CC_BaseThumb1.R 0.3%
+     最差顶点 y=0.922 误差 0.393m  (-0.369,0.922,-0.027)  CC_BaseHand.L 99.7%  CC_BasePinky1.L 0.3%
+· rest 姿势 stretch（拿原始顶点当基准）：max=2.987 平均=1.019   （≠1 → 网格是别的姿势建的，下面的数字改用 rest 形状当基准）
+· 逐骨 bind 偏差（|骨环境 × bindpose| 偏离单位阵）：71/71 根超过阈值
+     CC_BaseFoot.L                  旋转差  154.3°  位移 5.509m
+     CC_BaseToeBase.L               旋转差  154.3°  位移 5.509m
+     CC_BaseCalf.L                  旋转差  122.5°  位移 5.410m
+     CC_BaseCalfTwist01.L           旋转差  122.5°  位移 5.410m
+     CC_BaseCalfTwist02.L           旋转差  122.4°  位移 5.410m
+· 各时刻： 0.05→3.62  0.15→3.49  0.25→2.92  0.35→2.73  0.45→3.17  0.55→3.72  0.65→3.61  0.75→3.09  0.85→2.69
+· 最坏一帧 t=0.55×clip：max=6.026 平均=1.016  >1.5 的边 69 条，>2.0 的边 14 条
+   L 侧：max=5.867 平均=1.034 >1.5 的边 28（共 913 条）
+   R 侧：max=6.026 平均=1.041 >1.5 的边 31（共 913 条）
+· 踝部权重剖面（网格空间按高度分层）
+   网格 y 范围 0.864 ~ 1.365，脚踝骨 bind y = 0.077
+     y 区间           顶点   小腿Calf  Twist01  Twist02   脚Foot  脚趾Toe   ← 左右平均(%)
+      0.864~ 0.914   196      0.0      0.0      0.0      0.0      0.0
+      0.914~ 0.964   298      0.0      0.0      0.0      0.0      0.0
+      0.964~ 1.014   159      0.0      0.0      0.0      0.0      0.0
+      1.014~ 1.064   159      0.0      0.0      0.0      0.0      0.0
+      1.064~ 1.114   149      0.0      0.0      0.0      0.0      0.0
+      1.114~ 1.164   130      0.0      0.0      0.0      0.0      0.0
+      1.164~ 1.214   146      0.0      0.0      0.0      0.0      0.0
+      1.214~ 1.265   179      0.0      0.0      0.0      0.0      0.0
+      1.265~ 1.315   296      0.0      0.0      0.0      0.0      0.0
+      1.315~ 1.365   157      0.0      0.0      0.0      0.0      0.0
+· 相对「刚性地绑在自己那只脚」的偏差：最大 1.9132m（y=1.280）  平均 1.4701m
+· 逐骨归因（顶点被哪根骨从「共识位置」拉开多少；单位 m）
+     骨头                            最大拉开   平均拉开  顶点数   这些顶点的平均位置(网格空间)
+     CC_BaseUpperarm.R                0.0282    0.0055     385   (0.149, 1.192, 0.019)
+     CC_BaseThigh.R                   0.0246    0.0067     200   (0.082, 0.921, 0.020)
+     CC_Base_Hip                      0.0246    0.0098     526   (0.000, 0.961, 0.034)
+     CC_Base_Spine02                  0.0236    0.0042    1102   (0.000, 1.213, 0.024)
+     CC_BaseUpperarm.L                0.0229    0.0035     377   (-0.145, 1.198, 0.019)
+     CC_BaseForearm.L                 0.0229    0.0037     221   (-0.288, 1.013, -0.002)
+     CC_BaseForearm.R                 0.0203    0.0029     222   (0.287, 1.014, -0.002)
+     CC_Base_Waist                    0.0136    0.0042     608   (0.000, 0.981, 0.037)
+· 最坏的 6 条边（拉得最狠的地方 + 两端的权重）
+   拉伸 ×6.03  两端距脚踝 1.227m / 1.234m  边长 0.018→0.024
+      a (0.142,1.285,0.023)  CC_BaseUpperarm.R 63.5%  CC_BaseClavicle.R 25.8%  CC_Base_Spine02 10.7%
+      b (0.127,1.294,0.022)  CC_BaseClavicle.R 61.7%  CC_Base_Spine02 26.1%  CC_BaseUpperarm.R 11.7%  CC_Base_NeckTwist01 0.5%
+   拉伸 ×5.87  两端距脚踝 1.213m / 1.222m  边长 0.016→0.026
+      a (-0.142,1.288,-0.036)  CC_BaseUpperarm.L 63.9%  CC_BaseClavicle.L 24.3%  CC_Base_Spine02 11.8%
+      b (-0.129,1.298,-0.039)  CC_BaseClavicle.L 55.9%  CC_Base_Spine02 28.2%  CC_BaseUpperarm.L 15.1%  CC_Base_NeckTwist01 0.8%
+   拉伸 ×4.81  两端距脚踝 1.229m / 1.237m  边长 0.016→0.022
+      a (0.142,1.288,-0.036)  CC_BaseUpperarm.R 63.9%  CC_BaseClavicle.R 24.3%  CC_Base_Spine02 11.8%
+      b (0.129,1.298,-0.039)  CC_BaseClavicle.R 55.9%  CC_Base_Spine02 28.2%  CC_BaseUpperarm.R 15.1%  CC_Base_NeckTwist01 0.8%
+   拉伸 ×3.27  两端距脚踝 1.211m / 1.220m  边长 0.018→0.013
+      a (-0.142,1.285,0.023)  CC_BaseUpperarm.L 63.5%  CC_BaseClavicle.L 25.8%  CC_Base_Spine02 10.7%
+      b (-0.127,1.294,0.022)  CC_BaseClavicle.L 61.7%  CC_Base_Spine02 26.1%  CC_BaseUpperarm.L 11.7%  CC_Base_NeckTwist01 0.5%
+   拉伸 ×2.98  两端距脚踝 1.236m / 1.242m  边长 0.015→0.019
+      a (0.146,1.294,-0.005)  CC_BaseUpperarm.R 63.3%  CC_BaseClavicle.R 26.2%  CC_Base_Spine02 10.5%
+      b (0.133,1.303,-0.005)  CC_BaseClavicle.R 63.0%  CC_Base_Spine02 24.6%  CC_BaseUpperarm.R 11.7%  CC_Base_NeckTwist01 0.7%
+   拉伸 ×2.98  两端距脚踝 1.236m / 1.242m  边长 0.015→0.019
+      a (0.146,1.294,-0.005)  CC_BaseUpperarm.R 63.3%  CC_BaseClavicle.R 26.2%  CC_Base_Spine02 10.5%
+      b (0.133,1.303,-0.005)  CC_BaseClavicle.R 63.0%  CC_Base_Spine02 24.6%  CC_BaseUpperarm.R 11.7%  CC_Base_NeckTwist01 0.7%
+· 假设 A/B（只改内存，不动资产）：
+     方案                                                  最大stretch  >1.5的边  平均
+     ① 原样（不修）                                                  6.026       69   1.016
+     ② CalfTwist01/02 → 小腿 Calf                                6.026       69   1.016
+     ③ CalfTwist01/02 → 脚 Foot                                 6.026       69   1.016
+     ④ CalfTwist01/02 → Calf+Foot 各半                           6.026       69   1.016
+     ⑤ ToeBase → 脚 Foot                                        6.026       69   1.016
+     ⑥ ③＋⑤                                                     6.026       69   1.016
+     ⑦ 扭转骨+脚趾骨 全并到 Foot                                        6.026       69   1.016
+     ⑧ 全部并到 Foot（刚性上界，仅供参考）                                   98.566     1164   2.801
+     ⑨ 扭转骨按高度：踝下→Foot 踝上→Calf（跨度 6cm）                          6.026       69   1.016
+     ⑨b 同上，跨度拉长到 14cm                                          6.026       69   1.016
+     ⑨c 同上，跨度 10cm 但起点抬高 2cm                                   6.026       69   1.016
+     ⑬【推荐】小腿侧全权重按高度坡道（踝下1cm→踝上14cm）                            6.026       69   1.016
+     ⑬b 同上，坡道缩短到 8cm                                           6.026       69   1.016
+     ⑬c 同上，坡道拉长到 20cm                                          6.026       69   1.016
+     ⑭【粗绑】膝下只留腿三根：扭转→大小腿、脚趾→脚（硬切在踝）                            6.026       69   1.016
+     ⑭b【粗绑】同上，但踝口缓一下（踝下1cm→踝上16cm 坡道）                          6.026       69   1.016
+     ⑮【粗绑】膝下全归脚（整只鞋刚性）                                        98.566     1164   2.801
+· 权重平滑假设（小腿/脚/扭转骨这几根之间做拉普拉斯平滑）：
+     ⑫ 平滑  2 轮                                6.026       69   1.016
+     ⑫ 平滑  5 轮                                6.026       69   1.016
+     ⑫ 平滑 10 轮                                6.026       69   1.016
+     ⑫ 平滑 20 轮                                6.026       69   1.016
+     ③+⑫ 先并到Foot再平滑  5 轮                       6.026       69   1.016
+     ③+⑫ 先并到Foot再平滑 20 轮                       6.026       69   1.016
+     ⑬+⑫ 坡道后再平滑  2 轮                          6.026       69   1.016
+     ⑬+⑫ 坡道后再平滑  5 轮                          6.026       69   1.016
+     ⑬+⑫ 坡道后再平滑 10 轮                          6.026       69   1.016
+· 姿势级假设（改的是骨头朝向，权重不动）：
+     ⑪ 扭转骨 = Slerp(小腿, 脚, 0.5/0.8)                     6.026       69   1.016
+     ⑪ 扭转骨 = Slerp(小腿, 脚, 0.3/0.5)                     6.026       69   1.016
+     ⑪ 扭转骨 = Slerp(小腿, 脚, 0.8/1.0)                     6.026       69   1.016
+
+================ 重定向误差 A/B：同一条 mixamo 动画，分别放给两套骨架 ================
+把 mixamo 的 clip 直接采样到 CC_Base 角色身上（这就是 Unity 人形重定向），
+和它在 mixamo 原骨架上的姿势比【世界方向向量】——差得多就说明重定向本身算歪了。
+（两个模型摆在同一位置、同一朝向，所以世界方向可以直接比）
+
+---- Walk（归一化时间）
+   t     小腿方向差  脚背方向差  脚趾方向差  |  CC踝角  mixamo踝角  |  CC膝盖  mixamo膝盖
+   0.05          23.5        31.0        19.5  |     57.0        51.3  |    11.0       49.1
+   0.15          23.5        31.1        19.5  |     63.8        57.3  |    24.6       13.7
+   0.25          23.5        30.7        19.3  |     59.5        53.5  |    25.9       12.3
+   0.35          23.6        30.5        18.9  |     56.9        50.9  |     8.0       30.3
+   0.45          23.5        30.2        18.9  |     69.1        63.3  |     6.7       31.6
+   0.55          23.4        30.1        19.9  |     78.8        73.3  |     8.7       29.5
+   0.65          23.5        30.0        21.9  |     86.7        81.4  |    10.3       27.9
+   0.75          23.9        30.6        23.6  |     78.3        72.3  |     4.8       42.8
+   0.85          24.2        30.7        21.0  |     33.8        27.5  |    28.2       66.3
+   0.95          23.7        31.0        20.2  |     48.4        43.1  |    37.4       75.5
+
+---- 慢跑（归一化时间）
+   t     小腿方向差  脚背方向差  脚趾方向差  |  CC踝角  mixamo踝角  |  CC膝盖  mixamo膝盖
+   0.05          20.2         8.3        60.6  |     18.5        28.7  |    95.9      127.5
+   0.15          18.0        10.0        65.1  |     36.8        47.0  |    55.2       87.0
+   0.25          17.7        15.2        65.5  |     44.4        54.8  |     1.3       31.6
+   0.35          19.1        15.3        66.9  |     38.5        48.2  |    10.4       21.8
+   0.45          19.9        34.5        97.7  |     78.6        89.6  |    22.7       54.6
+   0.55          19.5        40.0       106.4  |     91.5       103.5  |    12.1       44.0
+   0.65          19.5        10.5        60.5  |     35.3        45.8  |    11.1       43.1
+   0.75          19.6        10.0        59.4  |     32.6        43.6  |    41.0       72.8
+   0.85          20.2         9.1        59.4  |     27.3        38.5  |    79.0      110.7
+   0.95          20.2         8.2        61.3  |     14.0        22.4  |   106.7      138.3
+
+---- 快速跑（归一化时间）
+   t     小腿方向差  脚背方向差  脚趾方向差  |  CC踝角  mixamo踝角  |  CC膝盖  mixamo膝盖
+   0.05          21.9        17.5        53.2  |     39.6        37.7  |    71.6      105.6
+   0.15          22.7        21.2        74.8  |     69.4        72.2  |    19.0       53.2
+   0.25          21.3        25.9        81.6  |     77.8        82.3  |     9.8       24.7
+   0.35          20.7        28.4        93.8  |     90.7        96.6  |     9.0       43.2
+   0.45          20.3        26.2        90.2  |    114.3       121.1  |     2.4       36.3
+   0.55          22.6        23.7        47.4  |     48.4        47.1  |    20.7       14.0
+   0.65          25.4        28.2        40.3  |     30.4        27.6  |    15.1       49.3
+   0.75          23.5        26.3        44.3  |     30.2        27.3  |    60.8       94.9
+   0.85          20.1        18.7        59.4  |     53.3        53.0  |   102.7      136.7
+   0.95          19.7        17.4        52.0  |     39.8        37.7  |   113.0      146.9
+
+（方向差 ≤5° = 重定向正常；脚背方向差几十度 = 脚踝被算歪了）

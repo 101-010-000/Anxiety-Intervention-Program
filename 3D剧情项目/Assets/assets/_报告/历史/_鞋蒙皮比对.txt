@@ -1,0 +1,43 @@
+鞋网格蒙皮比对  2026-09-27 23:44
+
+=== 徐夏  →  Shoes_shoes.006_lowsneakers
+   网格 shoes.006_lowsneakers  顶点 556  bindposes 71  bones 71
+   rootBone = Base_F_body/Armature_F/RL_BoneRoot
+   bones（前 12 个）：
+     [0] Base_F_body/Armature_F/RL_BoneRoot
+     [1] Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip
+     [2] Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis
+     [3] Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L
+     [4] Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L
+     [5] Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L/CC_BaseFoot.L
+     [6] Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L/CC_BaseFoot.L/CC_BaseToeBase.L
+     [7] Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L/CC_BaseCalfTwist01.L
+     [8] Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L/CC_BaseCalfTwist01.L/CC_BaseCalfTwist02.L
+     [9] Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseThighTwist01.L
+     [10] Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseThighTwist01.L/CC_BaseThighTwist02.L
+     [11] Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.R
+   挂在外来骨架下？ 
+
+=== 组长_可动  →  Shoes_shoes.006_lowsneakers
+   网格 shoes.006_lowsneakers  顶点 556  bindposes 71  bones 71
+   rootBone = Base_M_body/Armature_M/RL_BoneRoot
+   bones（前 12 个）：
+     [0] Base_M_body/Armature_M/RL_BoneRoot
+     [1] Base_M_body/Armature_M/RL_BoneRoot/CC_Base_Hip
+     [2] Base_M_body/Armature_M/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis
+     [3] Base_M_body/Armature_M/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L
+     [4] Base_M_body/Armature_M/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L
+     [5] Base_M_body/Armature_M/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L/CC_BaseFoot.L
+     [6] Base_M_body/Armature_M/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L/CC_BaseFoot.L/CC_BaseToeBase.L
+     [7] Base_M_body/Armature_M/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L/CC_BaseCalfTwist01.L
+     [8] Base_M_body/Armature_M/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L/CC_BaseCalfTwist01.L/CC_BaseCalfTwist02.L
+     [9] Base_M_body/Armature_M/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseThighTwist01.L
+     [10] Base_M_body/Armature_M/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseThighTwist01.L/CC_BaseThighTwist02.L
+     [11] Base_M_body/Armature_M/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.R
+   挂在外来骨架下？ 
+
+=== 王含_可动  →  Shoes_shoes.001_boots+socks
+   ★ 找不到这块网格
+
+=== 林溪_可动  →  Shoes_shoes.002_sneakers
+   ★ 找不到这块网格

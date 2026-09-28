@@ -1,0 +1,18 @@
+主角第三人称配置  2026-09-28 13:14
+
+── 1) 动作控制器（徐夏自己的剪辑，零重定向）
+   控制器 徐夏_第三人称.controller：混合树 Speed 0=Idle / 1=Walk / 2=SlowRun，另有 Phone→Texting 状态
+
+── 2) 场景里的 Player_徐夏
+   模型 徐夏_已绑定 → Animator 挂 徐夏_第三人称.controller，整棵子树移到 Outline 层（有描边）
+   根上旧 Animator 已停用
+   镜头：距离 3.4m，支点高 1.45m，俯仰 -45~40°（上抬 40°/下压 -45°），贴地保护=True（最低离地 0.35m），走 1.6m/s
+
+存场景：成功 ✓
+
+备注：
+  · 操作：鼠标 = 只转镜头（角色不跟）；WASD = 相对镜头移动，角色自己转向移动方向
+  · 想切回第一人称：把 Player_徐夏 上 FirstPersonController 的 thirdPerson 去掉勾（自动变回“镜头跟朝向”）
+  · 想开跑：runSpeed 改成 3.2 即可（混合树第 2 档 = 徐夏的 Slow Run）
+  · 镜头手感：tpDistance（距离）/ tpHeight（支点高）/ tpLookHeight（看多高）/ turnSpeed（转身快慢）
+  · 剧情对话锁人的接口没变（SetLocked / SetCursorLocked），门口传送也没动

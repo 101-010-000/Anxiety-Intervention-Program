@@ -1,0 +1,72 @@
+腿脚特写渲染  2026-09-27 23:28
+每个角色单独采样（避免互相干扰），拍正/侧两个角度，并记录腿脚骨骼数值。
+
+=== 林溪_可动  动画 快速跑  (0.63s)
+   UpperLeg
+      L CC_BaseThigh.L           localScale=(1,1,1) lossy=(1,1,1) worldY=0.789
+      R CC_BaseThigh.R           localScale=(1,1,1) lossy=(1,1,1) worldY=0.786
+   LowerLeg
+      L CC_BaseCalf.L            localScale=(1,1,1) lossy=(1,1,1) worldY=0.421
+      R CC_BaseCalf.R            localScale=(1,1,1) lossy=(1,1,1) worldY=0.479
+   Foot
+      L CC_BaseFoot.L            localScale=(1,1,1) lossy=(1,1,1) worldY=0.037
+      R CC_BaseFoot.R            localScale=(1,1,1) lossy=(1,1,1) worldY=0.437
+   Toes
+      L CC_BaseToeBase.L         localScale=(1,1,1) lossy=(1,1,1) worldY=0.031
+      R CC_BaseToeBase.R         localScale=(1,1,1) lossy=(1,1,1) worldY=0.390
+
+=== 张知远_可动  动画 Walk  (1.00s)
+   UpperLeg
+      L CC_BaseThigh.L           localScale=(1,1,1) lossy=(1,1,1) worldY=0.810
+      R CC_BaseThigh.R           localScale=(1,1,1) lossy=(1,1,1) worldY=0.787
+   LowerLeg
+      L CC_BaseCalf.L            localScale=(1,1,1) lossy=(1,1,1) worldY=0.442
+      R CC_BaseCalf.R            localScale=(1,1,1) lossy=(1,1,1) worldY=0.397
+   Foot
+      L CC_BaseFoot.L            localScale=(1,1,1) lossy=(1,1,1) worldY=0.092
+      R CC_BaseFoot.R            localScale=(1,1,1) lossy=(1,1,1) worldY=0.077
+   Toes
+      L CC_BaseToeBase.L         localScale=(1,1,1) lossy=(1,1,1) worldY=0.083
+      R CC_BaseToeBase.R         localScale=(1,1,1) lossy=(1,1,1) worldY=-0.014
+
+=== 徐夏  动画 待机女  (8.33s)
+   UpperLeg
+      L CC_BaseThigh.L           localScale=(1,1,1) lossy=(1,1,1) worldY=0.862
+      R CC_BaseThigh.R           localScale=(1,1,1) lossy=(1,1,1) worldY=0.863
+   LowerLeg
+      L CC_BaseCalf.L            localScale=(1,1,1) lossy=(1,1,1) worldY=0.471
+      R CC_BaseCalf.R            localScale=(1,1,1) lossy=(1,1,1) worldY=0.471
+   Foot
+      L CC_BaseFoot.L            localScale=(1,1,1) lossy=(1,1,1) worldY=0.077
+      R CC_BaseFoot.R            localScale=(1,1,1) lossy=(1,1,1) worldY=0.076
+   Toes
+      L CC_BaseToeBase.L         localScale=(1,1,1) lossy=(1,1,1) worldY=0.020
+      R CC_BaseToeBase.R         localScale=(1,1,1) lossy=(1,1,1) worldY=0.017
+
+=== 陆宣雨_可动  动画 行走男  (1.17s)
+   UpperLeg
+      L CC_BaseThigh.L           localScale=(1,1,1) lossy=(1,1,1) worldY=0.827
+      R CC_BaseThigh.R           localScale=(1,1,1) lossy=(1,1,1) worldY=0.818
+   LowerLeg
+      L CC_BaseCalf.L            localScale=(1,1,1) lossy=(1,1,1) worldY=0.445
+      R CC_BaseCalf.R            localScale=(1,1,1) lossy=(1,1,1) worldY=0.428
+   Foot
+      L CC_BaseFoot.L            localScale=(1,1,1) lossy=(1,1,1) worldY=0.101
+      R CC_BaseFoot.R            localScale=(1,1,1) lossy=(1,1,1) worldY=0.152
+   Toes
+      L CC_BaseToeBase.L         localScale=(1,1,1) lossy=(1,1,1) worldY=0.085
+      R CC_BaseToeBase.R         localScale=(1,1,1) lossy=(1,1,1) worldY=0.057
+
+=== 舍友B_可动  动画 行走  (1.10s)
+   UpperLeg
+      L CC_BaseThigh.L           localScale=(1,1,1) lossy=(1,1,1) worldY=0.826
+      R CC_BaseThigh.R           localScale=(1,1,1) lossy=(1,1,1) worldY=0.803
+   LowerLeg
+      L CC_BaseCalf.L            localScale=(1,1,1) lossy=(1,1,1) worldY=0.453
+      R CC_BaseCalf.R            localScale=(1,1,1) lossy=(1,1,1) worldY=0.412
+   Foot
+      L CC_BaseFoot.L            localScale=(1,1,1) lossy=(1,1,1) worldY=0.109
+      R CC_BaseFoot.R            localScale=(1,1,1) lossy=(1,1,1) worldY=0.161
+   Toes
+      L CC_BaseToeBase.L         localScale=(1,1,1) lossy=(1,1,1) worldY=0.092
+      R CC_BaseToeBase.R         localScale=(1,1,1) lossy=(1,1,1) worldY=0.067

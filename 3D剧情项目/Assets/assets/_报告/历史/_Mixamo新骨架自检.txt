@@ -1,0 +1,26 @@
+Mixamo 新骨架渲染  2026-09-28 04:17
+模型：Assets/assets/02_角色_Character/Mixamo已绑/李老师-已绑.fbx
+（材质按原角色的顺序接回去，否则是白模；三个机位：全身 / 骨盆特写 / 肩背特写）
+
+原角色材质 14 个：hair_mat_hair_tied.001 / hair_mat_hair_bangs.002 / hair_mat_hair_tied - bun / mat_glasses.001_round / skin_mat_base_F_body / skin_mat_base_F_face / brow_mat_eyelashes / mat_base_eye.001 / mat_eye_highlight / mat_base_mouth / brow_mat_eyebrows / top_mat_top.011_blazer / bot_mat_bot.001_pants / shoes_mat_shoes.005_highboots
+导出时的材质槽顺序（共 14 槽）：
+     [0] hair_mat_hair_tied.001
+     [1] hair_mat_hair_bangs.002
+     [2] hair_mat_hair_tied - bun
+     [3] mat_glasses.001_round
+     [4] skin_mat_base_F_body
+     [5] skin_mat_base_F_face
+     [6] brow_mat_eyelashes
+     [7] mat_base_eye.001
+     [8] mat_eye_highlight
+     [9] mat_base_mouth
+     [10] brow_mat_eyebrows
+     [11] top_mat_top.011_blazer
+     [12] bot_mat_bot.001_pants
+     [13] shoes_mat_shoes.005_highboots
+已给 14 个材质槽接上材质
+  Running：最坏 stretch 6.090（t=0.60s）
+  行走男：最坏 stretch 3.424（t=0.88s）
+  快速跑：最坏 stretch 6.137（t=0.35s）
+
+图在 Assets/assets/_报告/预览/Mixamo测试

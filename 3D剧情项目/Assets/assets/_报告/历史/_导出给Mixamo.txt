@@ -1,0 +1,55 @@
+导出给 Mixamo 的模型（去骨骼、T-pose、rest 姿势蒙皮后的形状）  2026-09-28 02:59
+输出目录：D:\workspace\unity project\干预\额外文件\导出给Mixamo
+
+  [缩放校正] 原始网格高 1.612m ÷ 蒙皮高 1.629 = ×0.9898
+      [官方FBX] 张知远_可动.fbx  顶点 12530 三角 18885 材质 11  4774 KB  ✓
+张知远_可动       顶点  12530  三角  18885  材质 11  →  张知远_可动.obj  (1938 KB)
+             包围盒 X    -651~    651   Y      01~   1611   Z    -111~    141（cm）
+             材质顺序：hair_mat_hair_short.004 / skin_mat_base_M_body / skin_mat_base_M_face / brow_mat_eyelashes / mat_base_eye.001 / mat_eye_highlight / mat_base_mouth / brow_mat_eyebrows / top_mat_top.002_jacket / bot_mat_bot.004_skinnyjeans / shoes_mat_shoes.002_sneakers
+  [缩放校正] 原始网格高 1.652m ÷ 蒙皮高 1.614 = ×1.0236
+      [官方FBX] 徐夏_可动.fbx  顶点 10875 三角 17537 材质 12  4392 KB  ✓
+徐夏_可动        顶点  10875  三角  17537  材质 12  →  徐夏_可动.obj  (1713 KB)
+             包围盒 X    -661~    661   Y      01~   1651   Z    -141~    151（cm）
+             材质顺序：hair_mat_hair_medium.001 / hair_mat_hair_bangs.001 / skin_mat_base_F_body / skin_mat_base_F_face / brow_mat_eyelashes / mat_base_eye.001 / mat_eye_highlight / mat_base_mouth / brow_mat_eyebrows / top_mat_top.003_sweater / bot_mat_bot.003_skirt / shoes_mat_shoes.006_lowsneakers
+  [缩放校正] 原始网格高 1.611m ÷ 蒙皮高 1.611 = ×1.0002
+      [官方FBX] 李老师_可动.fbx  顶点 11173 三角 17604 材质 14  4436 KB  ✓
+李老师_可动       顶点  11173  三角  17604  材质 14  →  李老师_可动.obj  (1744 KB)
+             包围盒 X    -651~    651   Y      01~   1611   Z    -161~    141（cm）
+             材质顺序：hair_mat_hair_tied.001 / hair_mat_hair_bangs.002 / hair_mat_hair_tied - bun / mat_glasses.001_round / skin_mat_base_F_body / skin_mat_base_F_face / brow_mat_eyelashes / mat_base_eye.001 / mat_eye_highlight / mat_base_mouth / brow_mat_eyebrows / top_mat_top.011_blazer / bot_mat_bot.001_pants / shoes_mat_shoes.005_highboots
+  [缩放校正] 原始网格高 1.621m ÷ 蒙皮高 1.621 = ×1.0002
+      [官方FBX] 林溪_可动.fbx  顶点 11647 三角 18347 材质 13  4618 KB  ✓
+林溪_可动        顶点  11647  三角  18347  材质 13  →  林溪_可动.obj  (1825 KB)
+             包围盒 X    -651~    651   Y      01~   1621   Z    -131~    141（cm）
+             材质顺序：hair_mat_hair_tied.002 / hair_mat_hair_bangs.002 / hair_mat_hair_tied.002 - twintails / skin_mat_base_F_body / skin_mat_base_F_face / brow_mat_eyelashes / mat_base_eye.001 / mat_eye_highlight / mat_base_mouth / brow_mat_eyebrows / top_mat_top.002_jacket / bot_mat_bot.002_shorts / shoes_mat_shoes.002_sneakers
+  [缩放校正] 原始网格高 1.600m ÷ 蒙皮高 1.617 = ×0.9892
+      [官方FBX] 王含_可动.fbx  顶点 11776 三角 18663 材质 13  4692 KB  ✓
+王含_可动        顶点  11776  三角  18663  材质 13  →  王含_可动.obj  (1851 KB)
+             包围盒 X    -641~    641   Y      01~   1601   Z    -161~    141（cm）
+             材质顺序：hair_mat_hair_long.001 / hair_mat_hair_bangs.003 / skin_mat_base_F_body / skin_mat_base_F_face / brow_mat_eyelashes / mat_base_eye.001 / mat_eye_highlight / mat_base_mouth / brow_mat_eyebrows / top_mat_top.004_shirt / bot_mat_bot.004_skinnyjeans / shoes_mat_shoes.001_boots / acc_mat_acc.001_scarf
+  [缩放校正] 原始网格高 1.610m ÷ 蒙皮高 1.616 = ×0.9965
+      [官方FBX] 组长_可动.fbx  顶点 10339 三角 16887 材质 11  4225 KB  ✓
+组长_可动        顶点  10339  三角  16887  材质 11  →  组长_可动.obj  (1630 KB)
+             包围盒 X    -661~    661   Y      01~   1611   Z     -91~    141（cm）
+             材质顺序：hair_mat_hair_short.001 / skin_mat_base_M_body / skin_mat_base_M_face / brow_mat_eyelashes / mat_base_eye.001 / mat_eye_highlight / mat_base_mouth / brow_mat_eyebrows / top_mat_top.010_shirtntie / bot_mat_bot.001_pants / shoes_mat_shoes.006_lowsneakers
+  [缩放校正] 原始网格高 1.611m ÷ 蒙皮高 1.611 = ×1.0002
+      [官方FBX] 舍友A_可动.fbx  顶点 11338 三角 17808 材质 13  4484 KB  ✓
+舍友A_可动       顶点  11338  三角  17808  材质 13  →  舍友A_可动.obj  (1769 KB)
+             包围盒 X    -651~    651   Y      01~   1611   Z    -151~    141（cm）
+             材质顺序：hair_mat_hair_tied.001 / hair_mat_hair_bangs.001 / hair_mat_hair_tied.001 - ponytail / skin_mat_base_F_body / skin_mat_base_F_face / brow_mat_eyelashes / mat_base_eye.001 / mat_eye_highlight / mat_base_mouth / brow_mat_eyebrows / top_mat_top.005_shirt_vest / bot_mat_bot.005_shorts / shoes_mat_shoes.005_highboots
+  [缩放校正] 原始网格高 1.620m ÷ 蒙皮高 1.620 = ×1.0002
+      [官方FBX] 舍友B_可动.fbx  顶点 12999 三角 19926 材质 12  5021 KB  ✓
+舍友B_可动       顶点  12999  三角  19926  材质 12  →  舍友B_可动.obj  (2032 KB)
+             包围盒 X    -651~    651   Y      01~   1621   Z    -131~    141（cm）
+             材质顺序：hair_mat_hair_curly.002 / hair_mat_hair_bangs.003 / skin_mat_base_F_body / skin_mat_base_F_face / brow_mat_eyelashes / mat_base_eye.001 / mat_eye_highlight / mat_base_mouth / brow_mat_eyebrows / top_mat_top.006_openshirt / bot_mat_bot.006_loosepants / shoes_mat_shoes.004_sandals
+  [缩放校正] 原始网格高 1.620m ÷ 蒙皮高 1.619 = ×1.0002
+      [官方FBX] 陆宣雨_可动.fbx  顶点 10273 三角 15756 材质 12  3970 KB  ✓
+陆宣雨_可动       顶点  10273  三角  15756  材质 12  →  陆宣雨_可动.obj  (1574 KB)
+             包围盒 X    -651~    651   Y      01~   1621   Z    -191~    151（cm）
+             材质顺序：hair_mat_hair_medium.002 / hair_mat_hair_bangs.002 / mat_glasses.001_square / skin_mat_base_F_body / skin_mat_base_F_face / brow_mat_eyelashes / mat_base_eye.001 / mat_eye_highlight / mat_base_mouth / brow_mat_eyebrows / top_mat_outfit.003 / shoes_mat_shoes.007_chelseas
+
+说明：
+  · 文件里【只有网格】，没有骨骼也没有蒙皮 —— Mixamo 直接当静态模型上传即可。
+  · 姿势 = Unity 里的 rest 姿势（标准 T-pose，双臂平伸、双腿并拢站直、站在原点）。
+  · 单位 = 厘米（一个 1.7m 的角色导出后高 170）。
+  · 如果导入 Mixamo 后发现【左右镜像了】，告诉我，把 FLIP_X 开关改一下重导即可；
+    这一步只是轴向约定，不影响网格本身。

@@ -1,0 +1,49 @@
+角色动画预览布置  2026-09-27 22:57
+
+动画剪辑 9 个：Walk、待机女、待机男、快速跑、慢跑、拿手机、拿手机待机、行走、行走男
+循环副本 9 个 → Assets/assets/03_动作_Animation/预览Clip（原 FBX 的 loopTime 一律没动）
+场景里 Animator 共 18 个，其中真正驱动蒙皮的 9 个：
+  ·备用       张知远_可动  （子树蒙皮 15 个）  controller=张知远_可动
+  ★驱动       张知远_可动/Base_M_body  （子树蒙皮 15 个）  controller=无
+  ·备用       徐夏  （子树蒙皮 16 个）  controller=徐夏
+  ★驱动       徐夏/Base_F_body  （子树蒙皮 16 个）  controller=无
+  ·备用       李老师_可动  （子树蒙皮 13 个）  controller=李老师_可动
+  ★驱动       李老师_可动/Base_F_body  （子树蒙皮 13 个）  controller=无
+  ·备用       林溪_可动  （子树蒙皮 16 个）  controller=林溪_可动
+  ★驱动       林溪_可动/Base_F_body  （子树蒙皮 16 个）  controller=无
+  ·备用       王含_可动  （子树蒙皮 14 个）  controller=王含_可动
+  ★驱动       王含_可动/Base_F_body  （子树蒙皮 14 个）  controller=无
+  ·备用       组长_可动  （子树蒙皮 14 个）  controller=组长_可动
+  ★驱动       组长_可动/Base_M_body  （子树蒙皮 14 个）  controller=无
+  ·备用       舍友A_可动  （子树蒙皮 16 个）  controller=舍友A_可动
+  ★驱动       舍友A_可动/Base_F_body  （子树蒙皮 16 个）  controller=无
+  ·备用       舍友B_可动  （子树蒙皮 14 个）  controller=舍友B_可动
+  ★驱动       舍友B_可动/Base_F_body  （子树蒙皮 14 个）  controller=无
+  ·备用       陆宣雨_可动  （子树蒙皮 14 个）  controller=陆宣雨_可动
+  ★驱动       陆宣雨_可动/Base_F_body  （子树蒙皮 14 个）  controller=无
+
+角色 9 个
+
+角色 ↔ 动画 对应：
+  张知远_可动 → Walk
+  徐夏 → 待机女
+  李老师_可动 → 待机男
+  林溪_可动 → 快速跑
+  王含_可动 → 慢跑
+  组长_可动 → 拿手机
+  舍友A_可动 → 拿手机待机
+  舍友B_可动 → 行走
+  陆宣雨_可动 → 行走男
+
+头顶标签 9 个（应该 = 角色数；不想看就设 ADD_LABEL=false 再跑一次）
+
+保存场景：Assets/Scenes/角色资源预览场景.unity  成功
+
+———————————————————————————— 怎么用 ————————————————————————————
+· 直接开 Play 看：9 个角色各播一个动作，标题就是动作名
+· 换某个角色播哪个动作：改本脚本里的配对方式，或者直接在场景里
+  选中该角色的 Animator → Controller 换一个预览 controller
+· 想给某个角色换动作：把 Animators/预览/<角色>.controller 里那个 state 的 Motion 换掉即可
+· 想加新动画：把 FBX 丢进 assets/03_动作_Animation/动画/，再跑一次本工具
+  （工具会给新动画做循环副本；原 FBX 的导入设置一律不动，游戏里的『拿手机』等不受影响）
+· 不想要头顶标签：ADD_LABEL=false 再跑一次

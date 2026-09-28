@@ -1,0 +1,413 @@
+把修复网格写进角色 prefab  2026-09-28 02:39
+目标：鞋 Shoes_* + 裸脚 *_feet（膝下只留 大腿/小腿/脚）
+
+        → 权重复查：逐骨总权重变化量 253.6（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  M_body_arms_lower                  顶点  132  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  张知远_可动 / M_body_arms_lower → M_body_arms_lower_fix.asset
+        → 权重复查：逐骨总权重变化量 437.0（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_Spine02、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  M_body_arms_upper                  顶点  220  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  张知远_可动 / M_body_arms_upper → M_body_arms_upper_fix.asset
+        → 权重复查：逐骨总权重变化量 849.5（✓ 已写入）；Twist02 35→0，Foot 175→597
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R   ✓ 只有腿骨
+  M_body_feet                        顶点  600  踝高 y=0.078  移动权重合计 4221  影响顶点 762
+  张知远_可动 / M_body_feet → M_body_feet_fix.asset
+        → 权重复查：逐骨总权重变化量 68.8（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BaseIndex1.L、CC_BaseIndex1.R、CC_BaseIndex2.L、CC_BaseIndex2.R、CC_BaseIndex3.L、CC_BaseIndex3.R、CC_BaseMid1.L、CC_BaseMid1.R、CC_BaseMid2.L、CC_BaseMid2.R、CC_BaseMid3.L、CC_BaseMid3.R、CC_BasePinky1.L、CC_BasePinky1.R、CC_BasePinky2.L、CC_BasePinky2.R、CC_BasePinky3.L、CC_BasePinky3.R、CC_BaseRing1.L、CC_BaseRing1.R、CC_BaseRing2.L、CC_BaseRing2.R、CC_BaseRing3.L、CC_BaseRing3.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseThumb2.L、CC_BaseThumb2.R、CC_BaseThumb3.L、CC_BaseThumb3.R
+  M_body_hands                       顶点 1108  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  张知远_可动 / M_body_hands → M_body_hands_fix.asset
+        → 权重复查：逐骨总权重变化量 308.0（✓ 已写入）；Twist02 1→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  M_body_legs_knee                   顶点  154  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  张知远_可动 / M_body_legs_knee → M_body_legs_knee_fix.asset
+        → 权重复查：逐骨总权重变化量 277.3（✓ 已写入）；Twist02 87→0，Foot 15→56
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  M_body_legs_lower                  顶点  154  踝高 y=0.078  移动权重合计 401  影响顶点 146
+  张知远_可动 / M_body_legs_lower → M_body_legs_lower_fix.asset
+        → 权重复查：逐骨总权重变化量 330.6（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  M_body_legs_upper                  顶点  178  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  张知远_可动 / M_body_legs_upper → M_body_legs_upper_fix.asset
+        → 权重复查：逐骨总权重变化量 161.0（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_NeckTwist01、CC_Base_NeckTwist02、CC_Base_Spine02、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  M_body_shoulders                   顶点  168  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  张知远_可动 / M_body_shoulders → M_body_shoulders_fix.asset
+        → 权重复查：逐骨总权重变化量 0.1（★ 没写进去（网格不可写？））；Twist02 0→0，Foot 0→0
+  ★ M_body_torso：权重写入失败（或本来就无需改），放弃
+  ★ 张知远_可动 / M_body_torso：没能生成修复网格
+        → 权重复查：逐骨总权重变化量 9.6（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_NeckTwist01、CC_Base_NeckTwist02、CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  M_body_torso.001                   顶点  288  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  张知远_可动 / M_body_torso.001 → M_body_torso.001_fix.asset
+        → 权重复查：逐骨总权重变化量 839.8（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseThigh.L、CC_BaseThigh.R   ｜ 还有其它骨：CC_Base_NeckTwist01、CC_Base_NeckTwist02、CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BasePinky1.L、CC_BasePinky1.R、CC_BaseRing1.L、CC_BaseRing1.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseThumb2.L、CC_BaseThumb2.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  M_top_002_jacket                   顶点 1870  踝高 y=0.077  移动权重合计 01  影响顶点 0
+  张知远_可动 / Top_M_top_002_jacket → M_top_002_jacket_fix.asset
+        → 权重复查：逐骨总权重变化量 1370.0（✓ 已写入）；Twist02 230→0，Foot 61→192
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R、CC_BaseThigh.L、CC_BaseThigh.R   ｜ 还有其它骨：CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist
+  M_bot_004_skinny                   顶点 1084  踝高 y=0.077  移动权重合计 1311  影响顶点 462
+  张知远_可动 / Bot_M_bot_004_skinny → M_bot_004_skinny_fix.asset
+        → 权重复查：逐骨总权重变化量 718.4（✓ 已写入）；Twist02 208→0，Foot 251→540
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R   ✓ 只有腿骨
+  shoes_002_sneaker                  顶点  610  踝高 y=0.077  移动权重合计 2891  影响顶点 1032
+  张知远_可动 / Shoes_shoes_002_sneaker → shoes_002_sneaker_fix.asset
+        → 权重复查：逐骨总权重变化量 253.6（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_arms_lower                  顶点  132  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  徐夏_可动 / F_body_arms_lower → F_body_arms_lower_fix.asset
+        → 权重复查：逐骨总权重变化量 436.9（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_Spine02、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_arms_upper                  顶点  220  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  徐夏_可动 / F_body_arms_upper → F_body_arms_upper_fix.asset
+        → 权重复查：逐骨总权重变化量 849.5（✓ 已写入）；Twist02 35→0，Foot 175→597
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R   ✓ 只有腿骨
+  F_body_feet                        顶点  600  踝高 y=0.078  移动权重合计 4221  影响顶点 762
+  徐夏_可动 / F_body_feet → F_body_feet_fix.asset
+        → 权重复查：逐骨总权重变化量 68.8（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BaseIndex1.L、CC_BaseIndex1.R、CC_BaseIndex2.L、CC_BaseIndex2.R、CC_BaseIndex3.L、CC_BaseIndex3.R、CC_BaseMid1.L、CC_BaseMid1.R、CC_BaseMid2.L、CC_BaseMid2.R、CC_BaseMid3.L、CC_BaseMid3.R、CC_BasePinky1.L、CC_BasePinky1.R、CC_BasePinky2.L、CC_BasePinky2.R、CC_BasePinky3.L、CC_BasePinky3.R、CC_BaseRing1.L、CC_BaseRing1.R、CC_BaseRing2.L、CC_BaseRing2.R、CC_BaseRing3.L、CC_BaseRing3.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseThumb2.L、CC_BaseThumb2.R、CC_BaseThumb3.L、CC_BaseThumb3.R
+  F_body_hands                       顶点 1108  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  徐夏_可动 / F_body_hands → F_body_hands_fix.asset
+        → 权重复查：逐骨总权重变化量 246.9（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseThigh.L、CC_BaseThigh.R   ｜ 还有其它骨：CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist
+  F_body_hips                        顶点  457  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  徐夏_可动 / F_body_hips → F_body_hips_fix.asset
+        → 权重复查：逐骨总权重变化量 308.0（✓ 已写入）；Twist02 1→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  F_body_legs_knee                   顶点  154  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  徐夏_可动 / F_body_legs_knee → F_body_legs_knee_fix.asset
+        → 权重复查：逐骨总权重变化量 277.3（✓ 已写入）；Twist02 87→0，Foot 15→56
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  F_body_legs_lower                  顶点  154  踝高 y=0.078  移动权重合计 401  影响顶点 146
+  徐夏_可动 / F_body_legs_lower → F_body_legs_lower_fix.asset
+        → 权重复查：逐骨总权重变化量 329.8（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  F_body_legs_upper                  顶点  178  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  徐夏_可动 / F_body_legs_upper → F_body_legs_upper_fix.asset
+        → 权重复查：逐骨总权重变化量 164.6（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_NeckTwist01、CC_Base_Spine02、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_shoulders                   顶点  194  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  徐夏_可动 / F_body_shoulders → F_body_shoulders_fix.asset
+        → 权重复查：逐骨总权重变化量 0.0（★ 没写进去（网格不可写？））；Twist02 0→0，Foot 0→0
+  ★ F_body_torso：权重写入失败（或本来就无需改），放弃
+  ★ 徐夏_可动 / F_body_torso：没能生成修复网格
+        → 权重复查：逐骨总权重变化量 1308.2（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseThigh.L、CC_BaseThigh.R   ｜ 还有其它骨：CC_Base_Head、CC_Base_NeckTwist01、CC_Base_NeckTwist02、CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BasePinky1.L、CC_BasePinky1.R、CC_BaseRing1.L、CC_BaseRing1.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseThumb2.L、CC_BaseThumb2.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_top.003_sweatshirt               顶点 1482  踝高 y=0.077  移动权重合计 01  影响顶点 0
+  徐夏_可动 / Top_F_top.003_sweatshirt → F_top.003_sweatshirt_fix.asset
+        → 权重复查：逐骨总权重变化量 511.8（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseThigh.L、CC_BaseThigh.R   ｜ 还有其它骨：CC_Base_Spine01、CC_Base_Waist
+  F_bot_003_skirt                    顶点  393  踝高 y=0.077  移动权重合计 01  影响顶点 0
+  徐夏_可动 / Bot_F_bot_003_skirt → F_bot_003_skirt_fix.asset
+        → 权重复查：逐骨总权重变化量 475.1（✓ 已写入）；Twist02 69→0，Foot 318→553
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R   ✓ 只有腿骨
+  shoes.006_lowsneakers              顶点  556  踝高 y=0.077  移动权重合计 2351  影响顶点 868
+  徐夏_可动 / Shoes_shoes.006_lowsneakers → shoes.006_lowsneakers_fix.asset
+        → 权重复查：逐骨总权重变化量 68.8（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BaseIndex1.L、CC_BaseIndex1.R、CC_BaseIndex2.L、CC_BaseIndex2.R、CC_BaseIndex3.L、CC_BaseIndex3.R、CC_BaseMid1.L、CC_BaseMid1.R、CC_BaseMid2.L、CC_BaseMid2.R、CC_BaseMid3.L、CC_BaseMid3.R、CC_BasePinky1.L、CC_BasePinky1.R、CC_BasePinky2.L、CC_BasePinky2.R、CC_BasePinky3.L、CC_BasePinky3.R、CC_BaseRing1.L、CC_BaseRing1.R、CC_BaseRing2.L、CC_BaseRing2.R、CC_BaseRing3.L、CC_BaseRing3.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseThumb2.L、CC_BaseThumb2.R、CC_BaseThumb3.L、CC_BaseThumb3.R
+  F_body_hands                       顶点 1108  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  李老师_可动 / F_body_hands → F_body_hands_fix.asset
+        → 权重复查：逐骨总权重变化量 308.0（✓ 已写入）；Twist02 1→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  F_body_legs_knee                   顶点  154  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  李老师_可动 / F_body_legs_knee → F_body_legs_knee_fix.asset
+        → 权重复查：逐骨总权重变化量 277.3（✓ 已写入）；Twist02 87→0，Foot 15→56
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  F_body_legs_lower                  顶点  154  踝高 y=0.078  移动权重合计 401  影响顶点 146
+  李老师_可动 / F_body_legs_lower → F_body_legs_lower_fix.asset
+        → 权重复查：逐骨总权重变化量 164.6（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_NeckTwist01、CC_Base_Spine02、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_shoulders                   顶点  194  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  李老师_可动 / F_body_shoulders → F_body_shoulders_fix.asset
+        → 权重复查：逐骨总权重变化量 0.0（★ 没写进去（网格不可写？））；Twist02 0→0，Foot 0→0
+  ★ F_body_torso：权重写入失败（或本来就无需改），放弃
+  ★ 李老师_可动 / F_body_torso：没能生成修复网格
+        → 权重复查：逐骨总权重变化量 17.7（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_NeckTwist01、CC_Base_NeckTwist02、CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_torso.001                   顶点  558  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  李老师_可动 / F_body_torso.001 → F_body_torso.001_fix.asset
+        → 权重复查：逐骨总权重变化量 1280.7（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseCalf.L   ｜ 还有其它骨：CC_Base_NeckTwist01、CC_Base_NeckTwist02、CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseThumb2.L、CC_BaseThumb2.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_top.011_blazer                   顶点 1750  踝高 y=0.077  移动权重合计 01  影响顶点 0
+  李老师_可动 / Top_F_top.011_blazer → F_top.011_blazer_fix.asset
+        → 权重复查：逐骨总权重变化量 770.6（✓ 已写入）；Twist02 98→0，Foot 1→3
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R、CC_BaseThigh.L、CC_BaseThigh.R   ｜ 还有其它骨：CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist
+  F_bot_001_pants                    顶点  748  踝高 y=0.077  移动权重合计 21  影响顶点 12
+  李老师_可动 / Bot_F_bot_001_pants → F_bot_001_pants_fix.asset
+        → 权重复查：逐骨总权重变化量 1432.0（✓ 已写入）；Twist02 528→0，Foot 292→743
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R   ✓ 只有腿骨
+  shoes.005_highboots                顶点 1008  踝高 y=0.077  移动权重合计 4511  影响顶点 1864
+  李老师_可动 / Shoes_shoes.005_highboots → shoes.005_highboots_fix.asset
+        → 权重复查：逐骨总权重变化量 253.6（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_arms_lower                  顶点  132  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  林溪_可动 / F_body_arms_lower → F_body_arms_lower_fix.asset
+        → 权重复查：逐骨总权重变化量 436.9（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_Spine02、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_arms_upper                  顶点  220  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  林溪_可动 / F_body_arms_upper → F_body_arms_upper_fix.asset
+        → 权重复查：逐骨总权重变化量 849.5（✓ 已写入）；Twist02 35→0，Foot 175→597
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R   ✓ 只有腿骨
+  F_body_feet                        顶点  600  踝高 y=0.078  移动权重合计 4221  影响顶点 762
+  林溪_可动 / F_body_feet → F_body_feet_fix.asset
+        → 权重复查：逐骨总权重变化量 68.8（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BaseIndex1.L、CC_BaseIndex1.R、CC_BaseIndex2.L、CC_BaseIndex2.R、CC_BaseIndex3.L、CC_BaseIndex3.R、CC_BaseMid1.L、CC_BaseMid1.R、CC_BaseMid2.L、CC_BaseMid2.R、CC_BaseMid3.L、CC_BaseMid3.R、CC_BasePinky1.L、CC_BasePinky1.R、CC_BasePinky2.L、CC_BasePinky2.R、CC_BasePinky3.L、CC_BasePinky3.R、CC_BaseRing1.L、CC_BaseRing1.R、CC_BaseRing2.L、CC_BaseRing2.R、CC_BaseRing3.L、CC_BaseRing3.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseThumb2.L、CC_BaseThumb2.R、CC_BaseThumb3.L、CC_BaseThumb3.R
+  F_body_hands                       顶点 1108  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  林溪_可动 / F_body_hands → F_body_hands_fix.asset
+        → 权重复查：逐骨总权重变化量 308.0（✓ 已写入）；Twist02 1→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  F_body_legs_knee                   顶点  154  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  林溪_可动 / F_body_legs_knee → F_body_legs_knee_fix.asset
+        → 权重复查：逐骨总权重变化量 277.3（✓ 已写入）；Twist02 87→0，Foot 15→56
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  F_body_legs_lower                  顶点  154  踝高 y=0.078  移动权重合计 401  影响顶点 146
+  林溪_可动 / F_body_legs_lower → F_body_legs_lower_fix.asset
+        → 权重复查：逐骨总权重变化量 329.8（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  F_body_legs_upper                  顶点  178  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  林溪_可动 / F_body_legs_upper → F_body_legs_upper_fix.asset
+        → 权重复查：逐骨总权重变化量 164.6（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_NeckTwist01、CC_Base_Spine02、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_shoulders                   顶点  194  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  林溪_可动 / F_body_shoulders → F_body_shoulders_fix.asset
+        → 权重复查：逐骨总权重变化量 0.0（★ 没写进去（网格不可写？））；Twist02 0→0，Foot 0→0
+  ★ F_body_torso：权重写入失败（或本来就无需改），放弃
+  ★ 林溪_可动 / F_body_torso：没能生成修复网格
+        → 权重复查：逐骨总权重变化量 884.7（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseThigh.L、CC_BaseThigh.R   ｜ 还有其它骨：CC_Base_NeckTwist01、CC_Base_NeckTwist02、CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BasePinky1.L、CC_BasePinky1.R、CC_BaseRing1.L、CC_BaseRing1.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseThumb2.L、CC_BaseThumb2.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_top_002_jacket                   顶点 1870  踝高 y=0.077  移动权重合计 01  影响顶点 0
+  林溪_可动 / Top_F_top_002_jacket → F_top_002_jacket_fix.asset
+        → 权重复查：逐骨总权重变化量 604.0（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseThigh.L、CC_BaseThigh.R   ｜ 还有其它骨：CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist
+  F_bot_002_shorts                   顶点  716  踝高 y=0.077  移动权重合计 01  影响顶点 0
+  林溪_可动 / Bot_F_bot_002_shorts → F_bot_002_shorts_fix.asset
+        → 权重复查：逐骨总权重变化量 718.4（✓ 已写入）；Twist02 208→0，Foot 251→540
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R   ✓ 只有腿骨
+  shoes_002_sneaker                  顶点  610  踝高 y=0.077  移动权重合计 2891  影响顶点 1032
+  林溪_可动 / Shoes_shoes_002_sneaker → shoes_002_sneaker_fix.asset
+        → 权重复查：逐骨总权重变化量 253.6（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_arms_lower                  顶点  132  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  王含_可动 / F_body_arms_lower → F_body_arms_lower_fix.asset
+        → 权重复查：逐骨总权重变化量 436.9（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_Spine02、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_arms_upper                  顶点  220  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  王含_可动 / F_body_arms_upper → F_body_arms_upper_fix.asset
+        → 权重复查：逐骨总权重变化量 68.8（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BaseIndex1.L、CC_BaseIndex1.R、CC_BaseIndex2.L、CC_BaseIndex2.R、CC_BaseIndex3.L、CC_BaseIndex3.R、CC_BaseMid1.L、CC_BaseMid1.R、CC_BaseMid2.L、CC_BaseMid2.R、CC_BaseMid3.L、CC_BaseMid3.R、CC_BasePinky1.L、CC_BasePinky1.R、CC_BasePinky2.L、CC_BasePinky2.R、CC_BasePinky3.L、CC_BasePinky3.R、CC_BaseRing1.L、CC_BaseRing1.R、CC_BaseRing2.L、CC_BaseRing2.R、CC_BaseRing3.L、CC_BaseRing3.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseThumb2.L、CC_BaseThumb2.R、CC_BaseThumb3.L、CC_BaseThumb3.R
+  F_body_hands                       顶点 1108  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  王含_可动 / F_body_hands → F_body_hands_fix.asset
+        → 权重复查：逐骨总权重变化量 308.0（✓ 已写入）；Twist02 1→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  F_body_legs_knee                   顶点  154  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  王含_可动 / F_body_legs_knee → F_body_legs_knee_fix.asset
+        → 权重复查：逐骨总权重变化量 164.6（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_NeckTwist01、CC_Base_Spine02、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_shoulders                   顶点  194  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  王含_可动 / F_body_shoulders → F_body_shoulders_fix.asset
+        → 权重复查：逐骨总权重变化量 0.0（★ 没写进去（网格不可写？））；Twist02 0→0，Foot 0→0
+  ★ F_body_torso：权重写入失败（或本来就无需改），放弃
+  ★ 王含_可动 / F_body_torso：没能生成修复网格
+        → 权重复查：逐骨总权重变化量 17.7（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_NeckTwist01、CC_Base_NeckTwist02、CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_torso.001                   顶点  558  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  王含_可动 / F_body_torso.001 → F_body_torso.001_fix.asset
+        → 权重复查：逐骨总权重变化量 1166.8（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseThigh.L、CC_BaseThigh.R   ｜ 还有其它骨：CC_Base_NeckTwist01、CC_Base_NeckTwist02、CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseForearm.L、CC_BaseForearm.R、CC_BasePinky1.L、CC_BasePinky1.R、CC_BaseThumb1.L、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_top_004_shirt                    顶点 1290  踝高 y=0.077  移动权重合计 01  影响顶点 0
+  王含_可动 / Top_F_top_004_shirt → F_top_004_shirt_fix.asset
+        → 权重复查：逐骨总权重变化量 1368.4（✓ 已写入）；Twist02 230→0，Foot 61→192
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R、CC_BaseThigh.L、CC_BaseThigh.R   ｜ 还有其它骨：CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist
+  F_bot_004_skinny                   顶点 1084  踝高 y=0.077  移动权重合计 1311  影响顶点 462
+  王含_可动 / Bot_F_bot_004_skinny → F_bot_004_skinny_fix.asset
+        → 权重复查：逐骨总权重变化量 1460.3（✓ 已写入）；Twist02 562→0，Foot 286→808
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R   ✓ 只有腿骨
+  shoes_001_boots+socks              顶点 1016  踝高 y=0.095  移动权重合计 5221  影响顶点 1705
+  王含_可动 / Shoes_shoes_001_boots+socks → shoes_001_boots+socks_fix.asset
+        → 权重复查：逐骨总权重变化量 253.6（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  M_body_arms_lower                  顶点  132  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  组长_可动 / M_body_arms_lower → M_body_arms_lower_fix.asset
+        → 权重复查：逐骨总权重变化量 437.0（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_Spine02、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  M_body_arms_upper                  顶点  220  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  组长_可动 / M_body_arms_upper → M_body_arms_upper_fix.asset
+        → 权重复查：逐骨总权重变化量 849.5（✓ 已写入）；Twist02 35→0，Foot 175→597
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R   ✓ 只有腿骨
+  M_body_feet                        顶点  600  踝高 y=0.078  移动权重合计 4221  影响顶点 762
+  组长_可动 / M_body_feet → M_body_feet_fix.asset
+        → 权重复查：逐骨总权重变化量 68.8（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BaseIndex1.L、CC_BaseIndex1.R、CC_BaseIndex2.L、CC_BaseIndex2.R、CC_BaseIndex3.L、CC_BaseIndex3.R、CC_BaseMid1.L、CC_BaseMid1.R、CC_BaseMid2.L、CC_BaseMid2.R、CC_BaseMid3.L、CC_BaseMid3.R、CC_BasePinky1.L、CC_BasePinky1.R、CC_BasePinky2.L、CC_BasePinky2.R、CC_BasePinky3.L、CC_BasePinky3.R、CC_BaseRing1.L、CC_BaseRing1.R、CC_BaseRing2.L、CC_BaseRing2.R、CC_BaseRing3.L、CC_BaseRing3.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseThumb2.L、CC_BaseThumb2.R、CC_BaseThumb3.L、CC_BaseThumb3.R
+  M_body_hands                       顶点 1108  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  组长_可动 / M_body_hands → M_body_hands_fix.asset
+        → 权重复查：逐骨总权重变化量 308.0（✓ 已写入）；Twist02 1→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  M_body_legs_knee                   顶点  154  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  组长_可动 / M_body_legs_knee → M_body_legs_knee_fix.asset
+        → 权重复查：逐骨总权重变化量 277.3（✓ 已写入）；Twist02 87→0，Foot 15→56
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  M_body_legs_lower                  顶点  154  踝高 y=0.078  移动权重合计 401  影响顶点 146
+  组长_可动 / M_body_legs_lower → M_body_legs_lower_fix.asset
+        → 权重复查：逐骨总权重变化量 330.6（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  M_body_legs_upper                  顶点  178  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  组长_可动 / M_body_legs_upper → M_body_legs_upper_fix.asset
+        → 权重复查：逐骨总权重变化量 0.1（★ 没写进去（网格不可写？））；Twist02 0→0，Foot 0→0
+  ★ M_body_torso：权重写入失败（或本来就无需改），放弃
+  ★ 组长_可动 / M_body_torso：没能生成修复网格
+        → 权重复查：逐骨总权重变化量 9.6（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_NeckTwist01、CC_Base_NeckTwist02、CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  M_body_torso.001                   顶点  288  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  组长_可动 / M_body_torso.001 → M_body_torso.001_fix.asset
+        → 权重复查：逐骨总权重变化量 1076.0（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseThigh.L、CC_BaseThigh.R   ｜ 还有其它骨：CC_Base_Head、CC_Base_NeckTwist01、CC_Base_NeckTwist02、CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseThumb2.L、CC_BaseThumb2.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  M_top.010_shirttie                 顶点 1240  踝高 y=0.077  移动权重合计 01  影响顶点 0
+  组长_可动 / Top_M_top.010_shirttie → M_top.010_shirttie_fix.asset
+        → 权重复查：逐骨总权重变化量 736.2（✓ 已写入）；Twist02 83→0，Foot 1→2
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R、CC_BaseThigh.L、CC_BaseThigh.R   ｜ 还有其它骨：CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist
+  M_bot_001_pants                    顶点  726  踝高 y=0.077  移动权重合计 11  影响顶点 0
+  组长_可动 / Bot_M_bot_001_pants → M_bot_001_pants_fix.asset
+        → 权重复查：逐骨总权重变化量 475.1（✓ 已写入）；Twist02 69→0，Foot 318→553
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R   ✓ 只有腿骨
+  shoes.006_lowsneakers              顶点  556  踝高 y=0.077  移动权重合计 2351  影响顶点 868
+  组长_可动 / Shoes_shoes.006_lowsneakers → shoes.006_lowsneakers_fix.asset
+        → 权重复查：逐骨总权重变化量 253.6（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_arms_lower                  顶点  132  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  舍友A_可动 / F_body_arms_lower → F_body_arms_lower_fix.asset
+        → 权重复查：逐骨总权重变化量 436.9（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_Spine02、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_arms_upper                  顶点  220  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  舍友A_可动 / F_body_arms_upper → F_body_arms_upper_fix.asset
+        → 权重复查：逐骨总权重变化量 68.8（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BaseIndex1.L、CC_BaseIndex1.R、CC_BaseIndex2.L、CC_BaseIndex2.R、CC_BaseIndex3.L、CC_BaseIndex3.R、CC_BaseMid1.L、CC_BaseMid1.R、CC_BaseMid2.L、CC_BaseMid2.R、CC_BaseMid3.L、CC_BaseMid3.R、CC_BasePinky1.L、CC_BasePinky1.R、CC_BasePinky2.L、CC_BasePinky2.R、CC_BasePinky3.L、CC_BasePinky3.R、CC_BaseRing1.L、CC_BaseRing1.R、CC_BaseRing2.L、CC_BaseRing2.R、CC_BaseRing3.L、CC_BaseRing3.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseThumb2.L、CC_BaseThumb2.R、CC_BaseThumb3.L、CC_BaseThumb3.R
+  F_body_hands                       顶点 1108  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  舍友A_可动 / F_body_hands → F_body_hands_fix.asset
+        → 权重复查：逐骨总权重变化量 308.0（✓ 已写入）；Twist02 1→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  F_body_legs_knee                   顶点  154  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  舍友A_可动 / F_body_legs_knee → F_body_legs_knee_fix.asset
+        → 权重复查：逐骨总权重变化量 277.3（✓ 已写入）；Twist02 87→0，Foot 15→56
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  F_body_legs_lower                  顶点  154  踝高 y=0.078  移动权重合计 401  影响顶点 146
+  舍友A_可动 / F_body_legs_lower → F_body_legs_lower_fix.asset
+        → 权重复查：逐骨总权重变化量 329.8（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  F_body_legs_upper                  顶点  178  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  舍友A_可动 / F_body_legs_upper → F_body_legs_upper_fix.asset
+        → 权重复查：逐骨总权重变化量 164.6（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_NeckTwist01、CC_Base_Spine02、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_shoulders                   顶点  194  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  舍友A_可动 / F_body_shoulders → F_body_shoulders_fix.asset
+        → 权重复查：逐骨总权重变化量 0.0（★ 没写进去（网格不可写？））；Twist02 0→0，Foot 0→0
+  ★ F_body_torso：权重写入失败（或本来就无需改），放弃
+  ★ 舍友A_可动 / F_body_torso：没能生成修复网格
+        → 权重复查：逐骨总权重变化量 17.7（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_NeckTwist01、CC_Base_NeckTwist02、CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_torso.001                   顶点  558  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  舍友A_可动 / F_body_torso.001 → F_body_torso.001_fix.asset
+        → 权重复查：逐骨总权重变化量 1130.2（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseThigh.L、CC_BaseThigh.R   ｜ 还有其它骨：CC_Base_Head、CC_Base_NeckTwist01、CC_Base_NeckTwist02、CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseForearm.L、CC_BaseForearm.R、CC_BasePinky1.L、CC_BasePinky1.R、CC_BaseRing1.L、CC_BaseThumb1.L、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_top_005_shirt+vest               顶点 1417  踝高 y=0.077  移动权重合计 01  影响顶点 0
+  舍友A_可动 / Top_F_top_005_shirt+vest → F_top_005_shirt+vest_fix.asset
+        → 权重复查：逐骨总权重变化量 838.4（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseThigh.L、CC_BaseThigh.R   ｜ 还有其它骨：CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist
+  F_bot_005_shorts                   顶点  805  踝高 y=0.077  移动权重合计 01  影响顶点 0
+  舍友A_可动 / Bot_F_bot_005_shorts → F_bot_005_shorts_fix.asset
+        → 权重复查：逐骨总权重变化量 1432.0（✓ 已写入）；Twist02 528→0，Foot 292→743
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R   ✓ 只有腿骨
+  shoes.005_highboots                顶点 1008  踝高 y=0.077  移动权重合计 4511  影响顶点 1864
+  舍友A_可动 / Shoes_shoes.005_highboots → shoes.005_highboots_fix.asset
+        → 权重复查：逐骨总权重变化量 253.6（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_arms_lower                  顶点  132  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  舍友B_可动 / F_body_arms_lower → F_body_arms_lower_fix.asset
+        → 权重复查：逐骨总权重变化量 436.9（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_Spine02、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_arms_upper                  顶点  220  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  舍友B_可动 / F_body_arms_upper → F_body_arms_upper_fix.asset
+        → 权重复查：逐骨总权重变化量 849.5（✓ 已写入）；Twist02 35→0，Foot 175→597
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R   ✓ 只有腿骨
+  F_body_feet                        顶点  600  踝高 y=0.078  移动权重合计 4221  影响顶点 762
+  舍友B_可动 / F_body_feet → F_body_feet_fix.asset
+        → 权重复查：逐骨总权重变化量 68.8（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BaseIndex1.L、CC_BaseIndex1.R、CC_BaseIndex2.L、CC_BaseIndex2.R、CC_BaseIndex3.L、CC_BaseIndex3.R、CC_BaseMid1.L、CC_BaseMid1.R、CC_BaseMid2.L、CC_BaseMid2.R、CC_BaseMid3.L、CC_BaseMid3.R、CC_BasePinky1.L、CC_BasePinky1.R、CC_BasePinky2.L、CC_BasePinky2.R、CC_BasePinky3.L、CC_BasePinky3.R、CC_BaseRing1.L、CC_BaseRing1.R、CC_BaseRing2.L、CC_BaseRing2.R、CC_BaseRing3.L、CC_BaseRing3.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseThumb2.L、CC_BaseThumb2.R、CC_BaseThumb3.L、CC_BaseThumb3.R
+  F_body_hands                       顶点 1108  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  舍友B_可动 / F_body_hands → F_body_hands_fix.asset
+        → 权重复查：逐骨总权重变化量 308.0（✓ 已写入）；Twist02 1→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  F_body_legs_knee                   顶点  154  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  舍友B_可动 / F_body_legs_knee → F_body_legs_knee_fix.asset
+        → 权重复查：逐骨总权重变化量 277.3（✓ 已写入）；Twist02 87→0，Foot 15→56
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  F_body_legs_lower                  顶点  154  踝高 y=0.078  移动权重合计 401  影响顶点 146
+  舍友B_可动 / F_body_legs_lower → F_body_legs_lower_fix.asset
+        → 权重复查：逐骨总权重变化量 329.8（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  F_body_legs_upper                  顶点  178  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  舍友B_可动 / F_body_legs_upper → F_body_legs_upper_fix.asset
+        → 权重复查：逐骨总权重变化量 164.6（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_NeckTwist01、CC_Base_Spine02、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_shoulders                   顶点  194  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  舍友B_可动 / F_body_shoulders → F_body_shoulders_fix.asset
+        → 权重复查：逐骨总权重变化量 0.0（★ 没写进去（网格不可写？））；Twist02 0→0，Foot 0→0
+  ★ F_body_torso：权重写入失败（或本来就无需改），放弃
+  ★ 舍友B_可动 / F_body_torso：没能生成修复网格
+        → 权重复查：逐骨总权重变化量 624.3（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_Head、CC_Base_NeckTwist01、CC_Base_NeckTwist02、CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_top_006_openshirt+T              顶点 1045  踝高 y=0.077  移动权重合计 01  影响顶点 0
+  舍友B_可动 / Top_F_top_006_openshirt+T → F_top_006_openshirt+T_fix.asset
+        → 权重复查：逐骨总权重变化量 1057.4（✓ 已写入）；Twist02 80→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseThigh.L、CC_BaseThigh.R   ｜ 还有其它骨：CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist
+  F_bot_006_loosepants+belt          顶点 1018  踝高 y=0.077  移动权重合计 01  影响顶点 0
+  舍友B_可动 / Bot_F_bot_006_loosepants+belt → F_bot_006_loosepants+belt_fix.asset
+        → 权重复查：逐骨总权重变化量 877.8（✓ 已写入）；Twist02 30→0，Foot 527→966
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R   ✓ 只有腿骨
+  shoes.004_sandals                  顶点  966  踝高 y=0.077  移动权重合计 4391  影响顶点 1538
+  舍友B_可动 / Shoes_shoes.004_sandals → shoes.004_sandals_fix.asset
+        → 权重复查：逐骨总权重变化量 253.6（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_arms_lower                  顶点  132  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  陆宣雨_可动 / F_body_arms_lower → F_body_arms_lower_fix.asset
+        → 权重复查：逐骨总权重变化量 436.9（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_Spine02、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_arms_upper                  顶点  220  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  陆宣雨_可动 / F_body_arms_upper → F_body_arms_upper_fix.asset
+        → 权重复查：逐骨总权重变化量 849.5（✓ 已写入）；Twist02 35→0，Foot 175→597
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R   ✓ 只有腿骨
+  F_body_feet                        顶点  600  踝高 y=0.078  移动权重合计 4221  影响顶点 762
+  陆宣雨_可动 / F_body_feet → F_body_feet_fix.asset
+        → 权重复查：逐骨总权重变化量 68.8（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseHand.L、CC_BaseHand.R、CC_BaseIndex1.L、CC_BaseIndex1.R、CC_BaseIndex2.L、CC_BaseIndex2.R、CC_BaseIndex3.L、CC_BaseIndex3.R、CC_BaseMid1.L、CC_BaseMid1.R、CC_BaseMid2.L、CC_BaseMid2.R、CC_BaseMid3.L、CC_BaseMid3.R、CC_BasePinky1.L、CC_BasePinky1.R、CC_BasePinky2.L、CC_BasePinky2.R、CC_BasePinky3.L、CC_BasePinky3.R、CC_BaseRing1.L、CC_BaseRing1.R、CC_BaseRing2.L、CC_BaseRing2.R、CC_BaseRing3.L、CC_BaseRing3.R、CC_BaseThumb1.L、CC_BaseThumb1.R、CC_BaseThumb2.L、CC_BaseThumb2.R、CC_BaseThumb3.L、CC_BaseThumb3.R
+  F_body_hands                       顶点 1108  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  陆宣雨_可动 / F_body_hands → F_body_hands_fix.asset
+        → 权重复查：逐骨总权重变化量 308.0（✓ 已写入）；Twist02 1→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  F_body_legs_knee                   顶点  154  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  陆宣雨_可动 / F_body_legs_knee → F_body_legs_knee_fix.asset
+        → 权重复查：逐骨总权重变化量 277.3（✓ 已写入）；Twist02 87→0，Foot 15→56
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  F_body_legs_lower                  顶点  154  踝高 y=0.078  移动权重合计 401  影响顶点 146
+  陆宣雨_可动 / F_body_legs_lower → F_body_legs_lower_fix.asset
+        → 权重复查：逐骨总权重变化量 329.8（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseThigh.L、CC_BaseThigh.R   ✓ 只有腿骨
+  F_body_legs_upper                  顶点  178  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  陆宣雨_可动 / F_body_legs_upper → F_body_legs_upper_fix.asset
+        → 权重复查：逐骨总权重变化量 164.6（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：   ｜ 还有其它骨：CC_Base_NeckTwist01、CC_Base_Spine02、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_body_shoulders                   顶点  194  踝高 y=0.078  移动权重合计 01  影响顶点 0
+  陆宣雨_可动 / F_body_shoulders → F_body_shoulders_fix.asset
+        → 权重复查：逐骨总权重变化量 0.0（★ 没写进去（网格不可写？））；Twist02 0→0，Foot 0→0
+  ★ F_body_torso：权重写入失败（或本来就无需改），放弃
+  ★ 陆宣雨_可动 / F_body_torso：没能生成修复网格
+        → 权重复查：逐骨总权重变化量 1391.4（✓ 已写入）；Twist02 0→0，Foot 0→0
+        → 修后下肢用到的骨：CC_BaseThigh.L、CC_BaseThigh.R   ｜ 还有其它骨：CC_Base_NeckTwist01、CC_Base_NeckTwist02、CC_Base_Spine01、CC_Base_Spine02、CC_Base_Waist、CC_BaseClavicle.L、CC_BaseClavicle.R、CC_BaseForearm.L、CC_BaseForearm.R、CC_BaseUpperarm.L、CC_BaseUpperarm.R
+  F_outfit.003                       顶点 1463  踝高 y=0.077  移动权重合计 01  影响顶点 0
+  陆宣雨_可动 / Outfit_F_outfit.003 → F_outfit.003_fix.asset
+        → 权重复查：逐骨总权重变化量 595.3（✓ 已写入）；Twist02 169→0，Foot 246→501
+        → 修后下肢用到的骨：CC_BaseCalf.L、CC_BaseCalf.R、CC_BaseFoot.L、CC_BaseFoot.R   ✓ 只有腿骨
+  shoes.007_chelsea                  顶点  544  踝高 y=0.077  移动权重合计 2551  影响顶点 852
+  陆宣雨_可动 / Shoes_shoes.007_chelsea → shoes.007_chelsea_fix.asset
+
+共替换 95 个网格。
+⚠ 之后再跑「重建角色模型」时，CharRebuild 会自动对鞋再套用一次（已接线）；裸脚不在 CharRebuild 里，重建后要重跑一次这个菜单。

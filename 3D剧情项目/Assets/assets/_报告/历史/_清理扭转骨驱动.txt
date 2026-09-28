@@ -1,0 +1,4 @@
+清理 TwistBoneDriver  2026-09-28 00:15
+场景：Assets/Scenes/角色资源预览场景.unity
+移除 9 个 TwistBoneDriver 组件。
+（这个脚本是我试的修复方案，实际效果是『所有脚都弯曲了』—— 已判定为有害，不要再用）

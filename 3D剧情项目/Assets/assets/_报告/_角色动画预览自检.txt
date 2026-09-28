@@ -1,0 +1,17 @@
+角色动画预览运行自检（真进 Play 跑一遍）  2026-09-28 05:14
+
+驱动蒙皮的 Animator：8 个
+  ✓  张知远_可动    controller=张知远_可动    avatar=有 humanoid=是 片段长=1.00s Δ=+0.4143
+  ✓  徐夏        controller=徐夏        avatar=有 humanoid=是 片段长=0.63s Δ=+0.6541
+  ✓  林溪_可动     controller=林溪_可动     avatar=有 humanoid=是 片段长=0.63s Δ=+0.6541
+  ✓  王含_可动     controller=王含_可动     avatar=有 humanoid=是 片段长=0.70s Δ=+0.5918
+  ✓  组长_可动     controller=组长_可动     avatar=有 humanoid=是 片段长=6.13s Δ=+0.0675
+  ✓  舍友A_可动    controller=舍友A_可动    avatar=有 humanoid=是 片段长=23.57s Δ=+0.0176
+  ✓  舍友B_可动    controller=舍友B_可动    avatar=有 humanoid=是 片段长=1.10s Δ=+0.3766
+  ✓  陆宣雨_可动    controller=陆宣雨_可动    avatar=有 humanoid=是 片段长=1.17s Δ=+0.3551
+
+在动的角色：8 / 8
+（Δ 是 0.4 秒里 normalizedTime 的推进量；为 0 说明这个角色没在播）
+游戏跑了 48 帧
+
+运行期报错：无 ✓

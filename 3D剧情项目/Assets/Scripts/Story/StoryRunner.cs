@@ -111,6 +111,15 @@ public class StoryRunner : MonoBehaviour
         _savedEsc = _player.allowEscToUnlock;
         _player.allowEscToUnlock = false;
 
+        // ★ 先把黑幕拉满（下面会瞬移玩家）——开场本来就从黑淡入，先黑住就不会看到“玩家自己跳一下”
+        //   ⚠ 场景里 BlackFade 可能被手动禁用了（踩过：它被禁用 → 黑幕全程不生效 →
+        //     开场瞬移 + 镜头摆位全部露在画面里，看着就像“角色自己向右向前挪了几下”）。所以这里顺手启用。
+        if (blackFade != null)
+        {
+            if (!blackFade.gameObject.activeSelf) blackFade.gameObject.SetActive(true);
+            blackFade.canvasRenderer.SetAlpha(1f);
+        }
+
         // 传送玩家到章节起点（CharacterController 关了再挪，不然会被拽回去）
         if (startAnchor != null)
         {
@@ -119,6 +128,7 @@ public class StoryRunner : MonoBehaviour
             _player.transform.position = startAnchor.position;
             _player.transform.rotation = Quaternion.Euler(0f, startAnchor.eulerAngles.y, 0f);
             if (cc != null) cc.enabled = true;
+            _player.ResetCameraNow();               // 镜头立刻跟到新位置（不然第一帧会甩一下）
         }
 
         // 接线场景里所有剧情交互点（★ 初始一律 unarm：只有走到对应的等待步骤才允许触发）
@@ -128,7 +138,6 @@ public class StoryRunner : MonoBehaviour
         StepIndex = 0;
         _choiceCounter = 0;
         if (phoneChat != null) phoneChat.HideImmediate();   // 万一上次没收干净
-        if (blackFade != null) blackFade.canvasRenderer.SetAlpha(1f);   // 进场：从黑淡入
         Next();
     }
 
@@ -235,10 +244,15 @@ public class StoryRunner : MonoBehaviour
         SetPerms(State.Card);
         if (blackFade != null)
         {
+            // ★ 先黑一帧：保证"开场黑幕"一定被看到一次
+            blackFade.canvasRenderer.SetAlpha(1f);
+            yield return null;
             float t = 0f;
             while (t < 1f)
             {
-                t += Time.unscaledDeltaTime / 0.6f;
+                // ★ 每帧最多推进 1/30 秒：开局首帧经常很慢（域重载/场景加载/着色器预热），
+                //   用真实 dt 会让整个淡入在一两帧里被跳过去 —— 那就“看不见黑幕”了（踩过）。
+                t += Mathf.Min(Time.unscaledDeltaTime, 1f / 30f) / 0.8f;
                 blackFade.canvasRenderer.SetAlpha(1f - Mathf.Clamp01(t));
                 yield return null;
             }
@@ -260,7 +274,12 @@ public class StoryRunner : MonoBehaviour
         if (blackFade != null)
         {
             float t = 0f;
-            while (t < 1f) { t += Time.unscaledDeltaTime / 0.5f; blackFade.canvasRenderer.SetAlpha(Mathf.Clamp01(t)); yield return null; }
+            while (t < 1f)
+            {
+                t += Mathf.Min(Time.unscaledDeltaTime, 1f / 30f) / 0.5f;   // 同上：卡帧也不会把淡出跳过去
+                blackFade.canvasRenderer.SetAlpha(Mathf.Clamp01(t));
+                yield return null;
+            }
         }
         if (cardTitle != null) cardTitle.text = (_ch != null ? _ch.chapter : "第一章") + "  完";
         if (cardSubtitle != null)
