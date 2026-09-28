@@ -23,8 +23,11 @@ public class NpcEntrance : MonoBehaviour
 {
     // ---------------- 可调参数（观感微调只动这里） ----------------
     const float SPEED = 1.35f;          // 入场步速（偏缓，演出感）
-    const float GHOST_PEAK = 0.75f;     // 行走中幽灵层的峰值浓度（保持明显可看穿）
-    const float GHOST_RAMP = 0.6f;      // 前 60% 路程：浓度 0→峰值（缓出），之后保持
+    // ★ 透明度区间（用户 2026-09-28 定稿："从 75% 不透明度变到 100%"）：
+    //   出现即 ~75% 可见（微透，能隐约看穿），凝实后 100%。
+    //   幽灵层 _Alpha 全程恒定（GHOST_ALPHA），75→100 的变化全部由凝实段完成：
+    //   真身接通 + 幽灵淡出的合成观感 = 实心度连续上升，无来回收缩。
+    const float GHOST_ALPHA = 0.88f;    // 幽灵层浓度（配合 shader 中心0.75/边缘1.0 → 全身≈75%~88%）
     const float REVEAL_START = 0.62f;   // 走到 62% 开始凝实（真身接通 + 幽灵开始淡出）
     const float REVEAL_DUR = 1.05f;     // 凝实总时长（覆盖到达前后，越大越"慢慢变实"）
     // --------------------------------------------------------------
@@ -124,13 +127,12 @@ public class NpcEntrance : MonoBehaviour
     public void Skip() { fast = true; }
 
     // ------------------------------------------------------------------ 内部
-    /// 幽灵层浓度 = 出现段缓出升到峰值并保持 × 凝实段平滑淡出
+    /// 幽灵层浓度：全程恒定 GHOST_ALPHA（出现即 ~75% 可见），凝实段平滑淡出到 0（露出真身=100%）
     void UpdateGhostAlpha(float t, float reveal)
     {
         if (_ghost == null) return;
-        float ramp = 1f - (1f - Mathf.Clamp01(t / GHOST_RAMP)) * (1f - Mathf.Clamp01(t / GHOST_RAMP)); // 缓出
-        float fade = reveal * reveal * (3f - 2f * reveal);                                              // 三次平滑
-        _ghost.SetFloat(AlphaId, GHOST_PEAK * ramp * (1f - fade));
+        float fade = reveal * reveal * (3f - 2f * reveal);          // 三次平滑
+        _ghost.SetFloat(AlphaId, GHOST_ALPHA * (1f - fade));
     }
 
     /// 复制蒙皮网格做幽灵层（共享骨骼 → 动作与真身完全同步），套幽灵材质
