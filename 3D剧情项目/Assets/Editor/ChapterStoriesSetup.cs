@@ -333,17 +333,35 @@ public static class ChapterStoriesSetup
     {
         var t = EnsureAnchor(p.loc, p.name, p.pos, 0f);
         if (t == null) return;
-        var col = t.GetComponent<BoxCollider>() ?? t.gameObject.AddComponent<BoxCollider>();
+
+        // ★ 踩坑（2026-09-28 抓到堆栈）：此节点 AddComponent<BoxCollider> 后立刻 set_isTrigger
+        // 抛 MissingComponentException（组件包装在、原生侧没建成，坏状态稳定复现）。
+        // 节点不被任何 runner 锚点池引用 → 自愈 = 整节点重建（同父/同名/同位），干净利落。
+        var col = t.GetComponent<BoxCollider>();
+        var si = t.GetComponent<StoryInteractable>();
+        if (col == null || si == null)
+        {
+            var holder = t.parent;
+            Vector3 pos = t.localPosition;
+            Object.DestroyImmediate(t.gameObject);
+            var go = new GameObject(p.name);
+            go.transform.SetParent(holder, false);
+            go.transform.localPosition = pos;
+            col = go.AddComponent<BoxCollider>();
+            si = go.AddComponent<StoryInteractable>();
+            if (col == null || si == null)
+                throw new System.Exception("重建 " + p.name + " 后组件仍为空（col=" + (col != null) + " si=" + (si != null) + "）");
+            Log("  + " + p.name + " 组件缺失/损坏，已整节点重建");
+        }
         col.isTrigger = true;
         col.center = new Vector3(0f, 1f, 0f);
         col.size = new Vector3(1.6f, 2f, 1.6f);
-        var si = t.GetComponent<StoryInteractable>() ?? t.gameObject.AddComponent<StoryInteractable>();
         si.mode = StoryInteractable.Mode.Touch;
         si.chapterTag = chapter;
         si.oneShot = true;
         EditorUtility.SetDirty(si);
         Log("  + " + p.name + " 挂 StoryInteractable(Touch 触发盒)  ch=" + chapter
-            + "（已有组件则只刷新参数）");
+            + "（组件齐全则只刷新参数）");
     }
 
     static void Log(string s) { _log.AppendLine(s); }
