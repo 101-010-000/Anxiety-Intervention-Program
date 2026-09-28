@@ -159,7 +159,7 @@ public static class PhoneChatSmokeTrigger
             {
                 File.Delete(menuTrigger);
                 if (File.Exists(menuTrigger + ".meta")) File.Delete(menuTrigger + ".meta");
-                SmokeTest2ViaMenu();
+                PhoneChatSmoke.SmokeTest2ViaMenu();
                 return;
             }
             catch (System.Exception e)
