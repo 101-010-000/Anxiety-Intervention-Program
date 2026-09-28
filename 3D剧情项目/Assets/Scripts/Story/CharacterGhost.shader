@@ -54,7 +54,7 @@ Shader "Custom/CharacterGhost"
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
-                OUT.positionCS = TransformObjectToHclip(IN.positionOS.xyz);
+                OUT.positionCS = TransformObjectToHClip(IN.positionOS.xyz);
                 half3 n = normalize(IN.normalOS);
                 OUT.shade = 0.72 + 0.28 * saturate(n.y * 0.5h + 0.5h);   // 顶面亮底面暗，一点体积感
                 return OUT;

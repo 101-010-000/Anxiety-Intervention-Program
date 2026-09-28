@@ -152,13 +152,50 @@ public class StoryRunner : MonoBehaviour
         _openingNar = true;
         StepIndex = 0;
         _choiceCounter = 0;
+        ApplyChapterNpcVisibility();        // 角色容器按章显隐（第2章时宿舍里不该有第五章的舍友）
         CollectAndHideEntranceNpcs();   // enter 步骤的角色开场先禁用（第2章陆宣雨：她不在宿舍）
         if (phoneChat != null) phoneChat.HideImmediate();   // 万一上次没收干净
         if (blackFade != null) blackFade.canvasRenderer.SetAlpha(1f);   // 进场：从黑淡入
         Next();
     }
 
-    // ------------------------------------------------------------------ NPC 入场（第2章陆宣雨"门口虚影渐显走近"，机制通用）
+    // ------------------------------------------------------------------ 角色容器按章显隐 + NPC 入场
+    // 「第X章角色」容器名兼容两种写法：汉字（第一章角色/第三章角色）与数字（第3章角色）。
+    // 场景里同一 Loc 可能摆多章容器（宿舍有 第二章角色 + 第五章角色），不按章过滤会互相穿帮
+    // （踩过：第2章开场宿舍里站着第五章的陆宣雨+舍友A/B）。
+    static readonly System.Text.RegularExpressions.Regex ChapterContainerRx =
+        new System.Text.RegularExpressions.Regex(@"^第([0-9一二三四五])章角色$");
+
+    static int ParseChapterNum(string s)
+    {
+        if (s.Length != 1) return -1;
+        switch (s[0])
+        {
+            case '一': return 1;
+            case '二': return 2;
+            case '三': return 3;
+            case '四': return 4;
+            case '五': return 5;
+            default: return s[0] >= '0' && s[0] <= '9' ? s[0] - '0' : -1;
+        }
+    }
+
+    void ApplyChapterNpcVisibility()
+    {
+        int shown = 0, hidden = 0;
+        foreach (var t in FindObjectsOfType<Transform>(true))
+        {
+            var m = ChapterContainerRx.Match(t.name);
+            if (!m.Success) continue;
+            bool want = ParseChapterNum(m.Groups[1].Value) == chapterIndex;
+            if (t.gameObject.activeSelf == want) continue;
+            t.gameObject.SetActive(want);
+            if (want) shown++; else hidden++;
+        }
+        Debug.Log("[StoryRunner] 第" + chapterIndex + "章：角色容器显隐 → 显示 " + shown + " / 隐藏 " + hidden +
+                  "（其余容器状态本就正确）");
+    }
+
     // json 是唯一事实源：Begin 时扫本章所有 enter 步骤的 who → 预禁用这些角色（记录引用，
     // enter 时再启用——FindObjectsOfType 找不到禁用对象，所以必须先存）。
     void CollectAndHideEntranceNpcs()
@@ -174,11 +211,23 @@ public class StoryRunner : MonoBehaviour
         }
     }
 
+    /// 按名找角色实例。★ 同名实例可能摆在多章容器下（宿舍有第二/第五章两个 陆宣雨_可动）：
+    /// 优先返回【本章容器】子树里的那个（第二章 enter 的是第二章的陆宣雨，不是第五章的），
+    /// 找不到本章的才退回第一个同名实例。
     Transform FindCharacterTransform(string name)
     {
+        Transform fallback = null;
         foreach (var t in FindObjectsOfType<Transform>(true))     // true：含禁用对象
-            if (t.name == name) return t;
-        return null;
+        {
+            if (t.name != name) continue;
+            if (fallback == null) fallback = t;
+            for (var p = t.parent; p != null; p = p.parent)
+            {
+                var m = ChapterContainerRx.Match(p.name);
+                if (m.Success && ParseChapterNum(m.Groups[1].Value) == chapterIndex) return t;
+            }
+        }
+        return fallback;
     }
 
     // ------------------------------------------------------------------ 步骤推进
