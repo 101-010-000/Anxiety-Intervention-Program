@@ -54,6 +54,36 @@ public static class PhoneChatSmoke
     [MenuItem("Tools/干预项目/第五章剧情运行自检", false, 45)]
     public static void SmokeTest5() { SmokeTest(5); }
 
+    // ★ 主菜单进场路径自检：从 MainMenu.unity 进 Play → LoadScene("Game")，复刻真实游玩
+    //   （排查"从菜单选章掉虚空"用——直接开 Game 场景的自检复现不了那条路径）
+    [MenuItem("Tools/干预项目/第2章自检（主菜单进场路径）", false, 46)]
+    public static void SmokeTest2ViaMenu()
+    {
+        _oldOptEnabled = EditorSettings.enterPlayModeOptionsEnabled;
+        _oldOpt = EditorSettings.enterPlayModeOptions;
+        EditorSettings.enterPlayModeOptionsEnabled = true;
+        EditorSettings.enterPlayModeOptions = EnterPlayModeOptions.DisableDomainReload;
+
+        EditorSceneManager.OpenScene("Assets/Scenes/MainMenu.unity", OpenSceneMode.Single);
+
+        // 菜单场景里没有 StorySmokeDriver（它挂在 Game 场景 StorySystem 上）→ 临时建一个，
+        // ViaMenu 模式 Awake 里 DontDestroyOnLoad，跨 LoadScene 存活
+        var go = new GameObject("SmokeDriverTemp");
+        go.AddComponent<StorySmokeDriver>();
+
+        StorySmokeDriver.Requested = true;
+        StorySmokeDriver.Finished = false;
+        StorySmokeDriver.TargetChapter = 2;
+        StorySmokeDriver.ViaMenu = true;
+        StorySmokeDriver.Lines.Clear();
+        StorySmokeDriver.Errors.Clear();
+
+        _start = EditorApplication.timeSinceStartup;
+        _active = true;
+        if (!_hooked) { EditorApplication.update += SmokePoll; _hooked = true; }
+        Debug.Log("[PhoneChatSmoke] 第2章自检（主菜单进场路径）开始");
+    }
+
     static bool _active, _hooked;
     static double _start;
     static bool _oldOptEnabled;
@@ -73,6 +103,7 @@ public static class PhoneChatSmoke
     {
         _active = false;
         StorySmokeDriver.Requested = false;
+        StorySmokeDriver.ViaMenu = false;
         int chapter = StorySmokeDriver.TargetChapter;
 
         EditorSettings.enterPlayModeOptionsEnabled = _oldOptEnabled;
@@ -99,6 +130,10 @@ public static class PhoneChatSmoke
         Directory.CreateDirectory(Path.GetDirectoryName(report).Replace('/', Path.DirectorySeparatorChar));
         File.WriteAllText(report, string.Join("\n", lines.ToArray()));
 
+        // 清理 ViaMenu 模式留在（未保存的）主菜单场景里的临时驱动对象
+        var temp = GameObject.Find("SmokeDriverTemp");
+        if (temp != null) Object.DestroyImmediate(temp);
+
         EditorApplication.isPlaying = false;
         Debug.Log("[PhoneChatSmoke] 第" + chapter + "章剧情运行自检完成，报告：" + report);
     }
@@ -116,6 +151,25 @@ public static class PhoneChatSmokeTrigger
 
     static void Check()
     {
+        // 主菜单进场路径（第2章专用，排查"从菜单选章掉虚空"）
+        string menuTrigger = "Assets/_story2menu_trigger.txt";
+        if (File.Exists(menuTrigger))
+        {
+            try
+            {
+                File.Delete(menuTrigger);
+                if (File.Exists(menuTrigger + ".meta")) File.Delete(menuTrigger + ".meta");
+                SmokeTest2ViaMenu();
+                return;
+            }
+            catch (System.Exception e)
+            {
+                Directory.CreateDirectory("../额外文件");
+                File.WriteAllText("../额外文件/错误_第2章菜单路径自检.txt", e.ToString());
+                throw;
+            }
+        }
+
         for (int ch = 1; ch <= 5; ch++)
         {
             int chapter = ch;                       // 闭包捕获用

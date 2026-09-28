@@ -13,6 +13,7 @@ public class StorySmokeDriver : MonoBehaviour
     public static bool Requested;
     public static bool Finished;
     public static int TargetChapter = 1;          // 编辑器入口设置（1-5）
+    public static bool ViaMenu;                   // true=从主菜单场景 LoadScene 进 Game（复刻真实游玩路径）
     public static readonly List<string> Lines = new List<string>();
     public static readonly List<string> Errors = new List<string>();
 
@@ -22,6 +23,7 @@ public class StorySmokeDriver : MonoBehaviour
     {
         // 抓运行期报错进报告
         Application.logMessageReceived += OnLog;
+        if (ViaMenu) DontDestroyOnLoad(gameObject);   // 要跨 LoadScene("Game") 存活
     }
 
     void OnDestroy()
@@ -39,12 +41,26 @@ public class StorySmokeDriver : MonoBehaviour
     {
         if (!Requested) { Finished = true; yield break; }
         Lines.Clear(); Errors.Clear();
-        Lines.Add("—— 第" + TargetChapter + "章剧情运行自检 ——");
+        Lines.Add("—— 第" + TargetChapter + "章剧情运行自检" + (ViaMenu ? "（主菜单进场路径）" : "") + " ——");
+
+        if (ViaMenu)
+        {
+            // 复刻真实游玩：菜单场景里选章 → LoadScene("Game")
+            Lines.Add("进场前 SelectedChapter=" + GameProgress.SelectedChapter);
+            GameProgress.SelectChapter(TargetChapter);
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
+            float t1 = Time.realtimeSinceStartup;
+            FirstPersonController p0;
+            do { p0 = FindObjectOfType<FirstPersonController>(); yield return null; }
+            while (p0 == null && Time.realtimeSinceStartup - t1 < 15f);
+            Lines.Add("Game 场景载入，玩家首见位置=" + (p0 != null ? p0.transform.position.ToString("F2") : "无!!")
+                      + "  SelectedChapter=" + GameProgress.SelectedChapter);
+        }
 
         // 等【本章】runner 起来：多 runner 并存时不能信 StoryRunner.Instance（谁后 Awake 谁占）
         StoryRunner r = null;
         float t0 = Time.realtimeSinceStartup;
-        while (r == null && Time.realtimeSinceStartup - t0 < 10f)
+        while (r == null && Time.realtimeSinceStartup - t0 < 15f)
         {
             foreach (var sr in FindObjectsOfType<StoryRunner>())
                 if (sr != null && sr.chapterIndex == TargetChapter) { r = sr; break; }
@@ -61,10 +77,11 @@ public class StorySmokeDriver : MonoBehaviour
                                               // 同样的打字机步骤要吃更多帧——1600 不够（第5章踩过，
                                               // 走到 87/92 耗尽）。真死锁由下方"同步骤 600 帧"判据兜住。
         int lastIdx = -1, stuck = 0;
-        // 玩家位置取证（排查"掉虚空"用）：起点/最低Y/终点
+        // 玩家位置取证（排查"掉虚空"用）：起点/最低点/终点；主菜单路径下额外记坠落轨迹
         var player = FindObjectOfType<FirstPersonController>();
         Vector3 pStart = player != null ? player.transform.position : Vector3.zero;
         float pMinY = pStart.y; Vector3 pEnd = pStart;
+        float lastTrailY = pStart.y;
         int sample = 0;
         while (!r.Finished && safety-- > 0)
         {
@@ -91,6 +108,11 @@ public class StorySmokeDriver : MonoBehaviour
                 var pp = player.transform.position;
                 if (pp.y < pMinY) pMinY = pp.y;
                 pEnd = pp;
+                if (ViaMenu && Mathf.Abs(pp.y - lastTrailY) > 0.5f)   // 坠落轨迹：Y 变化超 0.5m 记一笔
+                {
+                    Lines.Add("  轨迹 帧" + sample + "：y=" + pp.y.ToString("F1") + "  pos=" + pp.ToString("F1"));
+                    lastTrailY = pp.y;
+                }
             }
             yield return null;                 // ★ 等真游戏帧
         }
