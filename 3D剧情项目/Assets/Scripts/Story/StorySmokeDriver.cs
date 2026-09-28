@@ -56,7 +56,10 @@ public class StorySmokeDriver : MonoBehaviour
         Lines.Add("StoryRunner 就绪，总步骤 " + r.TotalSteps);
         if (r.TotalSteps < 40) Fail("步骤数不对：" + r.TotalSteps + "（检查 json）");
 
-        int safety = 1600;                     // 步数上限，防死循环（多章步数更多，放宽）
+        int safety = 6000;                     // 帧预算上限，防死循环。★按"帧"计而不是秒：
+                                              // 编辑器负载高（多 Unity 实例/后台编译）时帧率低，
+                                              // 同样的打字机步骤要吃更多帧——1600 不够（第5章踩过，
+                                              // 走到 87/92 耗尽）。真死锁由下方"同步骤 600 帧"判据兜住。
         int lastIdx = -1, stuck = 0;
         while (!r.Finished && safety-- > 0)
         {

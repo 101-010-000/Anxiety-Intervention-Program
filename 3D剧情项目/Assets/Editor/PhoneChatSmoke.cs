@@ -62,7 +62,7 @@ public static class PhoneChatSmoke
     static void SmokePoll()
     {
         if (!_active) return;
-        if (EditorApplication.timeSinceStartup - _start > 300) { Finish("超时(300 秒)"); return; }
+        if (EditorApplication.timeSinceStartup - _start > 600) { Finish("超时(600 秒)"); return; }
         if (!EditorApplication.isPlaying) { EditorApplication.isPlaying = true; return; }
         // 兜底开跑在 StorySmokeDriver 里做（按 TargetChapter 找 runner，多 runner 并存时不能信 Instance）
         if (!StorySmokeDriver.Finished) return;
