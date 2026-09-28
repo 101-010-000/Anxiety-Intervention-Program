@@ -167,7 +167,7 @@ public class NpcEntrance : MonoBehaviour
         if (_ghostClones.Count == 0)
             Debug.LogWarning("[NpcEntrance] 没有可复制的 SkinnedMeshRenderer —— 虚影层为空，将直接显示真身");
         else
-            Debug.Log("[NpcEntrance] 幽灵层就绪：" + _ghostClones.Count + " 个克隆（已启用，浓度 " + GHOST_ALPHA + "）");
+            Debug.Log("[NpcEntrance] 幽灵层就绪：" + _ghostClones.Count + " 个克隆（已启用，浓度 " + GHOST_START + "→" + GHOST_END + "）");
     }
 
     void ShowReal()
