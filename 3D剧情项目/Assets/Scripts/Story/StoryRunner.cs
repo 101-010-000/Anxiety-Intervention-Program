@@ -475,8 +475,8 @@ public class StoryRunner : MonoBehaviour
     }
 
     // ------------------------------------------------------------------ NPC 入场演出（enter 步骤，2026-09-27）
-    // who 从预禁用表启用 → 虚影渐显 + 从 from 锚点走到玩家面前（缺省落点；to 显式锚点可覆盖）
-    // → 落定（换回真实材质/恢复描边碰撞/面向玩家）→ 接对话。演出细节见 NpcEntrance。
+    // who 从预禁用表启用 → 从 from 锚点走到玩家面前（缺省落点；to 显式锚点可覆盖）
+    // → 面向玩家 → 接对话。全程真实形象（虚实渐变已移除，2026-09-28）。细节见 NpcEntrance。
     void DoEnter(StoryStep step)
     {
         if (_enterRt != null) StopCoroutine(_enterRt);
@@ -703,7 +703,7 @@ public class StoryRunner : MonoBehaviour
                 _player.moveLocked = true;
                 _player.SetCursorLocked(true);
                 break;
-            default:                                      // Card/Typing/Fade/Enter/EndCard/Idle：全锁
+            default:                                      // Card/Typing/Fade/EndCard/Idle：全锁（Enter 有独立 case：能转不能走）
                 _player.SetLocked(true);
                 _player.moveLocked = false;
                 _player.SetCursorLocked(true);

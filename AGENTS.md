@@ -315,7 +315,7 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   各绑 `Assets/数据/剧情/第N章.json` + `chapterIndex=N` + 各自 startAnchor/fadeAnchors，
   **11 个 UI 引用全部指向 `UI交互` 画布下同一套节点**（工具从第1章 runner 复制）——多章零新建 UI。
   主菜单选章写 `GameProgress.SelectedChapter`，只有匹配章的 runner `Begin()`，其余静默。
-- **数据**：`第2章.json`~`第5章.json`（78/104/79/92 步）。★ 正文体以
+- **数据**：`第2章.json`~`第5章.json`（79/104/79/92 步）。★ 正文体以
   `项目文档/剧本更新.docx`（提取稿 `额外文件/剧本更新_extract.txt`）为唯一权威源，旧版剧本只作对照。
   步骤类型在第1章八种之外新增 `fade`（`to`=锚点名）；微信台词 `s` 带「（微信）」，
   班群通知 `s="班群（通知）"` 同样落手机 UI。
@@ -328,6 +328,14 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   ⚠ BlackFade 在 UI 最上层，黑屏期间对话框不可见 → 时间流逝旁白用独立 nar 步骤（放 fade 前后）。
 - **交互点章节归属**：`StoryInteractable.chapterTag`（默认1）；`FindFree()` 只取本章未消费的点。
   `promptText` 非空时 F 提示整句显示它（如「拿起手机」），空则默认「与<displayName>交谈」。
+- **NPC 入场（enter 步骤，第2章陆宣雨）**：`{ "t": "enter", "who": "角色实例名", "from": "门口锚点名" }`。
+  Begin 时按 json 预禁用 who（开场不在场）；enter 时启用并从 from 锚点走到玩家面前
+  （缺省落点=玩家面前 1.3m，`to` 显式锚点可覆盖），播行走动画、到位面向玩家接对话。
+  镜头 0.3s 平滑转向门口（`FirstPersonController.LookTowardRoutine`，yaw+pitch 一起动）。
+  ★ 全程真实形象——虚实渐变（幽灵层/透明材质）已于 2026-09-28 按用户要求整体移除。
+  锚点解析约定：接线池没有就全场景按名找——把「第2章_陆宣雨门口」拖到任意门前即生效。
+- **出生点按名约定**：场景里放一个名为「第N章起点」（汉字章号）的物体即为该章出生点
+  （用户手放优先于工具接线的 startAnchor）。第2章用户已自放「第二章起点」。
 - **手机换聊天对象**：微信台词里非「徐夏」的说话人 → 自动推导联系人名 → `PhoneChatUI.SetContact()`
   （换标题+清空聊天流）。第2章 李同学↔林溪、第4章 班群/学姐 自动切换。★ 头像占位：沿用第一章
   两张（用户约定缺素材先占位），有新头像在 `手机聊天` 节点 Inspector 换 `avatarLeft` 即可。

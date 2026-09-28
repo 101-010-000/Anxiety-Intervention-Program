@@ -1,9 +1,10 @@
-第1章剧情运行自检（真进 Play 模式走一遍）  2026-09-27 22:41
+第1章剧情运行自检（真进 Play 模式走一遍）  2026-09-28 04:48
 
 —— 第1章剧情运行自检 ——
 StoryRunner 就绪，总步骤 121
 走完全部 121/121 步 ✓
-状态计数：Typing 952 / Gap 109 / 开场旁白 8 / Choice 13 / Walk 1 / Interact 1 / Fade 0 / Enter 0
+玩家位置取证：起点=(4.2,0.0,-4.0)  最低Y=0.0  终点=(4.2,0.0,-4.0)
+状态计数：Typing 1938 / Gap 109 / 开场旁白 8 / Choice 13 / Walk 1 / Interact 1 / Fade 0 / Enter 0
 运行期报错：无 ✓
 
 注：编辑器伪造不了 Input.GetKeyDown，交互/推进走的是 DebugAdvance()/Fire()，

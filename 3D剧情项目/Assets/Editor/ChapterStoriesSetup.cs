@@ -382,7 +382,7 @@ public static class ChapterStoriesSetup
     static void Warn(string s) { _log.AppendLine("★ " + s); Debug.LogWarning("[ChapterStoriesSetup] " + s); }
     static void Error(string s) { _log.AppendLine("★ 失败：" + s); Debug.LogError("[ChapterStoriesSetup] " + s); }
 
-    // ================================================================== NPC 入场接线（第2章陆宣雨"门口虚影渐显走近"，2026-09-27）
+    // ================================================================== NPC 入场接线（第2章陆宣雨"从门走进来"，2026-09-27）
     // 三件事（全幂等）：
     //   1) 宿舍南门内建「第2章_陆宣雨门口」锚点（enter 步骤 from）；
     //   2) 锚点补进第2章 runner 的锚点池（fadeAnchors 与 enter 共用）；
@@ -458,7 +458,7 @@ public static class ChapterStoriesSetup
         EditorSceneManager.SaveScene(scene);
 
         _log.AppendLine();
-        _log.AppendLine("【下一步】Play 第2章到微信段结束 → 陆宣雨从南门虚影渐显走到玩家面前落定。");
+        _log.AppendLine("【下一步】Play 第2章到微信段结束 → 陆宣雨从门口走到玩家面前落定。");
         _log.AppendLine("观感可调：NpcEntrance 顶部 SPEED（步速）。虚实渐变已移除（2026-09-28，全程真实形象）。");
         Directory.CreateDirectory(Path.GetDirectoryName(ENTRANCE_REPORT).Replace('/', Path.DirectorySeparatorChar));
         File.WriteAllText(ENTRANCE_REPORT, _log.ToString());

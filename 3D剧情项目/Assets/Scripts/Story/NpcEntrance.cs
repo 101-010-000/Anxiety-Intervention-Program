@@ -32,6 +32,9 @@ public class NpcEntrance : MonoBehaviour
     // ------------------------------------------------------------------ 演出（由 runner 协程 yield 驱动）
     public IEnumerator Run(Vector3 from, Vector3 to, Transform faceTarget)
     {
+        // 二次入场防护（trellis-check 2026-09-28）：同会话重新 Begin 再入场时，
+        // _restored/fast/Done 不重置会导致碰撞不恢复、快进残留
+        _restored = false; fast = false; Done = false;
         if (!_prepared) Prepare();
 
         transform.position = from;
