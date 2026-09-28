@@ -266,6 +266,33 @@ public class FirstPersonController : MonoBehaviour
         Step(false);
     }
 
+    // ------------------------------------------------------------------ 剧情演出视角（NpcEntrance/StoryRunner 用）
+    /// ~0.3s 平滑把视角转向目标点：身体 yaw 与镜头 pitch 一起动（v4——此前只转 yaw、
+    /// 俯仰角保留原值，玩家低头看桌面时进场会盯着自己的脚）。
+    /// 直接驱动 transform/pitch，与 Look() 的增量式不冲突：动画结束 pitch=目标值，不回弹。
+    public System.Collections.IEnumerator LookTowardRoutine(Vector3 worldPoint, float dur = 0.3f, float targetPitch = 8f)
+    {
+        Vector3 d = worldPoint - transform.position; d.y = 0f;
+        if (d.sqrMagnitude < 0.001f) yield break;
+        float yaw0 = transform.eulerAngles.y;
+        float yaw1 = Quaternion.LookRotation(d.normalized).eulerAngles.y;
+        float p0 = pitch;
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.unscaledDeltaTime / Mathf.Max(0.01f, dur);
+            float k = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(t));
+            transform.rotation = Quaternion.Euler(0f, Mathf.LerpAngle(yaw0, yaw1, k), 0f);
+            pitch = Mathf.LerpAngle(p0, targetPitch, k);
+            if (cameraPivot != null)
+            {
+                var e = cameraPivot.localEulerAngles;
+                cameraPivot.localEulerAngles = new Vector3(pitch, e.y, e.z);
+            }
+            yield return null;
+        }
+    }
+
     void Step(bool noHoriz)
     {
         // 掉出世界保护（2026-09-28）：y 低于地面 20m = 已经在虚空里下坠（正常游玩地面在 y≈0，

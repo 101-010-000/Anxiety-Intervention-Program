@@ -524,16 +524,10 @@ public class StoryRunner : MonoBehaviour
 
         if (!go.activeSelf) go.SetActive(true);
 
-        // ★ 镜头先看向门口（用户 2026-09-28 反馈"入场完全看不见"的根因：她出生在玩家视野外，
-        //   而演出期锁视角导致全程看不见、走到面前才"突然出现"）。台词本就写着"她抬头看了看
-        //   宿舍门"——把玩家（第一人称=镜头）转向入场锚点，她从第一帧就在画面里。
-        //   Look() 只对 transform 做增量旋转，直接设朝向不会在解锁后回弹。
+        // ★ 镜头平滑转向门口（v4）： yaw+pitch 一起动 0.3s（此前硬切且不管 pitch，
+        //   玩家低头看桌面时进场会盯着自己的脚——视频评审 2026-09-28）。与她淡入同步。
         if (_player != null)
-        {
-            Vector3 d = from.position - _player.transform.position; d.y = 0f;
-            if (d.sqrMagnitude > 0.01f)
-                _player.transform.rotation = Quaternion.LookRotation(d.normalized);
-        }
+            StartCoroutine(_player.LookTowardRoutine(from.position));
 
         _entrance = go.GetComponent<NpcEntrance>();
         if (_entrance == null) _entrance = go.AddComponent<NpcEntrance>();

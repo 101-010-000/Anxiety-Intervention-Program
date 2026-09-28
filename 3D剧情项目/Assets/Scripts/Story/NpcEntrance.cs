@@ -23,13 +23,15 @@ public class NpcEntrance : MonoBehaviour
 {
     // ---------------- 可调参数（观感微调只动这里） ----------------
     const float SPEED = 1.35f;          // 入场步速（偏缓，演出感）
-    // ★ 透明度区间（用户 2026-09-28 定稿："从 75% 不透明度变到 100%"）：
-    //   出现即 ~75% 可见（微透，能隐约看穿），凝实后 100%。
-    //   幽灵层 _Alpha 全程恒定（GHOST_ALPHA），75→100 的变化全部由凝实段完成：
-    //   真身接通 + 幽灵淡出的合成观感 = 实心度连续上升，无来回收缩。
-    const float GHOST_ALPHA = 0.88f;    // 幽灵层浓度（配合 shader 中心0.75/边缘1.0 → 全身≈75%~88%）
-    const float REVEAL_START = 0.62f;   // 走到 62% 开始凝实（真身接通 + 幽灵开始淡出）
-    const float REVEAL_DUR = 1.05f;     // 凝实总时长（覆盖到达前后，越大越"慢慢变实"）
+    // ★ v4 曲线（2026-09-28 视频评审定稿）：浓度贯穿【全程】连续爬升，
+    //   不再是"走路段恒定 + 最后一秒交接"——每一秒都在变实一点。
+    const float GHOST_START = 0.35f;    // 门口出场浓度（薄雾感，明显可透）
+    const float GHOST_END = 0.9f;       // 临近时的浓度（接近实体）
+    const float SPAWN_FADE = 0.3f;      // 出场淡入时长（与镜头平滑转向同步，不再硬切出现）
+    // 凝实交接：快而晚——最后 15% 路程才接通真身，幽灵 0.4s 让位。
+    // 重影/漏色（奶白+墨镜）阶段从"1 秒展示期"压成"一晃而过的衔接"，且发生在浓度最高点。
+    const float REVEAL_START = 0.85f;
+    const float REVEAL_DUR = 0.4f;
     // --------------------------------------------------------------
 
     static readonly int AlphaId = Shader.PropertyToID("_Alpha");
@@ -88,17 +90,20 @@ public class NpcEntrance : MonoBehaviour
         float dur = Mathf.Max(0.6f, dist / SPEED);
         Vector3 start = from;
         float t = 0f;          // 路程进度 0→1（匀速）
-        float reveal = 0f;     // 凝实进度 0→1
+        float reveal = 0f;     // 凝实进度 0→1（真身接通 + 幽灵让位）
+        float elapsed = 0f;
 
         while (t < 1f && !fast)
         {
             float dt = Time.deltaTime;
+            elapsed += dt;
             t = Mathf.Clamp01(t + dt / dur);
             transform.position = Vector3.Lerp(start, to, t);            // 匀速，无 SmoothStep 骤停
 
+            // v4 浓度曲线：出场淡入 → 全程 0.35→0.9 连续爬升 → 凝实段快速让位
             if (t >= REVEAL_START) reveal = Mathf.Clamp01(reveal + dt / REVEAL_DUR);
-            UpdateGhostAlpha(t, reveal);
-            if (reveal > 0f) ShowReal();                                 // 凝实启动：真身在幽灵最浓时接通（零跳变）
+            UpdateGhostAlpha(t, reveal, elapsed);
+            if (reveal > 0f) ShowReal();                                 // 真身在幽灵最浓时接通（零跳变）
             yield return null;
         }
 
@@ -109,7 +114,7 @@ public class NpcEntrance : MonoBehaviour
         {
             if (fast) reveal = 1f;
             else reveal = Mathf.Clamp01(reveal + Time.deltaTime / REVEAL_DUR);
-            UpdateGhostAlpha(1f, reveal);
+            UpdateGhostAlpha(1f, reveal, 999f);
             yield return null;
         }
 
@@ -127,12 +132,14 @@ public class NpcEntrance : MonoBehaviour
     public void Skip() { fast = true; }
 
     // ------------------------------------------------------------------ 内部
-    /// 幽灵层浓度：全程恒定 GHOST_ALPHA（出现即 ~75% 可见），凝实段平滑淡出到 0（露出真身=100%）
-    void UpdateGhostAlpha(float t, float reveal)
+    /// v4 浓度：出场 0.3s 淡入 → 随路程 0.35→0.9 线性爬升（贯穿全程的"变实"）→ 凝实段三次曲线让位
+    void UpdateGhostAlpha(float t, float reveal, float elapsed)
     {
         if (_ghost == null) return;
+        float spawnIn = Mathf.Clamp01(elapsed / SPAWN_FADE);
+        float ramp = GHOST_START + (GHOST_END - GHOST_START) * t;
         float fade = reveal * reveal * (3f - 2f * reveal);          // 三次平滑
-        _ghost.SetFloat(AlphaId, GHOST_ALPHA * (1f - fade));
+        _ghost.SetFloat(AlphaId, ramp * spawnIn * (1f - fade));
     }
 
     /// 复制蒙皮网格做幽灵层（共享骨骼 → 动作与真身完全同步），套幽灵材质
