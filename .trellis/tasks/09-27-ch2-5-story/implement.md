@@ -1,11 +1,19 @@
 # 执行计划：第 2–5 章剧情制作
 
-> **进度（2026-09-27）**：阶段 0–4 的代码与数据全部完成并提交（baa2396）——
-> 框架脚本 6 个 + 自检参数化 + ChapterStoriesSetup 工具 + 第2~5章.json（78/104/79/92 步）+ AGENTS 更新。
-> 程序集已编译通过（Library/ScriptAssemblies 08:36 更新，无 error CS）。
-> **当前停在人工卡点**：① 在 Unity 跑 `Tools/干预项目/多章剧情/一键搭建第2-5章（幂等）`；
-> ② Scene 里手调锚点/触发点位置（工具默认坐标按 Loc 中心估，重跑不覆盖手调）；
-> ③ 跑 `Tools/干预项目/第N章剧情运行自检`（N=1..5，先第1章回归）→ 报告齐后继续阶段 5 收尾。
+> **✅ 已完成并归档（2026-09-27 深夜）**。最终状态：
+> - 5 章自检全部 PASS（121/79/104/79/92 步，零运行期报错）：第1章 Walk 1/Interact 1/开场旁白 8，
+>   第3章 Fade 188、第4章 Interact 2/Fade 70、第5章 Fade 199。
+> - 归档前修复两个真 bug（trellis-check 四项全 PASS）：
+>   ① 多 runner 互抢交互点接线 → Begin() 只接 chapterTag==本章 的点（第1/3/4/5章自检曾全部卡死
+>   WaitInteract 的根因：SelectedChapter 残留第2章时，第2章 runner 在后台 Begin 并把全场景
+>   交互点 onTriggered 抢接到自己身上）；自检入口加 GameProgress.SelectChapter(目标章) 双保险。
+>   ② card 步骤掐断开场旁白自由走动段（历史遗留）：`_openingNar` 判定豁免 card，5 章开场恢复
+>   NarFree（边走边听）设计。
+> - **残留一项（场景侧，重跑菜单即补）**：第5章「宿舍门口」Touch 触发盒是空壳节点（那次
+>   一键搭建运行在它身上中断，`_多章剧情搭建.txt` 报告也因此未生成）。重跑
+>   `Tools/干预项目/多章剧情/一键搭建第2-5章（幂等）` → 重跑第5章自检（预期 Walk≥1）。
+> - 陆宣雨入场演出（enter 步骤）在另一任务 09-27-ch2-entrance-lxy 继续制作（代码已就绪并提交，
+>   第2章 json 已含 enter 步骤；锚点缺时优雅跳过，不影响游玩）。
 
 按「框架先行、逐章可验收」分 6 个阶段。每阶段末有验证点；阶段 2–5 每章独立可玩、可回归。
 所有 Unity 场景/资产变更走 `Assets/Editor/ChapterStoriesSetup.cs` 菜单项（**不用自动触发器**）；

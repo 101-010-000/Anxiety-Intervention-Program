@@ -337,6 +337,9 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 - **自检**：`Tools/干预项目/第N章剧情运行自检`（N=1..5，`PhoneChatSmoke.cs`；或丢
   `Assets/_storyNsmoke_trigger.txt`）→ `assets/_报告/_第N章剧情运行自检.txt`。
   ⚠ 自检会重开 Game 场景——跑之前场景必须先保存。
+  ⚠ 自检入口会强制 `GameProgress.SelectChapter(N)`；runner 的 Begin 只接本章（chapterTag）
+  交互点——两条铁律防"残留章 runner 后台开跑互抢接线"（踩过：第1/3/4/5章自检集体卡死
+  WaitInteract，根因即此）。
 - **待补（用户黄亮标注，内容等用户提供后加 json 步骤即可）**：第3章食堂隔壁桌外人对话、
   第4章宿舍舍友抱怨对话——预留 `dlg s=旁人甲/旁人乙`（名牌对话，无实体）。
 

@@ -23,6 +23,10 @@ public static class PhoneChatSmoke
 
         EditorSceneManager.OpenScene(GAME_SCENE, OpenSceneMode.Single);
 
+        // ★ 自检强制选定目标章：SelectedChapter 残留上次游玩的章时，那个章的 runner 会在后台
+        //   自动 Begin（抢交互点接线/挪玩家/抢 UI），污染自检环境。强制后只有目标章开跑。
+        GameProgress.SelectChapter(chapter);
+
         StorySmokeDriver.Requested = true;
         StorySmokeDriver.Finished = false;
         StorySmokeDriver.TargetChapter = chapter;

@@ -138,8 +138,16 @@ public class StoryRunner : MonoBehaviour
             if (cc != null) cc.enabled = true;
         }
 
-        // 接线场景里所有剧情交互点（★ 初始一律 unarm：只有走到对应的等待步骤才允许触发）
-        foreach (var si in FindObjectsOfType<StoryInteractable>()) { si.onTriggered = OnInteractableFired; si.armed = false; }
+        // 接线本章剧情交互点（★ 初始一律 unarm：只有走到对应的等待步骤才允许触发）。
+        // ★ 只接 chapterTag==本章 的点：多 runner 并存时（自检/选章），后 Begin 的 runner 若把
+        //   全场景交互点都接到自己身上，会把别的章的交互点"抢走"——点燃后回调落在本 runner、
+        //   状态机对不上 → 永远不推进（2026-09-27 自检第1/3/4/5章卡 WaitInteract 的根因）。
+        foreach (var si in FindObjectsOfType<StoryInteractable>())
+        {
+            if (si.chapterTag != chapterIndex) continue;
+            si.onTriggered = OnInteractableFired;
+            si.armed = false;
+        }
 
         _openingNar = true;
         StepIndex = 0;
@@ -180,7 +188,8 @@ public class StoryRunner : MonoBehaviour
         if (_ch == null || StepIndex >= _ch.steps.Count) { ToDone(); return; }
         var step = _ch.steps[StepIndex++];
         bool isText = step.t == "nar" || step.t == "dlg" || step.t == "mon";
-        if (_openingNar && step.t != "nar") _openingNar = false;   // 开场旁白段结束
+        // 开场旁白段结束（card 不算：每章都以 card 开头，它不能把"自由走动听旁白"提前掐掉）
+        if (_openingNar && step.t != "nar" && step.t != "card") _openingNar = false;
 
         // 3D 文本节点：进入非文本步骤时收框
         if (!isText && _nodeOpen) { dialogue.HideNode(); _nodeOpen = false; }

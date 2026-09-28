@@ -1,0 +1,10 @@
+第3章剧情运行自检（真进 Play 模式走一遍）  2026-09-27 22:47
+
+—— 第3章剧情运行自检 ——
+StoryRunner 就绪，总步骤 104
+走完全部 104/104 步 ✓
+状态计数：Typing 751 / Gap 93 / 开场旁白 3 / Choice 13 / Walk 0 / Interact 3 / Fade 188 / Enter 0
+运行期报错：无 ✓
+
+注：编辑器伪造不了 Input.GetKeyDown，交互/推进走的是 DebugAdvance()/Fire()，
+    与真实按键是同一入口。
