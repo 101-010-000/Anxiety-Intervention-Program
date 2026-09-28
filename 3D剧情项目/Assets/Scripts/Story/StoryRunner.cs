@@ -128,14 +128,20 @@ public class StoryRunner : MonoBehaviour
         _savedEsc = _player.allowEscToUnlock;
         _player.allowEscToUnlock = false;
 
-        // 传送玩家到章节起点（CharacterController 关了再挪，不然会被拽回去）
-        if (startAnchor != null)
+        // 传送玩家到章节起点（CharacterController 关了再挪，不然会被拽回去）。
+        // ★ 起点解析顺序（用户 2026-09-28 约定：自己手放的点优先）：
+        //   ① 场景里名为「第N章起点」的物体（汉字章号，用户随手放、随手挪，无需接线）
+        //   ② Inspector 里接线的 startAnchor（工具搭的 第N章_起点）
+        //   ③ 场景里名为「第N章_起点」的物体（工具命名兜底）
+        var spawn = FindSpawnAnchor();
+        if (spawn != null)
         {
             var cc = _player.GetComponent<CharacterController>();
             if (cc != null) cc.enabled = false;
-            _player.transform.position = startAnchor.position;
-            _player.transform.rotation = Quaternion.Euler(0f, startAnchor.eulerAngles.y, 0f);
+            _player.transform.position = spawn.position;
+            _player.transform.rotation = Quaternion.Euler(0f, spawn.eulerAngles.y, 0f);
             if (cc != null) cc.enabled = true;
+            Debug.Log("[StoryRunner] 第" + chapterIndex + "章起点 = " + spawn.name + " @ " + spawn.position.ToString("F1"));
         }
 
         // 接线本章剧情交互点（★ 初始一律 unarm：只有走到对应的等待步骤才允许触发）。
@@ -228,6 +234,18 @@ public class StoryRunner : MonoBehaviour
             }
         }
         return fallback;
+    }
+
+    // 章节起点解析（用户手放的「第N章起点」汉字命名优先；详见 Begin 里的注释）
+    static readonly string[] CN_NUM = { "", "一", "二", "三", "四", "五" };
+
+    Transform FindSpawnAnchor()
+    {
+        string cn = chapterIndex >= 1 && chapterIndex <= 5 ? CN_NUM[chapterIndex] : chapterIndex.ToString();
+        Transform t = FindCharacterTransform("第" + cn + "章起点");        // ① 用户手放（汉字章号）
+        if (t != null) return t;
+        if (startAnchor != null) return startAnchor;                      // ② 工具接线
+        return FindCharacterTransform("第" + chapterIndex + "章_起点");    // ③ 工具命名兜底
     }
 
     // ------------------------------------------------------------------ 步骤推进
