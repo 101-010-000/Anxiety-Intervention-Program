@@ -1,5 +1,6 @@
 // 主界面（主菜单）控制器：开始游戏 / 读取存档 / 章节选择 / 内容概览 / 设置 / 退出
 // 所有引用由 Assets/Editor/MainMenuBuilder.cs 在搭场景时接好，运行时不 FindObject。
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -186,17 +187,85 @@ public class MainMenuUI : MonoBehaviour
         else if (onOk != null) onOk();
     }
 
+    bool _loading;   // 异步加载进行中（防双击重入）
+
     void LoadGameScene()
     {
+        if (_loading) return;
         GameSettings.Save();
         if (Application.CanStreamedLevelBeLoaded(GAME_SCENE))
         {
-            SceneManager.LoadScene(GAME_SCENE);
+            _loading = true;
+            StartCoroutine(LoadGameSceneRoutine());
         }
         else if (toast != null)
         {
             toast.Show("场景 " + GAME_SCENE + " 还没加进 Build Settings");
         }
+    }
+
+    // ------------------------------------------------------------------ 异步加载 + 加载遮罩
+    // Game 场景很重（6 个地点整场景），同步 LoadScene 会把点击冻在原地数秒且无任何反馈。
+    // 这里改成 LoadSceneAsync：点完立刻出遮罩 → 显示进度 → 激活新场景。
+    // 遮罩是运行时挂在 UI_Canvas 最顶的纯黑全屏（不透明：场景激活瞬间的主线程卡顿也看不见）；
+    // 场景激活时 MainMenu 整个卸载、遮罩随之销毁，Game 侧 StoryRunner 本来就从全黑淡入，视觉无缝。
+    IEnumerator LoadGameSceneRoutine()
+    {
+        var overlay = new GameObject("加载遮罩", typeof(RectTransform), typeof(Image));
+        var canvas  = GetComponent<Canvas>();
+        if (canvas == null)   // 理论不会发生（本组件就挂在 UI_Canvas 上），兜底而已
+        {
+            canvas = overlay.AddComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.sortingOrder = 999;
+        }
+        overlay.transform.SetParent(canvas.transform, false);
+        overlay.transform.SetAsLastSibling();
+        var rt = (RectTransform)overlay.transform;
+        rt.anchorMin = Vector2.zero;  rt.anchorMax = Vector2.one;
+        rt.offsetMin = Vector2.zero;  rt.offsetMax = Vector2.zero;
+        overlay.GetComponent<Image>().color = Color.black;   // raycastTarget 默认开 → 顺带挡住底下按钮
+
+        var label = new GameObject("文字", typeof(RectTransform), typeof(Text)).GetComponent<Text>();
+        label.transform.SetParent(overlay.transform, false);
+        label.rectTransform.anchorMin = label.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+        label.rectTransform.sizeDelta = new Vector2(800f, 120f);
+        label.alignment = TextAnchor.MiddleCenter;
+        label.fontSize  = 30;
+        label.color     = new Color(0.78f, 0.85f, 0.91f, 1f);
+        label.font      = CloneMenuFont();
+
+        string title = GameProgress.ChapterTitle(GameProgress.SelectedChapter);
+
+        yield return null;   // 先让遮罩渲染出一帧，再开始加载
+
+        var op = SceneManager.LoadSceneAsync(GAME_SCENE);
+        op.allowSceneActivation = false;
+        // progress 封顶 0.9：剩下 0.1 是"激活权限"，留给 allowSceneActivation。
+        // 显示进度与真实进度解耦（真实进度会瞬间蹿满、把等待全晾给结尾的静止字幕）：
+        // 显示值以固定速率追真实值——既不会跑在加载前面，也不会瞬间拉满；
+        // 走满 100% 的同一帧立刻激活场景，结尾不空等。
+        const float rate = 0.42f;   // 每秒最多涨 42% → 最快约 2.4 秒走完
+        float shown = 0f;
+        while (shown < 1f || op.progress < 0.9f)
+        {
+            float target = Mathf.Min(op.progress / 0.9f, 1f);
+            shown = Mathf.MoveTowards(shown, target, rate * Time.unscaledDeltaTime);
+            label.text = title + "\n正在加载… " + Mathf.RoundToInt(shown * 100f) + "%";
+            yield return null;
+        }
+        label.text = title + "\n正在进入…";
+        op.allowSceneActivation = true;
+        // 激活后的首帧着色器编译会阻塞主线程几秒（编辑器专属，打包版基本没有），
+        // 这段无法用任何 UI 动画遮盖——黑屏停在"正在进入…"是能做到的最好状态。
+    }
+
+    /// 拿菜单里现成的字体（中文_Deng），不引新资源；实在没有就用系统雅黑兜底
+    Font CloneMenuFont()
+    {
+        foreach (var t in GetComponentsInChildren<Text>(true))
+            if (t.font != null) return t.font;
+        return Font.CreateDynamicFontFromOSFont("Microsoft YaHei", 16);
     }
 
     public void RefreshProgressHint()

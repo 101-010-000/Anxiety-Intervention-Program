@@ -199,7 +199,7 @@ Animator:
   m_GameObject: {fileID: 1190443333719060356}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: d4bcaef83119e484c8c682e87bbb95f5, type: 3}
-  m_Controller: {fileID: 9100000, guid: 9de21ac794b94014f9ebaba32ff4e316, type: 2}
+  m_Controller: {fileID: 9100000, guid: 9964a9e5dc01272499d46cb130694623, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -592,10 +592,26 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: a01b336d6f5bdc547880748feadfcf0d, type: 2}
+    - target: {fileID: -2012224166238003943, guid: d4bcaef83119e484c8c682e87bbb95f5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.16524568
+      objectReference: {fileID: 0}
+    - target: {fileID: -2012224166238003943, guid: d4bcaef83119e484c8c682e87bbb95f5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.0496892
+      objectReference: {fileID: 0}
     - target: {fileID: -1878115000943335328, guid: d4bcaef83119e484c8c682e87bbb95f5, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: a01b336d6f5bdc547880748feadfcf0d, type: 2}
+    - target: {fileID: -1788336539167528166, guid: d4bcaef83119e484c8c682e87bbb95f5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.0018779059
+      objectReference: {fileID: 0}
+    - target: {fileID: -1788336539167528166, guid: d4bcaef83119e484c8c682e87bbb95f5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.026909024
+      objectReference: {fileID: 0}
     - target: {fileID: -1197680987819815972, guid: d4bcaef83119e484c8c682e87bbb95f5, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 

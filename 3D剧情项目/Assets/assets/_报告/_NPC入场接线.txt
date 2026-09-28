@@ -1,0 +1,8 @@
+NPC 入场接线（第2章陆宣雨）  2026-09-28 00:05
+
+  + Loc_宿舍/多章锚点/第2章_陆宣雨门口 @ (2.0, 0.0, -5.4)
+  + 第2章 runner 锚点池 += 第2章_陆宣雨门口（共 1 个）
+  + 陆宣雨_可动.prefab → 挂 PC_徐夏_Walk.controller（rootMotion 关）
+
+【下一步】Play 第2章到微信段结束 → 陆宣雨从南门虚影渐显走到玩家面前落定。
+观感可调：NpcEntrance 顶部 SPEED / ALPHA_MAX；虚影颜色在 CharacterGhost.shader 默认值。

@@ -770,6 +770,14 @@ public static class NpcSetup
     // 低头看腿时，大腿顶端截面是单面片 → 从里面看被背面剔除 → 看着像被“切掉”。
     // 把徐夏专属材质改成双面（_Cull = Off）就看不到空洞了。只改徐夏的材质实例，
     // 不影响其他角色（一人一色，各自有独立材质目录）。
+    // ★ 2026-09-28 踩坑修正：ShaderGraph 的 Render Face 烤在母节点上，Allow Material
+    //   Override 关着（m_AllowMaterialOverride: false）时 shader 里根本没有 _Cull 属性——
+    //   旧版直接对材质 GetFloat/SetFloat("_Cull")：GetFloat 每个 CharacterLit 材质刷一条
+    //   Console 错误（异常拦不住，它只打日志不抛），SetFloat 写进去的也是 shader 不认的
+    //   死数据，双面从未生效。正解：先打开 CharacterLit 的 m_AllowMaterialOverride
+    //   （shadergraph 文本级补丁，2 处母节点副本），重导后 shader 才带 _Cull 属性，
+    //   再对徐夏材质 SetFloat("_Cull", 0)。其它角色材质不写 _Cull → 用母节点默认
+    //   RenderFace=Front，保持单面不变。
     [MenuItem("Tools/干预项目/徐夏身体改双面")]
     public static void MakeXiaDoubleSided()
     {
@@ -777,6 +785,20 @@ public static class NpcSetup
         log.Add("徐夏身体改双面  " + System.DateTime.Now.ToString("yyyy-MM-dd HH:mm"));
         log.Add("");
 
+        // 1) 打开 CharacterLit 的 Allow Material Override（幂等；2 处母节点副本一起翻）
+        const string sgPath = "Assets/assets/11_着色器_Shaders/主着色器_ShaderGraph/ShaderGraph_CharacterLit.shadergraph";
+        string txt = File.ReadAllText(sgPath);
+        int flipped = 0;
+        if (txt.Contains("\"m_AllowMaterialOverride\": false"))
+        {
+            flipped = txt.Split(new[] { "\"m_AllowMaterialOverride\": false" }, System.StringSplitOptions.None).Length - 1;
+            File.WriteAllText(sgPath, txt.Replace("\"m_AllowMaterialOverride\": false", "\"m_AllowMaterialOverride\": true"));
+            AssetDatabase.ImportAsset(sgPath, ImportAssetOptions.ForceUpdate);   // 重导后 shader 才带 _Cull 属性
+            log.Add("  ShaderGraph_CharacterLit：Allow Material Override 已打开（" + flipped + " 处）");
+        }
+        else log.Add("  ShaderGraph_CharacterLit：Allow Material Override 已开，无需再改");
+
+        // 2) 只写徐夏的材质实例（_Cull: 0 = Off 双面；眉毛/睫毛是包内置 shader，本就有 _Cull）
         string dir = CharDir + "/材质/徐夏";
         if (!Directory.Exists(dir)) { log.Add("★ 找不到 " + dir); WriteReport("徐夏身体改双面"); return; }
 
@@ -786,10 +808,7 @@ public static class NpcSetup
             string p2 = f.Replace('\\', '/');
             var m = AssetDatabase.LoadAssetAtPath<Material>(p2);
             if (m == null) continue;
-            // 注意：ShaderGraph 材质用 HasProperty("_Cull") 会返回 false（不在可查询属性里），
-            // 所以不能拿它做门禁，直接设值。
-            float before = 0f;
-            try { before = m.GetFloat("_Cull"); } catch { }
+            float before = m.HasFloat("_Cull") ? m.GetFloat("_Cull") : 2f;   // 2 = Back（默认单面）
             m.SetFloat("_Cull", 0f);                  // 0 = Off（双面）
             EditorUtility.SetDirty(m);
             log.Add(string.Format("  {0,-38} _Cull {1} → 0（双面）", Path.GetFileName(p2), before));
