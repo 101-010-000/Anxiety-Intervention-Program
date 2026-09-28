@@ -11,3 +11,46 @@
   top_mat_top.003_sweater.mat            _Cull 0 → 0（双面）
 
 改了 9 个材质。双面渲染略耗性能，但只影响徐夏一个人。
+角色动画体检  2026-09-27 23:57
+
+【剪辑】isHumanMotion=True 才是有效的 Humanoid 动画，能重定向到任意人形角色
+  待机男        isHumanMotion=True   legacy=False  长度=8.77s 帧率=30 循环=True
+  待机女        isHumanMotion=True   legacy=False  长度=8.33s 帧率=30 循环=True
+  行走         isHumanMotion=True   legacy=False  长度=1.10s 帧率=30 循环=True
+  行走男        isHumanMotion=True   legacy=False  长度=1.17s 帧率=30 循环=True
+  慢跑         isHumanMotion=True   legacy=False  长度=0.70s 帧率=30 循环=True
+  快速跑        isHumanMotion=True   legacy=False  长度=0.63s 帧率=30 循环=True
+  拿手机待机      isHumanMotion=True   legacy=False  长度=23.57s 帧率=30 循环=True
+  拿手机        isHumanMotion=True   legacy=False  长度=6.13s 帧率=30 循环=False
+
+【角色 prefab】avatar.isHuman + isValid 都为 True 才能正确重定向
+  组长_可动          Avatar=有    isHuman=True   isValid=True   controller=有 状态1 剪辑1
+  张知远_可动         Avatar=有    isHuman=True   isValid=True   controller=有 状态1 剪辑1
+  林溪_可动          Avatar=有    isHuman=True   isValid=True   controller=有 状态1 剪辑1
+  陆宣雨_可动         Avatar=有    isHuman=True   isValid=True   controller=有 状态1 剪辑1
+  王含_可动          Avatar=有    isHuman=True   isValid=True   controller=有 状态1 剪辑1
+  李老师_可动         Avatar=有    isHuman=True   isValid=True   controller=有 状态1 剪辑1
+  舍友A_可动         Avatar=有    isHuman=True   isValid=True   controller=有 状态1 剪辑1
+  舍友B_可动         Avatar=有    isHuman=True   isValid=True   controller=有 状态1 剪辑1
+
+【当前场景实例】
+  林溪_可动/Base_F_body                        激活=是      controller=林溪_可动 可见=-
+  林溪_可动                                    激活=是      controller=★无 可见=-
+  李老师_可动/Base_F_body                       激活=是      controller=李老师_可动 可见=-
+  李老师_可动                                   激活=是      controller=★无 可见=-
+  舍友A_可动/Base_F_body                       激活=是      controller=舍友A_可动 可见=-
+  舍友A_可动                                   激活=是      controller=★无 可见=-
+  王含_可动/Base_F_body                        激活=是      controller=王含_可动 可见=-
+  王含_可动                                    激活=是      controller=★无 可见=-
+  张知远_可动/Base_M_body                       激活=是      controller=张知远_可动 可见=-
+  张知远_可动                                   激活=是      controller=★无 可见=-
+  徐夏/Base_F_body                           激活=是      controller=徐夏 可见=-
+  徐夏                                       激活=是      controller=★无 可见=-
+  组长_可动/Base_M_body                        激活=是      controller=组长_可动 可见=-
+  组长_可动                                    激活=是      controller=★无 可见=-
+  陆宣雨_可动/Base_F_body                       激活=是      controller=陆宣雨_可动 可见=-
+  陆宣雨_可动                                   激活=是      controller=★无 可见=-
+  舍友B_可动/Base_F_body                       激活=是      controller=舍友B_可动 可见=-
+  舍友B_可动                                   激活=是      controller=★无 可见=-
+
+提醒：Scene 视图在【非 Play 模式】下不会播放 Animator，必须按 Play 才看得到动。

@@ -1,0 +1,121 @@
+角色骨骼/网格实测  2026-09-27 23:39
+
+================ 王含_可动   Animator=王含_可动/Base_F_body  controller=王含_可动
+   采样 慢跑 t=0.25s
+   —— 蒙皮网格 ——
+     Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Waist/CC_Base_Spine01/CC_Base_Spine02/CC_Base_NeckTwist01/CC_Base_NeckTwist02/CC_Base_Head/Hair/long.001_low 驱动=Base_F_body  蒙皮根=root             包围盒高=0.596 宽=0.364
+     Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Waist/CC_Base_Spine01/CC_Base_Spine02/CC_Base_NeckTwist01/CC_Base_NeckTwist02/CC_Base_Head/Hair_Bangs/bangs.003 驱动=Base_F_body  蒙皮根=root             包围盒高=0.201 宽=0.219
+     Base_F_body/F_body_arms_lower      驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.058 宽=1.013
+     Base_F_body/F_body_arms_upper      驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.161 宽=0.721
+     Base_F_body/F_body_hands           驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.071 宽=1.293
+     Base_F_body/F_body_legs_knee       驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.155 宽=0.228
+     Base_F_body/F_body_shoulders       驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.124 宽=0.366
+     Base_F_body/F_body_torso           驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.169 宽=0.265
+     Base_F_body/F_body_torso.001       驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.200 宽=0.385
+     Base_F_body/Head_F_head.001_mesh   驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.425 宽=0.196
+     Base_F_body/Top_F_top_004_shirt    驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.421 宽=0.845
+     Base_F_body/Bot_F_bot_004_skinny   驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.938 宽=0.311
+     Base_F_body/Shoes_shoes_001_boots+socks 驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.342 宽=0.248
+     Base_F_body/Scarf_F_acc.001_scarf  驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.301 宽=0.322
+   —— 左右腿骨骼（世界坐标 + 到父骨的距离 = 骨长 + lossyScale）——
+     左0 大腿       len=0.102m  y=0.837  lossy=(1,1,1)
+     左1 小腿       len=0.392m  y=0.470  lossy=(1,1,1)
+     左2 脚        len=0.396m  y=0.128  lossy=(1,1,1)
+     左3 脚趾       len=0.100m  y=0.086  lossy=(1,1,1)
+     左腿总长 0.888m
+     右0 大腿       len=0.102m  y=0.823  lossy=(1,1,1)
+     右1 小腿       len=0.392m  y=0.440  lossy=(1,1,1)
+     右2 脚        len=0.396m  y=0.250  lossy=(1,1,1)
+     右3 脚趾       len=0.100m  y=0.196  lossy=(1,1,1)
+     右腿总长 0.888m
+
+================ 王含_可动   Animator=王含_可动  controller=无
+   采样 (没有动画)
+   —— 蒙皮网格 ——
+     Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Waist/CC_Base_Spine01/CC_Base_Spine02/CC_Base_NeckTwist01/CC_Base_NeckTwist02/CC_Base_Head/Hair/long.001_low 驱动=Base_F_body  蒙皮根=root             包围盒高=0.496 宽=0.307
+     Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Waist/CC_Base_Spine01/CC_Base_Spine02/CC_Base_NeckTwist01/CC_Base_NeckTwist02/CC_Base_Head/Hair_Bangs/bangs.003 驱动=Base_F_body  蒙皮根=root             包围盒高=0.150 宽=0.202
+     Base_F_body/F_body_arms_lower      驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.058 宽=1.013
+     Base_F_body/F_body_arms_upper      驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.161 宽=0.721
+     Base_F_body/F_body_hands           驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.071 宽=1.293
+     Base_F_body/F_body_legs_knee       驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.155 宽=0.228
+     Base_F_body/F_body_shoulders       驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.124 宽=0.366
+     Base_F_body/F_body_torso           驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.169 宽=0.265
+     Base_F_body/F_body_torso.001       驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.200 宽=0.385
+     Base_F_body/Head_F_head.001_mesh   驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.425 宽=0.196
+     Base_F_body/Top_F_top_004_shirt    驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.421 宽=0.845
+     Base_F_body/Bot_F_bot_004_skinny   驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.938 宽=0.311
+     Base_F_body/Shoes_shoes_001_boots+socks 驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.342 宽=0.248
+     Base_F_body/Scarf_F_acc.001_scarf  驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.301 宽=0.322
+   —— 左右腿骨骼（世界坐标 + 到父骨的距离 = 骨长 + lossyScale）——
+     左0 大腿       len=0.102m  y=0.865  lossy=(1,1,1)
+     左1 小腿       len=0.392m  y=0.473  lossy=(1,1,1)
+     左2 脚        len=0.396m  y=0.077  lossy=(1,1,1)
+     左3 脚趾       len=0.100m  y=0.020  lossy=(1,1,1)
+     左腿总长 0.888m
+     右0 大腿       len=0.102m  y=0.865  lossy=(1,1,1)
+     右1 小腿       len=0.392m  y=0.473  lossy=(1,1,1)
+     右2 脚        len=0.396m  y=0.077  lossy=(1,1,1)
+     右3 脚趾       len=0.100m  y=0.020  lossy=(1,1,1)
+     右腿总长 0.888m
+
+================ 徐夏   Animator=徐夏/Base_F_body  controller=徐夏
+   采样 mixamo.com t=0.19s
+   —— 蒙皮网格 ——
+     Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Waist/CC_Base_Spine01/CC_Base_Spine02/CC_Base_NeckTwist01/CC_Base_NeckTwist02/CC_Base_Head/Hair/medium.001_low 驱动=Base_F_body  蒙皮根=root             包围盒高=0.356 宽=0.292
+     Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Waist/CC_Base_Spine01/CC_Base_Spine02/CC_Base_NeckTwist01/CC_Base_NeckTwist02/CC_Base_Head/Hair_Bangs/bangs.001_low 驱动=Base_F_body  蒙皮根=root             包围盒高=0.255 宽=0.241
+     Base_F_body/F_body_arms_lower      驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.058 宽=1.013
+     Base_F_body/F_body_arms_upper      驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.161 宽=0.721
+     Base_F_body/F_body_feet            驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.209 宽=0.225
+     Base_F_body/F_body_hands           驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.071 宽=1.293
+     Base_F_body/F_body_hips            驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.218 宽=0.306
+     Base_F_body/F_body_legs_knee       驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.155 宽=0.228
+     Base_F_body/F_body_legs_lower      驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.302 宽=0.222
+     Base_F_body/F_body_legs_upper      驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.315 宽=0.298
+     Base_F_body/F_body_shoulders       驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.124 宽=0.366
+     Base_F_body/F_body_torso           驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.169 宽=0.265
+     Base_F_body/Head_F_head.001_mesh   驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.425 宽=0.196
+     Base_F_body/Top_F_top.003_sweatshirt 驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.427 宽=1.171
+     Base_F_body/Bot_F_bot_003_skirt    驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.372 宽=0.387
+     Base_F_body/Shoes_shoes.006_lowsneakers 驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.241 宽=0.239
+   —— 左右腿骨骼（世界坐标 + 到父骨的距离 = 骨长 + lossyScale）——
+     左0 大腿       len=0.102m  y=0.870  lossy=(1,1,1)
+     左1 小腿       len=0.392m  y=0.506  lossy=(1,1,1)
+     左2 脚        len=0.396m  y=0.121  lossy=(1,1,1)
+     左3 脚趾       len=0.100m  y=0.088  lossy=(1,1,1)
+     左腿总长 0.888m
+     右0 大腿       len=0.102m  y=0.840  lossy=(1,1,1)
+     右1 小腿       len=0.392m  y=0.458  lossy=(1,1,1)
+     右2 脚        len=0.396m  y=0.344  lossy=(1,1,1)
+     右3 脚趾       len=0.100m  y=0.352  lossy=(1,1,1)
+     右腿总长 0.888m
+
+================ 徐夏   Animator=徐夏  controller=无
+   采样 (没有动画)
+   —— 蒙皮网格 ——
+     Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Waist/CC_Base_Spine01/CC_Base_Spine02/CC_Base_NeckTwist01/CC_Base_NeckTwist02/CC_Base_Head/Hair/medium.001_low 驱动=Base_F_body  蒙皮根=root             包围盒高=0.256 宽=0.255
+     Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Waist/CC_Base_Spine01/CC_Base_Spine02/CC_Base_NeckTwist01/CC_Base_NeckTwist02/CC_Base_Head/Hair_Bangs/bangs.001_low 驱动=Base_F_body  蒙皮根=root             包围盒高=0.182 宽=0.215
+     Base_F_body/F_body_arms_lower      驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.058 宽=1.013
+     Base_F_body/F_body_arms_upper      驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.161 宽=0.721
+     Base_F_body/F_body_feet            驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.209 宽=0.225
+     Base_F_body/F_body_hands           驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.071 宽=1.293
+     Base_F_body/F_body_hips            驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.218 宽=0.306
+     Base_F_body/F_body_legs_knee       驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.155 宽=0.228
+     Base_F_body/F_body_legs_lower      驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.302 宽=0.222
+     Base_F_body/F_body_legs_upper      驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.315 宽=0.298
+     Base_F_body/F_body_shoulders       驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.124 宽=0.366
+     Base_F_body/F_body_torso           驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.169 宽=0.265
+     Base_F_body/Head_F_head.001_mesh   驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.425 宽=0.196
+     Base_F_body/Top_F_top.003_sweatshirt 驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.427 宽=1.171
+     Base_F_body/Bot_F_bot_003_skirt    驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.372 宽=0.387
+     Base_F_body/Shoes_shoes.006_lowsneakers 驱动=Base_F_body  蒙皮根=RL_BoneRoot      包围盒高=0.241 宽=0.239
+   —— 左右腿骨骼（世界坐标 + 到父骨的距离 = 骨长 + lossyScale）——
+     左0 大腿       len=0.102m  y=0.865  lossy=(1,1,1)
+     左1 小腿       len=0.392m  y=0.473  lossy=(1,1,1)
+     左2 脚        len=0.396m  y=0.077  lossy=(1,1,1)
+     左3 脚趾       len=0.100m  y=0.020  lossy=(1,1,1)
+     左腿总长 0.888m
+     右0 大腿       len=0.102m  y=0.865  lossy=(1,1,1)
+     右1 小腿       len=0.392m  y=0.473  lossy=(1,1,1)
+     右2 脚        len=0.396m  y=0.077  lossy=(1,1,1)
+     右3 脚趾       len=0.100m  y=0.020  lossy=(1,1,1)
+     右腿总长 0.888m

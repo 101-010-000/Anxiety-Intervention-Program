@@ -1,0 +1,4 @@
+FBX Exporter 包安装完成  2026-09-28 02:57
+状态：Success
+
+✓ 装好了，重新跑一次「导出：给 Mixamo 用的模型」就会用官方 API 写 FBX

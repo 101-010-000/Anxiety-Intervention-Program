@@ -1,0 +1,439 @@
+带动画模型：贴回角色材质  2026-09-28 08:01
+做法：写 FBX 导入器的 Material Remap（externalObjects），不是改场景实例
+根目录：Assets/assets/03_动作_Animation/带动画模型
+
+材质索引：清洗后名字 110 组（角色实例 + 套件共享）
+
+════ 张知远
+   ── Idle.fbx
+      材质名来源：文件（11 个）
+      → .meta 里已有 11 条映射，跳过
+      .meta 复核：externalObjects 里 11 条
+      hair_mat_hair_short_004                → 角色实例   hair_mat_hair_short.004.mat
+      skin_mat_base_M_body                   → 角色实例   skin_mat_base_M_body.mat
+      skin_mat_base_M_face                   → 角色实例   skin_mat_base_M_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_top_002_jacket                 → 角色实例   top_mat_top.002_jacket.mat
+      bot_mat_bot_004_skinnyjeans            → 角色实例   bot_mat_bot.004_skinnyjeans.mat
+      shoes_mat_shoes_002_sneakers           → 角色实例   shoes_mat_shoes.002_sneakers.mat
+      自检：渲染器 1 个 / 子网格 11 / 材质槽 11，已接上角色材质 11，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 1 条（mixamo.com 13.9s）
+   ── 已绑定.fbx
+      材质名来源：文件（11 个）
+      → .meta 里已有 11 条映射，跳过
+      .meta 复核：externalObjects 里 11 条
+      hair_mat_hair_short_004                → 角色实例   hair_mat_hair_short.004.mat
+      skin_mat_base_M_body                   → 角色实例   skin_mat_base_M_body.mat
+      skin_mat_base_M_face                   → 角色实例   skin_mat_base_M_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_top_002_jacket                 → 角色实例   top_mat_top.002_jacket.mat
+      bot_mat_bot_004_skinnyjeans            → 角色实例   bot_mat_bot.004_skinnyjeans.mat
+      shoes_mat_shoes_002_sneakers           → 角色实例   shoes_mat_shoes.002_sneakers.mat
+      自检：渲染器 1 个 / 子网格 11 / 材质槽 11，已接上角色材质 11，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 0 条
+
+════ 徐夏
+   ── Idle.fbx
+      材质名来源：文件（12 个）
+      → .meta 里已有 12 条映射，跳过
+      .meta 复核：externalObjects 里 12 条
+      hair_mat_hair_medium_001               → 角色实例   hair_mat_hair_medium.001.mat
+      hair_mat_hair_bangs_001                → 角色实例   hair_mat_hair_bangs.001.mat
+      skin_mat_base_F_body                   → 角色实例   skin_mat_base_F_body.mat
+      skin_mat_base_F_face                   → 角色实例   skin_mat_base_F_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_top_003_sweater                → 角色实例   top_mat_top.003_sweater.mat
+      bot_mat_bot_003_skirt                  → 角色实例   bot_mat_bot.003_skirt.mat
+      shoes_mat_shoes_006_lowsneakers        → 角色实例   shoes_mat_shoes.006_lowsneakers.mat
+      自检：渲染器 1 个 / 子网格 12 / 材质槽 12，已接上角色材质 12，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 1 条（mixamo.com 16.6s）
+   ── Slow Run.fbx
+      材质名来源：文件（12 个）
+      → .meta 里已有 12 条映射，跳过
+      .meta 复核：externalObjects 里 12 条
+      hair_mat_hair_medium_001               → 角色实例   hair_mat_hair_medium.001.mat
+      hair_mat_hair_bangs_001                → 角色实例   hair_mat_hair_bangs.001.mat
+      skin_mat_base_F_body                   → 角色实例   skin_mat_base_F_body.mat
+      skin_mat_base_F_face                   → 角色实例   skin_mat_base_F_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_top_003_sweater                → 角色实例   top_mat_top.003_sweater.mat
+      bot_mat_bot_003_skirt                  → 角色实例   bot_mat_bot.003_skirt.mat
+      shoes_mat_shoes_006_lowsneakers        → 角色实例   shoes_mat_shoes.006_lowsneakers.mat
+      自检：渲染器 1 个 / 子网格 12 / 材质槽 12，已接上角色材质 12，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 1 条（mixamo.com 0.7s）
+   ── Texting.fbx
+      材质名来源：文件（12 个）
+      → .meta 里已有 12 条映射，跳过
+      .meta 复核：externalObjects 里 12 条
+      hair_mat_hair_medium_001               → 角色实例   hair_mat_hair_medium.001.mat
+      hair_mat_hair_bangs_001                → 角色实例   hair_mat_hair_bangs.001.mat
+      skin_mat_base_F_body                   → 角色实例   skin_mat_base_F_body.mat
+      skin_mat_base_F_face                   → 角色实例   skin_mat_base_F_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_top_003_sweater                → 角色实例   top_mat_top.003_sweater.mat
+      bot_mat_bot_003_skirt                  → 角色实例   bot_mat_bot.003_skirt.mat
+      shoes_mat_shoes_006_lowsneakers        → 角色实例   shoes_mat_shoes.006_lowsneakers.mat
+      自检：渲染器 1 个 / 子网格 12 / 材质槽 12，已接上角色材质 12，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 1 条（mixamo.com 18.5s）
+   ── Walk.fbx
+      材质名来源：文件（12 个）
+      → .meta 里已有 12 条映射，跳过
+      .meta 复核：externalObjects 里 12 条
+      hair_mat_hair_medium_001               → 角色实例   hair_mat_hair_medium.001.mat
+      hair_mat_hair_bangs_001                → 角色实例   hair_mat_hair_bangs.001.mat
+      skin_mat_base_F_body                   → 角色实例   skin_mat_base_F_body.mat
+      skin_mat_base_F_face                   → 角色实例   skin_mat_base_F_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_top_003_sweater                → 角色实例   top_mat_top.003_sweater.mat
+      bot_mat_bot_003_skirt                  → 角色实例   bot_mat_bot.003_skirt.mat
+      shoes_mat_shoes_006_lowsneakers        → 角色实例   shoes_mat_shoes.006_lowsneakers.mat
+      自检：渲染器 1 个 / 子网格 12 / 材质槽 12，已接上角色材质 12，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 1 条（mixamo.com 1.0s）
+   ── 已绑定.fbx
+      材质名来源：文件（12 个）
+      → .meta 里已有 12 条映射，跳过
+      .meta 复核：externalObjects 里 12 条
+      hair_mat_hair_medium_001               → 角色实例   hair_mat_hair_medium.001.mat
+      hair_mat_hair_bangs_001                → 角色实例   hair_mat_hair_bangs.001.mat
+      skin_mat_base_F_body                   → 角色实例   skin_mat_base_F_body.mat
+      skin_mat_base_F_face                   → 角色实例   skin_mat_base_F_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_top_003_sweater                → 角色实例   top_mat_top.003_sweater.mat
+      bot_mat_bot_003_skirt                  → 角色实例   bot_mat_bot.003_skirt.mat
+      shoes_mat_shoes_006_lowsneakers        → 角色实例   shoes_mat_shoes.006_lowsneakers.mat
+      自检：渲染器 1 个 / 子网格 12 / 材质槽 12，已接上角色材质 12，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 0 条
+
+════ 李老师
+   ── Idle.fbx
+      材质名来源：文件（14 个）
+      → .meta 里已有 14 条映射，跳过
+      .meta 复核：externalObjects 里 14 条
+      hair_mat_hair_tied_001                 → 角色实例   hair_mat_hair_tied.001.mat
+      hair_mat_hair_bangs_002                → 角色实例   hair_mat_hair_bangs.002.mat
+      hair_mat_hair_tied___bun               → 角色实例   hair_mat_hair_tied - bun.mat
+      mat_glasses_001_round                  → 套件共享   mat_glasses.001_round.mat
+      skin_mat_base_F_body                   → 角色实例   skin_mat_base_F_body.mat
+      skin_mat_base_F_face                   → 角色实例   skin_mat_base_F_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_top_011_blazer                 → 角色实例   top_mat_top.011_blazer.mat
+      bot_mat_bot_001_pants                  → 角色实例   bot_mat_bot.001_pants.mat
+      shoes_mat_shoes_005_highboots          → 角色实例   shoes_mat_shoes.005_highboots.mat
+      自检：渲染器 1 个 / 子网格 14 / 材质槽 14，已接上角色材质 14，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 1 条（mixamo.com 8.3s）
+   ── 已绑定.fbx
+      材质名来源：文件（14 个）
+      → .meta 里已有 14 条映射，跳过
+      .meta 复核：externalObjects 里 14 条
+      hair_mat_hair_tied_001                 → 角色实例   hair_mat_hair_tied.001.mat
+      hair_mat_hair_bangs_002                → 角色实例   hair_mat_hair_bangs.002.mat
+      hair_mat_hair_tied___bun               → 角色实例   hair_mat_hair_tied - bun.mat
+      mat_glasses_001_round                  → 套件共享   mat_glasses.001_round.mat
+      skin_mat_base_F_body                   → 角色实例   skin_mat_base_F_body.mat
+      skin_mat_base_F_face                   → 角色实例   skin_mat_base_F_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_top_011_blazer                 → 角色实例   top_mat_top.011_blazer.mat
+      bot_mat_bot_001_pants                  → 角色实例   bot_mat_bot.001_pants.mat
+      shoes_mat_shoes_005_highboots          → 角色实例   shoes_mat_shoes.005_highboots.mat
+      自检：渲染器 1 个 / 子网格 14 / 材质槽 14，已接上角色材质 14，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 0 条
+
+════ 林溪
+   ── Idle.fbx
+      材质名来源：文件（13 个）
+      → .meta 里已有 13 条映射，跳过
+      .meta 复核：externalObjects 里 13 条
+      hair_mat_hair_tied_002                 → 角色实例   hair_mat_hair_tied.002.mat
+      hair_mat_hair_bangs_002                → 角色实例   hair_mat_hair_bangs.002.mat
+      hair_mat_hair_tied_002___twintails     → 角色实例   hair_mat_hair_tied.002 - twintails.mat
+      skin_mat_base_F_body                   → 角色实例   skin_mat_base_F_body.mat
+      skin_mat_base_F_face                   → 角色实例   skin_mat_base_F_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_top_002_jacket                 → 角色实例   top_mat_top.002_jacket.mat
+      bot_mat_bot_002_shorts                 → 角色实例   bot_mat_bot.002_shorts.mat
+      shoes_mat_shoes_002_sneakers           → 角色实例   shoes_mat_shoes.002_sneakers.mat
+      自检：渲染器 1 个 / 子网格 13 / 材质槽 13，已接上角色材质 13，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 1 条（mixamo.com 16.6s）
+   ── Texting.fbx
+      材质名来源：文件（13 个）
+      → .meta 里已有 13 条映射，跳过
+      .meta 复核：externalObjects 里 13 条
+      hair_mat_hair_tied_002                 → 角色实例   hair_mat_hair_tied.002.mat
+      hair_mat_hair_bangs_002                → 角色实例   hair_mat_hair_bangs.002.mat
+      hair_mat_hair_tied_002___twintails     → 角色实例   hair_mat_hair_tied.002 - twintails.mat
+      skin_mat_base_F_body                   → 角色实例   skin_mat_base_F_body.mat
+      skin_mat_base_F_face                   → 角色实例   skin_mat_base_F_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_top_002_jacket                 → 角色实例   top_mat_top.002_jacket.mat
+      bot_mat_bot_002_shorts                 → 角色实例   bot_mat_bot.002_shorts.mat
+      shoes_mat_shoes_002_sneakers           → 角色实例   shoes_mat_shoes.002_sneakers.mat
+      自检：渲染器 1 个 / 子网格 13 / 材质槽 13，已接上角色材质 13，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 1 条（mixamo.com 18.5s）
+   ── 已绑定.fbx
+      材质名来源：文件（13 个）
+      → .meta 里已有 13 条映射，跳过
+      .meta 复核：externalObjects 里 13 条
+      hair_mat_hair_tied_002                 → 角色实例   hair_mat_hair_tied.002.mat
+      hair_mat_hair_bangs_002                → 角色实例   hair_mat_hair_bangs.002.mat
+      hair_mat_hair_tied_002___twintails     → 角色实例   hair_mat_hair_tied.002 - twintails.mat
+      skin_mat_base_F_body                   → 角色实例   skin_mat_base_F_body.mat
+      skin_mat_base_F_face                   → 角色实例   skin_mat_base_F_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_top_002_jacket                 → 角色实例   top_mat_top.002_jacket.mat
+      bot_mat_bot_002_shorts                 → 角色实例   bot_mat_bot.002_shorts.mat
+      shoes_mat_shoes_002_sneakers           → 角色实例   shoes_mat_shoes.002_sneakers.mat
+      自检：渲染器 1 个 / 子网格 13 / 材质槽 13，已接上角色材质 13，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 0 条
+
+════ 王含
+   ── Idle.fbx
+      材质名来源：文件（13 个）
+      → .meta 里已有 13 条映射，跳过
+      .meta 复核：externalObjects 里 13 条
+      hair_mat_hair_long_001                 → 角色实例   hair_mat_hair_long.001.mat
+      hair_mat_hair_bangs_003                → 角色实例   hair_mat_hair_bangs.003.mat
+      skin_mat_base_F_body                   → 角色实例   skin_mat_base_F_body.mat
+      skin_mat_base_F_face                   → 角色实例   skin_mat_base_F_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_top_004_shirt                  → 角色实例   top_mat_top.004_shirt.mat
+      bot_mat_bot_004_skinnyjeans            → 角色实例   bot_mat_bot.004_skinnyjeans.mat
+      shoes_mat_shoes_001_boots              → 角色实例   shoes_mat_shoes.001_boots.mat
+      acc_mat_acc_001_scarf                  → 角色实例   acc_mat_acc.001_scarf.mat
+      自检：渲染器 1 个 / 子网格 13 / 材质槽 13，已接上角色材质 13，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 1 条（mixamo.com 16.6s）
+   ── 已绑定.fbx
+      材质名来源：文件（13 个）
+      → .meta 里已有 13 条映射，跳过
+      .meta 复核：externalObjects 里 13 条
+      hair_mat_hair_long_001                 → 角色实例   hair_mat_hair_long.001.mat
+      hair_mat_hair_bangs_003                → 角色实例   hair_mat_hair_bangs.003.mat
+      skin_mat_base_F_body                   → 角色实例   skin_mat_base_F_body.mat
+      skin_mat_base_F_face                   → 角色实例   skin_mat_base_F_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_top_004_shirt                  → 角色实例   top_mat_top.004_shirt.mat
+      bot_mat_bot_004_skinnyjeans            → 角色实例   bot_mat_bot.004_skinnyjeans.mat
+      shoes_mat_shoes_001_boots              → 角色实例   shoes_mat_shoes.001_boots.mat
+      acc_mat_acc_001_scarf                  → 角色实例   acc_mat_acc.001_scarf.mat
+      自检：渲染器 1 个 / 子网格 13 / 材质槽 13，已接上角色材质 13，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 0 条
+
+════ 组长
+   ── Idle.fbx
+      材质名来源：文件（11 个）
+      → .meta 里已有 11 条映射，跳过
+      .meta 复核：externalObjects 里 11 条
+      hair_mat_hair_short_001                → 角色实例   hair_mat_hair_short.001.mat
+      skin_mat_base_M_body                   → 角色实例   skin_mat_base_M_body.mat
+      skin_mat_base_M_face                   → 角色实例   skin_mat_base_M_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_top_010_shirtntie              → 角色实例   top_mat_top.010_shirtntie.mat
+      bot_mat_bot_001_pants                  → 角色实例   bot_mat_bot.001_pants.mat
+      shoes_mat_shoes_006_lowsneakers        → 角色实例   shoes_mat_shoes.006_lowsneakers.mat
+      自检：渲染器 1 个 / 子网格 11 / 材质槽 11，已接上角色材质 11，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 1 条（mixamo.com 13.9s）
+   ── 已绑定.fbx
+      材质名来源：文件（11 个）
+      → .meta 里已有 11 条映射，跳过
+      .meta 复核：externalObjects 里 11 条
+      hair_mat_hair_short_001                → 角色实例   hair_mat_hair_short.001.mat
+      skin_mat_base_M_body                   → 角色实例   skin_mat_base_M_body.mat
+      skin_mat_base_M_face                   → 角色实例   skin_mat_base_M_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_top_010_shirtntie              → 角色实例   top_mat_top.010_shirtntie.mat
+      bot_mat_bot_001_pants                  → 角色实例   bot_mat_bot.001_pants.mat
+      shoes_mat_shoes_006_lowsneakers        → 角色实例   shoes_mat_shoes.006_lowsneakers.mat
+      自检：渲染器 1 个 / 子网格 11 / 材质槽 11，已接上角色材质 11，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 0 条
+
+════ 舍友A
+   ── Idle.fbx
+      材质名来源：文件（13 个）
+      → .meta 里已有 13 条映射，跳过
+      .meta 复核：externalObjects 里 13 条
+      hair_mat_hair_tied_001                 → 角色实例   hair_mat_hair_tied.001.mat
+      hair_mat_hair_bangs_001                → 角色实例   hair_mat_hair_bangs.001.mat
+      hair_mat_hair_tied_001___ponytail      → 角色实例   hair_mat_hair_tied.001 - ponytail.mat
+      skin_mat_base_F_body                   → 角色实例   skin_mat_base_F_body.mat
+      skin_mat_base_F_face                   → 角色实例   skin_mat_base_F_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_top_005_shirt_vest             → 角色实例   top_mat_top.005_shirt_vest.mat
+      bot_mat_bot_005_shorts                 → 角色实例   bot_mat_bot.005_shorts.mat
+      shoes_mat_shoes_005_highboots          → 角色实例   shoes_mat_shoes.005_highboots.mat
+      自检：渲染器 1 个 / 子网格 13 / 材质槽 13，已接上角色材质 13，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 1 条（mixamo.com 16.6s）
+   ── 已绑定.fbx
+      材质名来源：文件（13 个）
+      → .meta 里已有 13 条映射，跳过
+      .meta 复核：externalObjects 里 13 条
+      hair_mat_hair_tied_001                 → 角色实例   hair_mat_hair_tied.001.mat
+      hair_mat_hair_bangs_001                → 角色实例   hair_mat_hair_bangs.001.mat
+      hair_mat_hair_tied_001___ponytail      → 角色实例   hair_mat_hair_tied.001 - ponytail.mat
+      skin_mat_base_F_body                   → 角色实例   skin_mat_base_F_body.mat
+      skin_mat_base_F_face                   → 角色实例   skin_mat_base_F_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_top_005_shirt_vest             → 角色实例   top_mat_top.005_shirt_vest.mat
+      bot_mat_bot_005_shorts                 → 角色实例   bot_mat_bot.005_shorts.mat
+      shoes_mat_shoes_005_highboots          → 角色实例   shoes_mat_shoes.005_highboots.mat
+      自检：渲染器 1 个 / 子网格 13 / 材质槽 13，已接上角色材质 13，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 0 条
+
+════ 舍友B
+   ── Idle.fbx
+      材质名来源：文件（12 个）
+      → .meta 里已有 12 条映射，跳过
+      .meta 复核：externalObjects 里 12 条
+      hair_mat_hair_curly_002                → 角色实例   hair_mat_hair_curly.002.mat
+      hair_mat_hair_bangs_003                → 角色实例   hair_mat_hair_bangs.003.mat
+      skin_mat_base_F_body                   → 角色实例   skin_mat_base_F_body.mat
+      skin_mat_base_F_face                   → 角色实例   skin_mat_base_F_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_top_006_openshirt              → 角色实例   top_mat_top.006_openshirt.mat
+      bot_mat_bot_006_loosepants             → 角色实例   bot_mat_bot.006_loosepants.mat
+      shoes_mat_shoes_004_sandals            → 角色实例   shoes_mat_shoes.004_sandals.mat
+      自检：渲染器 1 个 / 子网格 12 / 材质槽 12，已接上角色材质 12，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 1 条（mixamo.com 6.0s）
+   ── 已绑定.fbx
+      材质名来源：文件（12 个）
+      → .meta 里已有 12 条映射，跳过
+      .meta 复核：externalObjects 里 12 条
+      hair_mat_hair_curly_002                → 角色实例   hair_mat_hair_curly.002.mat
+      hair_mat_hair_bangs_003                → 角色实例   hair_mat_hair_bangs.003.mat
+      skin_mat_base_F_body                   → 角色实例   skin_mat_base_F_body.mat
+      skin_mat_base_F_face                   → 角色实例   skin_mat_base_F_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_top_006_openshirt              → 角色实例   top_mat_top.006_openshirt.mat
+      bot_mat_bot_006_loosepants             → 角色实例   bot_mat_bot.006_loosepants.mat
+      shoes_mat_shoes_004_sandals            → 角色实例   shoes_mat_shoes.004_sandals.mat
+      自检：渲染器 1 个 / 子网格 12 / 材质槽 12，已接上角色材质 12，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 0 条
+
+════ 陆宣雨
+   ── Idle.fbx
+      材质名来源：文件（12 个）
+      → .meta 里已有 12 条映射，跳过
+      .meta 复核：externalObjects 里 12 条
+      hair_mat_hair_medium_002               → 角色实例   hair_mat_hair_medium.002.mat
+      hair_mat_hair_bangs_002                → 角色实例   hair_mat_hair_bangs.002.mat
+      mat_glasses_001_square                 → 套件共享   mat_glasses.001_square.mat
+      skin_mat_base_F_body                   → 角色实例   skin_mat_base_F_body.mat
+      skin_mat_base_F_face                   → 角色实例   skin_mat_base_F_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_outfit_003                     → 角色实例   top_mat_outfit.003.mat
+      shoes_mat_shoes_007_chelseas           → 角色实例   shoes_mat_shoes.007_chelseas.mat
+      自检：渲染器 1 个 / 子网格 12 / 材质槽 12，已接上角色材质 12，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 1 条（mixamo.com 2.0s）
+   ── 已绑定.fbx
+      材质名来源：文件（12 个）
+      → .meta 里已有 12 条映射，跳过
+      .meta 复核：externalObjects 里 12 条
+      hair_mat_hair_medium_002               → 角色实例   hair_mat_hair_medium.002.mat
+      hair_mat_hair_bangs_002                → 角色实例   hair_mat_hair_bangs.002.mat
+      mat_glasses_001_square                 → 套件共享   mat_glasses.001_square.mat
+      skin_mat_base_F_body                   → 角色实例   skin_mat_base_F_body.mat
+      skin_mat_base_F_face                   → 角色实例   skin_mat_base_F_face.mat
+      brow_mat_eyelashes                     → 角色实例   brow_mat_eyelashes.mat
+      mat_base_eye_001                       → 套件共享   mat_base_eye.001.mat
+      mat_eye_highlight                      → 套件共享   mat_eye_highlight.mat
+      mat_base_mouth                         → 套件共享   mat_base_mouth.mat
+      brow_mat_eyebrows                      → 角色实例   brow_mat_eyebrows.mat
+      top_mat_outfit_003                     → 角色实例   top_mat_outfit.003.mat
+      shoes_mat_shoes_007_chelseas           → 角色实例   shoes_mat_shoes.007_chelseas.mat
+      自检：渲染器 1 个 / 子网格 12 / 材质槽 12，已接上角色材质 12，空槽 0  ✓
+      导入设置：animationType=Generic  avatarSetup=NoAvatar  importAnimation=True  剪辑 0 条
+
+════ 汇总
+  FBX 22 个；材质槽 271 个；已映射 271 个；重写过映射的 FBX 0 个
+  找不到对应材质的：0 ✓
+  空材质槽 / 洋红：0 ✓
+  材质贴图（_BaseMap 遮罩）缺失：0 ✓
+
+机制自检：（未探测）
+
+备注：
+  · 材质是【共用】的（和 角色_URP/*_可动.prefab 同一份）—— 改颜色两边一起变，这是故意的。
+  · 只改导入器的材质重映射，不动网格 / 骨骼 / 动画 / 场景。
+  · FBX 里材质名 = 导出时的 Unity 材质名（. 空格 - 都变成 _），所以能一一对上。

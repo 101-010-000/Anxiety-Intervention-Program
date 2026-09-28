@@ -1,0 +1,41 @@
+同名骨头 / 驱动骨架 一致性检查  2026-09-28 00:05
+关键：Animator 驱动的骨头，和网格 bones[] 里指的骨头，是不是【同一个对象】。
+
+=== 徐夏   Animator=Base_F_body
+   —— 关键骨头的重名情况 ——
+     CC_Base_Hip              出现 1 次
+     CC_Base_Pelvis           出现 1 次
+     CC_BaseThigh.L           出现 1 次
+     CC_BaseCalf.L            出现 1 次
+     CC_BaseFoot.L            出现 1 次
+     CC_BaseToeBase.L         出现 1 次
+     RL_BoneRoot              出现 1 次
+     Armature_F               出现 1 次
+   —— 网格 bones[] vs Animator 驱动的骨头 ——
+     【F_body_feet】
+        CC_BaseThigh.L     Animator→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L 网格→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L 同一个 ✓
+        CC_BaseCalf.L      Animator→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L 网格→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L 同一个 ✓
+        CC_BaseFoot.L      Animator→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L/CC_BaseFoot.L 网格→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L/CC_BaseFoot.L 同一个 ✓
+        CC_BaseToeBase.L   Animator→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L/CC_BaseFoot.L/CC_BaseToeBase.L 网格→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L/CC_BaseFoot.L/CC_BaseToeBase.L 同一个 ✓
+     【Shoes_shoes.006_lowsneakers】
+        CC_BaseThigh.L     Animator→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L 网格→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L 同一个 ✓
+        CC_BaseCalf.L      Animator→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L 网格→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L 同一个 ✓
+        CC_BaseFoot.L      Animator→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L/CC_BaseFoot.L 网格→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L/CC_BaseFoot.L 同一个 ✓
+        CC_BaseToeBase.L   Animator→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L/CC_BaseFoot.L/CC_BaseToeBase.L 网格→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L/CC_BaseFoot.L/CC_BaseToeBase.L 同一个 ✓
+
+=== 王含_可动   Animator=Base_F_body
+   —— 关键骨头的重名情况 ——
+     CC_Base_Hip              出现 1 次
+     CC_Base_Pelvis           出现 1 次
+     CC_BaseThigh.L           出现 1 次
+     CC_BaseCalf.L            出现 1 次
+     CC_BaseFoot.L            出现 1 次
+     CC_BaseToeBase.L         出现 1 次
+     RL_BoneRoot              出现 1 次
+     Armature_F               出现 1 次
+   —— 网格 bones[] vs Animator 驱动的骨头 ——
+     【Shoes_shoes_001_boots+socks】
+        CC_BaseThigh.L     Animator→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L 网格→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L 同一个 ✓
+        CC_BaseCalf.L      Animator→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L 网格→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L 同一个 ✓
+        CC_BaseFoot.L      Animator→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L/CC_BaseFoot.L 网格→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L/CC_BaseFoot.L 同一个 ✓
+        CC_BaseToeBase.L   Animator→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L/CC_BaseFoot.L/CC_BaseToeBase.L 网格→Base_F_body/Armature_F/RL_BoneRoot/CC_Base_Hip/CC_Base_Pelvis/CC_BaseThigh.L/CC_BaseCalf.L/CC_BaseFoot.L/CC_BaseToeBase.L 同一个 ✓

@@ -265,7 +265,7 @@ public static class CharRebuild
     // 把测试场景里的主角换成重建后的 prefab（场景没开就临时加载，改完保存再关）
     static void SwapTestScene()
     {
-        const string scenePath = "Assets/Scenes/Test_徐夏_动画.unity";
+        const string scenePath = "Assets/Scenes/角色资源预览场景.unity";
         if (!File.Exists(scenePath)) { log.Add("（没有测试场景，跳过场景替换）"); return; }
         var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(OUT + "/徐夏_可动.prefab");
         if (prefab == null) { log.Add("（找不到新的徐夏 prefab，跳过场景替换）"); return; }
@@ -414,7 +414,9 @@ public static class CharRebuild
             var go = new GameObject(label + "_" + src.name);
             go.transform.SetParent(baseRoot, false);
             var smr = go.AddComponent<SkinnedMeshRenderer>();
-            smr.sharedMesh = src.sharedMesh;
+            // 鞋/袜的踝口权重修复（CC_Base 扭转骨从不会被 mixamo 动画驱动 → 压在它上面的
+            // 顶点实际上是“焊在小腿上”，踝关节一弯鞋口就会被拧变形）。详见 FootWeightFix.cs
+            smr.sharedMesh = FootWeightFix.FixIfShoe(src.sharedMesh, label);
             smr.sharedMaterials = ResolveMats(src, matName, label, c);
             var bones = new Transform[src.bones.Length];
             for (int i = 0; i < bones.Length; i++)

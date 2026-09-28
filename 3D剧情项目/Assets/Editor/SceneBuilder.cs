@@ -822,7 +822,7 @@ public static class SceneBuilder
         log.Add("");
 
         // 换掉场景里的 MeshFilter
-        foreach (var scPath in new[] { OUT_SCENE, "Assets/Scenes/MainMenu.unity", "Assets/Scenes/Test_徐夏_动画.unity" })
+        foreach (var scPath in new[] { OUT_SCENE, "Assets/Scenes/MainMenu.unity", "Assets/Scenes/角色资源预览场景.unity" })
         {
             if (!File.Exists(scPath)) continue;
             var scene = EditorSceneManager.OpenScene(scPath, OpenSceneMode.Single);
@@ -895,7 +895,7 @@ public static class SceneBuilder
 
         if (!Application.isBatchMode && !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
 
-        foreach (var scPath in new[] { OUT_SCENE, "Assets/Scenes/MainMenu.unity", "Assets/Scenes/Test_徐夏_动画.unity" })
+        foreach (var scPath in new[] { OUT_SCENE, "Assets/Scenes/MainMenu.unity", "Assets/Scenes/角色资源预览场景.unity" })
         {
             if (!File.Exists(scPath)) continue;
             var scene = EditorSceneManager.OpenScene(scPath, OpenSceneMode.Single);

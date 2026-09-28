@@ -1,0 +1,34 @@
+项目整理：清旧资源 + 归档历史报告  2026-09-28 08:49
+
+── 1) 备份并删除无人引用的死资产（备份在 D:\workspace\unity project\干预\额外文件\旧资源）
+   （已不在）Assets/assets/02_角色_Character/Mixamo已绑
+   （已不在）Assets/assets/02_角色_Character/Materials_URPLit
+   （已不在）Assets/assets/03_动作_Animation/动画/测试跑动画.fbx
+   （已不在）Assets/assets/03_动作_Animation/预览Clip/mixamo.com.anim
+   （已不在）Assets/assets/03_动作_Animation/预览Clip/mixamo.com_同源.anim
+   （已不在）Assets/assets/03_动作_Animation/预览Clip/Running.anim
+   （已不在）Assets/assets/03_动作_Animation/Animators/预览/李老师_已绑.controller
+
+── 2) 历史报告 → Assets/assets/_报告/历史
+   移动 45 份（另有 0 份本来就不在）
+
+── 3) 历史预览图 → Assets/assets/_报告/预览/历史
+   ✓ Mixamo测试
+   ✓ 腿脚
+
+注：Editor 脚本与运行时调试脚本的归档是另一步（用文件方式搬，避免边跑边重编译）——
+    MixamoRigCheck / FootDiag / FootDiagTrigger / FootSkinProbe / FootWeightFix /
+    TestRunAnim / InstallFbxPkg / _TriggerTouch / Scripts/Debug/AnimDiag / Scripts/Game/TwistFixABDriver
+════ 人工补充（2026-09-28 收尾）
+· Editor 脚本归档：MixamoRigCheck / FootDiag / FootDiagTrigger / FootSkinProbe / TestRunAnim / InstallFbxPkg
+  / _TriggerTouch / ProjectTidy（本工具自己）→ 额外文件/历史Editor脚本/
+  ★ FootWeightFix.cs 搬回 Assets/Editor —— CharRebuild.cs:419 会调 FootWeightFix.FixIfShoe()，不能动。
+· 运行时调试脚本归档：Scripts/Debug/AnimDiag.cs、Scripts/Game/TwistFixABDriver.cs → 额外文件/历史脚本_运行时/
+  （空掉的 Scripts/Debug/ 目录已删；NpcSetup 的 PlayDiag 菜单若还想用，把 AnimDiag.cs 拷回来即可）
+· 额外文件/ 结构：新增 旧资源/（被清出项目的资产，连 .meta 备份）、场景备份/、历史脚本_运行时/、历史dump/，
+  并删掉误建的嵌套目录 额外文件/额外文件/。
+· 编译自检：清完 Tundra build success，0 error（FootWeightFix 的 CS0162 是历史 warning）。
+· 残留但【无害】的断引用（历史遗留，不是本次清理造成，被清 GUID 与它们零重叠）：
+  kit 材质里 23 条 guid 指向已不存在资产，集中在 _ColorRamp / _Metallic / _Normal / _RGB_Map / _MainTex /
+  _MetallicGlossMap 这些「旧 shader 遗留属性」上；现行 shader 只吃 _BaseMap（遮罩）+ _BumpMap，
+  渲染实测正常（带动画模型预览与原角色逐像素一致）。想彻底干净就把这些属性置 None。

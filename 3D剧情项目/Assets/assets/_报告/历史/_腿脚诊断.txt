@@ -1,0 +1,818 @@
+腿脚骨骼诊断（只读）  2026-09-27 23:23
+
+=== Assets/assets/02_角色_Character/组合角色/张知远/张知远.fbx
+   isHuman=True  isValid=True  name=张知远Avatar
+   —— 人形映射（我关心的这几根）——
+     Hips           → CC_Base_Hip
+     Spine          → CC_Base_Waist
+     LeftUpperLeg   → CC_BaseThigh_L
+     RightUpperLeg  → CC_BaseThigh_R
+     LeftLowerLeg   → CC_BaseCalf_L
+     RightLowerLeg  → CC_BaseCalf_R
+     LeftFoot       → CC_BaseFoot_L
+     RightFoot      → CC_BaseFoot_R
+     LeftToes       → CC_BaseToeBase_L
+     RightToes      → CC_BaseToeBase_R
+   —— 腿脚骨骼的绑定姿势缩放（非 1 或左右不一致就要怀疑）——
+     CC_BaseThigh_L                 scale=(1, 1, 1)
+     CC_BaseCalf_L                  scale=(1, 1, 1)
+     CC_BaseFoot_L                  scale=(1, 1, 1)
+     CC_BaseToeBase_L               scale=(1, 1, 1)
+     CC_BaseToeBase_L_end           scale=(1, 1, 1)
+     CC_BaseCalfTwist01_L           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_L           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_L_end       scale=(1, 1, 1)
+     CC_BaseThighTwist01_L          scale=(1, 1, 1)
+     CC_BaseThighTwist02_L          scale=(1, 1, 1)
+     CC_BaseThighTwist02_L_end      scale=(1, 1, 1)
+     CC_BaseThigh_R                 scale=(1, 1, 1)
+     CC_BaseThighTwist01_R          scale=(1, 1, 1)
+     CC_BaseThighTwist02_R          scale=(1, 1, 1)
+     CC_BaseThighTwist02_R_end      scale=(1, 1, 1)
+     CC_BaseCalf_R                  scale=(1, 1, 1)
+     CC_BaseFoot_R                  scale=(1, 1, 1)
+     CC_BaseToeBase_R               scale=(1, 1, 1)
+     CC_BaseToeBase_R_end           scale=(1, 1, 1)
+     CC_BaseCalfTwist01_R           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_R           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_R_end       scale=(1, 1, 1)
+     M_body_legs_knee               scale=(1, 1, 1)
+     M_body_legs_lower              scale=(1, 1, 1)
+     M_body_legs_upper              scale=(1, 1, 1)
+
+=== Assets/assets/02_角色_Character/组合角色/徐夏/徐夏.fbx
+   isHuman=True  isValid=True  name=徐夏Avatar
+   —— 人形映射（我关心的这几根）——
+     Hips           → CC_Base_Hip
+     Spine          → CC_Base_Waist
+     LeftUpperLeg   → CC_BaseThigh_L
+     RightUpperLeg  → CC_BaseThigh_R
+     LeftLowerLeg   → CC_BaseCalf_L
+     RightLowerLeg  → CC_BaseCalf_R
+     LeftFoot       → CC_BaseFoot_L
+     RightFoot      → CC_BaseFoot_R
+     LeftToes       → CC_BaseToeBase_L
+     RightToes      → CC_BaseToeBase_R
+   —— 腿脚骨骼的绑定姿势缩放（非 1 或左右不一致就要怀疑）——
+     CC_BaseThigh_L                 scale=(1, 1, 1)
+     CC_BaseCalf_L                  scale=(1, 1, 1)
+     CC_BaseFoot_L                  scale=(1, 1, 1)
+     CC_BaseToeBase_L               scale=(1, 1, 1)
+     CC_BaseToeBase_L_end           scale=(1, 1, 1)
+     CC_BaseCalfTwist01_L           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_L           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_L_end       scale=(1, 1, 1)
+     CC_BaseThighTwist01_L          scale=(1, 1, 1)
+     CC_BaseThighTwist02_L          scale=(1, 1, 1)
+     CC_BaseThighTwist02_L_end      scale=(1, 1, 1)
+     CC_BaseThigh_R                 scale=(1, 1, 1)
+     CC_BaseThighTwist01_R          scale=(1, 1, 1)
+     CC_BaseThighTwist02_R          scale=(1, 1, 1)
+     CC_BaseThighTwist02_R_end      scale=(1, 1, 1)
+     CC_BaseCalf_R                  scale=(1, 1, 1)
+     CC_BaseFoot_R                  scale=(1, 1, 1)
+     CC_BaseToeBase_R               scale=(1, 1, 1)
+     CC_BaseToeBase_R_end           scale=(1, 1, 1)
+     CC_BaseCalfTwist01_R           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_R           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_R_end       scale=(1, 1, 1)
+     F_body_legs_knee               scale=(1, 1, 1)
+     F_body_legs_lower              scale=(1, 1, 1)
+
+=== Assets/assets/02_角色_Character/组合角色/李老师/李老师.fbx
+   isHuman=True  isValid=True  name=李老师Avatar
+   —— 人形映射（我关心的这几根）——
+     Hips           → CC_Base_Hip
+     Spine          → CC_Base_Waist
+     LeftUpperLeg   → CC_BaseThigh_L
+     RightUpperLeg  → CC_BaseThigh_R
+     LeftLowerLeg   → CC_BaseCalf_L
+     RightLowerLeg  → CC_BaseCalf_R
+     LeftFoot       → CC_BaseFoot_L
+     RightFoot      → CC_BaseFoot_R
+     LeftToes       → CC_BaseToeBase_L
+     RightToes      → CC_BaseToeBase_R
+   —— 腿脚骨骼的绑定姿势缩放（非 1 或左右不一致就要怀疑）——
+     CC_BaseThigh_L                 scale=(1, 1, 1)
+     CC_BaseCalf_L                  scale=(1, 1, 1)
+     CC_BaseFoot_L                  scale=(1, 1, 1)
+     CC_BaseToeBase_L               scale=(1, 1, 1)
+     CC_BaseToeBase_L_end           scale=(1, 1, 1)
+     CC_BaseCalfTwist01_L           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_L           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_L_end       scale=(1, 1, 1)
+     CC_BaseThighTwist01_L          scale=(1, 1, 1)
+     CC_BaseThighTwist02_L          scale=(1, 1, 1)
+     CC_BaseThighTwist02_L_end      scale=(1, 1, 1)
+     CC_BaseThigh_R                 scale=(1, 1, 1)
+     CC_BaseThighTwist01_R          scale=(1, 1, 1)
+     CC_BaseThighTwist02_R          scale=(1, 1, 1)
+     CC_BaseThighTwist02_R_end      scale=(1, 1, 1)
+     CC_BaseCalf_R                  scale=(1, 1, 1)
+     CC_BaseFoot_R                  scale=(1, 1, 1)
+     CC_BaseToeBase_R               scale=(1, 1, 1)
+     CC_BaseToeBase_R_end           scale=(1, 1, 1)
+     CC_BaseCalfTwist01_R           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_R           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_R_end       scale=(1, 1, 1)
+     F_body_legs_knee               scale=(1, 1, 1)
+     F_body_legs_lower              scale=(1, 1, 1)
+
+=== Assets/assets/02_角色_Character/组合角色/林溪/林溪.fbx
+   isHuman=True  isValid=True  name=林溪Avatar
+   —— 人形映射（我关心的这几根）——
+     Hips           → CC_Base_Hip
+     Spine          → CC_Base_Waist
+     LeftUpperLeg   → CC_BaseThigh_L
+     RightUpperLeg  → CC_BaseThigh_R
+     LeftLowerLeg   → CC_BaseCalf_L
+     RightLowerLeg  → CC_BaseCalf_R
+     LeftFoot       → CC_BaseFoot_L
+     RightFoot      → CC_BaseFoot_R
+     LeftToes       → CC_BaseToeBase_L
+     RightToes      → CC_BaseToeBase_R
+   —— 腿脚骨骼的绑定姿势缩放（非 1 或左右不一致就要怀疑）——
+     CC_BaseThigh_L                 scale=(1, 1, 1)
+     CC_BaseCalf_L                  scale=(1, 1, 1)
+     CC_BaseFoot_L                  scale=(1, 1, 1)
+     CC_BaseToeBase_L               scale=(1, 1, 1)
+     CC_BaseToeBase_L_end           scale=(1, 1, 1)
+     CC_BaseCalfTwist01_L           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_L           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_L_end       scale=(1, 1, 1)
+     CC_BaseThighTwist01_L          scale=(1, 1, 1)
+     CC_BaseThighTwist02_L          scale=(1, 1, 1)
+     CC_BaseThighTwist02_L_end      scale=(1, 1, 1)
+     CC_BaseThigh_R                 scale=(1, 1, 1)
+     CC_BaseThighTwist01_R          scale=(1, 1, 1)
+     CC_BaseThighTwist02_R          scale=(1, 1, 1)
+     CC_BaseThighTwist02_R_end      scale=(1, 1, 1)
+     CC_BaseCalf_R                  scale=(1, 1, 1)
+     CC_BaseFoot_R                  scale=(1, 1, 1)
+     CC_BaseToeBase_R               scale=(1, 1, 1)
+     CC_BaseToeBase_R_end           scale=(1, 1, 1)
+     CC_BaseCalfTwist01_R           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_R           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_R_end       scale=(1, 1, 1)
+     F_body_legs_knee               scale=(1, 1, 1)
+     F_body_legs_lower              scale=(1, 1, 1)
+     F_body_legs_upper              scale=(1, 1, 1)
+
+=== Assets/assets/02_角色_Character/组合角色/王含/王含.fbx
+   isHuman=True  isValid=True  name=王含Avatar
+   —— 人形映射（我关心的这几根）——
+     Hips           → CC_Base_Hip
+     Spine          → CC_Base_Waist
+     LeftUpperLeg   → CC_BaseThigh_L
+     RightUpperLeg  → CC_BaseThigh_R
+     LeftLowerLeg   → CC_BaseCalf_L
+     RightLowerLeg  → CC_BaseCalf_R
+     LeftFoot       → CC_BaseFoot_L
+     RightFoot      → CC_BaseFoot_R
+     LeftToes       → CC_BaseToeBase_L
+     RightToes      → CC_BaseToeBase_R
+   —— 腿脚骨骼的绑定姿势缩放（非 1 或左右不一致就要怀疑）——
+     CC_BaseThigh_L                 scale=(1, 1, 1)
+     CC_BaseCalf_L                  scale=(1, 1, 1)
+     CC_BaseFoot_L                  scale=(1, 1, 1)
+     CC_BaseToeBase_L               scale=(1, 1, 1)
+     CC_BaseToeBase_L_end           scale=(1, 1, 1)
+     CC_BaseCalfTwist01_L           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_L           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_L_end       scale=(1, 1, 1)
+     CC_BaseThighTwist01_L          scale=(1, 1, 1)
+     CC_BaseThighTwist02_L          scale=(1, 1, 1)
+     CC_BaseThighTwist02_L_end      scale=(1, 1, 1)
+     CC_BaseThigh_R                 scale=(1, 1, 1)
+     CC_BaseThighTwist01_R          scale=(1, 1, 1)
+     CC_BaseThighTwist02_R          scale=(1, 1, 1)
+     CC_BaseThighTwist02_R_end      scale=(1, 1, 1)
+     CC_BaseCalf_R                  scale=(1, 1, 1)
+     CC_BaseFoot_R                  scale=(1, 1, 1)
+     CC_BaseToeBase_R               scale=(1, 1, 1)
+     CC_BaseToeBase_R_end           scale=(1, 1, 1)
+     CC_BaseCalfTwist01_R           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_R           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_R_end       scale=(1, 1, 1)
+     F_body_legs_knee               scale=(1, 1, 1)
+     F_body_legs_lower              scale=(1, 1, 1)
+     F_body_legs_upper              scale=(1, 1, 1)
+
+=== Assets/assets/02_角色_Character/组合角色/组长/组长.fbx
+   isHuman=True  isValid=True  name=组长Avatar
+   —— 人形映射（我关心的这几根）——
+     Hips           → CC_Base_Hip
+     Spine          → CC_Base_Waist
+     LeftUpperLeg   → CC_BaseThigh_L
+     RightUpperLeg  → CC_BaseThigh_R
+     LeftLowerLeg   → CC_BaseCalf_L
+     RightLowerLeg  → CC_BaseCalf_R
+     LeftFoot       → CC_BaseFoot_L
+     RightFoot      → CC_BaseFoot_R
+     LeftToes       → CC_BaseToeBase_L
+     RightToes      → CC_BaseToeBase_R
+   —— 腿脚骨骼的绑定姿势缩放（非 1 或左右不一致就要怀疑）——
+     CC_BaseThigh_L                 scale=(1, 1, 1)
+     CC_BaseCalf_L                  scale=(1, 1, 1)
+     CC_BaseFoot_L                  scale=(1, 1, 1)
+     CC_BaseToeBase_L               scale=(1, 1, 1)
+     CC_BaseToeBase_L_end           scale=(1, 1, 1)
+     CC_BaseCalfTwist01_L           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_L           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_L_end       scale=(1, 1, 1)
+     CC_BaseThighTwist01_L          scale=(1, 1, 1)
+     CC_BaseThighTwist02_L          scale=(1, 1, 1)
+     CC_BaseThighTwist02_L_end      scale=(1, 1, 1)
+     CC_BaseThigh_R                 scale=(1, 1, 1)
+     CC_BaseThighTwist01_R          scale=(1, 1, 1)
+     CC_BaseThighTwist02_R          scale=(1, 1, 1)
+     CC_BaseThighTwist02_R_end      scale=(1, 1, 1)
+     CC_BaseCalf_R                  scale=(1, 1, 1)
+     CC_BaseFoot_R                  scale=(1, 1, 1)
+     CC_BaseToeBase_R               scale=(1, 1, 1)
+     CC_BaseToeBase_R_end           scale=(1, 1, 1)
+     CC_BaseCalfTwist01_R           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_R           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_R_end       scale=(1, 1, 1)
+     M_body_legs_knee               scale=(1, 1, 1)
+     M_body_legs_lower              scale=(1, 1, 1)
+
+=== Assets/assets/02_角色_Character/组合角色/舍友A/舍友A.fbx
+   isHuman=True  isValid=True  name=舍友AAvatar
+   —— 人形映射（我关心的这几根）——
+     Hips           → CC_Base_Hip
+     Spine          → CC_Base_Waist
+     LeftUpperLeg   → CC_BaseThigh_L
+     RightUpperLeg  → CC_BaseThigh_R
+     LeftLowerLeg   → CC_BaseCalf_L
+     RightLowerLeg  → CC_BaseCalf_R
+     LeftFoot       → CC_BaseFoot_L
+     RightFoot      → CC_BaseFoot_R
+     LeftToes       → CC_BaseToeBase_L
+     RightToes      → CC_BaseToeBase_R
+   —— 腿脚骨骼的绑定姿势缩放（非 1 或左右不一致就要怀疑）——
+     CC_BaseThigh_L                 scale=(1, 1, 1)
+     CC_BaseCalf_L                  scale=(1, 1, 1)
+     CC_BaseFoot_L                  scale=(1, 1, 1)
+     CC_BaseToeBase_L               scale=(1, 1, 1)
+     CC_BaseToeBase_L_end           scale=(1, 1, 1)
+     CC_BaseCalfTwist01_L           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_L           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_L_end       scale=(1, 1, 1)
+     CC_BaseThighTwist01_L          scale=(1, 1, 1)
+     CC_BaseThighTwist02_L          scale=(1, 1, 1)
+     CC_BaseThighTwist02_L_end      scale=(1, 1, 1)
+     CC_BaseThigh_R                 scale=(1, 1, 1)
+     CC_BaseThighTwist01_R          scale=(1, 1, 1)
+     CC_BaseThighTwist02_R          scale=(1, 1, 1)
+     CC_BaseThighTwist02_R_end      scale=(1, 1, 1)
+     CC_BaseCalf_R                  scale=(1, 1, 1)
+     CC_BaseFoot_R                  scale=(1, 1, 1)
+     CC_BaseToeBase_R               scale=(1, 1, 1)
+     CC_BaseToeBase_R_end           scale=(1, 1, 1)
+     CC_BaseCalfTwist01_R           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_R           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_R_end       scale=(1, 1, 1)
+     F_body_legs_knee               scale=(1, 1, 1)
+     F_body_legs_lower              scale=(1, 1, 1)
+     F_body_legs_upper              scale=(1, 1, 1)
+
+=== Assets/assets/02_角色_Character/组合角色/舍友B/舍友B.fbx
+   isHuman=True  isValid=True  name=舍友BAvatar
+   —— 人形映射（我关心的这几根）——
+     Hips           → CC_Base_Hip
+     Spine          → CC_Base_Waist
+     LeftUpperLeg   → CC_BaseThigh_L
+     RightUpperLeg  → CC_BaseThigh_R
+     LeftLowerLeg   → CC_BaseCalf_L
+     RightLowerLeg  → CC_BaseCalf_R
+     LeftFoot       → CC_BaseFoot_L
+     RightFoot      → CC_BaseFoot_R
+     LeftToes       → CC_BaseToeBase_L
+     RightToes      → CC_BaseToeBase_R
+   —— 腿脚骨骼的绑定姿势缩放（非 1 或左右不一致就要怀疑）——
+     CC_BaseThigh_L                 scale=(1, 1, 1)
+     CC_BaseCalf_L                  scale=(1, 1, 1)
+     CC_BaseFoot_L                  scale=(1, 1, 1)
+     CC_BaseToeBase_L               scale=(1, 1, 1)
+     CC_BaseToeBase_L_end           scale=(1, 1, 1)
+     CC_BaseCalfTwist01_L           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_L           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_L_end       scale=(1, 1, 1)
+     CC_BaseThighTwist01_L          scale=(1, 1, 1)
+     CC_BaseThighTwist02_L          scale=(1, 1, 1)
+     CC_BaseThighTwist02_L_end      scale=(1, 1, 1)
+     CC_BaseThigh_R                 scale=(1, 1, 1)
+     CC_BaseThighTwist01_R          scale=(1, 1, 1)
+     CC_BaseThighTwist02_R          scale=(1, 1, 1)
+     CC_BaseThighTwist02_R_end      scale=(1, 1, 1)
+     CC_BaseCalf_R                  scale=(1, 1, 1)
+     CC_BaseFoot_R                  scale=(1, 1, 1)
+     CC_BaseToeBase_R               scale=(1, 1, 1)
+     CC_BaseToeBase_R_end           scale=(1, 1, 1)
+     CC_BaseCalfTwist01_R           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_R           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_R_end       scale=(1, 1, 1)
+     F_body_legs_knee               scale=(1, 1, 1)
+     F_body_legs_lower              scale=(1, 1, 1)
+     F_body_legs_upper              scale=(1, 1, 1)
+
+=== Assets/assets/02_角色_Character/组合角色/陆宣雨/陆宣雨.fbx
+   isHuman=True  isValid=True  name=陆宣雨Avatar
+   —— 人形映射（我关心的这几根）——
+     Hips           → CC_Base_Hip
+     Spine          → CC_Base_Waist
+     LeftUpperLeg   → CC_BaseThigh_L
+     RightUpperLeg  → CC_BaseThigh_R
+     LeftLowerLeg   → CC_BaseCalf_L
+     RightLowerLeg  → CC_BaseCalf_R
+     LeftFoot       → CC_BaseFoot_L
+     RightFoot      → CC_BaseFoot_R
+     LeftToes       → CC_BaseToeBase_L
+     RightToes      → CC_BaseToeBase_R
+   —— 腿脚骨骼的绑定姿势缩放（非 1 或左右不一致就要怀疑）——
+     CC_BaseThigh_L                 scale=(1, 1, 1)
+     CC_BaseCalf_L                  scale=(1, 1, 1)
+     CC_BaseFoot_L                  scale=(1, 1, 1)
+     CC_BaseToeBase_L               scale=(1, 1, 1)
+     CC_BaseToeBase_L_end           scale=(1, 1, 1)
+     CC_BaseCalfTwist01_L           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_L           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_L_end       scale=(1, 1, 1)
+     CC_BaseThighTwist01_L          scale=(1, 1, 1)
+     CC_BaseThighTwist02_L          scale=(1, 1, 1)
+     CC_BaseThighTwist02_L_end      scale=(1, 1, 1)
+     CC_BaseThigh_R                 scale=(1, 1, 1)
+     CC_BaseThighTwist01_R          scale=(1, 1, 1)
+     CC_BaseThighTwist02_R          scale=(1, 1, 1)
+     CC_BaseThighTwist02_R_end      scale=(1, 1, 1)
+     CC_BaseCalf_R                  scale=(1, 1, 1)
+     CC_BaseFoot_R                  scale=(1, 1, 1)
+     CC_BaseToeBase_R               scale=(1, 1, 1)
+     CC_BaseToeBase_R_end           scale=(1, 1, 1)
+     CC_BaseCalfTwist01_R           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_R           scale=(1, 1, 1)
+     CC_BaseCalfTwist02_R_end       scale=(1, 1, 1)
+     F_body_legs_knee               scale=(1, 1, 1)
+     F_body_legs_lower              scale=(1, 1, 1)
+
+=== Assets/assets/03_动作_Animation/动画/Walk.fbx
+   isHuman=True  isValid=True  name=WalkAvatar
+   —— 人形映射（我关心的这几根）——
+     Hips           → mixamorig:Hips
+     Spine          → mixamorig:Spine
+     LeftUpperLeg   → mixamorig:LeftUpLeg
+     RightUpperLeg  → mixamorig:RightUpLeg
+     LeftLowerLeg   → mixamorig:LeftLeg
+     RightLowerLeg  → mixamorig:RightLeg
+     LeftFoot       → mixamorig:LeftFoot
+     RightFoot      → mixamorig:RightFoot
+     LeftToes       → mixamorig:LeftToeBase
+     RightToes      → mixamorig:RightToeBase
+   —— 腿脚骨骼的绑定姿势缩放（非 1 或左右不一致就要怀疑）——
+     mixamorig:LeftUpLeg            scale=(1, 1, 1)
+     mixamorig:LeftLeg              scale=(1, 1, 1)
+     mixamorig:LeftFoot             scale=(1, 1, 1)
+     mixamorig:LeftToeBase          scale=(1, 1, 1)
+     mixamorig:LeftToe_End          scale=(1, 1, 1)
+     mixamorig:RightUpLeg           scale=(1, 1, 1)
+     mixamorig:RightLeg             scale=(1, 1, 1)
+     mixamorig:RightFoot            scale=(1, 1, 1)
+     mixamorig:RightToeBase         scale=(1, 1, 1)
+     mixamorig:RightToe_End         scale=(1, 1, 1)
+
+=== Assets/assets/03_动作_Animation/动画/待机女.fbx
+   isHuman=True  isValid=True  name=待机女Avatar
+   —— 人形映射（我关心的这几根）——
+     Hips           → mixamorig:Hips
+     Spine          → mixamorig:Spine
+     LeftUpperLeg   → mixamorig:LeftUpLeg
+     RightUpperLeg  → mixamorig:RightUpLeg
+     LeftLowerLeg   → mixamorig:LeftLeg
+     RightLowerLeg  → mixamorig:RightLeg
+     LeftFoot       → mixamorig:LeftFoot
+     RightFoot      → mixamorig:RightFoot
+     LeftToes       → mixamorig:LeftToeBase
+     RightToes      → mixamorig:RightToeBase
+   —— 腿脚骨骼的绑定姿势缩放（非 1 或左右不一致就要怀疑）——
+     mixamorig:LeftUpLeg            scale=(1, 1, 1)
+     mixamorig:LeftLeg              scale=(1, 1, 1)
+     mixamorig:LeftFoot             scale=(1, 1, 1)
+     mixamorig:LeftToeBase          scale=(1, 1, 1)
+     mixamorig:LeftToe_End          scale=(1, 1, 1)
+     mixamorig:RightUpLeg           scale=(1, 1, 1)
+     mixamorig:RightLeg             scale=(1, 1, 1)
+     mixamorig:RightFoot            scale=(1, 1, 1)
+     mixamorig:RightToeBase         scale=(1, 1, 1)
+     mixamorig:RightToe_End         scale=(1, 1, 1)
+
+=== Assets/assets/03_动作_Animation/动画/待机男.fbx
+   isHuman=True  isValid=True  name=待机男Avatar
+   —— 人形映射（我关心的这几根）——
+     Hips           → mixamorig:Hips
+     Spine          → mixamorig:Spine
+     LeftUpperLeg   → mixamorig:LeftUpLeg
+     RightUpperLeg  → mixamorig:RightUpLeg
+     LeftLowerLeg   → mixamorig:LeftLeg
+     RightLowerLeg  → mixamorig:RightLeg
+     LeftFoot       → mixamorig:LeftFoot
+     RightFoot      → mixamorig:RightFoot
+     LeftToes       → mixamorig:LeftToeBase
+     RightToes      → mixamorig:RightToeBase
+   —— 腿脚骨骼的绑定姿势缩放（非 1 或左右不一致就要怀疑）——
+     mixamorig:LeftUpLeg            scale=(1, 1, 1)
+     mixamorig:LeftLeg              scale=(1, 1, 1)
+     mixamorig:LeftFoot             scale=(1, 1, 1)
+     mixamorig:LeftToeBase          scale=(1, 1, 1)
+     mixamorig:LeftToe_End          scale=(1, 1, 1)
+     mixamorig:RightUpLeg           scale=(1, 1, 1)
+     mixamorig:RightLeg             scale=(1, 1, 1)
+     mixamorig:RightFoot            scale=(1, 1, 1)
+     mixamorig:RightToeBase         scale=(1, 1, 1)
+     mixamorig:RightToe_End         scale=(1, 1, 1)
+
+=== Assets/assets/03_动作_Animation/动画/快速跑.fbx
+   isHuman=True  isValid=True  name=快速跑Avatar
+   —— 人形映射（我关心的这几根）——
+     Hips           → mixamorig:Hips
+     Spine          → mixamorig:Spine
+     LeftUpperLeg   → mixamorig:LeftUpLeg
+     RightUpperLeg  → mixamorig:RightUpLeg
+     LeftLowerLeg   → mixamorig:LeftLeg
+     RightLowerLeg  → mixamorig:RightLeg
+     LeftFoot       → mixamorig:LeftFoot
+     RightFoot      → mixamorig:RightFoot
+     LeftToes       → mixamorig:LeftToeBase
+     RightToes      → mixamorig:RightToeBase
+   —— 腿脚骨骼的绑定姿势缩放（非 1 或左右不一致就要怀疑）——
+     mixamorig:LeftUpLeg            scale=(1, 1, 1)
+     mixamorig:LeftLeg              scale=(1, 1, 1)
+     mixamorig:LeftFoot             scale=(1, 1, 1)
+     mixamorig:LeftToeBase          scale=(1, 1, 1)
+     mixamorig:LeftToe_End          scale=(1, 1, 1)
+     mixamorig:RightUpLeg           scale=(1, 1, 1)
+     mixamorig:RightLeg             scale=(1, 1, 1)
+     mixamorig:RightFoot            scale=(1, 1, 1)
+     mixamorig:RightToeBase         scale=(1, 1, 1)
+     mixamorig:RightToe_End         scale=(1, 1, 1)
+
+=== Assets/assets/03_动作_Animation/动画/慢跑.fbx
+   isHuman=True  isValid=True  name=慢跑Avatar
+   —— 人形映射（我关心的这几根）——
+     Hips           → mixamorig:Hips
+     Spine          → mixamorig:Spine
+     LeftUpperLeg   → mixamorig:LeftUpLeg
+     RightUpperLeg  → mixamorig:RightUpLeg
+     LeftLowerLeg   → mixamorig:LeftLeg
+     RightLowerLeg  → mixamorig:RightLeg
+     LeftFoot       → mixamorig:LeftFoot
+     RightFoot      → mixamorig:RightFoot
+     LeftToes       → mixamorig:LeftToeBase
+     RightToes      → mixamorig:RightToeBase
+   —— 腿脚骨骼的绑定姿势缩放（非 1 或左右不一致就要怀疑）——
+     mixamorig:LeftUpLeg            scale=(1, 1, 1)
+     mixamorig:LeftLeg              scale=(1, 1, 1)
+     mixamorig:LeftFoot             scale=(1, 1, 1)
+     mixamorig:LeftToeBase          scale=(1, 1, 1)
+     mixamorig:LeftToe_End          scale=(1, 1, 1)
+     mixamorig:RightUpLeg           scale=(1, 1, 1)
+     mixamorig:RightLeg             scale=(1, 1, 1)
+     mixamorig:RightFoot            scale=(1, 1, 1)
+     mixamorig:RightToeBase         scale=(1, 1, 1)
+     mixamorig:RightToe_End         scale=(1, 1, 1)
+
+=== Assets/assets/03_动作_Animation/动画/拿手机.fbx
+   isHuman=True  isValid=True  name=拿手机Avatar
+   —— 人形映射（我关心的这几根）——
+     Hips           → mixamorig:Hips
+     Spine          → mixamorig:Spine
+     LeftUpperLeg   → mixamorig:LeftUpLeg
+     RightUpperLeg  → mixamorig:RightUpLeg
+     LeftLowerLeg   → mixamorig:LeftLeg
+     RightLowerLeg  → mixamorig:RightLeg
+     LeftFoot       → mixamorig:LeftFoot
+     RightFoot      → mixamorig:RightFoot
+     LeftToes       → mixamorig:LeftToeBase
+     RightToes      → mixamorig:RightToeBase
+   —— 腿脚骨骼的绑定姿势缩放（非 1 或左右不一致就要怀疑）——
+     mixamorig:LeftUpLeg            scale=(1, 1, 1)
+     mixamorig:LeftLeg              scale=(1, 1, 1)
+     mixamorig:LeftFoot             scale=(1, 1, 1)
+     mixamorig:LeftToeBase          scale=(1, 1, 1)
+     mixamorig:LeftToe_End          scale=(1, 1, 1)
+     mixamorig:RightUpLeg           scale=(1, 1, 1)
+     mixamorig:RightLeg             scale=(1, 1, 1)
+     mixamorig:RightFoot            scale=(1, 1, 1)
+     mixamorig:RightToeBase         scale=(1, 1, 1)
+     mixamorig:RightToe_End         scale=(1, 1, 1)
+
+=== Assets/assets/03_动作_Animation/动画/拿手机待机.fbx
+   isHuman=True  isValid=True  name=拿手机待机Avatar
+   —— 人形映射（我关心的这几根）——
+     Hips           → mixamorig:Hips
+     Spine          → mixamorig:Spine
+     LeftUpperLeg   → mixamorig:LeftUpLeg
+     RightUpperLeg  → mixamorig:RightUpLeg
+     LeftLowerLeg   → mixamorig:LeftLeg
+     RightLowerLeg  → mixamorig:RightLeg
+     LeftFoot       → mixamorig:LeftFoot
+     RightFoot      → mixamorig:RightFoot
+     LeftToes       → mixamorig:LeftToeBase
+     RightToes      → mixamorig:RightToeBase
+   —— 腿脚骨骼的绑定姿势缩放（非 1 或左右不一致就要怀疑）——
+     mixamorig:LeftUpLeg            scale=(1, 1, 1)
+     mixamorig:LeftLeg              scale=(1, 1, 1)
+     mixamorig:LeftFoot             scale=(1, 1, 1)
+     mixamorig:LeftToeBase          scale=(1, 1, 1)
+     mixamorig:LeftToe_End          scale=(1, 1, 1)
+     mixamorig:RightUpLeg           scale=(1, 1, 1)
+     mixamorig:RightLeg             scale=(1, 1, 1)
+     mixamorig:RightFoot            scale=(1, 1, 1)
+     mixamorig:RightToeBase         scale=(1, 1, 1)
+     mixamorig:RightToe_End         scale=(1, 1, 1)
+
+=== Assets/assets/03_动作_Animation/动画/行走.fbx
+   isHuman=True  isValid=True  name=行走Avatar
+   —— 人形映射（我关心的这几根）——
+     Hips           → mixamorig:Hips
+     Spine          → mixamorig:Spine
+     LeftUpperLeg   → mixamorig:LeftUpLeg
+     RightUpperLeg  → mixamorig:RightUpLeg
+     LeftLowerLeg   → mixamorig:LeftLeg
+     RightLowerLeg  → mixamorig:RightLeg
+     LeftFoot       → mixamorig:LeftFoot
+     RightFoot      → mixamorig:RightFoot
+     LeftToes       → mixamorig:LeftToeBase
+     RightToes      → mixamorig:RightToeBase
+   —— 腿脚骨骼的绑定姿势缩放（非 1 或左右不一致就要怀疑）——
+     mixamorig:LeftUpLeg            scale=(1, 1, 1)
+     mixamorig:LeftLeg              scale=(1, 1, 1)
+     mixamorig:LeftFoot             scale=(1, 1, 1)
+     mixamorig:LeftToeBase          scale=(1, 1, 1)
+     mixamorig:LeftToe_End          scale=(1, 1, 1)
+     mixamorig:RightUpLeg           scale=(1, 1, 1)
+     mixamorig:RightLeg             scale=(1, 1, 1)
+     mixamorig:RightFoot            scale=(1, 1, 1)
+     mixamorig:RightToeBase         scale=(1, 1, 1)
+     mixamorig:RightToe_End         scale=(1, 1, 1)
+
+=== Assets/assets/03_动作_Animation/动画/行走男.fbx
+   isHuman=True  isValid=True  name=行走男Avatar
+   —— 人形映射（我关心的这几根）——
+     Hips           → mixamorig:Hips
+     Spine          → mixamorig:Spine
+     LeftUpperLeg   → mixamorig:LeftUpLeg
+     RightUpperLeg  → mixamorig:RightUpLeg
+     LeftLowerLeg   → mixamorig:LeftLeg
+     RightLowerLeg  → mixamorig:RightLeg
+     LeftFoot       → mixamorig:LeftFoot
+     RightFoot      → mixamorig:RightFoot
+     LeftToes       → mixamorig:LeftToeBase
+     RightToes      → mixamorig:RightToeBase
+   —— 腿脚骨骼的绑定姿势缩放（非 1 或左右不一致就要怀疑）——
+     mixamorig:LeftUpLeg            scale=(1, 1, 1)
+     mixamorig:LeftLeg              scale=(1, 1, 1)
+     mixamorig:LeftFoot             scale=(1, 1, 1)
+     mixamorig:LeftToeBase          scale=(1, 1, 1)
+     mixamorig:LeftToe_End          scale=(1, 1, 1)
+     mixamorig:RightUpLeg           scale=(1, 1, 1)
+     mixamorig:RightLeg             scale=(1, 1, 1)
+     mixamorig:RightFoot            scale=(1, 1, 1)
+     mixamorig:RightToeBase         scale=(1, 1, 1)
+     mixamorig:RightToe_End         scale=(1, 1, 1)
+
+=== 预览场景里角色实例的腿脚骨骼（左右对比）===
+   林溪_可动  (Animator: Base_F_body)
+      UpperLeg:
+         L CC_BaseThigh.L             scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseThigh.R             scale=(1,1,1) lossy=(1,1,1)
+      LowerLeg:
+         L CC_BaseCalf.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseCalf.R              scale=(1,1,1) lossy=(1,1,1)
+      Foot:
+         L CC_BaseFoot.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseFoot.R              scale=(1,1,1) lossy=(1,1,1)
+      Toes:
+         L CC_BaseToeBase.L           scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseToeBase.R           scale=(1,1,1) lossy=(1,1,1)
+   林溪_可动  (Animator: 林溪_可动)
+      UpperLeg:
+         L CC_BaseThigh.L             scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseThigh.R             scale=(1,1,1) lossy=(1,1,1)
+      LowerLeg:
+         L CC_BaseCalf.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseCalf.R              scale=(1,1,1) lossy=(1,1,1)
+      Foot:
+         L CC_BaseFoot.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseFoot.R              scale=(1,1,1) lossy=(1,1,1)
+      Toes:
+         L CC_BaseToeBase.L           scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseToeBase.R           scale=(1,1,1) lossy=(1,1,1)
+   李老师_可动  (Animator: Base_F_body)
+      UpperLeg:
+         L CC_BaseThigh.L             scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseThigh.R             scale=(1,1,1) lossy=(1,1,1)
+      LowerLeg:
+         L CC_BaseCalf.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseCalf.R              scale=(1,1,1) lossy=(1,1,1)
+      Foot:
+         L CC_BaseFoot.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseFoot.R              scale=(1,1,1) lossy=(1,1,1)
+      Toes:
+         L CC_BaseToeBase.L           scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseToeBase.R           scale=(1,1,1) lossy=(1,1,1)
+   李老师_可动  (Animator: 李老师_可动)
+      UpperLeg:
+         L CC_BaseThigh.L             scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseThigh.R             scale=(1,1,1) lossy=(1,1,1)
+      LowerLeg:
+         L CC_BaseCalf.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseCalf.R              scale=(1,1,1) lossy=(1,1,1)
+      Foot:
+         L CC_BaseFoot.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseFoot.R              scale=(1,1,1) lossy=(1,1,1)
+      Toes:
+         L CC_BaseToeBase.L           scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseToeBase.R           scale=(1,1,1) lossy=(1,1,1)
+   舍友A_可动  (Animator: Base_F_body)
+      UpperLeg:
+         L CC_BaseThigh.L             scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseThigh.R             scale=(1,1,1) lossy=(1,1,1)
+      LowerLeg:
+         L CC_BaseCalf.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseCalf.R              scale=(1,1,1) lossy=(1,1,1)
+      Foot:
+         L CC_BaseFoot.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseFoot.R              scale=(1,1,1) lossy=(1,1,1)
+      Toes:
+         L CC_BaseToeBase.L           scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseToeBase.R           scale=(1,1,1) lossy=(1,1,1)
+   舍友A_可动  (Animator: 舍友A_可动)
+      UpperLeg:
+         L CC_BaseThigh.L             scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseThigh.R             scale=(1,1,1) lossy=(1,1,1)
+      LowerLeg:
+         L CC_BaseCalf.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseCalf.R              scale=(1,1,1) lossy=(1,1,1)
+      Foot:
+         L CC_BaseFoot.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseFoot.R              scale=(1,1,1) lossy=(1,1,1)
+      Toes:
+         L CC_BaseToeBase.L           scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseToeBase.R           scale=(1,1,1) lossy=(1,1,1)
+   王含_可动  (Animator: Base_F_body)
+      UpperLeg:
+         L CC_BaseThigh.L             scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseThigh.R             scale=(1,1,1) lossy=(1,1,1)
+      LowerLeg:
+         L CC_BaseCalf.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseCalf.R              scale=(1,1,1) lossy=(1,1,1)
+      Foot:
+         L CC_BaseFoot.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseFoot.R              scale=(1,1,1) lossy=(1,1,1)
+      Toes:
+         L CC_BaseToeBase.L           scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseToeBase.R           scale=(1,1,1) lossy=(1,1,1)
+   王含_可动  (Animator: 王含_可动)
+      UpperLeg:
+         L CC_BaseThigh.L             scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseThigh.R             scale=(1,1,1) lossy=(1,1,1)
+      LowerLeg:
+         L CC_BaseCalf.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseCalf.R              scale=(1,1,1) lossy=(1,1,1)
+      Foot:
+         L CC_BaseFoot.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseFoot.R              scale=(1,1,1) lossy=(1,1,1)
+      Toes:
+         L CC_BaseToeBase.L           scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseToeBase.R           scale=(1,1,1) lossy=(1,1,1)
+   张知远_可动  (Animator: Base_M_body)
+      UpperLeg:
+         L CC_BaseThigh.L             scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseThigh.R             scale=(1,1,1) lossy=(1,1,1)
+      LowerLeg:
+         L CC_BaseCalf.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseCalf.R              scale=(1,1,1) lossy=(1,1,1)
+      Foot:
+         L CC_BaseFoot.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseFoot.R              scale=(1,1,1) lossy=(1,1,1)
+      Toes:
+         L CC_BaseToeBase.L           scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseToeBase.R           scale=(1,1,1) lossy=(1,1,1)
+   张知远_可动  (Animator: 张知远_可动)
+      UpperLeg:
+         L CC_BaseThigh.L             scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseThigh.R             scale=(1,1,1) lossy=(1,1,1)
+      LowerLeg:
+         L CC_BaseCalf.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseCalf.R              scale=(1,1,1) lossy=(1,1,1)
+      Foot:
+         L CC_BaseFoot.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseFoot.R              scale=(1,1,1) lossy=(1,1,1)
+      Toes:
+         L CC_BaseToeBase.L           scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseToeBase.R           scale=(1,1,1) lossy=(1,1,1)
+   徐夏  (Animator: Base_F_body)
+      UpperLeg:
+         L CC_BaseThigh.L             scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseThigh.R             scale=(1,1,1) lossy=(1,1,1)
+      LowerLeg:
+         L CC_BaseCalf.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseCalf.R              scale=(1,1,1) lossy=(1,1,1)
+      Foot:
+         L CC_BaseFoot.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseFoot.R              scale=(1,1,1) lossy=(1,1,1)
+      Toes:
+         L CC_BaseToeBase.L           scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseToeBase.R           scale=(1,1,1) lossy=(1,1,1)
+   徐夏  (Animator: 徐夏)
+      UpperLeg:
+         L CC_BaseThigh.L             scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseThigh.R             scale=(1,1,1) lossy=(1,1,1)
+      LowerLeg:
+         L CC_BaseCalf.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseCalf.R              scale=(1,1,1) lossy=(1,1,1)
+      Foot:
+         L CC_BaseFoot.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseFoot.R              scale=(1,1,1) lossy=(1,1,1)
+      Toes:
+         L CC_BaseToeBase.L           scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseToeBase.R           scale=(1,1,1) lossy=(1,1,1)
+   组长_可动  (Animator: Base_M_body)
+      UpperLeg:
+         L CC_BaseThigh.L             scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseThigh.R             scale=(1,1,1) lossy=(1,1,1)
+      LowerLeg:
+         L CC_BaseCalf.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseCalf.R              scale=(1,1,1) lossy=(1,1,1)
+      Foot:
+         L CC_BaseFoot.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseFoot.R              scale=(1,1,1) lossy=(1,1,1)
+      Toes:
+         L CC_BaseToeBase.L           scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseToeBase.R           scale=(1,1,1) lossy=(1,1,1)
+   组长_可动  (Animator: 组长_可动)
+      UpperLeg:
+         L CC_BaseThigh.L             scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseThigh.R             scale=(1,1,1) lossy=(1,1,1)
+      LowerLeg:
+         L CC_BaseCalf.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseCalf.R              scale=(1,1,1) lossy=(1,1,1)
+      Foot:
+         L CC_BaseFoot.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseFoot.R              scale=(1,1,1) lossy=(1,1,1)
+      Toes:
+         L CC_BaseToeBase.L           scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseToeBase.R           scale=(1,1,1) lossy=(1,1,1)
+   陆宣雨_可动  (Animator: Base_F_body)
+      UpperLeg:
+         L CC_BaseThigh.L             scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseThigh.R             scale=(1,1,1) lossy=(1,1,1)
+      LowerLeg:
+         L CC_BaseCalf.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseCalf.R              scale=(1,1,1) lossy=(1,1,1)
+      Foot:
+         L CC_BaseFoot.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseFoot.R              scale=(1,1,1) lossy=(1,1,1)
+      Toes:
+         L CC_BaseToeBase.L           scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseToeBase.R           scale=(1,1,1) lossy=(1,1,1)
+   陆宣雨_可动  (Animator: 陆宣雨_可动)
+      UpperLeg:
+         L CC_BaseThigh.L             scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseThigh.R             scale=(1,1,1) lossy=(1,1,1)
+      LowerLeg:
+         L CC_BaseCalf.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseCalf.R              scale=(1,1,1) lossy=(1,1,1)
+      Foot:
+         L CC_BaseFoot.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseFoot.R              scale=(1,1,1) lossy=(1,1,1)
+      Toes:
+         L CC_BaseToeBase.L           scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseToeBase.R           scale=(1,1,1) lossy=(1,1,1)
+   舍友B_可动  (Animator: Base_F_body)
+      UpperLeg:
+         L CC_BaseThigh.L             scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseThigh.R             scale=(1,1,1) lossy=(1,1,1)
+      LowerLeg:
+         L CC_BaseCalf.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseCalf.R              scale=(1,1,1) lossy=(1,1,1)
+      Foot:
+         L CC_BaseFoot.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseFoot.R              scale=(1,1,1) lossy=(1,1,1)
+      Toes:
+         L CC_BaseToeBase.L           scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseToeBase.R           scale=(1,1,1) lossy=(1,1,1)
+   舍友B_可动  (Animator: 舍友B_可动)
+      UpperLeg:
+         L CC_BaseThigh.L             scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseThigh.R             scale=(1,1,1) lossy=(1,1,1)
+      LowerLeg:
+         L CC_BaseCalf.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseCalf.R              scale=(1,1,1) lossy=(1,1,1)
+      Foot:
+         L CC_BaseFoot.L              scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseFoot.R              scale=(1,1,1) lossy=(1,1,1)
+      Toes:
+         L CC_BaseToeBase.L           scale=(1,1,1) lossy=(1,1,1)
+         R CC_BaseToeBase.R           scale=(1,1,1) lossy=(1,1,1)

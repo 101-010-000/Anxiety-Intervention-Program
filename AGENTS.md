@@ -23,11 +23,24 @@
 额外文件/
   日志_构建/            Unity 构建/批处理日志（*.log，项目根不放日志）
   历史Editor脚本/       旧的一次性 Editor 脚本（不参与编译，只做档案馆，别放回 Assets）
+  历史脚本_运行时/      从 Assets/Scripts 里拿出来的调试/一次性 MonoBehaviour（同样不参与编译）
+  旧资源/               从项目里清出来的旧资产（连 .meta 备份，恢复时整份拷回去 GUID 不变）
+  场景备份/             换模型/大改前后的 .unity 快照
   旧预览/               已作废的预览图（当前有效预览在项目 assets/_报告/预览/）
+  历史dump/             早期的一堆场景/素材 dump（*.txt）
   素材整理脚本/         整理原始素材时用的脚本与 dump
   工具脚本/             通用小工具（如 检查CSharp.py）
+  导出给Mixamo/         给 Mixamo 上传的 FBX/OBJ（ExportForMixamo 的产物，~86MB，跑导出时会重建）
   错误_*.txt            Editor 工具运行出错时的异常堆栈（项目外的副产物）
+  _backup_editor_scripts/ _backup_scene_metas/  更早的两次批量备份（保留）
 ```
+
+> 2026-09-28 做过一次清理（`历史Editor脚本/ProjectTidy.cs` 是当次工具，已归档）：
+> 删掉 `02_角色_Character/Mixamo已绑`（2 个，上一轮试绑产物）、`Materials_URPLit`（68 个，全项目无人引用的另一套套件材质）、
+> `动画/测试跑动画.fbx`、`预览Clip` 里三个孤儿 anim、`Animators/预览/李老师_已绑.controller`（均已备份到 `额外文件/旧资源/`）；
+> 旧报告 45 份 → `assets/_报告/历史/`，旧预览图 `Mixamo测试`、`腿脚` → `assets/_报告/预览/历史/`。
+> ⚠ `FootWeightFix.cs` **不能动**：`CharRebuild.cs` 重建时会调 `FootWeightFix.FixIfShoe()`（其他脚部工具确实只被注释提到，已归档）。
+> ⚠ `Scripts/Debug/AnimDiag.cs` 已归档；`NpcSetup` 的 PlayDiag 菜单要是还想用，把它拷回来即可。
 
 ### 素材的使用方式：复制进项目，**必须连 `.meta` 一起复制**
 
@@ -54,10 +67,19 @@ Editor/                        agent 工具（菜单 Tools/干预项目/…）�
   CharRebuild.cs               角色重建：服装搭配 / 一人一色 / 身体删减
   PlayerAnimSetup.cs           主角动画：生成 AnimatorController 并挂到徐夏
   CharPreview.cs               渲染角色预览 / 材质诊断 / 全量强制重导
+  AnimModelMats.cs             带动画模型：把角色材质贴回 FBX 导入器（externalObjects）+ 预览渲染（见第五节）
+  GameCharSwap.cs              Game 场景角色替换：旧模型 → Mixamo 已绑定模型 + 挂 Idle + 运行自检（见第三节末）
+  PlayerThirdPerson.cs         主角第三人称：建 徐夏_第三人称.controller（Idle/Walk/SlowRun + Phone）+ 配镜头 + Play 自检
+  ExportForMixamo.cs           导出给 Mixamo 的模型（去骨骼只留网格，T-pose rest 蒙皮结果 → 额外文件/导出给Mixamo/）
+  CheckMixamoExport.cs         自检：导出的 FBX Unity 能不能读（配合上一个用）
+  FootWeightFix.cs             ★ 鞋/袜踝口权重修复——被 CharRebuild 调用，不要归档！
+  （其余一次性脚本已归档：MixamoRigCheck / FootDiag / FootDiagTrigger / FootSkinProbe /
+    TestRunAnim / InstallFbxPkg / ProjectTidy / _TriggerTouch —— 都在 额外文件/历史Editor脚本/）
   AssetLocator.cs              在 Assets 里按名字找文件/目录
   SceneBuilder.cs              剧情主场景 Game.unity：6 个地点拼装 + 场景总览渲染（末尾会自动调 ScenePostFx）
   ScenePostFx.cs               剧情场景后期：辉光/模糊/抬黑/雾 + 6 个地点各自的氛围 Volume（见第五节）
   GameDoorBuilder.cs           门口传送：给场景里已有的门触发盒挂交互 + 「按 F 开门」+ 地点选择面板（见第五节）
+  AnimPreviewSetup.cs          角色预览场景：每个角色挂一个不一样的动画 + 运行自检（见第五节）
   MainMenuAssets.cs            主界面 UI 贴图：程序化生成 57 张 + 中文字体 + 20 张收录图导入
   MainMenuSlices.cs            切《ui素材》设计稿：圆角抠图 + 内部压平 + 九宫格 border（稿_*.png）
   MainMenuBuilder.cs           主界面场景 MainMenu.unity：主菜单/设置/存读档/章节/概览/弹窗
@@ -72,16 +94,17 @@ assets/
       组合角色/<角色>/<角色>.fbx      每个角色的模型（含 humanoid Avatar，动画用）
       角色_URP/<角色>_可动.prefab     ★ 场景/剧情里真正使用的角色
       角色_URP/材质/<角色>/           角色专属材质实例（一人一色）
-  03_动作_Animation/           动画 FBX + Animators/PC_徐夏_测试.controller
+  03_动作_Animation/           动画 FBX + Animators/（PC_徐夏_测试.controller = 旧的；带动画模型/<角色>_Idle.controller、
+                                徐夏_第三人称.controller = 现在在用的，同源零重定向）
   04_音效_Audio/
   05_UI/                       ★ 主界面 UI 素材：背景/界面/按钮/图标/字体 + 内容概览（20 张原图）+ 设计稿_原图（《ui素材》12 张）
   11_着色器_Shaders/           角色套件 ShaderGraph（CharacterLit / Toon / 子图 / HLSL）
   _报告/                       ★ 所有报告、清单、预览图都写到这里
 Scripts/UI/                    主界面运行时脚本（MainMenuUI / UIPanel / GameSettings / SaveSystem …）
-Scripts/Player/                FirstPersonController.cs（第一人称移动/视角/动画）
+Scripts/Player/                FirstPersonController.cs（第一/第三人称移动·视角·动画，同一个脚本）
 Scripts/Visual/                DreamyFocus.cs（景深同步）、SceneOutline.shader + OutlineFeature.cs（描边，见第五节）
 Scripts/Game/                  DoorInteractable.cs / DoorTravelSystem.cs / DoorSmokeDriver.cs（门口传送，见第五节）
-Scenes/Test_徐夏_动画.unity     测试场景（9 个角色实例 + 相机 + 太阳）
+Scenes/角色资源预览场景.unity   角色预览（9 个角色实例 + 相机 + 太阳；原名 Test_徐夏_动画）
 Scenes/MainMenu.unity          主界面（Build Settings 第 0 号：主菜单 + 设置/存读档/章节选择/内容概览）
 Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，SceneBuilder 生成）
 ```
@@ -101,6 +124,108 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 - 主角徐夏的 Animator：`Locomotion` 1D 混合树（`Speed`：0 待机 / 0.5 行走 / 1 慢跑 / 2 快速跑）
   \+ `Phone`(Bool) 拿手机待机 + `TakePhone`(Trigger) 拿手机。
 
+### 带动画模型（Mixamo 重绑的 FBX）  `assets/03_动作_Animation/带动画模型/<角色>/`
+
+- **背景**：原角色是 CC_Base 骨架 + Unity 重定向，重定向会把腿掰歪 → 把组装好的网格导出给 Mixamo
+  （`ExportForMixamo.cs`，去骨骼只留网格），Mixamo 自动绑一套自己的骨架后导回来。
+- 每个角色一个文件夹，里面 `已绑定.fbx` = 模型本体（无动画），`Idle/Walk/Texting/Slow Run…` = 带模型的动作。
+- ★ **材质要在这里贴**：Mixamo 导回的 FBX 里材质只是空壳（名字还在、没贴图）→ 白模。
+  用 `Tools/干预项目/带动画模型：贴回角色材质`（`AnimModelMats.cs`）：把 FBX 导入器的
+  **材质重映射（externalObjects）** 写成「FBX 内材质名 → `角色_URP/材质/<角色>/*.mat`」，
+  以后任何地方实例化这个 FBX 材质都是对的（**共用**角色的那份材质，一人一色仍只有一处真源）。
+- 名字怎么对上：Unity 导出时把 `. 空格 -` 都换成 `_`，Mixamo 往返后保留 → 两边「清洗后同名」。
+  角色实例材质优先，其次是套件共享材质（眼睛/嘴/高光/眼镜）。
+- ⚠ **Unity 2022.3 没有 `SetExternalObjectMap` / `AddRemappedAsset`**，改 `GetExternalObjectMap()` 返回的字典再
+  `SaveAndReimport()` **不会落盘**（`_带动画模型材质.txt` 里 `.meta 复核 0 条` 就是这个坑）。
+  工具现在走：① 反射调内部 `AssetImporter.AddRemap` → 复核 .meta；② 不行就直接改写 .meta 的 `externalObjects` 块 + 强制重导。
+  **判断成不成看 `.meta 复核` 条数，不要看返回值。**
+- 自检：报告里应有「找不到对应材质：0 ✓ / 空材质槽：0 ✓」；预览走
+  `Tools/干预项目/带动画模型：渲染预览（看材质）` → `assets/_报告/预览/带动画模型/<角色>_已绑定.png`
+  （和 `预览/<角色>_可动.png` 同机位，可逐像素对比：实测平均差 3~9/255，基本一致）。
+- ⚠ 导进来的 FBX 默认是 **Generic / 无 Avatar**（Unity 新建 FBX 的默认值）。要让动画真的驱动人形骨架，
+  得在 Rig 里设 **Humanoid + Create From This Model**（`MixamoRigCheck.cs` 里有同类代码可参考），
+  否则 Animator 挂着也不动。另外每条剪辑默认都叫 `mixamo.com`，接控制器前最好改个名。
+
+### Game 场景角色替换（GameCharSwap）  `Assets/Editor/GameCharSwap.cs`
+
+- **做了什么**（2026-09-28 定稿）：把 `Game.unity` 里 52 个角色实例（11 个剧情角色 + 41 个路人）的
+  人物模型从旧的 CC_Base 版换成 `带动画模型/<角色>/已绑定.fbx`，并在原地挂该角色自己的 **Idle**（同源、零重定向）。
+- **位置 / 层级 / 组件一律不动**：工具只删「实例根下**来自 prefab 的**子物体」（`GetCorrespondingObjectFromSource != null`），
+  手动加的东西（如玩家身上那个 `FP_相机`）一律保留；实例根（名字/变换/局部层/胶囊碰撞体/玩家组件）原封不动。
+  （所以实例仍然是旧 `<角色>_可动.prefab` 的实例，只是模型被换成新的 —— 想回滚直接 Revert 这个实例即可）
+- **路人不是另一套模型**：路人和厨师就是这 9 个角色，只是实例上做了**材质覆盖**（`Materials/路人材质.mat`）。
+  覆盖表按【原材质名 → 覆盖材质】记录下来（名字里的 `.` `-` 空格 都当 `_` 比，因为 Unity 导出 FBX 时就这么改的名），
+  再映到新模型的同名子网格上；厨师是**部分覆盖**（只改了 9 个材质，眼睛/眉毛留着），工具按名逐槽处理，不会一刀切。
+- **Idle 控制器**：`assets/03_动作_Animation/Animators/带动画模型/<角色>_Idle.controller`
+  \+ 循环副本 `<角色>_Idle.anim`（源 = 该角色 `带动画模型/<角色>/Idle.fbx` 的 clip，`loopTime=true`）。
+  控制器里额外加了旧参数名 `Speed` / `Phone` / `TakePhone`，免得 `FirstPersonController` 写参数时报错。
+- ⚠ **Mixamo 导回的 FBX 里没有 Animator 组件**（模型本身不带）→ 工具会自己 `AddComponent<Animator>()` 到新模型根上
+  （不加就永远 rest 姿势）。Animator 必须坐在新模型根上：Generic 动画是**按节点路径**回放的，路径相对 Animator 所在节点。
+- ⚠ **NPC 根上那个旧 Animator 要停用**（`enabled=false` + controller 置空）：旧骨架已经被删，留着只会跟新 Animator 抢同一副骨架。
+- ⚠ **玩家（`Player_徐夏`）**：`FirstPersonController` 的 `firstPersonShadowsOnlyParts` 原来是 `[torso]`，
+  新模型是**一整块合并网格**，做不到“只藏躯干” → 工具把它自己模型的渲染器名字整个加进名单（= 第一人称下整身只投影）。
+  另外玩家的**移动动画还没重建**：根上的 Animator 现在挂的是 `徐夏_Idle`，走路/跑要等把
+  `PC_徐夏_测试.controller` 用新模型自己的 clip（Idle / Walk / Slow Run）重做（新导入里还没有太快跑/慢跑/拿手机）。
+- **自检（③）写法有坑**：`EditorApplication.update` 的订阅在**进 Play 模式的那次域重载时会被冲掉**，
+  所以自检靠一个状态文件 `额外文件/_gamechkar_smoke.state` + `[InitializeOnLoad]` 在重载后重新接管
+  （仓库里 DoorSmokeDriver 那套是等价的思路）。自检不看“normalizedTime 有没有推进”（那只能证明状态机在跑），
+  而是直接量 **骨头世界坐标的位移**：52/52 位移 > 0 才算真的在播。
+- 验证口径（本次结果）：实例 52/52 在播、空材质槽 0、洋红 0、路人材质槽 401；场景里 `X_已绑定` 模型 52 个、旧模型 0 个。
+- ⚠ 编辑模式下角色显示 **rest 姿势（T-pose）**，Play 里才是 Idle，别当成坏了。
+
+### 主角与第三人称（FirstPersonController）
+
+- **主角 = 场景根的 `Player_徐夏`**（`Loc_*` 以外的那个），根上挂 `CharacterController` + `FirstPersonController`
+  （+ 已停用的旧 Animator），子物体：`徐夏_已绑定`（新模型）+ `FP_相机`（**手动加的，不是 prefab 件**）。
+- **视角是第一/第三称共用一个脚本**：`FirstPersonController.thirdPerson`（勾上=第三人称）。
+  切换用 `SetThirdPerson(bool)`（运行时会顺手把相机位置复位），剧情用的 `SetLocked/SetCursorLocked/SnapCameraTo` 接口没变，
+  门口传送（`player.transform.position + 0.9m` 探针）也不需要改。
+- **操作方式（第三人称，用户 2026-09-28 定稿）：鼠标左/右【只转镜头】，角色不跟着转；WASD 相对镜头移动；
+  角色自己转向移动方向（`turnSpeed` 度/秒）**。
+  · 实现：`camYaw`（相机水平角）只在 `Look()` 里被鼠标改；身体只在此 `MoveWithInput()` 里被
+   `Quaternion.RotateTowards` 转向；`LateUpdate` 用 `camYaw` 摆相机 → 两者天生解耦。
+  · `WishDir(ix,iz)`：第三人称 = `Quaternion.Euler(0,camYaw,0) * (ix,0,iz)`；第一人称 = 角色自身方向（老行为）。
+  · `MoveWithInput(ix,iz)` 是公开接口（`Move()` 调它）；另有 `useInputOverride / inputOverride` 虚拟输入，
+     自检和剧情演出可以直接让它走路（★ 自检千万不要用编辑器 tick 手动调，tick ≠ 游戏帧，会跑不动）。
+- ⚠ **相机位置和朝向都不能从“角色位置”反推**（踩过：`rotation = LookRotation(角色位置 - 相机位置)` + 位置带平滑
+  → 角色一横移/转身，相机位置滞后一拍，朝向就跟着变，看起来就是“镜头跟着玩家晃”）。
+  现在两者**只由 `camYaw / pitch / 距离` 决定**：`cameraPivot.rotation = Quaternion.Euler(pitch+aimDown, camYaw, 0)`，
+  与角色无关（`aimDown` 只是“往下看胸口”的固定几何角）。
+- **第三人称怎么摆**：`LateUpdate` 里把相机放到「角色 + tpHeight」支点的背后 tpDistance 米，
+  `tpBlockMask` 满墙自动拉近（球半径 tpCollisionRadius，最短 tpMinDistance）；
+  俯仰用 `tpPitchMin/Max`（**用户定稿：上抬 +40° / 下压 −45°**，正值=镜头抬到头上往下看）；
+  `tpFollowSmooth=0`（默认）就是硬跟，调大才有拖尾感。
+  · ⚠ **贴地保护**：支点 1.45m + 距离 3.4m 时，压到 −45° 会让镜头到地面下 0.95m →
+    `tpKeepAboveGround=true` 会在要入地时**自动缩短吊臂**（最低离地 `tpMinCameraHeight=0.35`），仍对着角色，不钻地。
+    想让 −45° 完整用出来：把 `tpHeight` 调高或 `tpDistance` 调小（例：距离 ≤1.55m 就能在离地 0.35m 以上走满 −45°）。
+  · ⚠ `tpBlockMask` 默认排除了 **Outline 层（8）**——角色/道具都在那层，不然身后站个 NPC 镜头就会被硬拉近。
+  · ⚠ **`CastForCamera` 里不要按法线忽略“朝上/朝下的面”**（踩过）：当时为了不让地板把镜头往下拽加了
+    `normal.y>0.7 / <-0.7 就 continue`，结果**天花板也一起被忽略**，镜头直接穿顶。
+    地板会挡是正常的——那正是“弹簧臂贴地缩短”，另外还有 `tpKeepAboveGround` 兜底。
+  · ⚠ 相机碰撞要能跳过玩家自己：**CharacterController 就在根节点上**，所以射线过滤用 `collider.transform.IsChildOf(玩家)`。
+- **模型显示**：`thirdPerson=true` 时 `ApplyFirstPersonParts()` 把所有部件设回 `ShadowCastingMode.On`；
+  第一人称才按 `firstPersonShadowsOnlyParts` 藏躯干。
+  主角模型整棵子树在 **Outline 层**（跟 NPC 一样有描边），`FP_相机` 仍在 Default。
+- **主角动画**：`Animators/带动画模型/徐夏_第三人称.controller`（零重定向，用徐夏自己的剪辑）：
+  混合树 `Speed`：0=Idle / 1=Walk / 2=SlowRun，另有 `Phone`=true → Texting（剧情微信段会 `SetBool("Phone")`）。
+  · 根上旧 Animator 已停用（旧骨架已删）；`FirstPersonController.animator` 指向**模型上那个** Animator。
+  · 本作设计是「**只走不跑**」：`runSpeed == walkSpeed == 1.6`。想开跑把 runSpeed 改 3.2（混合树第 2 档已经在）。
+  · `Move()` 写进 Animator 的 Speed 是 `clamp(animV / walkSpeed, 0, 2)`（不再卡在 1），所以有第 2 档就能用上。
+  · **起步要快**：`animV = max(实际速度, 输入速度)` —— 动画混合看**输入**（瞬时），不看被 `accel` 平滑过的实际速度，
+    否则 Speed 会跟着加速曲线爬上来（~0.2s 才混到 Walk，感觉就是“起步慢”）；位移仍按原速加速。
+    `animStartSmooth` 只管“停下/微调”的过渡（默认 0 = 都不要过渡）。
+- **自检**：`Tools/干预项目/主角第三人称/② 运行自检`（或丢 `Assets/_player3psmoke_trigger.txt`）→ 报告 `assets/_报告/_主角第三人称自检.txt`。
+  实测过的：按 W 走 0.68m 且位移沿相机前方 0.98 / 角色朝向 0.97（自己转向移动方向）；按 D 沿相机右方 0.95；
+  动画骨头位移 1.16m；主角在相机视锥内。
+  · ⚠ 检测逻辑在**运行时**脚本 `Assets/Scripts/Player/PlayerThirdPersonSmokeDriver.cs`（协程，用真游戏帧），
+    编辑器只负责进/退 Play。**关键坑（都踩过）**：
+    ① 把检测挂在 `EditorApplication.update` 里跑 → 进 Play 的域重载会把订阅和静态状态全冲掉 → 写到一半就没了；
+    ② 进 Play 前把场景弄脏 → Unity 会弹「保存场景?」模态框，自动化直接卡死；
+    ③ 自举要“看文件就跑完把文件删了”，否则一次自检会起好几个驱动，互相干扰测量结果；
+    ④ 自检要在开局先清 `useInputOverride`/`camYaw`，并临时停掉 `StoryRunner`（剧情开场会锁住玩家），
+       否则角色一直在走，镜头/朝向测出来全是错的。
+  · 状态全用**文件**记（`额外文件/_player3p_run` / `_player3p_done` / `_player3p_smoke.state`），不用静态变量。
+
 ---
 
 ## 四、干活约定
@@ -117,6 +242,7 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
    - `_postfxfull_trigger.txt` → 后期布置 + 渲染每屋一张「原/后」对比预览（一次搞定，推荐）
    - `_postfx_trigger.txt` → 只布置后期；`_postfxpreview_trigger.txt` → 只渲染后期预览
    - `_doors_trigger.txt` → 搭/刷新门口传送；`_doorssmoke_trigger.txt` → 门口传送运行自检
+   - `_animpreview_trigger.txt` → 角色预览场景：每个角色挂一个动画；`_animpreviewsmoke_trigger.txt` → 动画运行自检
    - `_menu_trigger.txt` → 重建主界面 MainMenu.unity
    - `_camera_trigger.txt` → 场景视图相机复位（视角斜了/跑飞了）
    - `_phonechat_trigger.txt` → 搭建手机聊天UI（第1章微信段）+ 渲染预览
@@ -240,6 +366,27 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
     编辑器只负责置标志 → 进 Play → 轮询 `Finished` → 写报告 → 退出。
 - 想改门位/触发范围：直接改那个门自己的 BoxCollider；想改显示名/章节：改它上面的 `DoorInteractable`。
 
+### 角色动画预览（AnimPreviewSetup）
+
+- **场景**：`Assets/Scenes/角色资源预览场景.unity`（原名 `Test_徐夏_动画.unity`）——
+  9 个角色 prefab 实例排成一排 + 相机 + 太阳。
+- **做法**：`Assets/Editor/AnimPreviewSetup.cs`，菜单
+  `Tools/干预项目/角色预览场景：每个角色挂一个动画`（或丢 `_animpreview_trigger.txt`）。
+  9 个动画 ↔ 9 个角色按名字排序一一对应（多于角色就轮流），报告 `assets/_报告/_角色动画预览.txt`。
+- ⚠ **一个角色身上有两个 Animator**：prefab 根一个、模型内部 `Base_F_body`/`Base_M_body` 一个。
+  只有**离 `SkinnedMeshRenderer` 最近的那个**才真的在驱动身体。
+  所以工具是从每个蒙皮网格往上找最近的 Animator 当"驱动者"，只给它换 Controller
+  —— 一开始按"场景里所有 Animator"配，结果 9 个角色配成了 18 份、标签也翻倍，已改。
+- **不动原动画 FBX 的导入设置**：`拿手机` / `Walk` 这类一次性动作单独做 `loopTime=true` 的 `.anim`
+  副本（`assets/03_动作_Animation/预览Clip/`）给预览用。
+  直接改 FBX 的 loopTime 会让游戏里的"拿手机"变成循环 —— 别那么干。
+- 角色/动画 FBX 都是 `animationType: 3`（Humanoid），所以动作会自动重定向到各自身形上。
+  Animator 的 Avatar 是 prefab 自带的，工具不碰。
+- 头顶标签是场景里的 `标签_<动画名>` 节点（`TextMesh` + 中文字体）；设 `ADD_LABEL=false` 再跑一次就没有。
+- **自检**：`Tools/干预项目/角色预览场景：动画运行自检`（或 `_animpreviewsmoke_trigger.txt`）——
+  真进 Play 采样 `normalizedTime` 看有没有推进，能抓出"挂了 controller 但没在播"
+  （没 Avatar / Avatar 不是 Humanoid / state 的 Motion 为空）。报告 `assets/_报告/_角色动画预览自检.txt`。
+
 ### 第一章剧情（Chapter1Story）
 
 - **搭建工具已归档**（2026-09-23 用户定稿）：`Chapter1StoryBuilder`（连同它的自动触发器）已移到
@@ -264,6 +411,11 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   工具对这三个节点只做**只读快照**（`LayoutDialogue` → 报告里列当前值），**一个字都不写回**；
   字体也只在“真的没有中文字形”时才补（`font.HasCharacter('中')` 判断）。
   运行时的正文颜色由三语态（dlg/nar/mon）切换 —— 那是演出需求，不是工具覆盖。
+- ⚠ **`BlackFade` 必须启用**（`StoryRunner.Begin()` 现在会自己 `SetActive(true)` 兜底）：
+  它在场景里被禁用时**所有黑幕都不生效**，于是"开场先黑住再瞬移"这招白做 ——
+  玩家会看到「瞬移 4.4m + 镜头第一帧摆位」露在画面里（低帧率下被拆成几段，看着就像"角色自己向右向前挪了几下"）。
+  实测口径：开局探针 150 帧里**玩家根位移 0.000m**、落点就是 `Loc_教室/StoryStart`（4.23, 0.03, −4.05）；
+  黑幕能在运行时被找到（= 已启用）才算对。
 - `遮罩`（全屏黑 68%）已从「对话」下提到 `UI交互` 最前（= UI 最底层，才铺得满全屏、也压不到对话条）。
   **运行时按语态启用：`dlg` 对话 / `mon` 内心独白 → 开；`nar` 旁白 → 关**（`DialogueUI.SetDim`）。场景里默认禁用。
 - `BlackFade` 与 `遮罩` 职责不同、**层级不能互换**：
@@ -365,6 +517,9 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 | 重新给主角挂动画 | `Tools/干预项目/给主角挂动画`（会重写 `PC_徐夏_测试.controller`） |
 | 看角色长相 | `Tools/干预项目/渲染角色预览` → `assets/_报告/预览/*.png` |
 | 查材质为什么洋红 | `Tools/干预项目/诊断角色材质` → `assets/_报告/_材质诊断.txt` |
+| Mixamo 重绑的模型贴角色材质 | `Tools/干预项目/带动画模型：贴回角色材质`（或丢 `Assets/_animmodelmats_trigger.txt`，会顺带渲染预览）→ 报告 `assets/_报告/_带动画模型材质.txt`、预览 `assets/_报告/预览/带动画模型/<角色>_已绑定.png` |
+| Game 场景角色换新模型 | `Tools/干预项目/Game角色替换/① 试运行`（只看）→ `② 执行替换` → `③ 运行自检`；触发器 `_gcharprobe_trigger.txt` / `_gcharsvap_trigger.txt` / `_gcharsmoke_trigger.txt`；报告 `assets/_报告/_Game角色替换.txt`、`_Game角色替换自检.txt` |
+| 主角换第三人称 / 调镜头 | `Tools/干预项目/主角第三人称/① 配置` → `② 运行自检`（触发器 `_player3p_trigger.txt` / `_player3psmoke_trigger.txt`）；报告 `assets/_报告/_主角第三人称.txt`、`_主角第三人称自检.txt` |
 | 材质引用变空/洋红 | `Tools/干预项目/全量强制重导` |
 | 编辑器视角斜了/乱转/跑飞 | `Tools/干预项目/场景视图相机/…`（1 完全复位 / 2 只摆正 / 3 回原点 / 4 聚焦选中）→ `assets/_报告/_场景视图相机.txt`；或丢 `_camera_trigger.txt` 自动跑 |
 | 从素材里拿新配件 | 复制 FBX + **它的 .meta** 到 `assets/02_角色_Character/Meshes/…`，再在 `CharRebuild.cs` 里引用 |
@@ -373,6 +528,8 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 | 调剧情场景的后期（辉光/模糊/雾/氛围） | 改 `Assets/Editor/ScenePostFx.cs` 顶部常量或 `Moods()` 表 → `Tools/干预项目/场景后期效果/① 一键布置`（或丢 `_postfxfull_trigger.txt`） |
 | 看后期效果 / 对比开关后期 | `Tools/干预项目/场景后期效果/③ 渲染后期预览` → `assets/_报告/预览/场景/后期_*.png`（开）与 `原始_*.png`（关）成对出现；报告 `_后期预览.txt` 里带平均亮度差值 |
 | 不要后期了 | `Tools/干预项目/场景后期效果/④ 关闭后期效果`（停用不是删除，跑一次 ① 就回来） |
+| 角色预览场景里看动画 | `Tools/干预项目/角色预览场景：每个角色挂一个动画`（或丢 `_animpreview_trigger.txt`）→ 报告 `assets/_报告/_角色动画预览.txt` |
+| 验证动画真的在播 | `Tools/干预项目/角色预览场景：动画运行自检`（真进 Play 采样 normalizedTime）→ `assets/_报告/_角色动画预览自检.txt` |
 | 搭/刷新门口传送（按 F 选地点传走） | `Tools/干预项目/搭建门口传送`（或丢 `_doors_trigger.txt`） |
 | 验证门口传送能不能用 | `Tools/干预项目/门口传送运行自检`（真进 Play 模式走一遍）→ `assets/_报告/_门口传送运行自检.txt` |
 | 重建/改第一章剧情 UI（谨慎） | 把 `额外文件/历史Editor脚本/Chapter1StoryBuilder.cs` 拷回 `Assets/Editor/` → **手动**跑菜单（会重建 `ChoicePanel`/`WalkHint`/`ChapterCard`/`BlackFade`；`对话/对话框/名字/对话内容` 已冻结只读）→ 用完移走 |

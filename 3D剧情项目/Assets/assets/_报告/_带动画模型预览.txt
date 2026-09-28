@@ -1,0 +1,22 @@
+带动画模型预览  2026-09-28 08:01
+每个角色渲染 已绑定.fbx（rest 姿势，材质走导入器重映射） → Assets/assets/_报告/预览/带动画模型
+对照：assets/_报告/预览/<角色>_可动.png（原模型同一机位）
+
+  张知远      高 1.71m  材质 11 个：hair_mat_hair_short.004、skin_mat_base_M_body、skin_mat_base_M_face、brow_mat_eyelashes、mat_base_eye.001、mat_eye_highlight、mat_base_mouth、brow_mat_eyebrows、top_mat_top.002_jacket、bot_mat_bot.004_skinnyjeans、shoes_mat_shoes.002_sneakers
+        → Assets/assets/_报告/预览/带动画模型/张知远_已绑定.png
+  徐夏       高 1.75m  材质 12 个：hair_mat_hair_medium.001、hair_mat_hair_bangs.001、skin_mat_base_F_body、skin_mat_base_F_face、brow_mat_eyelashes、mat_base_eye.001、mat_eye_highlight、mat_base_mouth、brow_mat_eyebrows、top_mat_top.003_sweater、bot_mat_bot.003_skirt、shoes_mat_shoes.006_lowsneakers
+        → Assets/assets/_报告/预览/带动画模型/徐夏_已绑定.png
+  李老师      高 1.71m  材质 14 个：hair_mat_hair_tied.001、hair_mat_hair_bangs.002、hair_mat_hair_tied - bun、mat_glasses.001_round、skin_mat_base_F_body、skin_mat_base_F_face、brow_mat_eyelashes、mat_base_eye.001、mat_eye_highlight、mat_base_mouth、brow_mat_eyebrows、top_mat_top.011_blazer、bot_mat_bot.001_pants、shoes_mat_shoes.005_highboots
+        → Assets/assets/_报告/预览/带动画模型/李老师_已绑定.png
+  林溪       高 1.72m  材质 13 个：hair_mat_hair_tied.002、hair_mat_hair_bangs.002、hair_mat_hair_tied.002 - twintails、skin_mat_base_F_body、skin_mat_base_F_face、brow_mat_eyelashes、mat_base_eye.001、mat_eye_highlight、mat_base_mouth、brow_mat_eyebrows、top_mat_top.002_jacket、bot_mat_bot.002_shorts、shoes_mat_shoes.002_sneakers
+        → Assets/assets/_报告/预览/带动画模型/林溪_已绑定.png
+  王含       高 1.69m  材质 13 个：hair_mat_hair_long.001、hair_mat_hair_bangs.003、skin_mat_base_F_body、skin_mat_base_F_face、brow_mat_eyelashes、mat_base_eye.001、mat_eye_highlight、mat_base_mouth、brow_mat_eyebrows、top_mat_top.004_shirt、bot_mat_bot.004_skinnyjeans、shoes_mat_shoes.001_boots、acc_mat_acc.001_scarf
+        → Assets/assets/_报告/预览/带动画模型/王含_已绑定.png
+  组长       高 1.71m  材质 11 个：hair_mat_hair_short.001、skin_mat_base_M_body、skin_mat_base_M_face、brow_mat_eyelashes、mat_base_eye.001、mat_eye_highlight、mat_base_mouth、brow_mat_eyebrows、top_mat_top.010_shirtntie、bot_mat_bot.001_pants、shoes_mat_shoes.006_lowsneakers
+        → Assets/assets/_报告/预览/带动画模型/组长_已绑定.png
+  舍友A      高 1.71m  材质 13 个：hair_mat_hair_tied.001、hair_mat_hair_bangs.001、hair_mat_hair_tied.001 - ponytail、skin_mat_base_F_body、skin_mat_base_F_face、brow_mat_eyelashes、mat_base_eye.001、mat_eye_highlight、mat_base_mouth、brow_mat_eyebrows、top_mat_top.005_shirt_vest、bot_mat_bot.005_shorts、shoes_mat_shoes.005_highboots
+        → Assets/assets/_报告/预览/带动画模型/舍友A_已绑定.png
+  舍友B      高 1.71m  材质 12 个：hair_mat_hair_curly.002、hair_mat_hair_bangs.003、skin_mat_base_F_body、skin_mat_base_F_face、brow_mat_eyelashes、mat_base_eye.001、mat_eye_highlight、mat_base_mouth、brow_mat_eyebrows、top_mat_top.006_openshirt、bot_mat_bot.006_loosepants、shoes_mat_shoes.004_sandals
+        → Assets/assets/_报告/预览/带动画模型/舍友B_已绑定.png
+  陆宣雨      高 1.72m  材质 12 个：hair_mat_hair_medium.002、hair_mat_hair_bangs.002、mat_glasses.001_square、skin_mat_base_F_body、skin_mat_base_F_face、brow_mat_eyelashes、mat_base_eye.001、mat_eye_highlight、mat_base_mouth、brow_mat_eyebrows、top_mat_outfit.003、shoes_mat_shoes.007_chelseas
+        → Assets/assets/_报告/预览/带动画模型/陆宣雨_已绑定.png

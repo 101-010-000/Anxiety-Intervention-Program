@@ -1,0 +1,36 @@
+骨架层级比对：prefab（组装后） vs 原 FBX  2026-09-27 23:56
+如果同一根骨头的父节点不一样，就是组装脚本把层级弄坏了。
+
+=== 徐夏
+   骨头                           prefab 的父节点                  原 FBX 的父节点
+   CC_BaseThigh.L               CC_Base_Pelvis               ★无此骨   ★★ 不一致
+   CC_BaseCalf.L                CC_BaseThigh.L               ★无此骨   ★★ 不一致
+   CC_BaseFoot.L                CC_BaseCalf.L                ★无此骨   ★★ 不一致
+   CC_BaseToeBase.L             CC_BaseFoot.L                ★无此骨   ★★ 不一致
+   CC_BaseThighTwist01.L        CC_BaseThigh.L               ★无此骨   ★★ 不一致
+   CC_BaseThighTwist02.L        CC_BaseThighTwist01.L        ★无此骨   ★★ 不一致
+   CC_BaseCalfTwist01.L         CC_BaseCalf.L                ★无此骨   ★★ 不一致
+   CC_BaseCalfTwist02.L         CC_BaseCalfTwist01.L         ★无此骨   ★★ 不一致
+   CC_BaseThigh.R               CC_Base_Pelvis               ★无此骨   ★★ 不一致
+   CC_BaseCalf.R                CC_BaseThigh.R               ★无此骨   ★★ 不一致
+   CC_BaseFoot.R                CC_BaseCalf.R                ★无此骨   ★★ 不一致
+   CC_BaseCalfTwist01.R         CC_BaseCalf.R                ★无此骨   ★★ 不一致
+   CC_BaseCalfTwist02.R         CC_BaseCalfTwist01.R         ★无此骨   ★★ 不一致
+   —— 原 FBX 里这几根骨的 localRotation ——
+
+=== 王含
+   骨头                           prefab 的父节点                  原 FBX 的父节点
+   CC_BaseThigh.L               CC_Base_Pelvis               ★无此骨   ★★ 不一致
+   CC_BaseCalf.L                CC_BaseThigh.L               ★无此骨   ★★ 不一致
+   CC_BaseFoot.L                CC_BaseCalf.L                ★无此骨   ★★ 不一致
+   CC_BaseToeBase.L             CC_BaseFoot.L                ★无此骨   ★★ 不一致
+   CC_BaseThighTwist01.L        CC_BaseThigh.L               ★无此骨   ★★ 不一致
+   CC_BaseThighTwist02.L        CC_BaseThighTwist01.L        ★无此骨   ★★ 不一致
+   CC_BaseCalfTwist01.L         CC_BaseCalf.L                ★无此骨   ★★ 不一致
+   CC_BaseCalfTwist02.L         CC_BaseCalfTwist01.L         ★无此骨   ★★ 不一致
+   CC_BaseThigh.R               CC_Base_Pelvis               ★无此骨   ★★ 不一致
+   CC_BaseCalf.R                CC_BaseThigh.R               ★无此骨   ★★ 不一致
+   CC_BaseFoot.R                CC_BaseCalf.R                ★无此骨   ★★ 不一致
+   CC_BaseCalfTwist01.R         CC_BaseCalf.R                ★无此骨   ★★ 不一致
+   CC_BaseCalfTwist02.R         CC_BaseCalfTwist01.R         ★无此骨   ★★ 不一致
+   —— 原 FBX 里这几根骨的 localRotation ——
