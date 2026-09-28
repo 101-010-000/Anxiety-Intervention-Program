@@ -1,39 +1,47 @@
-// NPC 剧情入场驱动（第2章陆宣雨"门口虚影渐显走近"，2026-09-27；机制通用，第4章林溪可复用）：
-//   由 StoryRunner 的 enter 步骤在目标角色根节点上懒挂本组件，负责一段入场演出：
-//     1. Prepare：快照原材质/原 Layer/原碰撞状态 → 摘描边（Layer 暂离 Outline，防半透明人
-//        挂着实心黑壳穿帮）→ 禁胶囊碰撞（虚影不挡人）→ 全部 Renderer 换虚影材质（_Alpha=0）；
-//     2. Run（协程，由 runner yield 驱动）：从起点走向终点（面朝移动方向、播行走动画、
-//        _Alpha 随进度渐升到上限）→ 到位切待机、转身面向玩家 → Restore（换回原材质、
-//        恢复 Layer/碰撞）→ Done；
-//     3. Skip：自检/快进用，立即终态（同一套收尾逻辑，幂等）。
-//   落点不写死：StoryRunner 按玩家当前位置算"玩家面前 1.3m"传入（用户 2026-09-27 定）。
+// NPC 剧情入场驱动（第2章陆宣雨"门口半透明渐显走近"，2026-09-28 v3 双层交叉淡化）：
+//   由 StoryRunner 的 enter 步骤在目标角色根节点上懒挂本组件，负责一段入场演出。
 //
-// 材质说明：虚影材质 = CharacterGhost.shader 的运行时实例（Shader.Find），只在内存中存在，
-//   不落资产；还原用快照的 sharedMaterials 写回，零资产污染。
-// 动画说明：复用 PC_徐夏_Walk.controller（Speed 驱动的待机/行走混合树，humanoid 跨角色
-//   重定向）；兼容 Walk(Bool) 型；animator 缺失/无参数时退化为纯位移。
+// ★ v3 核心思路（用户定稿："虚化=透明，由半透明慢慢变到不透明，全程连续"）：
+//   真身本体不透明（CharacterLit 冻结不能改），无法渐显 → 用【双层】实现连续凝实：
+//     · 幽灵层 = 复制她的 SkinnedMeshRenderer（共享骨骼，动作同步）套全息透明材质；
+//     · 真身本体先隐藏，演出中段在幽灵层最浓时接通（同轮廓 → 视觉零跳变）；
+//     · 幽灵层最后 ~1s 平滑淡出 → 真人从虚影里"凝实"出来。
+//   整体不透明度单调递增 0.2→0.65→1.0，无任何一帧突变。
+//
+// 曲线（用户反馈"快靠近时落差大"的对症设计）：
+//   位移：匀速（不做 SmoothStep，避免终点速度骤停）；
+//   幽灵浓度：前 60% 路程缓出升到 GHOST_PEAK 后【保持】——靠近阶段视觉稳定不剧变；
+//   凝实：走过 REVEAL_START 后启动，持续 REVEAL_DUR 秒（覆盖到达前后），三次曲线平滑。
+//
+// 穿帮防护沿用：入场期摘描边（Layer 暂离 Outline）、禁碰撞；落定恢复。
+// Skip() 供自检快进（瞬间终态，同一套收尾）。
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class NpcEntrance : MonoBehaviour
 {
+    // ---------------- 可调参数（观感微调只动这里） ----------------
     const float SPEED = 1.35f;          // 入场步速（偏缓，演出感）
-    // 显形驱动：_Alpha 0→1 随位移进度升（shader 内部再按菲涅尔分中心/边缘——
-    // v2 全息版：中心透、边缘实，整体一直是"虚"的，直到落定换回真实材质才是"实"）
+    const float GHOST_PEAK = 0.75f;     // 行走中幽灵层的峰值浓度（保持明显可看穿）
+    const float GHOST_RAMP = 0.6f;      // 前 60% 路程：浓度 0→峰值（缓出），之后保持
+    const float REVEAL_START = 0.62f;   // 走到 62% 开始凝实（真身接通 + 幽灵开始淡出）
+    const float REVEAL_DUR = 1.05f;     // 凝实总时长（覆盖到达前后，越大越"慢慢变实"）
+    // --------------------------------------------------------------
 
     static readonly int AlphaId = Shader.PropertyToID("_Alpha");
 
-    Renderer[] _renderers;
-    Material[][] _origMats;             // 每个 renderer 的 sharedMaterials 快照
-    Material _ghost;                    // 虚影材质实例（所有 renderer 共享一个，全局改 _Alpha）
+    Renderer[] _realRenderers;          // 真身（演出中隐藏，凝实启动时接通）
+    readonly List<GameObject> _ghostClones = new List<GameObject>();
+    Material _ghost;                    // 幽灵材质实例（所有克隆共享，全局改 _Alpha）
     int _origLayer;
-    bool _hadCollider;
     Collider _collider;
+    bool _hadCollider;
     Animator _anim;
-    bool _prepared, _restored;
+    bool _prepared, _restored, _realShown;
 
     public bool Done { get; private set; }
-    /// 自检/调试：置 true 后协程下一帧直达终态（等价 Skip）
+    /// 自检/调试：置 true 后协程逐帧直达终态（等价 Skip）
     public bool fast;
 
     // ------------------------------------------------------------------ 准备
@@ -42,13 +50,13 @@ public class NpcEntrance : MonoBehaviour
         if (_prepared) return;
         _prepared = true;
         _restored = false;
+        _realShown = false;
         Done = false;
 
-        _renderers = GetComponentsInChildren<Renderer>(true);
-        _origMats = new Material[_renderers.Length][];
+        _realRenderers = GetComponentsInChildren<Renderer>(true);
         var shader = Shader.Find("Custom/CharacterGhost");
         if (shader != null) _ghost = new Material(shader);
-        else Debug.LogWarning("[NpcEntrance] 找不到 Custom/CharacterGhost shader —— 虚影渐显退化为直接出现");
+        else Debug.LogWarning("[NpcEntrance] 找不到 Custom/CharacterGhost shader —— 入场将退化为直接出现");
 
         _origLayer = gameObject.layer;
         _collider = GetComponent<Collider>();
@@ -65,24 +73,43 @@ public class NpcEntrance : MonoBehaviour
         Vector3 dir = to - from; dir.y = 0f;
         if (dir.sqrMagnitude > 0.0001f) transform.rotation = Quaternion.LookRotation(dir.normalized);
 
-        HideVisualSide();               // 摘描边 + 禁碰撞 + 换虚影材质（_Alpha=0）
+        // 摘描边 + 禁碰撞（虚影不挡人）；真身隐藏 + 造幽灵层
+        gameObject.layer = LayerMask.NameToLayer("Default");
+        if (_collider != null) _collider.enabled = false;
+        foreach (var r in _realRenderers) if (r != null) r.enabled = false;
+        BuildGhostLayer();
+
         SetWalk(true);
 
         float dist = Vector3.Distance(from, to);
         float dur = Mathf.Max(0.6f, dist / SPEED);
         Vector3 start = from;
-        float t = 0f;
+        float t = 0f;          // 路程进度 0→1（匀速）
+        float reveal = 0f;     // 凝实进度 0→1
+
         while (t < 1f && !fast)
         {
-            t += Time.deltaTime / dur;
-            float k = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(t));
-            transform.position = Vector3.Lerp(start, to, k);
-            if (_ghost != null) _ghost.SetFloat(AlphaId, Mathf.Clamp01(t));
+            float dt = Time.deltaTime;
+            t = Mathf.Clamp01(t + dt / dur);
+            transform.position = Vector3.Lerp(start, to, t);            // 匀速，无 SmoothStep 骤停
+
+            if (t >= REVEAL_START) reveal = Mathf.Clamp01(reveal + dt / REVEAL_DUR);
+            UpdateGhostAlpha(t, reveal);
+            if (reveal > 0f) ShowReal();                                 // 凝实启动：真身在幽灵最浓时接通（零跳变）
             yield return null;
         }
 
-        // 终态（正常走完或 fast/Skip 都到这）
+        // 到达后把凝实播完（fast 时直接跳满）
+        if (!_realShown) ShowReal();
         transform.position = to;
+        while (reveal < 1f)
+        {
+            if (fast) reveal = 1f;
+            else reveal = Mathf.Clamp01(reveal + Time.deltaTime / REVEAL_DUR);
+            UpdateGhostAlpha(1f, reveal);
+            yield return null;
+        }
+
         if (faceTarget != null)
         {
             Vector3 d = faceTarget.position - transform.position; d.y = 0f;
@@ -97,22 +124,42 @@ public class NpcEntrance : MonoBehaviour
     public void Skip() { fast = true; }
 
     // ------------------------------------------------------------------ 内部
-    void HideVisualSide()
+    /// 幽灵层浓度 = 出现段缓出升到峰值并保持 × 凝实段平滑淡出
+    void UpdateGhostAlpha(float t, float reveal)
     {
-        // 描边：OutlineFeature 只画 Outline 层 —— 暂离该层即摘掉黑壳（落定恢复）
-        gameObject.layer = LayerMask.NameToLayer("Default");
-        if (_collider != null) _collider.enabled = false;
+        if (_ghost == null) return;
+        float ramp = 1f - (1f - Mathf.Clamp01(t / GHOST_RAMP)) * (1f - Mathf.Clamp01(t / GHOST_RAMP)); // 缓出
+        float fade = reveal * reveal * (3f - 2f * reveal);                                              // 三次平滑
+        _ghost.SetFloat(AlphaId, GHOST_PEAK * ramp * (1f - fade));
+    }
 
-        for (int i = 0; i < _renderers.Length; i++)
+    /// 复制蒙皮网格做幽灵层（共享骨骼 → 动作与真身完全同步），套幽灵材质
+    void BuildGhostLayer()
+    {
+        if (_ghost == null) return;
+        foreach (var r in _realRenderers)
         {
-            _origMats[i] = _renderers[i].sharedMaterials;
-            if (_ghost != null)
-            {
-                var ghostArr = new Material[_renderers[i].sharedMaterials.Length];
-                for (int j = 0; j < ghostArr.Length; j++) ghostArr[j] = _ghost;
-                _renderers[i].materials = ghostArr;      // 赋 materials 会实例化，这里全是同一个 _ghost 引用
-            }
+            if (r == null || !(r is SkinnedMeshRenderer)) continue;
+            var cloneGo = Instantiate(r.gameObject, r.transform.parent);
+            cloneGo.name = "幽灵层_" + r.name;
+            foreach (var col in cloneGo.GetComponentsInChildren<Collider>()) col.enabled = false;
+            var smr = cloneGo.GetComponent<SkinnedMeshRenderer>();
+            smr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            smr.updateWhenOffscreen = true;
+            var mats = new Material[smr.sharedMaterials.Length];
+            for (int i = 0; i < mats.Length; i++) mats[i] = _ghost;
+            smr.sharedMaterials = mats;
+            _ghostClones.Add(cloneGo);
         }
+        if (_ghostClones.Count == 0)
+            Debug.LogWarning("[NpcEntrance] 没有可复制的 SkinnedMeshRenderer —— 虚影层为空，将直接显示真身");
+    }
+
+    void ShowReal()
+    {
+        if (_realShown) return;
+        _realShown = true;
+        foreach (var r in _realRenderers) if (r != null) r.enabled = true;
     }
 
     void Restore()
@@ -121,10 +168,10 @@ public class NpcEntrance : MonoBehaviour
         _restored = true;
         gameObject.layer = _origLayer;
         if (_collider != null && _hadCollider) _collider.enabled = true;
-        for (int i = 0; i < _renderers.Length; i++)
-            if (_renderers[i] != null && _origMats[i] != null)
-                _renderers[i].sharedMaterials = _origMats[i];   // 写回原引用，不产生材质实例
-        if (_ghost != null) _ghost.SetFloat(AlphaId, 1f);       // 万一有残留引用也不再透明
+        foreach (var go in _ghostClones) if (go != null) Destroy(go);
+        _ghostClones.Clear();
+        ShowReal();          // 保险：任何路径（含 fast）都保证真身可见
+        if (_ghost != null) _ghost.SetFloat(AlphaId, 1f);
     }
 
     void SetWalk(bool on)
@@ -144,6 +191,7 @@ public class NpcEntrance : MonoBehaviour
 
     void OnDestroy()
     {
+        foreach (var go in _ghostClones) if (go != null) Destroy(go);
         if (_ghost != null) Destroy(_ghost);
     }
 }

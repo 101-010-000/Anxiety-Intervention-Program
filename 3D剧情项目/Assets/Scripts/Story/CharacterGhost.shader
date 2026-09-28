@@ -11,10 +11,10 @@ Shader "Custom/CharacterGhost"
 {
     Properties
     {
-        _Color ("虚影颜色", Color) = (0.68, 0.85, 1.0, 1)
-        _CenterAlpha ("正对时透明度", Range(0, 1)) = 0.16   // 身体中心：很透（看穿）
-        _RimAlpha ("边缘不透明度", Range(0, 1)) = 0.85      // 轮廓边缘：清晰可辨
-        _RimPower ("边缘聚拢程度", Range(0.5, 8)) = 2.5
+        _Color ("虚影颜色", Color) = (0.7, 0.87, 1.0, 1)
+        _CenterAlpha ("正对时透明度", Range(0, 1)) = 0.14   // 身体中心：几乎全透（看穿见背景）
+        _RimAlpha ("边缘不透明度", Range(0, 1)) = 0.75      // 轮廓边缘：可辨
+        _RimPower ("边缘聚拢程度", Range(0.5, 8)) = 3.0     // 边缘收窄——大面积保持可看穿
         _Alpha ("显形进度", Range(0, 1)) = 0                // NpcEntrance 全局驱动
     }
 
