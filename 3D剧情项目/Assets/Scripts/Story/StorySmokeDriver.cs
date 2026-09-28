@@ -61,6 +61,11 @@ public class StorySmokeDriver : MonoBehaviour
                                               // 同样的打字机步骤要吃更多帧——1600 不够（第5章踩过，
                                               // 走到 87/92 耗尽）。真死锁由下方"同步骤 600 帧"判据兜住。
         int lastIdx = -1, stuck = 0;
+        // 玩家位置取证（排查"掉虚空"用）：起点/最低Y/终点
+        var player = FindObjectOfType<FirstPersonController>();
+        Vector3 pStart = player != null ? player.transform.position : Vector3.zero;
+        float pMinY = pStart.y; Vector3 pEnd = pStart;
+        int sample = 0;
         while (!r.Finished && safety-- > 0)
         {
             switch (r.CurrState)
@@ -80,12 +85,22 @@ public class StorySmokeDriver : MonoBehaviour
             else { lastIdx = r.StepIndex; stuck = 0; }
 
             r.DebugAdvance();
+            sample++;
+            if (player != null && (sample % 120 == 0 || r.Finished))
+            {
+                var pp = player.transform.position;
+                if (pp.y < pMinY) pMinY = pp.y;
+                pEnd = pp;
+            }
             yield return null;                 // ★ 等真游戏帧
         }
 
         if (r.Finished)
         {
             Lines.Add("走完全部 " + r.StepIndex + "/" + r.TotalSteps + " 步 ✓");
+            Lines.Add(string.Format("玩家位置取证：起点=({0:F1},{1:F1},{2:F1})  最低Y={3:F1}  终点=({4:F1},{5:F1},{6:F1})" +
+                (pMinY < -3 ? "  ★玩家掉下去了！" : ""),
+                pStart.x, pStart.y, pStart.z, pMinY, pEnd.x, pEnd.y, pEnd.z));
             Lines.Add("状态计数：Typing " + _sawTyping + " / Gap " + _sawGap + " / 开场旁白 " + _sawNarFree
                       + " / Choice " + _sawChoice + " / Walk " + _sawWalk + " / Interact " + _sawInteract
                       + " / Fade " + _sawFade + " / Enter " + _sawEnter);
