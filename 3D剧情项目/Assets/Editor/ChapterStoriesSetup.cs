@@ -104,6 +104,27 @@ public static class ChapterStoriesSetup
     [MenuItem(MENU + "一键搭建第2-5章（幂等）", false, 50)]
     public static void SetupAll()
     {
+        try { SetupAllCore(); }
+        catch (System.Exception e)
+        {
+            // 踩过两次坑：运行中途异常 → 报告没写出、场景可能只保存了一半，事后无从查因。
+            // 现在异常必落两处：报告内 + 额外文件/错误_多章剧情搭建.txt（仓库约定）。
+            _log.AppendLine();
+            _log.AppendLine("★ 异常中止：" + e);
+            FlushReport();
+            try
+            {
+                Directory.CreateDirectory("../额外文件");
+                File.WriteAllText("../额外文件/错误_多章剧情搭建.txt", e.ToString());
+            }
+            catch { }
+            Debug.LogError("[ChapterStoriesSetup] 异常：" + e);
+            EditorUtility.DisplayDialog("多章剧情搭建", "异常中止（详情见 Console 与 额外文件/错误_多章剧情搭建.txt）", "好");
+        }
+    }
+
+    static void SetupAllCore()
+    {
         _log.Clear();
         _log.AppendLine("多章剧情搭建（第2-5章）  " + System.DateTime.Now.ToString("yyyy-MM-dd HH:mm"));
         _log.AppendLine();
@@ -178,6 +199,7 @@ public static class ChapterStoriesSetup
 
         // 第5章门口 Touch 触发盒（walk 步骤用）
         EnsureTouchBox(CH5_DOOR_TOUCH, 5);
+        FlushReport();   // 分段落盘：中途出问题也能看到跑到了哪一步
 
         _log.AppendLine();
         _log.AppendLine("【json 校验】");
@@ -194,6 +216,7 @@ public static class ChapterStoriesSetup
 
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);
+        FlushReport();
 
         _log.AppendLine();
         _log.AppendLine("【待人工确认】");
@@ -202,10 +225,16 @@ public static class ChapterStoriesSetup
         _log.AppendLine("  2) 自检：Tools/干预项目/第N章剧情运行自检（N=2..5）→ assets/_报告/_第N章剧情运行自检.txt。");
         _log.AppendLine("  3) 手机聊天对象头像目前沿用第一章两张（占位）；有新头像后在 手机聊天 节点 Inspector 换 avatarLeft 即可。");
 
-        Directory.CreateDirectory(Path.GetDirectoryName(REPORT).Replace('/', Path.DirectorySeparatorChar));
-        File.WriteAllText(REPORT, _log.ToString());
+        FlushReport();
         Debug.Log("[ChapterStoriesSetup] 完成，报告：" + REPORT);
         EditorUtility.DisplayDialog("多章剧情搭建", "完成，详见：\n" + REPORT, "好");
+    }
+
+    /// 分段把当前日志落盘（幂等重入安全）：无论跑到哪一步，报告文件都反映最新进度
+    static void FlushReport()
+    {
+        Directory.CreateDirectory(Path.GetDirectoryName(REPORT).Replace('/', Path.DirectorySeparatorChar));
+        File.WriteAllText(REPORT, _log.ToString());
     }
 
     [MenuItem(MENU + "只看接线状态（不改动）", false, 51)]
@@ -313,7 +342,8 @@ public static class ChapterStoriesSetup
         si.chapterTag = chapter;
         si.oneShot = true;
         EditorUtility.SetDirty(si);
-        Log("  + " + p.name + " 挂 StoryInteractable(Touch 触发盒)  ch=" + chapter);
+        Log("  + " + p.name + " 挂 StoryInteractable(Touch 触发盒)  ch=" + chapter
+            + "（已有组件则只刷新参数）");
     }
 
     static void Log(string s) { _log.AppendLine(s); }
