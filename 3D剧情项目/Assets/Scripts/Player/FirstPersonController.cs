@@ -82,6 +82,7 @@ public class FirstPersonController : MonoBehaviour
     float pitch;
     float velY;
     Vector3 horizVel;
+    Vector3 _lastGroundedPos = new Vector3(0f, 0.1f, 0f);   // 掉出世界保护的回溯点（默认=教室地板中心）
 
     // ------------------------------------------------------------------
     void Awake()
@@ -267,6 +268,21 @@ public class FirstPersonController : MonoBehaviour
 
     void Step(bool noHoriz)
     {
+        // 掉出世界保护（2026-09-28）：y 低于地面 20m = 已经在虚空里下坠（正常游玩地面在 y≈0，
+        // 台阶/床铺高度远不到 -20）。拉回【最后一次踩到地面的位置】并清速度——根因无论是什么
+        // （传送未执行/锚点悬空/碰撞未加载），玩家都不会无限坠落。从未落地过则回世界原点（教室地板）。
+        if (cc.isGrounded && transform.position.y > -5f) _lastGroundedPos = transform.position;
+        else if (transform.position.y < -20f)
+        {
+            cc.enabled = false;
+            transform.position = _lastGroundedPos;
+            cc.enabled = true;
+            velY = 0f;
+            horizVel = Vector3.zero;
+            Debug.LogWarning("[FirstPersonController] 掉出世界，已拉回最后落地点：" + _lastGroundedPos.ToString("F1"));
+            return;
+        }
+
         if (cc.isGrounded && velY < 0f) velY = -2f;
         velY += gravity * Time.deltaTime;
 
