@@ -1,15 +1,21 @@
-// NPC 入场虚影材质（第2章陆宣雨"从虚变实"演出，2026-09-27）：
-// 入场期间临时替换角色所有 Renderer 的材质为本 shader 的实例（统一淡青白半透明），
-// 由 NpcEntrance 驱动 _Alpha 从 0 → 0.75 渐显；到位后换回原材质"落定"。
-// ★ 只做入场演出的"虚影"，不还原角色真实配色 —— 真实配色属于 CharacterLit（ShaderGraph，
-//   9 角色共享，AGENTS 第三节历史事故区，不能动）。简单法线明暗给一点体积感。
-// URP unlit transparent；_Alpha 独立属性方便全局驱动。
+// NPC 入场虚影材质（第2章陆宣雨"从虚变实"演出，2026-09-28 v2 全息透明版）：
+// 入场期间临时替换角色所有 Renderer 的材质为本 shader 的实例，由 NpcEntrance 驱动 _Alpha 0→1；
+// 到位后换回原材质"落定"。★ 只做演出虚影，不还原真实配色（真实配色属于 CharacterLit，
+//   ShaderGraph 9 角色共享，不能动）。
+//
+// v2（用户反馈"黑白感，要透明感"）：v1 是平色+固定 alpha 的剪影，看起来像灰白纸片。
+//   v2 改为全息虚影：菲涅尔（视角与表面法线夹角）驱动——
+//     正对镜头的"身体中心"近乎全透（能直接看穿看到背景），
+//     侧向轮廓边缘更实更亮 → 一眼就是"透明的人影"而不是变色的人。
 Shader "Custom/CharacterGhost"
 {
     Properties
     {
-        _Color ("虚影颜色", Color) = (0.75, 0.85, 0.92, 0.75)
-        _Alpha ("显形度", Range(0, 1)) = 0
+        _Color ("虚影颜色", Color) = (0.68, 0.85, 1.0, 1)
+        _CenterAlpha ("正对时透明度", Range(0, 1)) = 0.16   // 身体中心：很透（看穿）
+        _RimAlpha ("边缘不透明度", Range(0, 1)) = 0.85      // 轮廓边缘：清晰可辨
+        _RimPower ("边缘聚拢程度", Range(0.5, 8)) = 2.5
+        _Alpha ("显形进度", Range(0, 1)) = 0                // NpcEntrance 全局驱动
     }
 
     SubShader
@@ -24,7 +30,7 @@ Shader "Custom/CharacterGhost"
 
         Pass
         {
-            Name "GhostUnlit"
+            Name "GhostHologram"
             Blend SrcAlpha OneMinusSrcAlpha
             ZWrite Off
             Cull Back
@@ -36,6 +42,9 @@ Shader "Custom/CharacterGhost"
 
             CBUFFER_START(UnityPerMaterial)
                 half4 _Color;
+                half _CenterAlpha;
+                half _RimAlpha;
+                half _RimPower;
                 half _Alpha;
             CBUFFER_END
 
@@ -48,21 +57,29 @@ Shader "Custom/CharacterGhost"
             struct Varyings
             {
                 float4 positionCS : SV_POSITION;
-                half  shade       : TEXCOORD0;
+                float3 positionWS : TEXCOORD0;
+                half3  normalWS   : TEXCOORD1;
             };
 
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
-                OUT.positionCS = TransformObjectToHClip(IN.positionOS.xyz);
-                half3 n = normalize(IN.normalOS);
-                OUT.shade = 0.72 + 0.28 * saturate(n.y * 0.5h + 0.5h);   // 顶面亮底面暗，一点体积感
+                VertexPositionInputs p = GetVertexPositionInputs(IN.positionOS.xyz);
+                OUT.positionWS = p.positionWS;
+                OUT.positionCS = p.positionCS;
+                OUT.normalWS = TransformObjectToWorldNormal(IN.normalOS);
                 return OUT;
             }
 
             half4 frag(Varyings IN) : SV_Target
             {
-                return half4(_Color.rgb * IN.shade, _Color.a * saturate(_Alpha));
+                half3 N = normalize(IN.normalWS);
+                half3 V = normalize(_WorldSpaceCameraPos.xyz - IN.positionWS);
+                half fres = pow(1.0h - saturate(dot(N, V)), _RimPower);
+
+                half alpha = lerp(_CenterAlpha, _RimAlpha, fres) * saturate(_Alpha);
+                half3 col = _Color.rgb * (0.85h + 0.45h * fres);   // 边缘微亮，中心更"虚"
+                return half4(col, alpha);
             }
             ENDHLSL
         }

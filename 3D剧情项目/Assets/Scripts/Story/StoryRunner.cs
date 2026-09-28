@@ -465,10 +465,13 @@ public class StoryRunner : MonoBehaviour
 
     Transform FindFadeAnchor(string name)
     {
-        if (fadeAnchors == null || string.IsNullOrEmpty(name)) return null;
-        foreach (var a in fadeAnchors)
-            if (a != null && a.name == name) return a;
-        return null;
+        if (string.IsNullOrEmpty(name)) return null;
+        if (fadeAnchors != null)
+            foreach (var a in fadeAnchors)
+                if (a != null && a.name == name) return a;
+        // 接线池里没有 → 全场景按名找（用户手放/挪动的同名锚点直接生效，同「第N章起点」约定：
+        // 想让陆宣雨从真正的 门(1) 进来，把「第2章_陆宣雨门口」拖到门前即可，无需重跑工具）
+        return FindCharacterTransform(name);
     }
 
     // ------------------------------------------------------------------ NPC 入场演出（enter 步骤，2026-09-27）

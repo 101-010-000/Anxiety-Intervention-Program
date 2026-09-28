@@ -18,7 +18,8 @@ using UnityEngine;
 public class NpcEntrance : MonoBehaviour
 {
     const float SPEED = 1.35f;          // 入场步速（偏缓，演出感）
-    const float ALPHA_MAX = 0.75f;      // 虚影阶段最高不透明度（保留"虚"感直到落定）
+    // 显形驱动：_Alpha 0→1 随位移进度升（shader 内部再按菲涅尔分中心/边缘——
+    // v2 全息版：中心透、边缘实，整体一直是"虚"的，直到落定换回真实材质才是"实"）
 
     static readonly int AlphaId = Shader.PropertyToID("_Alpha");
 
@@ -76,7 +77,7 @@ public class NpcEntrance : MonoBehaviour
             t += Time.deltaTime / dur;
             float k = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(t));
             transform.position = Vector3.Lerp(start, to, k);
-            if (_ghost != null) _ghost.SetFloat(AlphaId, ALPHA_MAX * Mathf.Clamp01(t));
+            if (_ghost != null) _ghost.SetFloat(AlphaId, Mathf.Clamp01(t));
             yield return null;
         }
 
