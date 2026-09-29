@@ -13,3 +13,7 @@ Thumbs.db
 # agent 副产物（与项目无直接关系）：临时脚本、dump、备份、日志
 额外文件/*
 !额外文件/.gitkeep
+
+# 一次性触发器（丢进 Assets 用完即删，不入库）
+3D剧情项目/Assets/_*_trigger.txt
+3D剧情项目/Assets/_*_trigger.txt.meta
