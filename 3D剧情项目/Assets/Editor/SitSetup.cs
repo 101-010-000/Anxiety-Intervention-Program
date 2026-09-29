@@ -29,6 +29,16 @@ public static class SitSetup
     const string PARAM = "Sitting";
     const string REPORT = "Assets/assets/_报告/_坐姿接入.txt";
 
+    // 不要玩家坐下的锚点（名字包含其中之一就把它的 SitSpot 停用）
+    // ★ 用户 2026-09-29：第5章不要玩家坐下
+    static readonly string[] NO_SIT = { "第5章_回座位" };
+
+    // 自由可坐点（按 F 坐）的允许章节：★ 第5章一律不允许坐（用户 2026-09-29）
+    //   宿舍那个（凳子2 (45) 上）只在第 2、4 章；其余（食堂 凳子2 (8)(11)）第 1~4 章都可以
+    static readonly string[] DORM_SPOT_PATH = { "Loc_宿舍" };
+    static readonly int[] DORM_SPOT_CHAPTERS = { 2, 4 };
+    static readonly int[] FREE_SPOT_CHAPTERS = { 1, 2, 3, 4 };
+
     [MenuItem("Tools/干预项目/坐姿：生成剪辑 + 加 Sit 状态", false, 152)]
     public static void Run()
     {
@@ -99,6 +109,24 @@ public static class SitSetup
                 // 剧情锚点 = 锁住自动坐；玩家自己的可坐点 = 按 F 坐（用户 2026-09-29 定稿）
                 var want = storyAnchor ? SitMode.剧情锁住自动坐下 : SitMode.按F坐下;
                 if (spot.mode != want) { spot.mode = want; fixedMode++; }
+
+                // 不坐名单：停用（不删组件，想恢复就把 NO_SIT 里那项去掉再跑一次）
+                bool noSit = NO_SIT.Any(k => n.Contains(k));
+                if (spot.enabled == noSit) { spot.enabled = !noSit; fixedMode++; }
+                if (noSit) log.Add("     ★ 按【不坐名单】停用了这个座位的 SitSpot");
+
+                // 宿舍的可坐点：只在第 2/4 章能坐
+                string path = PathOf(tr);
+                bool dormSpot = freeSpot && DORM_SPOT_PATH.Any(k => path.Contains(k));
+                var wantCh = dormSpot ? DORM_SPOT_CHAPTERS : FREE_SPOT_CHAPTERS;   // 都不给第5章
+                string curCh = string.Join(",", spot.onlyChapters);
+                string wantChStr = string.Join(",", wantCh);
+                if (curCh != wantChStr)
+                {
+                    spot.onlyChapters = wantCh;
+                    fixedMode++;
+                    log.Add("     ★ 限定章节 → " + (wantChStr.Length > 0 ? wantChStr : "不限"));
+                }
 
                 // 自检：椅子找得到吗、点在不在空中
                 var seat = spot.seat != null ? spot.seat : spot.FindNearestSeatPublic();

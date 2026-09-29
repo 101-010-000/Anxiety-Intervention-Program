@@ -34,6 +34,10 @@ public class SitSpot : MonoBehaviour
     [Tooltip("起身判定：离座位多远就算走开了（剧情把玩家传走时也会起身）")]
     public float standDistance = 1.8f;
 
+    [Header("限定章节（留空 = 不限）")]
+    [Tooltip("只在这些章允许坐。例：宿舍那个可坐点填 2、4 → 第5章就坐不下（用户 2026-09-29）")]
+    public int[] onlyChapters = new int[0];
+
     [Header("提示")]
     [Tooltip("靠近时显示「按 F 坐下」提示（运行时自建小画布，不影响剧情/门口那两套 UI）")]
     public bool showPrompt = true;
@@ -49,6 +53,14 @@ public class SitSpot : MonoBehaviour
     {
         if (_fpc == null) _fpc = FirstPersonController.Instance;
         if (_fpc == null || _fpc.animator == null) return;
+
+        if (onlyChapters != null && onlyChapters.Length > 0 &&
+            System.Array.IndexOf(onlyChapters, GameProgress.SelectedChapter) < 0)
+        {
+            if (_seated) Stand();
+            if (showPrompt) SitPrompt.Hide(this);
+            return;                                    // 这一章不允许坐
+        }
 
         Vector3 a = SeatPos();
         Vector3 p = _fpc.transform.position;

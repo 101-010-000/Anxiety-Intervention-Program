@@ -6371,6 +6371,7 @@ MonoBehaviour:
   snapToGround: 1
   groundOffset: 0
   standDistance: 1.8
+  onlyChapters: 
   showPrompt: 1
 --- !u!1001 &59222279
 PrefabInstance:
@@ -25433,6 +25434,7 @@ MonoBehaviour:
   snapToGround: 1
   groundOffset: 0
   standDistance: 1.8
+  onlyChapters: 
   showPrompt: 1
 --- !u!1001 &349475872
 PrefabInstance:
@@ -29525,7 +29527,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 423869587}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e7ffa75661ef3134e867bc7033f744ae, type: 3}
   m_Name: 
@@ -29537,6 +29539,7 @@ MonoBehaviour:
   snapToGround: 1
   groundOffset: 0
   standDistance: 1.8
+  onlyChapters: 
   showPrompt: 1
 --- !u!1 &425662831
 GameObject:
@@ -49102,6 +49105,7 @@ MonoBehaviour:
   snapToGround: 1
   groundOffset: 0
   standDistance: 1.8
+  onlyChapters: 
   showPrompt: 1
 --- !u!1001 &724848673
 PrefabInstance:
@@ -86173,6 +86177,7 @@ MonoBehaviour:
   snapToGround: 1
   groundOffset: 0
   standDistance: 1.8
+  onlyChapters: 0200000004000000
   showPrompt: 1
 --- !u!1 &1284845879
 GameObject:
@@ -124041,6 +124046,7 @@ MonoBehaviour:
   snapToGround: 1
   groundOffset: 0
   standDistance: 1.8
+  onlyChapters: 
   showPrompt: 1
 --- !u!1001 &1909571851
 PrefabInstance:
