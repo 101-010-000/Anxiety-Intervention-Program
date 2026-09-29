@@ -146,6 +146,19 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   得在 Rig 里设 **Humanoid + Create From This Model**（`MixamoRigCheck.cs` 里有同类代码可参考），
   否则 Animator 挂着也不动。另外每条剪辑默认都叫 `mixamo.com`，接控制器前最好改个名。
 
+### 去掉某部件（眼镜等）  `Assets/Editor/HidePart.cs`
+
+- **需求**：陆宣雨不带眼镜（用户 2026-09-29）。
+- **做法：把那个子网格的三角形清空**，不是换透明材质 ——
+  带动画模型整身是「一块合并网格 + 多个子网格」，眼镜就是其中一个子网格；
+  **描边（OutlineFeature）给对象的每个子网格都画外壳，跟材质无关** → 换透明材质也会剩一副黑眼镜框。
+  工具会：① 拷一份网格资产（`角色_URP/去部件/<角色>_<源>_无glasses.asset`）把该子网格置空
+  （**自检：剩余三角形必须为 0**，只读网格上 SetTriangles 会静默失败）；
+  ② 把当前场景里对应实例的 `SkinnedMeshRenderer.sharedMesh` 换成它；③ 清掉 `CharRebuild` 里该角色的 `Glasses=`。
+- ⚠ **网格覆盖是加在实例上的**：以后若重跑「Game角色替换」换新模型，**要再跑一次本工具**。
+- ⚠ 带动画模型 FBX 本体里眼镜三角形还在（只是没人用），所以「带动画模型预览」渲出来的图仍会戴眼镜。
+- 菜单：`Tools/干预项目/角色：去掉部件（眼镜）`（触发器 `Assets/_hidepart_trigger.txt`）；报告 `assets/_报告/_去掉部件.txt`。
+
 ### Game 场景角色替换（GameCharSwap）  `Assets/Editor/GameCharSwap.cs`
 
 - **做了什么**（2026-09-28 定稿）：把 `Game.unity` 里 52 个角色实例（11 个剧情角色 + 41 个路人）的

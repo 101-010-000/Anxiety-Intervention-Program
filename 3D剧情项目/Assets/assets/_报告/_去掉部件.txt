@@ -1,0 +1,12 @@
+角色去掉部件（关键字 glasses）  2026-09-29 10:17
+
+  网格资产：Assets/assets/02_角色_Character/角色_URP/去部件/陆宣雨_Idle_无glasses.asset（清空第 2 槽「mat_glasses.001_square」）
+  网格资产：Assets/assets/02_角色_Character/角色_URP/去部件/陆宣雨_已绑定_无glasses.asset（清空第 2 槽「mat_glasses.001_square」）
+  场景实例：GameRoot/Locations/Loc_宿舍/第五章角色/陆宣雨_可动/陆宣雨_已绑定/_mixamo_陆宣雨_可动 → 已换成去部件网格
+  场景实例：GameRoot/Locations/Loc_宿舍/第二章角色/陆宣雨_可动/陆宣雨_已绑定/_mixamo_陆宣雨_可动 → 已换成去部件网格
+  存场景：成功 ✓
+
+  ★ CharRebuild 里没找到 陆宣雨 的配置行
+
+合计：新网格 2 份，场景实例改了 2 个
+注意：以后若重跑「Game角色替换」换新模型，需要再跑一次本工具（网格覆盖是加在实例上的）。
