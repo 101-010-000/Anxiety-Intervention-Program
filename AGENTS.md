@@ -285,14 +285,16 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
    - `_postfx_trigger.txt` → 只布置后期；`_postfxpreview_trigger.txt` → 只渲染后期预览
    - `_doors_trigger.txt` → 搭/刷新门口传送；`_doorssmoke_trigger.txt` → 门口传送运行自检
    - `_ch4door_trigger.txt` → 第4/5章门口引导（重建门口 UI + 修剧情点摆位 + 清场景残留）
+   - `_travel45_trigger.txt` → 第4/5章跳转改造（interact+fade 锚点/F点 + 林溪_宿舍实例，幂等）→ 报告 `assets/_报告/_第4-5章跳转改造.txt`
    - `_animpreview_trigger.txt` → 角色预览场景：每个角色挂一个动画；`_animpreviewsmoke_trigger.txt` → 动画运行自检
    - `_menu_trigger.txt` → 重建主界面 MainMenu.unity
    - `_camera_trigger.txt` → 场景视图相机复位（视角斜了/跑飞了）
    - `_phonechat_trigger.txt` → 搭建手机聊天UI（第1章微信段）+ 渲染预览
    - `_colliders_trigger.txt` → 给 6 个地点的墙板/家具补碰撞体（防穿模/掉虚空）
-   - `_phonech2_trigger.txt` → 手机摆进宿舍+接第2章交互（半径1.2m、F 拿起隐藏、下次交互重现）
+   - `_phonech2_trigger.txt` → 手机摆进宿舍+接第2/4章交互（半径1.2m、以手机为判定中心、F 拿起/点开后隐藏、重新武装时重现）
    - `_officedoorflow_trigger.txt` → 办公室进出流程（南墙换门框墙+门外走廊4×4m+锚点重摆+出口交互点，幂等，跑完自删）
      （工具 `Assets/Editor/OfficeDoorFlowSetup.cs`，报告 `assets/_报告/_办公室进出流程.txt`、预览 `预览/场景/办公室门_外|内.png`）
+   - `_npcwalk_trigger.txt` → NPC 走路动画接入（扫描带 Walk.fbx 的角色：生成 `<角色>_Walk.anim` 循环副本 + Idle↔Walk 过渡，幂等，跑完自删）
    > 触发器依赖"域重载"生效：改一下任意脚本文件、或让 Unity 窗口获得焦点/按 Ctrl+R 即可。
 4. **出现"洋红 / 空材质"**：先跑 `Tools/干预项目/全量强制重导`（等价 Assets → Reimport All），
    再用 `诊断角色材质` 核对（`_报告/_材质诊断.txt` 里应无 `MATERIAL_NULL`、无 `supported=False`）。
@@ -449,7 +451,15 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
     编辑器只负责置标志 → 进 Play → 轮询 `Finished` → 写报告 → 退出。
 - 想改门位/触发范围：直接改那个门自己的 BoxCollider；想改显示名/章节：改它上面的 `DoorInteractable`。
 
-#### ★ 剧情导流（`door` 步骤，2026-09-29 第4/5章定稿）
+#### ★ 剧情导流（`door` 步骤，2026-09-29 第4/5章定稿；⚠ 同日晚些已退役）
+
+> **⚠ 2026-09-29 晚用户定稿**：第4/5章**不再用 door 选择面板导流**，改回前三章的
+> **interact→fade**（门口 F 交互 → 黑屏落到指定锚点 `第N章_目的地到达`）。第4/5章 json 里的
+> door 步骤已全部替换（第4章还加了林溪 enter/leave 进宿舍演出，实例 `林溪_宿舍` 在
+> `Loc_宿舍/第四章角色` 下——★ 必须与图书馆那位 `林溪_可动` 不同名，按名找会抓错）。
+> door 机制本身保留在引擎（`StoryRunner.DoDoor`）备用。场景侧由
+> `Tools/干预项目/第4-5章跳转改造（幂等）`（`Chapter45TravelSetup.cs`，或丢 `_travel45_trigger.txt`）
+> 搭建，报告 `assets/_报告/_第4-5章跳转改造.txt`。下面这段 door 机制文档保留作参考。
 
 - **需求（用户 2026-09-29）**：剧情要换地点时**不能自己瞬移过去**——
   ① 「场景不应该是自己直接跳转，而是引导玩家去门口选择跳转」→ 亮目标卡把玩家引到门口，自己按 F 选地点；
@@ -620,6 +630,8 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   让他自己按 F 选地点（面板里只有 `to` 可点），**落点就是那个地点的门口**，
   跟着的 `interact` 步骤才是“玩家自己找”的触发点。机制详见§五「门口传送 / 剧情导流」。
   第4章第 55 步、第5章第 27/30/82 步都已从 `fade` 换成它（第5章 27 的 `walk` 并入 door）。
+  ⚠ **2026-09-29 晚已全部换回 interact→fade**（用户改主意，见§五导流小节顶部的退役说明）；
+  现在的写法：`{ "t":"interact","x":"走到门口，前往X","at":"第N章_去X" }` + `{ "t":"fade","to":"第N章_X到达" }`。
 - **交互点章节归属**：`StoryInteractable.chapterTag`（默认1）；`FindFree()` 只取本章未消费的点。
   `promptText` 非空时 F 提示整句显示它（如「拿起手机」），空则默认「与<displayName>交谈」。
   ★ **任意座位模式 `anySeat`（第5章「找个凳子坐下」）**：判定不看节点自身位置，而是「玩家【碰到】了
@@ -637,6 +649,12 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 - **NPC 入场（enter 步骤，第2章陆宣雨）**：`{ "t": "enter", "who": "角色实例名", "from": "门口锚点名" }`。
   Begin 时按 json 预禁用 who（开场不在场）；enter 时启用并从 from 锚点走到玩家面前
   （缺省落点=玩家面前 1.3m，`to` 显式锚点可覆盖），播行走动画、到位面向玩家接对话。
+  ★ **enter 落点尽量给显式 `to`（站位锚点）**：缺省「玩家面前1.3m」是按门→玩家方向硬算的、
+  不看碰撞，会落进家具（2026-09-29 第4章林溪落进书桌边椅子里穿模，试玩截图实锤）。
+  现有：`第4章_林溪站位` / `第2章_陆宣雨站位`——由「第4-5章跳转改造」工具在「路线拐点→书桌」
+  走廊上用 `Physics.CheckCapsule` 自动探测净空生成默认位（★ 两人**各探一个点、分开站**；
+  ⚠ 探测胶囊底心必须抬过地板碰撞体顶面，否则每个候选点都"撞地板"→全走廊无净空——
+  第一版踩过，两人因此一起退到路线拐点变成同点，被用户打回）。
   镜头 0.3s 平滑转向门口（`FirstPersonController.LookTowardRoutine`，yaw+pitch 一起动）。
   ★ 全程真实形象——虚实渐变（幽灵层/透明材质）已于 2026-09-28 按用户要求整体移除。
   锚点解析约定：接线池没有就全场景按名找——把「第2章_陆宣雨门口」拖到任意门前即生效。
@@ -652,6 +670,8 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 - **NPC 退场（leave 步骤，2026-09-28）**：`{ "t": "leave", "who": "角色实例名", "to": "座位锚点名" }`——从当前位置走回
   落点（`to` 显式锚点优先，同名解析同 fade；缺省=Begin 快照的场景手摆 pos/yaw），到位回原朝向、
   保持在场待机。状态复用 State.Enter（能转不能走），自检快进同 enter（`_entrance.Skip()`）。
+  ★ **`hide:true` = 到位直接整棵隐藏**（2026-09-29 第4章林溪「一起去图书馆」）：走到门口即隐藏，
+  **不转身、不在门口待机**（用户明确：不要先转身再隐藏）；续播 SilentApply 同步处理。
   第2章陆宣雨对话完"回到自己的座位上"用它——演完站桩在玩家旁边不是正常游戏表现。
   ⚠ **第2章陆宣雨的场景摆位就在门口锚点旁（实测差 0.3m）**——"开场原位"对她是门口不是座位，
   所以 json 的 leave 带了 `"to": "第2章_陆宣雨座位"`：场景里放一个该名空物体（摆到她的桌椅旁）即生效；
@@ -660,6 +680,12 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   （`NpcEntrance.RunPath`：逐段直线匀速，段间 `RotateTowards` 平滑转向；起点=当前位置，
   即退场是从**主角交谈点**出发不是门口）。锚点同名解析同 fade（接线池没有就全场景按名找），
   **缺锚点=警告一次 + 退化直线**（旧行为，不会报错）。
+  ★ **林溪有【自己的】拐点 `第4章_林溪路线_1` + 站位 `第4章_林溪站位`**（用户 2026-09-29 定稿：
+  两人拐点、站位都要分开，各自手拖互不影响）——由「第4-5章跳转改造」工具生成默认位
+  （拐点=陆宣雨拐点旁横向偏移；站位=各自拐点→书桌走廊上物理探测净空）。不够绕再放
+  `第4章_林溪路线_2` 加进 via。
+  （⚠ 为什么不上 NavMesh：项目故意不上——剧情演出路线要可控可手调（本节上方有专题说明），
+  NPC 走位是 transform 直移不经物理，桌椅碰撞体只拦玩家，绕行靠 via。）
   场景路线点用 `Tools/干预项目/多章剧情/补第2章陆宣雨路线锚点（幂等）` 建
   （`Loc_宿舍/多章锚点/第2章_陆宣雨路线_1`，缺省过道估计位 world (77.6,0,0.8)，**已存在绝不改位置**，
   用户在 Scene 里手拖生效）；第2章退场已配该点（用户 2026-09-29 定稿：一个拐弯就够）——路线不合适就拖它；
@@ -706,8 +732,12 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   道具，手挪自动跟随）= 交互判定中心改用道具位置 + Fire 后道具整棵 `SetActive(false)`（「拿起」的可见反馈）
   + Revive/重新武装时道具重现（"快要下次交互的时候再出现"，第2章两次拿手机复用同一点）。
   第2章接线：`Loc_宿舍/多章锚点/第2章_手机` 半径 1.2m + 联动 `手机_淡蓝`（用户手摆在 `Loc_宿舍` 下），
-  工具 `Tools/干预项目/手机道具/③ 摆进宿舍+接第2章交互`（或丢 `_phonech2_trigger.txt`）→
+  工具 `Tools/干预项目/手机道具/③ 摆进宿舍+接第2/4章交互`（或丢 `_phonech2_trigger.txt`）→
   报告 `assets/_报告/_手机交互.txt`（会存场景）。未配道具的交互点（第1章等）行为零变化。
+  第4章接线（2026-09-29 用户：「点开通知看看吧」改成和第2章一样）：`第4章_班群通知` 同样
+  半径 1.2m + 联动同一部 `手机_淡蓝`（prompt 工具默认「点开通知」，场景里手调成「点开班群通知」，
+  手调优先——重跑工具不覆盖文案）；按 F 后手机隐藏，班群（通知）台词
+  走手机 UI（拿手机动画有微信台词自动补拿兜底）。同一部手机跨章共用没问题——换章会重载 Game 场景，手机回到桌上。
 - **干预题记录键**：`story.choice.ch<N>.<题号>`（按章隔离；第1章旧键 `story.choice.<题号>` 已废弃）。
 - **搭建工具**：`Assets/Editor/ChapterStoriesSetup.cs`，菜单 `Tools/干预项目/多章剧情/`：
   「一键搭建第2-5章（幂等）」建 runner×4 + `Loc_*/多章锚点/`（起点/交互点/fade落点）+ 接线 + 存场景 +
@@ -735,7 +765,7 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 | Mixamo 重绑的模型贴角色材质 | `Tools/干预项目/带动画模型：贴回角色材质`（或丢 `Assets/_animmodelmats_trigger.txt`，会顺带渲染预览）→ 报告 `assets/_报告/_带动画模型材质.txt`、预览 `assets/_报告/预览/带动画模型/<角色>_已绑定.png` |
 | Game 场景角色换新模型 | `Tools/干预项目/Game角色替换/① 试运行`（只看）→ `② 执行替换` → `③ 运行自检`；触发器 `_gcharprobe_trigger.txt` / `_gcharsvap_trigger.txt` / `_gcharsmoke_trigger.txt`；报告 `assets/_报告/_Game角色替换.txt`、`_Game角色替换自检.txt` |
 | 主角换第三人称 / 调镜头 | `Tools/干预项目/主角第三人称/① 配置` → `② 运行自检`（触发器 `_player3p_trigger.txt` / `_player3psmoke_trigger.txt`）；报告 `assets/_报告/_主角第三人称.txt`、`_主角第三人称自检.txt` |
-| NPC 走路动画接入（有 Walk.fbx 的角色） | `Tools/干预项目/NPC走路动画/接入（扫描带Walk.fbx的角色）`（`NpcWalkSetup.cs`，幂等）→ 报告 `assets/_报告/_NPC走路接入.txt`（含根位移/In Place 体检） |
+| NPC 走路动画接入（有 Walk.fbx 的角色） | `Tools/干预项目/NPC走路动画/接入（扫描带Walk.fbx的角色）`（`NpcWalkSetup.cs`，幂等；或丢 `Assets/_npcwalk_trigger.txt` 自动跑）→ 报告 `assets/_报告/_NPC走路接入.txt`（含根位移/In Place 体检） |
 | 材质引用变空/洋红 | `Tools/干预项目/全量强制重导` |
 | 编辑器视角斜了/乱转/跑飞 | `Tools/干预项目/场景视图相机/…`（1 完全复位 / 2 只摆正 / 3 回原点 / 4 聚焦选中）→ `assets/_报告/_场景视图相机.txt`；或丢 `_camera_trigger.txt` 自动跑 |
 | 从素材里拿新配件 | 复制 FBX + **它的 .meta** 到 `assets/02_角色_Character/Meshes/…`，再在 `CharRebuild.cs` 里引用 |
@@ -748,10 +778,11 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 | 验证动画真的在播 | `Tools/干预项目/角色预览场景：动画运行自检`（真进 Play 采样 normalizedTime）→ `assets/_报告/_角色动画预览自检.txt` |
 | 搭/刷新门口传送（按 F 选地点传走） | `Tools/干预项目/搭建门口传送`（或丢 `_doors_trigger.txt`） |
 | 门口面板不见了 / 白底提示跟剧情 UI 重叠 / 剧情要引导玩家自己走过去 | `Tools/干预项目/第4/5章门口引导（走到门口按F去下个地点）`（`Chapter4DoorTrip.cs`，或丢 `_ch4door_trigger.txt`）→ `assets/_报告/_第4章门口引导.txt`（幂等：缺 UI/提示没统一就重建、修剧情点摆位、清残留节点） |
+| 第4/5章跳转改回 interact→fade / 林溪进宿舍演出 | `Tools/干预项目/第4-5章跳转改造（幂等）`（`Chapter45TravelSetup.cs`，或丢 `_travel45_trigger.txt`）→ 报告 `assets/_报告/_第4-5章跳转改造.txt`（fade 落点/门口 F 点都在 `Loc_*/多章锚点/` 下，手拖按名生效） |
 | 验证门口传送能不能用 | `Tools/干预项目/门口传送运行自检`（真进 Play 模式走一遍）→ `assets/_报告/_门口传送运行自检.txt` |
 | 场景设施穿模/贴墙掉虚空 | `Tools/干预项目/场景碰撞体/① 给设施加碰撞体`（或丢 `_colliders_trigger.txt`）→ 报告 `assets/_报告/_场景碰撞体.txt` |
 | 手机道具重跑/重渲预览 | `Tools/干预项目/手机道具/①`（幂等，或丢 `_phoneprop_trigger.txt`）→ 报告 `assets/_报告/_手机道具.txt`、预览 `预览/道具/手机_淡蓝.png`；换手机源件先跑 `额外文件/工具脚本/glb2obj_phone.py` |
-| 手机接第2章交互（靠近拿取/拿起消失） | `Tools/干预项目/手机道具/③ 摆进宿舍+接第2章交互`（幂等，或丢 `_phonech2_trigger.txt`）→ 报告 `assets/_报告/_手机交互.txt`；手机实例以场景里 `手机_淡蓝` 为准（手挪自动跟随），行为在 `StoryInteractable.propObjectName` |
+| 手机接第2/4章交互（靠近拿取/拿起消失） | `Tools/干预项目/手机道具/③ 摆进宿舍+接第2/4章交互`（幂等，或丢 `_phonech2_trigger.txt`）→ 报告 `assets/_报告/_手机交互.txt`；手机实例以场景里 `手机_淡蓝` 为准（手挪自动跟随），行为在 `StoryInteractable.propObjectName` |
 | 重建/改第一章剧情 UI（谨慎） | 把 `额外文件/历史Editor脚本/Chapter1StoryBuilder.cs` 拷回 `Assets/Editor/` → **手动**跑菜单（会重建 `ChoicePanel`/`WalkHint`/`ChapterCard`/`BlackFade`；`对话/对话框/名字/对话内容` 已冻结只读）→ 用完移走 |
 | 第一章剧情运行自检 | `Tools/干预项目/第一章剧情运行自检`（PhoneChatSmoke.cs，独立入口）→ `assets/_报告/_第一章剧情运行自检.txt` |
 | 搭建第2-5章剧情（runner/锚点/接线） | `Tools/干预项目/多章剧情/一键搭建第2-5章（幂等）`（ChapterStoriesSetup.cs）→ 报告 `assets/_报告/_多章剧情搭建.txt`；摆位默认值可随后在 Scene 里手调（重跑不覆盖） |

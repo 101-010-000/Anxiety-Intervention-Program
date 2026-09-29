@@ -283,7 +283,8 @@ public class StoryRunner : MonoBehaviour
                 else if (_npcHomePos.TryGetValue(step.who, out target) && _npcHomeYaw.TryGetValue(step.who, out yaw)) { }
                 else break;                                                       // 没落点信息，保持现状
                 go.transform.position = target;
-                go.transform.rotation = Quaternion.Euler(0f, yaw, 0f);
+                if (step.hide) go.SetActive(false);                    // 续播同样处理「走出门即隐藏」
+                else go.transform.rotation = Quaternion.Euler(0f, yaw, 0f);
                 break;
             }
 
@@ -854,6 +855,15 @@ public class StoryRunner : MonoBehaviour
         var pts = BuildPath(from, step.via, target);
         yield return _entrance.RunPath(pts, null); // faceTarget=null：保持走向（面朝座位方向走回去）
 
+        if (step.hide)
+        {
+            // 「走出门」：到位直接整棵隐藏——不转身、不在门口待机（用户 2026-09-29：第4章林溪与玩家一起去图书馆）
+            go.SetActive(false);
+            _entrance = null;
+            _leaveRt = null;
+            Next();
+            yield break;
+        }
         go.transform.rotation = Quaternion.Euler(0f, yaw, 0f);   // 到位回原朝向（如面朝书桌）
         _entrance = null;
         _leaveRt = null;

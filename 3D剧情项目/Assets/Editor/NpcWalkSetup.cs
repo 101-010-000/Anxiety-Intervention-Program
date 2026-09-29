@@ -14,6 +14,7 @@
 //   另带体检：Walk 剪辑若带根位移（Mixamo 下载没勾 In Place），报告里会警告——
 //   那种剪辑播起来会自己往前蹭，和 NpcEntrance 的 Lerp 叠加成"漂移"。
 //   菜单：Tools/干预项目/NPC走路动画/接入（扫描带Walk.fbx的角色）
+//   触发器：Assets/_npcwalk_trigger.txt（丢进 Assets 下次刷新自动跑，用完自删）
 //   报告：assets/_报告/_NPC走路接入.txt
 using System.Collections.Generic;
 using System.IO;
@@ -203,5 +204,33 @@ public static class NpcWalkSetup
         File.WriteAllText(path, string.Join("\n", log.ToArray()));
         AssetDatabase.Refresh();
         Debug.Log("[NpcWalkSetup] 报告：" + path);
+    }
+}
+
+// 丢 Assets/_npcwalk_trigger.txt → 下次刷新/重编译后自动跑一次
+[InitializeOnLoad]
+public static class NpcWalkSetupTrigger
+{
+    const string Trigger = "Assets/_npcwalk_trigger.txt";
+    const string ErrFile = "../额外文件/错误_NPC走路接入.txt";
+
+    static NpcWalkSetupTrigger()
+    {
+        if (!File.Exists(Trigger)) return;
+        EditorApplication.delayCall += () =>
+        {
+            try
+            {
+                if (File.Exists(Trigger)) File.Delete(Trigger);
+                if (File.Exists(Trigger + ".meta")) File.Delete(Trigger + ".meta");
+                NpcWalkSetup.Run();
+            }
+            catch (System.Exception e)
+            {
+                Directory.CreateDirectory("../额外文件");
+                File.WriteAllText(ErrFile, e.ToString());
+                Debug.LogError("[NpcWalkSetup] 失败: " + e);
+            }
+        };
     }
 }

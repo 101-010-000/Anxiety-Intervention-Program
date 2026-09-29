@@ -40,7 +40,7 @@ public static class PhonePropSetup
     [MenuItem("Tools/干预项目/手机道具/② 只诊断")]
     public static void DiagMenu() { RunInternal(true); }
 
-    [MenuItem("Tools/干预项目/手机道具/③ 摆进宿舍+接第2章交互（幂等）")]
+    [MenuItem("Tools/干预项目/手机道具/③ 摆进宿舍+接第2/4章交互（幂等）")]
     public static void WireChapter2Menu() { WireChapter2Internal(); }
 
     public static void RunFromTrigger() { RunInternal(false); }
@@ -171,14 +171,17 @@ public static class PhonePropSetup
         WriteReport(log);
     }
 
-    // ============================================== ③ 手机 × 第2章「拿起手机」交互接线
+    // ============================================== ③ 手机 × 第2/4章「拿手机/点通知」交互接线
     // 用户需求（2026-09-28）：交互以场景里的 手机_淡蓝 为中心、半径收小要靠近才能按 F；
     // 按下后手机整棵隐藏（拿起的反馈），第2章第二次拿手机步骤到达时再回到桌上。
     // 判定中心/隐藏/重现都在 StoryInteractable.propObjectName（按名解析，手挪手机自动跟随）；
     // 本菜单只负责把场景接线写盘：半径 1.2m + 联动名 + 存场景。幂等。
+    // 用户需求（2026-09-29）：第4章「点开通知看看吧」（第4章_班群通知）也改成同样机制——
+    // 判定跟着同一部手机走（换章会重载场景，手机回到桌上，互不干扰）。
     const string PROP_NAME = "手机_淡蓝";
     const string CH2_LOC = "Loc_宿舍";
     const string CH2_ANCHOR_PATH = "多章锚点/第2章_手机";
+    const string CH4_ANCHOR = "第4章_班群通知";
     const float CH2_RADIUS = 1.2f;
     const string GAME_SCENE = "Assets/Scenes/Game.unity";
     const string WIRE_REPORT = "Assets/assets/_报告/_手机交互.txt";
@@ -186,7 +189,7 @@ public static class PhonePropSetup
     static void WireChapter2Internal()
     {
         var log = new List<string>();
-        log.Add("手机 × 第2章交互接线  " + System.DateTime.Now.ToString("yyyy-MM-dd HH:mm"));
+        log.Add("手机 × 第2/4章交互接线  " + System.DateTime.Now.ToString("yyyy-MM-dd HH:mm"));
         log.Add("");
         try
         {
@@ -243,6 +246,35 @@ public static class PhonePropSetup
             log.Add("接线：" + CH2_LOC + "/" + CH2_ANCHOR_PATH + "  半径=" + CH2_RADIUS.ToString("0.0") + "m  prompt=" + si.promptText + "  联动道具=" + PROP_NAME);
             log.Add("行为：走近手机 ≤1.2m 出提示 → 按 F 拿起（拿手机动画 + 手机隐藏）→ 第2章第二次拿手机步骤到达时手机回到桌上。");
             log.Add("提示文案/位置若被手调过：文案不动，半径与联动名按设计值覆盖（重跑本菜单即可恢复）。");
+
+            // ---- 第4章「点开通知看看吧」（第4章_班群通知）：同一部手机、同一套机制（用户 2026-09-29）----
+            var ch4Go = FindInScene(scene, CH4_ANCHOR);
+            if (ch4Go == null)
+            {
+                log.Add("");
+                log.Add("★ 找不到「" + CH4_ANCHOR + "」——先跑 Tools/干预项目/多章剧情/一键搭建第2-5章、第4/5章门口引导 再回来重跑本菜单。");
+            }
+            else
+            {
+                var si4 = ch4Go.GetComponent<StoryInteractable>();
+                if (si4 == null)
+                {
+                    si4 = ch4Go.AddComponent<StoryInteractable>();
+                    log.Add("  第4章交互点缺 StoryInteractable，已补挂");
+                }
+                si4.mode = StoryInteractable.Mode.InteractF;
+                si4.chapterTag = 4;
+                si4.oneShot = true;                               // 第4章只点开一次
+                if (string.IsNullOrEmpty(si4.promptText)) si4.promptText = "点开通知";
+                si4.radius = CH2_RADIUS;                          // 与第2章一致：以手机为中心 1.2m
+                si4.propObjectName = PROP_NAME;                   // 判定中心=手机位置；F 后隐藏；重新武装时重现
+                EditorUtility.SetDirty(si4);
+
+                log.Add("");
+                log.Add("接线：" + GetPath(ch4Go.transform) + "  半径=" + CH2_RADIUS.ToString("0.0") + "m  prompt=" + si4.promptText + "  联动道具=" + PROP_NAME);
+                log.Add("行为：走近手机 ≤1.2m 出提示 → 按 F 点开通知（手机隐藏，后续班群台词走手机 UI、动画有自动补拿兜底）。");
+                log.Add("位置说明：节点自身位置只是兜底——判定中心=手机实际位置（与第2章共用同一部 手机_淡蓝）。");
+            }
 
             if (EditorSceneManager.SaveOpenScenes()) log.Add("场景已保存 ✓");
             else log.Add("★ 场景保存失败（手动 Ctrl+S 兜底）");
