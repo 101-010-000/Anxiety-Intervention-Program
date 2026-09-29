@@ -43,12 +43,23 @@ public class DoorTravelSystem : MonoBehaviour
     [Tooltip("判定用的探针高度（米）。用脚底判会跟门触发盒的底面错开几厘米，所以抬到胸口高度")]
     public float probeHeight = 0.9f;
 
+    [Header("剧情导流（StoryRunner 驱动；平时全空）")]
+    [Tooltip("剧情正在等玩家去的地点（locationId）。非空时：面板里只有它能点，其余置灰")]
+    public string storyTargetId;
+    [Tooltip("剧情到达目标地点后的落点（剧情锚点）。留空 = 用门自己的 arrivePoint")]
+    public Transform storyArrivePoint;
+    [Tooltip("到达目标地点后的回调（StoryRunner 接：关掉本系统、继续剧情）")]
+    public System.Action<string> onStoryArrived;
+
     [Header("门口列表（工具自动填）")]
     public List<DoorInteractable> doors = new List<DoorInteractable>();
 
     /// 当前站着的那个门（null = 不在任何门前）
     public DoorInteractable CurrentDoor { get; private set; }
     public bool IsPanelOpen => panel != null && panel.IsOpen;
+
+    /// 是否处于「剧情导流」：只放行 storyTargetId，到了就回调（第4章「走到门口按 F 去图书馆」）
+    public bool InStoryMode => !string.IsNullOrEmpty(storyTargetId);
 
     /// 面板上的目标列表：**按地点去重**（一间房可能有好几个门，但目标只该有一个）
     public List<DoorInteractable> Destinations { get; } = new List<DoorInteractable>();
@@ -60,6 +71,14 @@ public class DoorTravelSystem : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        // ★ 目标列表/按钮列表必须在 Awake 里建，不能放 Start：
+        //   剧情 runner 的 Begin()（也在 Start 里）会把本系统 enabled=false，谁先跑不确定 ——
+        //   一旦被先关掉，Start() 就永远不跑 → Destinations 空着 → 开门面板一个按钮都没有
+        //   （2026-09-29 自检抳到过：门触发盒 8 个 / 去重后目标地点 0 个，时序时好时坏）。
+        if (player == null) player = FirstPersonController.Instance;
+        if (player == null) player = FindObjectOfType<FirstPersonController>();
+        RebuildDestinations();
+        BuildButtonLists();
     }
 
     void Start()
@@ -67,8 +86,7 @@ public class DoorTravelSystem : MonoBehaviour
         if (player == null) player = FirstPersonController.Instance;
         if (player == null) player = FindObjectOfType<FirstPersonController>();
 
-        RebuildDestinations();
-        BuildButtonLists();
+        if (Destinations.Count == 0) RebuildDestinations();      // Awake 之后又被清掉/doors 运行时才填的兜底
         if (panel != null) panel.Hide(true);
         if (promptRoot != null) promptRoot.SetActive(false);
 
@@ -154,6 +172,56 @@ public class DoorTravelSystem : MonoBehaviour
         }
     }
 
+    // ------------------------------------------------------------------ 剧情导流（StoryRunner 用）
+    // 第4章「走到门口，按 F 前往图书馆」：剧情把本系统打开 + 设成【只放行图书馆】，
+    // 玩家自己走到门前按 F 选地点 → 到了图书馆 → 回调 StoryRunner 继续剧情。
+    // ★ 不限制目的地直接放行的话，玩家一点食堂/教室剧情就断了（或得写一堆补丁），
+    //   所以这里只置灰其余地点，画面/交互跟平时开门面板完全一样。
+    public void EnterStoryMode(string targetLocationId, Transform arriveOverride, System.Action<string> onArrived)
+    {
+        storyTargetId = targetLocationId;
+        storyArrivePoint = arriveOverride;
+        onStoryArrived = onArrived;
+        enabled = true;
+        if (IsPanelOpen) ClosePanel();          // 上一次面板还开着（自检快进时可能）：先收掉
+        RefreshPrompt();
+    }
+
+    public void ExitStoryMode()
+    {
+        storyTargetId = null;
+        storyArrivePoint = null;
+        onStoryArrived = null;
+    }
+
+    /// 剧情目标地点的显示名（面板提示/自检报告用）
+    public string StoryTargetTitle()
+    {
+        for (int i = 0; i < doors.Count; i++)
+            if (doors[i] != null && doors[i].locationId == storyTargetId)
+                return string.IsNullOrEmpty(doors[i].title) ? doors[i].locationId : doors[i].title;
+        return storyTargetId;
+    }
+
+    /// 门口列表里有没有这个地点（剧情 door 步骤先问一句：没有就退回直接传送，别把玩家卡在门口）
+    public bool HasDestination(string locationId)
+    {
+        if (string.IsNullOrEmpty(locationId)) return false;
+        for (int i = 0; i < doors.Count; i++)
+            if (doors[i] != null && doors[i].locationId == locationId) return true;
+        return false;
+    }
+
+    /// 自检/调试用：不点面板按钮，直接走一遍「到达剧情目标地点」（与玩家路径共用 TravelTo）
+    public bool DebugTravelToStoryGoal()
+    {
+        if (!InStoryMode) return false;
+        for (int i = 0; i < doors.Count; i++)
+            if (doors[i] != null && doors[i].locationId == storyTargetId) { TravelTo(doors[i]); return true; }
+        Debug.LogWarning("[DoorTravelSystem] 剧情目标地点在门口列表里找不到：" + storyTargetId);
+        return false;
+    }
+
     /// 面板上某个地点的按钮（找不到返回 null）
     public Button GetDestinationButton(string locationId)
     {
@@ -187,6 +255,7 @@ public class DoorTravelSystem : MonoBehaviour
     public void OpenPanel()
     {
         if (panel == null) return;
+        if (Destinations.Count == 0) RebuildDestinations();     // 兜底（Start 没跑过也不至于面板空白）
         panel.Show();
 
         // 锁玩家 + 放开鼠标。
@@ -224,12 +293,15 @@ public class DoorTravelSystem : MonoBehaviour
     void RefreshPanelTexts()
     {
         string here = CurrentDoor != null ? CurrentDoor.locationId : null;
+        bool story = InStoryMode;
 
         if (panelTitle != null) panelTitle.text = "去别的地点";
         if (panelHint != null)
-            panelHint.text = CurrentDoor != null
-                ? "当前站在「" + (string.IsNullOrEmpty(CurrentDoor.title) ? here : CurrentDoor.title) + "」的门口"
-                : "选择要前往的地点";
+            panelHint.text = story
+                ? "剧情：现在要去「" + StoryTargetTitle() + "」（其它地点本章暂时不开放）"
+                : (CurrentDoor != null
+                    ? "当前站在「" + (string.IsNullOrEmpty(CurrentDoor.title) ? here : CurrentDoor.title) + "」的门口"
+                    : "选择要前往的地点");
 
         for (int i = 0; i < _btnButtons.Count; i++)
         {
@@ -245,6 +317,7 @@ public class DoorTravelSystem : MonoBehaviour
 
             var d = Destinations[i];
             bool isHere = !string.IsNullOrEmpty(here) && d.locationId == here;
+            bool isGoal = story && d.locationId == storyTargetId;
             btn.gameObject.SetActive(true);
 
             if (lbl != null)
@@ -252,13 +325,16 @@ public class DoorTravelSystem : MonoBehaviour
                 string s = d.title;
                 if (!string.IsNullOrEmpty(d.chapter)) s += "    <size=22><color=#8A97A6>" + d.chapter + "</color></size>";
                 if (isHere) s += "    <size=22><color=#8A97A6>（当前所在地）</color></size>";
+                else if (isGoal) s += "    <size=22><color=#4C9FE8>（本章前往）</color></size>";
+                else if (story) s += "    <size=22><color=#8A97A6>（本章不去）</color></size>";
                 lbl.text = s;
             }
 
-            btn.interactable = !isHere;
+            // 剧情导流时：只有目标地点能点（其余置灰，跟"当前所在地"同一个视觉规则）
+            btn.interactable = !isHere && (!story || isGoal);
             var captured = d;
             btn.onClick.RemoveAllListeners();
-            if (!isHere) btn.onClick.AddListener(() => TravelTo(captured));
+            if (btn.interactable) btn.onClick.AddListener(() => TravelTo(captured));
         }
 
         if (closeButton != null)
@@ -273,7 +349,12 @@ public class DoorTravelSystem : MonoBehaviour
     {
         if (target == null || player == null) { ClosePanel(); return; }
 
-        var dest = target.arrivePoint != null ? target.arrivePoint : target.transform;
+        bool isStoryGoal = InStoryMode && target.locationId == storyTargetId;
+        // 剧情导流时落点改用剧情锚点（第4章：直接落到图书馆里、林溪旁边那个座位）
+        var dest = (isStoryGoal && storyArrivePoint != null)
+            ? storyArrivePoint
+            : (target.arrivePoint != null ? target.arrivePoint : target.transform);
+        string arrivedId = target.locationId;
 
         // CharacterController 开着的时候直接改 position 会被它拽回去，先关掉再挪
         var cc = player.GetComponent<CharacterController>();
@@ -285,5 +366,13 @@ public class DoorTravelSystem : MonoBehaviour
         if (cc != null) cc.enabled = true;
 
         ClosePanel();
+
+        // 到了剧情要的地方 → 回调 StoryRunner（先清导流状态，回调里再关系统/继续剧情）
+        if (isStoryGoal)
+        {
+            var cb = onStoryArrived;
+            ExitStoryMode();
+            if (cb != null) cb(arrivedId);
+        }
     }
 }

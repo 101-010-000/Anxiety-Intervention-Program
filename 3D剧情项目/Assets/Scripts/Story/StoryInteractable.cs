@@ -1,7 +1,10 @@
 // 剧情交互点：两种模式（挂在场景的触发节点上）
 //   InteractF —— 玩家走近（半径内）出"按 F 交谈"提示，按 F 触发（如：组长）
+//                 变体：anySeat=true = 「任意座位」——不按本节点自身位置判，
+//                 而是「玩家 radius 米内有本地点里任意一把凳子/椅子」就算到位（第5章「找个凳子坐下」）。
 //   Touch     —— 玩家走进触发盒即触发（如：教室门口撞张知远）
 // 触发后回调 StoryRunner（运行期由 runner 统一接线），一次性触发后自禁用。
+using System.Collections.Generic;
 using UnityEngine;
 
 public class StoryInteractable : MonoBehaviour
@@ -24,6 +27,9 @@ public class StoryInteractable : MonoBehaviour
              "① 交互判定中心 = 道具位置（玩家要走近道具才能交互，按名解析，手挪道具自动跟随）；" +
              "② Fire 后道具整棵隐藏（「拿起」的可见反馈）；③ Revive/重新武装时道具重新出现（下次交互前）。")]
     public string propObjectName = "";
+    [Tooltip("任意座位模式：玩家【碰到】本地点（Loc_*）里任意一把凳子/椅子就算到位" +
+             "（第5章「找个凳子坐下」；radius = 允许离凳子表面的间隙，0.4 ≈ 贴着凳子；判定只看本地点内）")]
+    public bool anySeat;
 
     /// 是否允许触发/显示（StoryRunner 只在进入对应的等待步骤时置 true）。
     /// ★ 不加这个开关：开场旁白段（自由走动）路过组长时按一下 F 就会把交互点消费掉，
@@ -92,12 +98,68 @@ public class StoryInteractable : MonoBehaviour
         {
             var p = Player;
             if (p == null) return;
-            Vector3 a = PromptCenter; a.y = 0f;
+            Vector3 a = AnchorFor(p.transform.position); a.y = 0f;
             Vector3 b = p.transform.position; b.y = 0f;
             bool inRange = (a - b).sqrMagnitude <= radius * radius;
             if (inRange != PlayerInRange) PlayerInRange = inRange;
             if (inRange && Input.GetKeyDown(key)) Fire();
         }
+    }
+
+    // ------------------------------------------------------------------ 任意座位模式
+    // 场景里的凳子/椅子（名字含 凳/椅/chair/stool/bench/沙发）——按地点缓存，避免每帧扫全场景
+    static readonly Dictionary<Transform, List<Transform>> _seatCache = new Dictionary<Transform, List<Transform>>();
+
+    Transform MyLoc()
+    {
+        for (var t = transform; t != null; t = t.parent)
+            if (t.name.StartsWith("Loc_")) return t;
+        return transform.root;
+    }
+
+    List<Transform> SeatsHere()
+    {
+        var loc = MyLoc();
+        List<Transform> list;
+        if (_seatCache.TryGetValue(loc, out list) && list != null) return list;
+        list = new List<Transform>();
+        foreach (var t in loc.GetComponentsInChildren<Transform>(true))
+            if (SitSpot.IsSeatName(t.name)) list.Add(t);
+        _seatCache[loc] = list;
+        return list;
+    }
+
+    /// 判定用的目标点：普通模式就是本节点；任意座位模式 = 玩家碰到的那把凳子
+    /// （用凳子自身碰撞体/渲染包围盒算【表面】距离，不看节点原点 —— 原点可能在模型角落）。
+    Vector3 AnchorFor(Vector3 playerPos)
+    {
+        if (!anySeat) return PromptCenter;   // 普通模式：道具联动（手机）时判定中心跟道具走，否则本节点
+        var seats = SeatsHere();
+        Transform best = null;
+        Vector3 bestPoint = Vector3.zero;
+        float bestD = radius;                       // 只有“碰得到的距离”才算
+        for (int i = 0; i < seats.Count; i++)
+        {
+            var s = seats[i];
+            if (s == null || !s.gameObject.activeInHierarchy) continue;
+            Vector3 q = SurfacePoint(s, playerPos);
+            float d = new Vector2(q.x - playerPos.x, q.z - playerPos.z).magnitude;
+            if (d <= bestD) { bestD = d; best = s; bestPoint = q; }
+        }
+        // 身边没碰到凳子 → 回退到本节点自身位置（radius 很小，基本等于不触发）
+        return best != null ? bestPoint : transform.position;
+    }
+
+    /// 凳子上离 point 最近的一点（优先碰撞体，其次渲染包围盒，都没有才回退节点原点）
+    static Vector3 SurfacePoint(Transform seat, Vector3 point)
+    {
+        var col = seat.GetComponentInChildren<Collider>();
+        if (col != null && col.enabled && col.gameObject.activeInHierarchy)
+            return col.ClosestPoint(point);
+        var r = seat.GetComponentInChildren<Renderer>();
+        if (r != null && r.enabled && r.gameObject.activeInHierarchy)
+            return r.bounds.ClosestPoint(point);
+        return seat.position;
     }
 
     void OnTriggerEnter(Collider other)

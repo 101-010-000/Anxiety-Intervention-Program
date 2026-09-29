@@ -12,6 +12,10 @@
 //   fade     黑屏转场：黑幕淡入 → 传送玩家到 to 同名锚点（runner.fadeAnchors）→ 淡出。
 //            用于"黑屏/刷新"类剧情跳转（第3章进办公室、第5章宿舍↔图书馆等）。
 //            to=锚点名；时间流逝旁白请用独立的 nar 步骤（BlackFade 在最上层，黑屏期间框不可见）
+//   door     门口传送导流（2026-09-29，第4章）：to=要去的 locationId（如 Loc_图书馆）、
+//            anchor=到达后的落点锚点名（缺省=门自己的 arrivePoint）、x=左上角目标卡文案。
+//            剧情不开门自己跳，而是亮目标卡引导玩家【自己走到门口按 F】，面板里只有本章目的地可点；
+//            到达后 DoorTravelSystem 回调继续剧情。门系统平时被剧情整体关掉，只有这一步临时打开。
 //   enter    NPC 入场演出（第2章陆宣雨）：who=角色实例名（Begin 时预禁用）、from=门口起点锚点、
 //            to=可选落点锚点（缺省=玩家面前1.3m）。全程真实形象（虚实渐变已移除），细节见 NpcEntrance。
 //   leave    NPC 退场（2026-09-28，与 enter 对称）：who 走回【开场原位】（Begin 时快照），
@@ -30,6 +34,8 @@ public class StoryStep
     public string s = "";
     public string x = "";
     public string to = "";                   // fade：目标锚点名（runner.fadeAnchors 里同名元素）
+                                             // door：要去的 locationId（门外那片地点的 id，如 Loc_图书馆）
+    public string anchor = "";               // door：到达后的落点锚点名（缺省 = 用门自己的 arrivePoint）
     public string who = "";                  // enter：角色实例名（Begin 时预禁用，enter 时启用入场）
     public string from = "";                 // enter：门口起点锚点名
     public List<string> via = new List<string>();  // enter/leave：途经锚点名列表（同名解析同 to/from；

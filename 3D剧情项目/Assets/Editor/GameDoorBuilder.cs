@@ -234,6 +234,10 @@ public static class GameDoorBuilder
             if (bc == null || !bc.isTrigger) continue;
             if (bc.GetComponent<Volume>() != null) continue;                       // 后期氛围体积
             if (bc.GetComponent<DoorInteractable>() != null) { res.Add(bc); continue; }
+            // ★ 剧情触发盒不是门（踩过 2026-09-29）：第5章_宿舍门口（走动段 Touch 盒）、
+            //   教室 BumpPoint（张知远撞人）都勾了 Is Trigger 且在 Loc_* 下，
+            //   无差别挂 DoorInteractable 会让玩家在剧情触发盒前弹「按 F 开门」。
+            if (bc.GetComponent<StoryInteractable>() != null) continue;
             if (bc.name.StartsWith("Post_")) continue;
             var root = bc.transform.root;
             if (root != null && root.name == UI_NAME) continue;                    // UI 画布
@@ -323,26 +327,40 @@ public static class GameDoorBuilder
 
         var R = new UIRefs();
 
-        // ---- 门口提示（底部居中）
-        var prompt = Node("提示_按F", canvasGO.transform);
-        Corner(prompt, new Vector2(0f, 118f), new Vector2(520f, 92f), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f));
-        var pbg = prompt.AddComponent<Image>();
-        pbg.sprite = SlicedSprite("面板_暗");
-        pbg.type = Image.Type.Sliced;
-        pbg.color = new Color(1f, 1f, 1f, 0.92f);
-        pbg.raycastTarget = false;
-        R.promptRoot = prompt;
+        // ---- 门口提示：**直接复用剧情那套「交互提示」**（用户 2026-09-29 定稿：交互 UI 统一用已有的那套）
+        // ⚠ 别自建白底提示：旧版的 提示_按F 用的贴图名（面板_暗 / 按钮_次_普通）在当前 MenuAssets 里
+        //   已经不存在 → Sprite 取到 null → 画面里就是一个纯白方块，还跟剧情提示叠在同一个位置。
+        var existing = FindExistingPrompt();
+        if (existing.go != null)
+        {
+            R.promptRoot = existing.go;
+            R.promptLabel = existing.label;
+            log.Add("门口提示：复用已有节点 " + PathOf(existing.go.transform) + "（不再新建白底提示）");
+        }
+        else
+        {
+            // 兜底（场景里还没搭剧情 UI 时才走到这里）：自建一个，贴图用确实存在的那张
+            var prompt = Node("提示_按F", canvasGO.transform);
+            Corner(prompt, new Vector2(0f, 118f), new Vector2(520f, 92f), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f));
+            var pbg = prompt.AddComponent<Image>();
+            pbg.sprite = SlicedSprite("面板_玻璃");
+            pbg.type = Image.Type.Sliced;
+            pbg.color = new Color(1f, 1f, 1f, 0.92f);
+            pbg.raycastTarget = false;
+            R.promptRoot = prompt;
 
-        var key = Node("键位", prompt.transform);
-        At(key, new Vector2(-168f, 0f), new Vector2(64f, 64f));
-        var kimg = key.AddComponent<Image>();
-        kimg.sprite = SlicedSprite("按钮_次_普通");
-        kimg.type = Image.Type.Sliced;
-        kimg.raycastTarget = false;
-        Label(key.transform, "字", "F", Vector2.zero, new Vector2(64f, 64f), 34, TEXT_DARK, TextAnchor.MiddleCenter, FontStyle.Bold);
+            var key = Node("键位", prompt.transform);
+            At(key, new Vector2(-168f, 0f), new Vector2(64f, 64f));
+            var kimg = key.AddComponent<Image>();
+            kimg.sprite = SlicedSprite("页签_普通");
+            kimg.type = Image.Type.Sliced;
+            kimg.raycastTarget = false;
+            Label(key.transform, "字", "F", Vector2.zero, new Vector2(64f, 64f), 34, TEXT_DARK, TextAnchor.MiddleCenter, FontStyle.Bold);
 
-        R.promptLabel = Label(prompt.transform, "文字", "开门", new Vector2(24f, 0f), new Vector2(400f, 64f), 30,
-                              TEXT_DARK, TextAnchor.MiddleLeft);
+            R.promptLabel = Label(prompt.transform, "文字", "开门", new Vector2(24f, 0f), new Vector2(400f, 64f), 30,
+                                  TEXT_DARK, TextAnchor.MiddleLeft);
+            log.Add("★ 场景里没有 交互提示 节点 → 自建了一个兜底提示（建议先搭好剧情 UI）");
+        }
 
         // ---- 选择面板
         var pageGO = Node("面板_选择地点", canvasGO.transform);
@@ -363,7 +381,7 @@ public static class GameDoorBuilder
         var card = Node("卡片", pageGO.transform);
         At(card, Vector2.zero, new Vector2(760f, 720f));
         var cardImg = card.AddComponent<Image>();
-        cardImg.sprite = SlicedSprite("面板_亮") ?? SlicedSprite("稿_面板_弹窗");
+        cardImg.sprite = SlicedSprite("面板_亮");
         cardImg.type = Image.Type.Sliced;
         cardImg.raycastTarget = true;
 
@@ -377,7 +395,7 @@ public static class GameDoorBuilder
         var closeGO = Node("按钮_关闭", card.transform);
         Corner(closeGO, new Vector2(-18f, -18f), new Vector2(48f, 48f), new Vector2(1f, 1f), new Vector2(1f, 1f));
         var closeImg = closeGO.AddComponent<Image>();
-        closeImg.sprite = SlicedSprite("按钮_图标_普通");
+        closeImg.sprite = SlicedSprite("按钮_图标_悬停");
         closeImg.type = Image.Type.Sliced;
         closeImg.raycastTarget = true;
         R.closeButton = closeGO.AddComponent<Button>();
@@ -401,7 +419,7 @@ public static class GameDoorBuilder
             var bgo = Node("目标_" + i, list.transform);
             At(bgo, new Vector2(0f, y), new Vector2(620f, 58f));
             var bimg = bgo.AddComponent<Image>();
-            bimg.sprite = SlicedSprite("按钮_次_普通");
+            bimg.sprite = SlicedSprite("按钮_次_悬停");       // 用确实存在的贴图（旧版名字已失效 → 白块）
             bimg.type = Image.Type.Sliced;
             bimg.raycastTarget = true;
             var btn = bgo.AddComponent<Button>();
@@ -422,6 +440,21 @@ public static class GameDoorBuilder
     }
 
     // ------------------------------------------------------------------ 小工具（照 MainMenuBuilder 的写法）
+    /// 找剧情那套已有提示（UI交互/交互提示 + 它的 文字 子节点）——门口提示直接复用它
+    static (GameObject go, Text label) FindExistingPrompt()
+    {
+        foreach (var canvasName in new[] { "UI交互", "UI_门口交互" })
+        {
+            var canvas = GameObject.Find(canvasName);
+            if (canvas == null) continue;
+            var t = canvas.transform.Find("交互提示");
+            if (t == null) continue;
+            var label = t.Find("文字");
+            return (t.gameObject, label != null ? label.GetComponent<Text>() : t.GetComponentInChildren<Text>(true));
+        }
+        return (null, null);
+    }
+
     static void LoadFont(List<string> log)
     {
         _font = AssetDatabase.LoadAssetAtPath<Font>(FONT_PATH);
