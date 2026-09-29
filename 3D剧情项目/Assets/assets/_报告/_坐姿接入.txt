@@ -1,0 +1,25 @@
+坐姿接入  2026-09-29 12:03
+
+  张知远：没有 Sitting Idle.fbx（跳过）
+  徐夏：剪辑 徐夏_Sit.anim（3.0s，循环）
+      徐夏_Idle.controller：Sit 状态已存在，只更新了动作 ✓
+      徐夏_第三人称.controller：Sit 状态已存在，只更新了动作 ✓
+  李老师：没有 Sitting Idle.fbx（跳过）
+  林溪：剪辑 林溪_Sit.anim（3.0s，循环）
+      林溪_Idle.controller：Sit 状态已存在，只更新了动作 ✓
+  王含：剪辑 王含_Sit.anim（3.0s，循环）
+      王含_Idle.controller：Sit 状态已存在，只更新了动作 ✓
+  组长：没有 Sitting Idle.fbx（跳过）
+  舍友A：没有 Sitting Idle.fbx（跳过）
+  舍友B：没有 Sitting Idle.fbx（跳过）
+  陆宣雨：剪辑 陆宣雨_Sit.anim（6.4s，循环）
+      陆宣雨_Idle.controller：Sit 状态已存在，只更新了动作 ✓
+
+── ③ 场景里给坐下锚点挂 SitSpot（玩家自动坐下/起身）
+  挂上 SitSpot：GameRoot/Locations/Loc_宿舍/多章锚点/第4章_坐下看资料
+  挂上 SitSpot：GameRoot/Locations/Loc_宿舍/多章锚点/第5章_回座位
+  挂上 SitSpot：GameRoot/Locations/Loc_食堂/多章锚点/第3章_落座
+  存场景：成功 ✓
+
+合计：4 个角色有坐姿剪辑，改了 0 个控制器，新挂座位 3 个
+下一步（运行时）：座位点上挂 SitSpot（玩家自动坐下/起身）、NPC 用 SitHere，见 Assets/Scripts/Game/SitSpot.cs

@@ -100,6 +100,32 @@ public class FirstPersonController : MonoBehaviour
     [Tooltip("移动时 Speed 参数的平滑时间（秒）。越小越干脆；起步那一下不插值，直接到位")]
     public float animStartSmooth = 0.04f;
 
+    [Header("坐姿（由 SitSpot 调用，见 Scripts/Game/SitSpot.cs）")]
+    [Tooltip("是否坐着（坐下时镜头支点压低，不然第三人称盯着头顶）")]
+    public bool sitting = false;
+    [Tooltip("坐姿时的镜头支点高（站姿是 tpHeight）")]
+    public float sitTpHeight = 0.95f;
+    [Tooltip("坐姿时的看向高度（站姿是 tpLookHeight）")]
+    public float sitTpLookHeight = 0.72f;
+    float _tpHSaved = -1f, _tpLSaved = -1f;
+
+    /// <summary>坐下/起身（SitSpot 调用）：坐姿时把第三人称镜头支点压低</summary>
+    public void SetSitting(bool v)
+    {
+        if (v == sitting) return;
+        sitting = v;
+        if (v)
+        {
+            _tpHSaved = tpHeight; _tpLSaved = tpLookHeight;
+            tpHeight = sitTpHeight; tpLookHeight = sitTpLookHeight;
+        }
+        else
+        {
+            if (_tpHSaved > 0f) tpHeight = _tpHSaved;
+            if (_tpLSaved > 0f) tpLookHeight = _tpLSaved;
+        }
+    }
+
     [Header("虚拟输入（自检 / 剧情演出用）")]
     [Tooltip("勾上 = 忽略键盘，改用下面的 inputOverride（自检要靠它：编辑器 tick ≠ 游戏帧，直接注入会跑不动）")]
     public bool useInputOverride = false;

@@ -146,6 +146,25 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   得在 Rig 里设 **Humanoid + Create From This Model**（`MixamoRigCheck.cs` 里有同类代码可参考），
   否则 Animator 挂着也不动。另外每条剪辑默认都叫 `mixamo.com`，接控制器前最好改个名。
 
+### 坐姿（坐下动作）  `Assets/Editor/SitSetup.cs` + `Assets/Scripts/Game/SitSpot.cs`
+
+- **剧情里坐下是刚需**：第1章（教室第三排）、第2章（宿舍书桌 / 陆宣雨搬椅子）、
+  **第3章 `interact` @ `Loc_食堂/多章锚点/第3章_落座`**、**第4章 `interact` @ `Loc_宿舍/多章锚点/第4章_坐下看资料`**、
+  第5章（`第5章_回座位`）。
+- **素材**：Mixamo 的 `Sitting Idle.fbx`（勾 In Place），放 `带动画模型/<角色>/`（和 Idle/Walk 同格式，带模型那种）。
+  已有的：徐夏 / 林溪 / 王含 / 陆宣雨（李老师、舍友 A/B 还没）。
+- **工具**（`Tools/干预项目/坐姿：生成剪辑 + 加 Sit 状态`）：① 生成循环剪辑 `<角色>_Sit.anim`；
+  ② 给 `<角色>_Idle.controller` 与 `徐夏_第三人称.controller` 加 Bool 参数 `Sitting` + 状态 `Sit`
+  （AnyState→Sit 当 Sitting=true；Sit→默认状态 当 false）；③ 给名字含「落座/坐下/回座位」的锚点挂 `SitSpot`。
+- ⚠ 坐姿剪辑的基准是**脚在地面、屁股在椅面** → 实测 Hips Y ≈ **0.55m**（站姿 Idle ≈ 0.93m），
+  所以**座位点的 Y 必须是地面（0）**、朝向 = 面向桌子（现有三个锚点正好都在 Y=0）。
+- **运行时**：`SitSpot`（座位点）—— 玩家站到座位上且**剧情把玩家锁住**（locked=true，即正在对话）→ 自动坐下
+  （关 CC→挪人→`animator.SetBool("Sitting",true)`→`fpc.SetSitting(true)`）；按 WASD 或离座/被传送 → 起身。
+  **不需要改 StoryRunner**（靠"站在座位上 + 被锁住"这个组合判定，和现有 interact 流程天然对上）。
+  NPC 用 `SitHere`（Start 把 Sitting 置 true），把 NPC 实例摆到座位上即可。
+- 第三人称镜头有**坐姿档**：`FirstPersonController.SetSitting(true)` 会把 `tpHeight` 1.45→0.95、
+  `tpLookHeight` 1.2→0.72（不然坐着镜头盯头顶），起身自动还原。
+
 ### 去掉某部件（眼镜等）  `Assets/Editor/HidePart.cs`
 
 - **需求**：陆宣雨不带眼镜（用户 2026-09-29）。
