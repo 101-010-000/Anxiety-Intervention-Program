@@ -77,6 +77,7 @@ public class StoryRunner : MonoBehaviour
     StoryInteractable _currentTouch;
     int _choiceCounter;
     string _pendingThumb;   // 选择题全选时的抓屏文件名（存档缩略图；章末存档复用最后一张）
+    readonly List<StoryStep> _resumeChat = new List<StoryStep>();   // 续播快进时收集的微信台词（FlushResumeChat 回放）
     int _lastLineLen;
     Coroutine _cardRt;
     Coroutine _fadeRt;
@@ -176,7 +177,157 @@ public class StoryRunner : MonoBehaviour
         ApplyChapterNpcVisibility();        // 角色容器按章显隐（第2章时宿舍里不该有第五章的舍友）
         CollectAndHideEntranceNpcs();   // enter 步骤的角色开场先禁用（第2章陆宣雨：她不在宿舍）
         if (phoneChat != null) phoneChat.HideImmediate();   // 万一上次没收干净
+
+        // 章内续播（2026-09-28）：读档写入的 ResumeChapter/Step 在这里一次性消费——
+        // 静默快进 0..resume-1（复刻世界副作用：传送/入场退场/交互消费/微信记录），再从 resume 步正常播。
+        int resume = GameProgress.ResumeChapter == chapterIndex ? GameProgress.ResumeStep : 0;
+        GameProgress.ClearResume();         // 无论是否命中都清掉，防残留泄漏到重开/别的章
+        if (resume > 0)
+        {
+            if (resume >= _ch.steps.Count) resume = _ch.steps.Count - 1;   // 章末档：step=总数 → 回到 end 步重播结尾
+            Debug.Log("[StoryRunner] 续播第" + chapterIndex + "章：静默快进 0.." + (resume - 1) + "，从第 " + resume + " 步继续");
+            for (int i = 0; i < resume; i++) SilentApply(_ch.steps[i]);
+            StepIndex = resume;
+            _openingNar = false;            // 续播点必在开场自由走动段之后（存档只在选择题/章末产生）
+            // 先把「对话」节点激活（框仍收着）：微信台词的"隐形打字机"要在活节点上跑协程——
+            // 正常游玩里开场旁白早把它激活了，静默快进跳过了这一步（续播落在微信段时报过
+            // "Coroutine couldn't be started because '对话' is inactive" ×2，踩过）
+            if (dialogue != null && !dialogue.gameObject.activeSelf)
+            {
+                dialogue.gameObject.SetActive(true);
+                dialogue.HideNode();
+            }
+            FlushResumeChat(resume);        // 微信段历史回放（若续播点仍在微信段，手机带着记录亮屏）
+            DoCard(null);                   // 黑幕淡入 → FadeInRoutine 末尾 Next() 正好执行续播步
+            return;
+        }
         Next();
+    }
+
+    // ------------------------------------------------------------------ 章内续播：静默快进
+    // 只复刻"对后续剧情有影响的世界副作用"，跳过一切 UI 演出（对话打字/走位动画/黑屏/镜头转向）：
+    //   fade/enter/leave/walk/interact = 传送与站位；interact 顺带消费交互点 + 隐藏联动道具（拿起手机）；
+    //   choice = 题号计数对齐（选择记录在 PlayerPrefs，本来就持久）；微信台词进回放队列（FlushResumeChat）。
+    // 拿/放手机动画不回放：续播后的微信台词/交互提示有"自动补拿"兜底（PlayText 里已处理）。
+    // ⚠ StoryInteractable.Fire() 会触发 onTriggered → OnInteractableFired——它按 CurrState 分发，
+    //   快进期间状态不是 WaitWalk/WaitInteract，天然 no-op，安全。
+    void SilentApply(StoryStep step)
+    {
+        switch (step.t)
+        {
+            case "card":
+            case "nar":
+            case "dlg":
+            case "mon":
+            {
+                bool wechat = step.t == "dlg" && !string.IsNullOrEmpty(step.s)
+                              && (step.s.Contains("（微信）") || step.s.Contains("（通知）"));
+                if (wechat) _resumeChat.Add(step);          // 微信历史排队；续播点仍在微信段时回放
+                break;
+            }
+
+            case "choice":
+                _choiceCounter++;                           // 题号对齐（交卷计数与缩略图命名都要连续）
+                break;
+
+            case "fade":
+            {
+                var target = FindFadeAnchor(step.to);
+                if (target != null && _player != null) TeleportPlayer(target.position, target.eulerAngles.y);
+                break;
+            }
+
+            case "enter":
+            {
+                if (string.IsNullOrEmpty(step.who)) break;
+                GameObject go = null;
+                _entranceNpcs.TryGetValue(step.who, out go);
+                if (go == null) { var t = FindCharacterTransform(step.who); go = t != null ? t.gameObject : null; }
+                if (go == null) { Debug.LogWarning("[StoryRunner] 续播 enter 找不到角色：" + step.who); break; }
+                Transform from = FindFadeAnchor(step.from);
+                Transform toT  = FindFadeAnchor(step.to);
+                Vector3 target;
+                if (toT != null) target = toT.position;                          // 显式落点优先
+                else if (from != null && _player != null)
+                {
+                    Vector3 p = _player.transform.position;                      // 缺省 = 玩家面前 1.3m（同 EnterRoutine 的算法）
+                    Vector3 dir = p - from.position; dir.y = 0f;
+                    target = dir.sqrMagnitude > 0.01f ? p - dir.normalized * 1.3f : p;
+                }
+                else if (_player != null) target = _player.transform.position;
+                else break;
+                if (!go.activeSelf) go.SetActive(true);
+                go.transform.position = target;
+                if (_player != null)                                               // 到位面向玩家（同 NpcEntrance 收尾）
+                {
+                    Vector3 f = _player.transform.position - target; f.y = 0f;
+                    if (f.sqrMagnitude > 0.001f) go.transform.rotation = Quaternion.LookRotation(f.normalized);
+                }
+                break;
+            }
+
+            case "leave":
+            {
+                if (string.IsNullOrEmpty(step.who)) break;
+                GameObject go = null;
+                _entranceNpcs.TryGetValue(step.who, out go);
+                if (go == null) { var t = FindCharacterTransform(step.who); go = t != null ? t.gameObject : null; }
+                if (go == null) break;
+                Transform toT = FindFadeAnchor(step.to);
+                Vector3 target; float yaw;
+                if (toT != null) { target = toT.position; yaw = toT.eulerAngles.y; }
+                else if (_npcHomePos.TryGetValue(step.who, out target) && _npcHomeYaw.TryGetValue(step.who, out yaw)) { }
+                else break;                                                       // 没落点信息，保持现状
+                go.transform.position = target;
+                go.transform.rotation = Quaternion.Euler(0f, yaw, 0f);
+                break;
+            }
+
+            case "walk":
+            case "interact":
+            {
+                var si = step.t == "walk"
+                    ? FindFree(StoryInteractable.Mode.Touch)
+                    : FindFree(StoryInteractable.Mode.InteractF, step.at);
+                if (si == null) { Debug.LogWarning("[StoryRunner] 续播找不到交互点（" + step.t + " " + step.at + "）"); break; }
+                si.Fire();                                // 消费 + 联动道具隐藏（拿起手机的可见状态）
+                if (_player != null)
+                {
+                    Vector3 c = si.PromptCenter;          // 玩家站到交互点旁（y 沿用玩家脚高，锚点可能悬空/入地）
+                    TeleportPlayer(new Vector3(c.x, _player.transform.position.y, c.z), _player.transform.eulerAngles.y);
+                }
+                break;
+            }
+        }
+    }
+
+    /// 续播点仍在微信段时回放聊天记录：先 Show（内部会 Clear）再补历史，随后 PlayText 往下追加当前句。
+    void FlushResumeChat(int resume)
+    {
+        if (_resumeChat.Count == 0 || phoneChat == null) return;
+        bool nextIsWechat = resume < _ch.steps.Count && _ch.steps[resume].t == "dlg"
+                            && !string.IsNullOrEmpty(_ch.steps[resume].s)
+                            && (_ch.steps[resume].s.Contains("（微信）") || _ch.steps[resume].s.Contains("（通知）"));
+        if (!nextIsWechat) return;    // 此刻手机该收着：正常游玩里手机每次重新亮屏也会清空记录，行为一致
+        phoneChat.Show();
+        foreach (var st in _resumeChat)
+        {
+            if (!st.s.Contains("徐夏"))
+                phoneChat.SetContact(st.s.Replace("（微信）", "").Replace("（通知）", ""));
+            phoneChat.Append(st.s, st.x);
+        }
+        _resumeChat.Clear();
+    }
+
+    /// 传送玩家（照抄 FadeRoutine 的坑：CharacterController 不先关会被拽回去；镜头立刻跟过去）
+    void TeleportPlayer(Vector3 pos, float yaw)
+    {
+        var cc = _player.GetComponent<CharacterController>();
+        if (cc != null) cc.enabled = false;
+        _player.transform.position = pos;
+        _player.transform.rotation = Quaternion.Euler(0f, yaw, 0f);
+        if (cc != null) cc.enabled = true;
+        _player.ResetCameraNow();
     }
 
     // ------------------------------------------------------------------ 角色容器按章显隐 + NPC 入场
@@ -302,6 +453,7 @@ public class StoryRunner : MonoBehaviour
                 _currentF = FindFree(StoryInteractable.Mode.InteractF, step.at);
                 if (_currentF == null) { Debug.LogWarning("[StoryRunner] 没有 F 交互点，跳过"); Next(); return; }
                 _currentF.armed = true;
+                _currentF.ShowProp();   // 联动道具（手机）在交互步骤到达时先回到桌上（第2章第二次拿手机）
                 ShowWalkHint(step.x);
                 SetPerms(State.WaitInteract);
                 break;
@@ -567,7 +719,9 @@ public class StoryRunner : MonoBehaviour
 
         _entrance = go.GetComponent<NpcEntrance>();
         if (_entrance == null) _entrance = go.AddComponent<NpcEntrance>();
-        yield return _entrance.Run(from.position, target, _player != null ? _player.transform : null);
+        // via 途经点：每项按 fade 锚点同名解析，缺锚点只警告并跳过该点；via 为空/全缺 = 原两点直线
+        var pts = BuildPath(from.position, step.via, target);
+        yield return _entrance.RunPath(pts, _player != null ? _player.transform : null);
 
         _entrance = null;
         _enterRt = null;
@@ -619,12 +773,31 @@ public class StoryRunner : MonoBehaviour
         _entrance = go.GetComponent<NpcEntrance>();
         if (_entrance == null) _entrance = go.AddComponent<NpcEntrance>();
         Vector3 from = go.transform.position;
-        yield return _entrance.Run(from, target, null); // faceTarget=null：保持走向（面朝座位方向走回去）
+        // via 途经点（绕开桌椅）：每项按 fade 锚点同名解析，缺锚点只警告并跳过该点；
+        // via 为空/全缺时 pts 就两点 = 原直线，行为不变
+        var pts = BuildPath(from, step.via, target);
+        yield return _entrance.RunPath(pts, null); // faceTarget=null：保持走向（面朝座位方向走回去）
 
         go.transform.rotation = Quaternion.Euler(0f, yaw, 0f);   // 到位回原朝向（如面朝书桌）
         _entrance = null;
         _leaveRt = null;
         Next();
+    }
+
+    /// 组装 enter/leave 的途经点列：起点 + 各 via 锚点（同名解析同 fade 锚点，缺锚点只警告跳过）+ 终点；
+    /// via 为空/全缺时返回 [起点, 终点] 两点 = 原直线行为（v7，配合 NpcEntrance.RunPath 分段走位）
+    Vector3[] BuildPath(Vector3 start, List<string> via, Vector3 end)
+    {
+        var list = new List<Vector3> { start };
+        if (via != null)
+            foreach (var n in via)
+            {
+                var a = FindFadeAnchor(n);
+                if (a != null) list.Add(a.position);
+                else Debug.LogWarning("[StoryRunner] via 途经锚点「" + n + "」找不到——跳过该点（此段走直线）");
+            }
+        list.Add(end);
+        return list.ToArray();
     }
 
     static bool HitsAny(string text, string[] keys)
@@ -643,23 +816,22 @@ public class StoryRunner : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    // ------------------------------------------------------------------ 自动存档（2026-09-27 接线）
+    // ------------------------------------------------------------------ 自动存档（2026-09-27 接线；2026-09-28 改每章一档 + 章内续播）
     // 时机：每道干预题交卷后（受设置"选择后自动存档"开关控制）+ 章节通关（始终存，进度兜底）。
-    // 槽位：最近使用的手动槽，从没存过 → 1 号槽。存到章级（读档 = 从该章第 1 步重播；
-    // nodeId/step 先留档，章内续播以后要再做）。
-    // 缩略图：选择题全选完毕、面板完整显示的那一刻抓屏（ChoicePanel.onPanelComplete），
-    // 章末存档复用本章最后一题的截图。自检（StorySmokeDriver.Requested）不写档，防污染真实存档。
+    // 槽位：★每章一档——第 N 章写 N 号槽（重玩本章只覆盖本章自己的档，章与章互不冲掉；槽 6 留空）。
+    // step 语义 = "下一个待执行步骤号"（Next() 先自增再执行，交卷时 StepIndex 已指向题目后一步）；
+    // 读档时经 GameProgress.SetResume 带进 Game 场景 → Begin 静默快进到该步 = 章内续播。
+    // 缩略图：选择题全选完毕、面板完整显示的那一刻抓屏；本章没抓到新图时保留槽里旧图。
+    // 自检（StorySmokeDriver.Requested / StoryResumeDriver.Active）不写档，防污染真实存档。
     void AutoSave(string reason, bool force = false)
     {
         if (!force && !GameSettings.AutoSave) return;
-        if (StorySmokeDriver.Requested) return;   // ★只看"自检真的在跑"标志；场景里常驻的驱动组件不代表在自检（FindObjectOfType 会把真实游玩的存档也挡掉，踩过）
-        int slot = SaveSystem.LatestSlot();
-        if (slot < 0) slot = 0;
+        if (StorySmokeDriver.Requested || StoryResumeDriver.Active) return;   // ★只看"自检真的在跑"标志；场景里常驻的驱动组件不代表在自检（FindObjectOfType 会把真实游玩的存档也挡掉，踩过）
+        int slot = Mathf.Clamp(chapterIndex, 1, SaveSystem.SlotCount) - 1;    // 第1章→槽1 … 第5章→槽5
 
-        // 覆盖槽位前清掉旧缩略图文件（防孤儿文件越攒越多）
         var old = SaveSystem.Info(slot);
         string oldThumb = old != null && old.data != null ? old.data.thumbnail : "";
-        string newThumb = _pendingThumb ?? "";
+        string newThumb = string.IsNullOrEmpty(_pendingThumb) ? oldThumb : _pendingThumb;   // 本章还没抓到新图 → 沿用旧图
         if (!string.IsNullOrEmpty(oldThumb) && oldThumb != newThumb)
         {
             try { System.IO.File.Delete(System.IO.Path.Combine(SaveSystem.Dir, oldThumb)); } catch { }

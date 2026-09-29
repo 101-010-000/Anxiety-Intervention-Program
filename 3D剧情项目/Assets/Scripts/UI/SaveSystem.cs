@@ -212,16 +212,42 @@ public static class GameProgress
         if (chapter + 1 > Unlocked) Unlocked = Mathf.Min(chapter + 1, ChapterTitles.Length);
     }
 
-    /// 选中要去哪一章（章节选择 / 读取存档 / 开始游戏都走这里），游戏场景启动时读它
+    /// 选中要去哪一章（章节选择 / 读取存档 / 开始游戏都走这里），游戏场景启动时读它。
+    /// ★ 顺带清掉章内续播标记：读档路径在 SelectChapter 之后单独 SetResume，
+    ///   其它入口（选章/开始游戏）等于"从头播本章"，不能吃到上一次读档残留的续播点。
     public static void SelectChapter(int chapter)
     {
         PlayerPrefs.SetInt(K_NEXT, Mathf.Clamp(chapter, 1, ChapterTitles.Length));
+        ClearResume();
         PlayerPrefs.Save();
     }
 
     public static int SelectedChapter
     {
         get { return Mathf.Clamp(PlayerPrefs.GetInt(K_NEXT, 1), 1, ChapterTitles.Length); }
+    }
+
+    // ------------------------------------------------- 章内续播（2026-09-28）
+    // 读档时写入"回到哪章哪步"；游戏场景 StoryRunner.Begin() 检测到本章命中 →
+    // 静默快进到该步 → 一次性消费（ClearResume）。step 语义 = 存档时的"下一个待执行步骤号"。
+    const string K_RESUME_CH   = "story.resume.ch";
+    const string K_RESUME_STEP = "story.resume.step";
+
+    public static int ResumeChapter { get { return PlayerPrefs.GetInt(K_RESUME_CH, 0); } }
+    public static int ResumeStep    { get { return PlayerPrefs.GetInt(K_RESUME_STEP, 0); } }
+
+    public static void SetResume(int chapter, int step)
+    {
+        PlayerPrefs.SetInt(K_RESUME_CH, Mathf.Max(0, chapter));
+        PlayerPrefs.SetInt(K_RESUME_STEP, Mathf.Max(0, step));
+        PlayerPrefs.Save();
+    }
+
+    public static void ClearResume()
+    {
+        PlayerPrefs.DeleteKey(K_RESUME_CH);
+        PlayerPrefs.DeleteKey(K_RESUME_STEP);
+        PlayerPrefs.Save();
     }
 
     public static void NewGame()

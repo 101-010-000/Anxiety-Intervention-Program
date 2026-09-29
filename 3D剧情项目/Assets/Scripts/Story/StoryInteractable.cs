@@ -20,6 +20,11 @@ public class StoryInteractable : MonoBehaviour
     [Tooltip("F 提示整句（如「拿起手机」）。留空 = 默认「与<displayName>交谈」。")]
     public string promptText = "";
 
+    [Tooltip("道具联动（可空）：场景里的道具 GameObject 名（如 手机_淡蓝）。" +
+             "① 交互判定中心 = 道具位置（玩家要走近道具才能交互，按名解析，手挪道具自动跟随）；" +
+             "② Fire 后道具整棵隐藏（「拿起」的可见反馈）；③ Revive/重新武装时道具重新出现（下次交互前）。")]
+    public string propObjectName = "";
+
     /// 是否允许触发/显示（StoryRunner 只在进入对应的等待步骤时置 true）。
     /// ★ 不加这个开关：开场旁白段（自由走动）路过组长时按一下 F 就会把交互点消费掉，
     ///   等到真正该交互时提示还在、按 F 却没反应。
@@ -32,6 +37,42 @@ public class StoryInteractable : MonoBehaviour
     public bool Consumed { get; private set; }
 
     FirstPersonController _player;
+    GameObject _prop;          // 按名解析后缓存（隐藏后是 inactive，GameObject.Find 找不到，必须缓存）
+    bool _propMissing;         // 找过没找到：不再每帧 Find（ShowProp 时会再给一次机会）
+
+    /// 交互判定中心：联动道具的位置，没配道具就用自身（水平距离判定会把 y 清零）
+    public Vector3 PromptCenter
+    {
+        get { var p = ResolveProp(); return p != null ? p.transform.position : transform.position; }
+    }
+
+    GameObject ResolveProp()
+    {
+        if (string.IsNullOrEmpty(propObjectName)) return null;
+        if (_prop != null) return _prop;
+        if (_propMissing) return null;
+        _prop = GameObject.Find(propObjectName);
+        if (_prop == null)
+        {
+            _propMissing = true;
+            Debug.LogWarning("[StoryInteractable] 没找到联动道具「" + propObjectName + "」（交互中心回退到自身位置，隐藏/重现不生效）", this);
+        }
+        return _prop;
+    }
+
+    /// 重新武装时让联动道具回到场景（StoryRunner 进入 interact 步骤时调；Revive 里也会调）
+    public void ShowProp()
+    {
+        if (_prop == null) _propMissing = false;   // 每次武装都再试一次，别让一次 Find 失败永久失效
+        var p = ResolveProp();
+        if (p != null && !p.activeSelf) p.SetActive(true);
+    }
+
+    void HideProp()
+    {
+        var p = ResolveProp();
+        if (p != null) p.SetActive(false);
+    }
 
     FirstPersonController Player
     {
@@ -51,7 +92,7 @@ public class StoryInteractable : MonoBehaviour
         {
             var p = Player;
             if (p == null) return;
-            Vector3 a = transform.position; a.y = 0f;
+            Vector3 a = PromptCenter; a.y = 0f;
             Vector3 b = p.transform.position; b.y = 0f;
             bool inRange = (a - b).sqrMagnitude <= radius * radius;
             if (inRange != PlayerInRange) PlayerInRange = inRange;
@@ -78,6 +119,7 @@ public class StoryInteractable : MonoBehaviour
             if (col != null) col.enabled = false;
         }
         if (onTriggered != null) onTriggered(this);
+        HideProp();      // 联动道具整棵隐藏 = 「被拿起」的可见反馈（没配道具时 no-op）
     }
 
     /// 消费后复用（2026-09-28）：同一章多次用同一个点（第2章两次"拿起手机"）。
@@ -88,5 +130,6 @@ public class StoryInteractable : MonoBehaviour
         PlayerInRange = false;
         var col = GetComponent<Collider>();
         if (col != null) col.enabled = true;
+        ShowProp();      // 下一次交互快要开始时，道具先回到桌上（第2章第二次拿手机）
     }
 }

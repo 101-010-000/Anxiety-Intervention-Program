@@ -372,6 +372,8 @@ public class MainMenuUI : MonoBehaviour
             var info = SaveSystem.Info(_selectedSlot);
             if (info == null || !info.exists) { Toast("这个存档位是空的"); return; }
             GameProgress.SelectChapter(info.data.chapter);
+            // 章内续播（2026-09-28）：把存档里记的步号带进 Game 场景，Begin 静默快进到该步再继续播
+            GameProgress.SetResume(info.data.chapter, info.data.step);
             LoadGameScene();
         });
         if (btnSaveDelete != null) btnSaveDelete.onClick.AddListener(delegate

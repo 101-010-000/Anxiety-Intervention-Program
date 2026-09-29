@@ -382,6 +382,62 @@ public static class ChapterStoriesSetup
     static void Warn(string s) { _log.AppendLine("★ " + s); Debug.LogWarning("[ChapterStoriesSetup] " + s); }
     static void Error(string s) { _log.AppendLine("★ 失败：" + s); Debug.LogError("[ChapterStoriesSetup] " + s); }
 
+    // ================================================================== 第2章陆宣雨退场路线点（2026-09-29）
+    // 背景：leave 走位是直线 Lerp 直移 transform（不经物理，碰撞体拦不住），
+    // 门口→座位直线纵贯宿舍西墙桌椅区 → 穿模。解法：json leave 带 via 途经锚点，
+    // 退场按「门口 → 过道路线点 → 座位」分段走（解析见 StoryRunner.BuildPath，走位见 NpcEntrance.RunPath）。
+    // 本菜单只维护路线点锚点：缺省建过道估计位；已存在只打印现位置、绝不改动（幂等铁律：手摆位优先）。
+    const string VIA_ANCHOR = "第2章_陆宣雨路线_1";
+
+    [MenuItem(MENU + "补第2章陆宣雨路线锚点（幂等）", false, 53)]
+    public static void EnsureExitViaAnchor()
+    {
+        _log.Clear();
+        _log.AppendLine("补第2章陆宣雨退场路线锚点  " + System.DateTime.Now.ToString("yyyy-MM-dd HH:mm"));
+
+        var scene = EditorSceneManager.OpenScene(GAME_SCENE, OpenSceneMode.Single);
+        var loc = GameObject.Find("Loc_宿舍");
+        if (loc == null)
+        {
+            Error("场景里没有 Loc_宿舍");
+            Directory.CreateDirectory(Path.GetDirectoryName(REPORT).Replace('/', Path.DirectorySeparatorChar));
+            File.AppendAllText(REPORT, _log.ToString() + System.Environment.NewLine);   // 追加，不冲掉既往报告
+            return;
+        }
+        var holder = EnsureChild(loc.transform, "多章锚点").transform;
+
+        var found = holder.Find(VIA_ANCHOR);
+        if (found != null)
+        {
+            // 幂等：已存在（多半是用户手拖过的）只报告现位置，一个字段都不写
+            Log("  = " + VIA_ANCHOR + " 已存在 @ world " + found.position.ToString("F2") + "（手摆位，不改动）");
+        }
+        else
+        {
+            var go = new GameObject(VIA_ANCHOR);
+            go.transform.SetParent(holder, false);
+            go.transform.position = new Vector3(77.6f, 0f, 0.8f);   // 宿舍中央过道估计位（世界坐标）
+            Log("  + Loc_宿舍/多章锚点/" + VIA_ANCHOR + " @ world (77.6, 0, 0.8)（默认估计位）");
+        }
+
+        // 沿既有工具惯例：本菜单自己打开的就是 Game.unity，确认后存盘
+        if (scene.path == GAME_SCENE)
+        {
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene);
+        }
+        else Warn("当前打开的不是 Game.unity（" + scene.path + "），跳过保存");
+
+        _log.AppendLine();
+        _log.AppendLine("提醒：路线点是估计位，请按宿舍桌椅实际摆位在 Scene 里手拖微调——");
+        _log.AppendLine("  leave 的 via 按同名解析锚点（接线池没有就全场景按名找），退场即按 门口→路线点→座位 分段走。");
+
+        Directory.CreateDirectory(Path.GetDirectoryName(REPORT).Replace('/', Path.DirectorySeparatorChar));
+        File.AppendAllText(REPORT, _log.ToString() + System.Environment.NewLine);   // 追加，不冲掉既往报告
+        Debug.Log("[ChapterStoriesSetup] 路线锚点已核对/补建，报告（追加）：" + REPORT);
+        EditorUtility.DisplayDialog("补第2章陆宣雨路线锚点", "完成，详见（追加）：\n" + REPORT, "好");
+    }
+
     // ================================================================== NPC 入场接线（第2章陆宣雨"从门走进来"，2026-09-27）
     // 三件事（全幂等）：
     //   1) 宿舍南门内建「第2章_陆宣雨门口」锚点（enter 步骤 from）；

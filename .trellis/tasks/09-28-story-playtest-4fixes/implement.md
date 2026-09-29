@@ -17,6 +17,17 @@
    第5章（1 个 at）。
 6. [ ] AGENTS.md「多章剧情」一节补 5 条约定（leave / at 绑定 / Revive / 章末卡置顶 / 走路清 Phone）。
 7. [ ] 记忆文件 playtest-bugs-2026-09-28.md 标记已修。
+8. [ ] leave/enter 走位支持 via 经由点（2026-09-29 试玩追加：陆宣雨退场直线穿桌椅——
+   NpcEntrance 本就是直线 Lerp 直移 transform，不经物理，门口(74.54,-2.45)→座位(75.42,4.07)
+   恰好纵贯西墙桌椅区）：
+   - a. `StoryData.cs`：StoryStep 加 `List<string> via`（同名解析同 to，缺锚点警告跳过）。
+   - b. `NpcEntrance.cs`：新增 `RunPath(Vector3[] pts, Transform faceTarget)` 分段走
+     （全程 SetWalk/关碰撞体，段间 RotateTowards 平滑转向，fast 快进语义不变）；
+     `Run(from,to,faceTarget)` 改薄包装，行为不变。
+   - c. `StoryRunner.cs`：LeaveRoutine / EnterRoutine 解析 step.via → pts。
+   - d. `第2章.json`：leave 加 `"via": ["第2章_陆宣雨路线_1"]`。
+   - e. `ChapterStoriesSetup.cs`：幂等菜单「补第2章陆宣雨路线锚点」（缺省过道估计位
+     world (77.6, 0, 0.8)，已存在不动；用户 Scene 里手拖生效）。
 
 ## 验证（交给用户在 Unity 里跑，不远程触发）
 

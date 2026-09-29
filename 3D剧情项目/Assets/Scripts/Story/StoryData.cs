@@ -16,6 +16,7 @@
 //            to=可选落点锚点（缺省=玩家面前1.3m）。全程真实形象（虚实渐变已移除），细节见 NpcEntrance。
 //   leave    NPC 退场（2026-09-28，与 enter 对称）：who 走回【开场原位】（Begin 时快照），
 //            to=可选锚点覆盖（同名解析约定同 fade）。第2章陆宣雨"回到自己的座位上"。
+//            可带 via=途经锚点名列表分段走（绕开桌椅等家具；解析同 to，缺锚点只警告跳过）。
 //   card     入场淡入（黑幕淡出，不显示标题卡——用户反馈定稿：不要开场黑屏）
 //   end      章节结束卡（返回主界面 + 固定提示句）
 using System;
@@ -31,6 +32,8 @@ public class StoryStep
     public string to = "";                   // fade：目标锚点名（runner.fadeAnchors 里同名元素）
     public string who = "";                  // enter：角色实例名（Begin 时预禁用，enter 时启用入场）
     public string from = "";                 // enter：门口起点锚点名
+    public List<string> via = new List<string>();  // enter/leave：途经锚点名列表（同名解析同 to/from；
+                                                   // 缺锚点=警告并跳过该点，不报错）。第2章陆宣雨退场绕开桌椅
     public string at = "";                   // interact：目标交互点 GameObject 名（缺省=旧逻辑取第一个可用点；
                                              // 第3章起一章多个 F 点，不点名会武装错点——2026-09-28）
     public string title = "";

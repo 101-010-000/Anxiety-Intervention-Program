@@ -5,6 +5,7 @@ using System.Text;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;   // 2026-09-28 补：SceneManager 所在命名空间（修 3×CS0103）
 
 /// <summary>
 /// 手机道具（Sketchfab CC-BY 淡蓝低模手机）：把转换好的 4 个 OBJ（按材质拆件）接进项目。
@@ -39,7 +40,11 @@ public static class PhonePropSetup
     [MenuItem("Tools/干预项目/手机道具/② 只诊断")]
     public static void DiagMenu() { RunInternal(true); }
 
+    [MenuItem("Tools/干预项目/手机道具/③ 摆进宿舍+接第2章交互（幂等）")]
+    public static void WireChapter2Menu() { WireChapter2Internal(); }
+
     public static void RunFromTrigger() { RunInternal(false); }
+    public static void WireChapter2FromTrigger() { WireChapter2Internal(); }
 
     // ------------------------------------------------------------------ 主流程
     static void RunInternal(bool diagOnly)
@@ -88,7 +93,8 @@ public static class PhonePropSetup
                 var m = AssetDatabase.LoadAssetAtPath<Material>(path);
                 if (!diagOnly)
                 {
-                    if (m != null) AssetDatabase.DeleteAsset(path);   // 幂等重建，引用由预置体重建兜底
+                    // CreateAsset 覆盖同路径 = 原地替换内容、GUID 不变；删了重建会换 GUID，
+                    // 已保存的预制体/场景引用会断链（AGENTS.md 踩过的坑），别改回 DeleteAsset。
                     m = new Material(shader);
                     m.color = color;
                     if (m.HasProperty("_Metallic")) m.SetFloat("_Metallic", 0f);
@@ -107,6 +113,7 @@ public static class PhonePropSetup
             if (!diagOnly)
             {
                 var go = new GameObject("手机_淡蓝");
+                if (outline >= 0) go.layer = outline;          // 根也在 Outline：与其他道具「整棵子树」约定一致
                 int tri = 0;
                 var bounds = new Bounds();
                 bool first = true;
@@ -127,7 +134,8 @@ public static class PhonePropSetup
                     }
                 }
                 log.Add($"几何：{bounds.size.x:0.000} × {bounds.size.y:0.000} × {bounds.size.z:0.000} m，{tri} 三角，{PARTS.Length} 件");
-                if (root != null) AssetDatabase.DeleteAsset(PREFAB);
+                // SaveAsPrefabAsset 覆盖同路径 = 原地替换、GUID 不变；用户场景里可能已摆放实例，
+                // DeleteAsset 重建会把实例断成 missing prefab —— 别改回 DeleteAsset。
                 root = PrefabUtility.SaveAsPrefabAsset(go, PREFAB);
                 Object.DestroyImmediate(go);
                 log.Add("预置体：" + PREFAB + (root != null ? " ✓" : " ✗ 保存失败"));
@@ -135,7 +143,7 @@ public static class PhonePropSetup
             log.Add($"Outline 层：{(outline >= 0 ? LayerMask.LayerToName(outline) + " (" + outline + ")" : "缺失（描边不生效）")}");
 
             // ④ 预览
-            if (!diagOnly && root != null) RenderPreview(root, outline, log);
+            if (!diagOnly && root != null) RenderPreview(root, log);
             else if (diagOnly) log.Add("（诊断模式不渲染预览）");
 
             // 自检
@@ -163,6 +171,126 @@ public static class PhonePropSetup
         WriteReport(log);
     }
 
+    // ============================================== ③ 手机 × 第2章「拿起手机」交互接线
+    // 用户需求（2026-09-28）：交互以场景里的 手机_淡蓝 为中心、半径收小要靠近才能按 F；
+    // 按下后手机整棵隐藏（拿起的反馈），第2章第二次拿手机步骤到达时再回到桌上。
+    // 判定中心/隐藏/重现都在 StoryInteractable.propObjectName（按名解析，手挪手机自动跟随）；
+    // 本菜单只负责把场景接线写盘：半径 1.2m + 联动名 + 存场景。幂等。
+    const string PROP_NAME = "手机_淡蓝";
+    const string CH2_LOC = "Loc_宿舍";
+    const string CH2_ANCHOR_PATH = "多章锚点/第2章_手机";
+    const float CH2_RADIUS = 1.2f;
+    const string GAME_SCENE = "Assets/Scenes/Game.unity";
+    const string WIRE_REPORT = "Assets/assets/_报告/_手机交互.txt";
+
+    static void WireChapter2Internal()
+    {
+        var log = new List<string>();
+        log.Add("手机 × 第2章交互接线  " + System.DateTime.Now.ToString("yyyy-MM-dd HH:mm"));
+        log.Add("");
+        try
+        {
+            if (EditorApplication.isPlaying) { log.Add("★ 正在 Play 模式，退出后再跑。"); WriteWireReport(log); return; }
+
+            // 场景：优先活动场景（用户手摆的手机多半还没存盘，先在打开的场景里找），其次已打开的 Game，最后才从盘上开
+            var scene = EditorSceneManager.GetActiveScene();
+            if (scene.path != GAME_SCENE)
+            {
+                // 2022.3 的 EditorSceneManager 没有 GetOpenScenes——用 SceneManager.sceneCount/GetSceneAt 枚举已打开场景
+                var opened = Enumerable.Range(0, SceneManager.sceneCount).Select(SceneManager.GetSceneAt).FirstOrDefault(s => s.path == GAME_SCENE);
+                scene = opened.IsValid() ? opened : EditorSceneManager.OpenScene(GAME_SCENE, OpenSceneMode.Single);
+            }
+            log.Add("场景：" + scene.path + (scene.isDirty ? "（带未保存手改——会一起存盘）" : ""));
+
+            var loc = FindInScene(scene, CH2_LOC);
+            var anchor = loc != null ? loc.transform.Find(CH2_ANCHOR_PATH) : null;
+            if (anchor == null)
+            {
+                log.Add("★ " + CH2_LOC + "/" + CH2_ANCHOR_PATH + " 不存在——先跑 Tools/干预项目/多章剧情/一键搭建第2-5章 再回来。");
+                WriteWireReport(log); return;
+            }
+
+            // 手机实例：用户手摆的优先（整棵场景树按名找，含未激活）；没有才用预置体兜底摆在锚点处
+            var phone = FindInScene(scene, PROP_NAME);
+            if (phone == null)
+            {
+                var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PREFAB);
+                if (prefab == null) { log.Add("★ 场景里没有「" + PROP_NAME + "」，预置体也缺失：" + PREFAB + "——先跑菜单①。"); WriteWireReport(log); return; }
+                phone = (GameObject)PrefabUtility.InstantiatePrefab(prefab, scene);
+                phone.transform.SetParent(loc.transform, true);
+                phone.transform.position = anchor.position;
+                log.Add("★ 场景里没有「" + PROP_NAME + "」，已用预置体兜底摆在锚点处——请在 Scene 里手挪到桌上（工具不猜桌位）。");
+            }
+            else
+                log.Add("手机实例：" + GetPath(phone.transform));
+            if (!phone.activeSelf) { phone.SetActive(true); log.Add("  手机原本是隐藏的，已重新激活（首次交互前必须在桌上）。"); }
+
+            var si = anchor.GetComponent<StoryInteractable>();
+            if (si == null)
+            {
+                si = anchor.gameObject.AddComponent<StoryInteractable>();
+                log.Add("  交互点缺 StoryInteractable，已补挂");
+            }
+            si.mode = StoryInteractable.Mode.InteractF;
+            si.chapterTag = 2;
+            si.oneShot = false;                                   // 第2章两次拿手机复用同一个点
+            if (string.IsNullOrEmpty(si.promptText)) si.promptText = "拿起手机";
+            si.radius = CH2_RADIUS;                               // 要靠近才能交互
+            si.propObjectName = PROP_NAME;                        // 判定中心=手机位置；F 后隐藏；下次交互前重现
+            EditorUtility.SetDirty(si);
+
+            log.Add("");
+            log.Add("接线：" + CH2_LOC + "/" + CH2_ANCHOR_PATH + "  半径=" + CH2_RADIUS.ToString("0.0") + "m  prompt=" + si.promptText + "  联动道具=" + PROP_NAME);
+            log.Add("行为：走近手机 ≤1.2m 出提示 → 按 F 拿起（拿手机动画 + 手机隐藏）→ 第2章第二次拿手机步骤到达时手机回到桌上。");
+            log.Add("提示文案/位置若被手调过：文案不动，半径与联动名按设计值覆盖（重跑本菜单即可恢复）。");
+
+            if (EditorSceneManager.SaveOpenScenes()) log.Add("场景已保存 ✓");
+            else log.Add("★ 场景保存失败（手动 Ctrl+S 兜底）");
+        }
+        catch (System.Exception e) { log.Add("★ 异常：" + e); }
+        WriteWireReport(log);
+    }
+
+    static GameObject FindInScene(Scene scene, string name)
+    {
+        foreach (var root in scene.GetRootGameObjects())
+        {
+            var hit = FindRecursive(root.transform, name);
+            if (hit != null) return hit.gameObject;
+        }
+        return null;
+    }
+
+    static Transform FindRecursive(Transform t, string name)
+    {
+        if (t.name == name) return t;
+        for (int i = 0; i < t.childCount; i++)
+        {
+            var hit = FindRecursive(t.GetChild(i), name);
+            if (hit != null) return hit;
+        }
+        return null;
+    }
+
+    static string GetPath(Transform t)
+    {
+        var sb = new StringBuilder(t.name);
+        while (t.parent != null) { t = t.parent; sb.Insert(0, t.name + "/"); }
+        return sb.ToString();
+    }
+
+    static void WriteWireReport(List<string> log)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("手机 × 第2章交互接线");
+        sb.AppendLine(new string('=', 46));
+        sb.AppendLine();
+        foreach (var l in log) sb.AppendLine(l);
+        Directory.CreateDirectory("Assets/assets/_报告".Replace('/', Path.DirectorySeparatorChar));
+        File.WriteAllText(WIRE_REPORT.Replace('/', Path.DirectorySeparatorChar), sb.ToString(), new UTF8Encoding(false));
+        Debug.Log("[PhonePropSetup] 接线报告 → " + WIRE_REPORT);
+    }
+
     // --------------------------------------------------------------- 工具
     // OBJ 的 Mesh 是子资产，主资产是 GameObject —— 必须按类型枚举子资产取
     static Mesh LoadMesh(string file)
@@ -185,7 +313,11 @@ public static class PhonePropSetup
     }
 
     // ------------------------------------------------------------------ 预览渲染
-    static void RenderPreview(GameObject prefab, int outline, List<string> log)
+    // ⚠ 编辑器的 cam.Render() 剔除是「全局按层」的，不管相机在哪个场景 —— 首版用 Outline+Default 层
+    //   直接把打开着的 Game 场景（角色脚、地板）拍进了预览图。学 CharPreview：用隔离层 31 只画道具。
+    const int PREVIEW_LAYER = 31;
+
+    static void RenderPreview(GameObject prefab, List<string> log)
     {
         Directory.CreateDirectory(PREVIEW_DIR.Replace('/', Path.DirectorySeparatorChar));
         var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Additive);
@@ -196,22 +328,25 @@ public static class PhonePropSetup
             cam.clearFlags = CameraClearFlags.SolidColor;
             cam.backgroundColor = new Color(0.87f, 0.90f, 0.93f);
             cam.fieldOfView = 30f;
-            int mask = -1;                                  // 全层可见（背景色兜底），道具本体在 Outline 层
-            if (outline >= 0) mask = (1 << 0) | (1 << outline);
-            cam.cullingMask = mask;
+            cam.cullingMask = 1 << PREVIEW_LAYER;
 
             var keyGO = new GameObject("prev_key"); SceneManager.MoveGameObjectToScene(keyGO, scene);
             var key = keyGO.AddComponent<Light>(); key.type = LightType.Directional; key.intensity = 1.1f;
             keyGO.transform.rotation = Quaternion.Euler(40, 210, 0);
-            key.cullingMask = -1;
+            key.cullingMask = 1 << PREVIEW_LAYER;
             var fillGO = new GameObject("prev_fill"); SceneManager.MoveGameObjectToScene(fillGO, scene);
             var fill = fillGO.AddComponent<Light>(); fill.type = LightType.Directional; fill.intensity = 0.4f;
             fillGO.transform.rotation = Quaternion.Euler(20, 30, 0);
-            fill.cullingMask = -1;
+            fill.cullingMask = 1 << PREVIEW_LAYER;
 
             var inst = (GameObject)PrefabUtility.InstantiatePrefab(prefab, scene);
+            foreach (var t in inst.GetComponentsInChildren<Transform>(true)) t.gameObject.layer = PREVIEW_LAYER;
             var bounds = new Bounds(inst.transform.position, Vector3.zero);
-            foreach (var r in inst.GetComponentsInChildren<MeshRenderer>()) bounds.Encapsulate(r.bounds);
+            bool has = false;
+            foreach (var r in inst.GetComponentsInChildren<MeshRenderer>())
+            {
+                if (!has) { bounds = r.bounds; has = true; } else bounds.Encapsulate(r.bounds);
+            }
 
             var rt = new RenderTexture(800, 800, 24);
             cam.targetTexture = rt;
@@ -280,6 +415,34 @@ public static class PhonePropSetupTrigger
                 Directory.CreateDirectory("../额外文件");
                 File.WriteAllText(ErrFile, e.ToString());
                 Debug.LogError("[PhonePropSetup] 触发失败: " + e);
+            }
+        };
+    }
+}
+
+// 工程里存在 Assets/_phonech2_trigger.txt 时，编辑器下次刷新/重编译后自动跑一次「手机×第2章交互接线」。
+[InitializeOnLoad]
+public static class PhoneCh2WireTrigger
+{
+    const string Trigger = "Assets/_phonech2_trigger.txt";
+    const string ErrFile = "../额外文件/错误_手机交互接线.txt";
+
+    static PhoneCh2WireTrigger()
+    {
+        if (!File.Exists(Trigger)) return;
+        EditorApplication.delayCall += () =>
+        {
+            try
+            {
+                if (File.Exists(Trigger)) File.Delete(Trigger);
+                if (File.Exists(Trigger + ".meta")) File.Delete(Trigger + ".meta");
+                PhonePropSetup.WireChapter2FromTrigger();
+            }
+            catch (System.Exception e)
+            {
+                Directory.CreateDirectory("../额外文件");
+                File.WriteAllText(ErrFile, e.ToString());
+                Debug.LogError("[PhonePropSetup] 手机交互接线触发失败: " + e);
             }
         };
     }
