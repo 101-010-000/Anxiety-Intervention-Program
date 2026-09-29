@@ -1,0 +1,17 @@
+第5章「任意凳子坐下」触发判定探针  2026-09-29 18:25
+
+宿舍里的凳子（用来验证“本地点之外不算”）：6 把，例：凳子2 (39) @ (78.9, 1.0, 4.5)
+
+【第5章_图书馆躲避】所在地点 Loc_图书馆，里面 34 把凳子；radius=0.9 anySeat=True
+  ① 站到第1把凳子（凳子2 (43) (194.3, 1.0, 1.7)）→ PlayerInRange=True ✓
+  ② 站到另一把凳子（凳子2 (61) (206.2, 1.0, -3.6)）→ PlayerInRange=True ✓
+  ③ 站到凳旁 1.6m → PlayerInRange=False ✓
+  ④ 站到宿舍的凳子上（本地点之外）→ PlayerInRange=False ✓
+
+【第5章_食堂座位】所在地点 Loc_食堂，里面 45 把凳子；radius=0.9 anySeat=True
+  ① 站到第1把凳子（凳子2 (118.0, 1.0, 7.9)）→ PlayerInRange=True ✓
+  ② 站到另一把凳子（凳子2 (16) (113.3, 1.0, 2.9)）→ PlayerInRange=True ✓
+  ③ 站到凳旁 1.6m → PlayerInRange=False ✓
+  ④ 站到宿舍的凳子上（本地点之外）→ PlayerInRange=False ✓
+
+（探针结束）

@@ -145,8 +145,8 @@ public static class Chapter4DoorTrip
 
         var ch5Lib = GameObject.Find("第5章_图书馆躲避");
         if (ch5Lib == null) _log.AppendLine("  ★ 找不到 第5章_图书馆躲避（先跑『一键搭建第2-5章』）");
-        else EnsureInteract(ch5Lib.transform, 5, 3.2f, "", "坐下，安静一会儿",
-                            "第5章_图书馆躲避（门口进来后往里走）");
+        else EnsureInteract(ch5Lib.transform, 5, 0.9f, "", "坐下，安静一会儿",
+                            "第5章_图书馆躲避（图书馆里任意一把凳子都行）", anySeat: true);
 
         // 食堂：把触发点摆在离「食堂门口落点」最近的那把椅子上（门口→座位，玩家自己走）
         var canteenSeat = GameObject.Find("第5章_食堂座位");
@@ -177,8 +177,8 @@ public static class Chapter4DoorTrip
                 }
                 else _log.AppendLine("  ★ 食堂门口 8m 内没找到椅子 —— 座位点保持原样");
             }
-            EnsureInteract(canteenSeat.transform, 5, 3.0f, "", "坐下，和舍友们一起吃饭",
-                           "第5章_食堂座位（从食堂门口走进去坐下）");
+            EnsureInteract(canteenSeat.transform, 5, 0.9f, "", "坐下，和舍友们一起吃饭",
+                           "第5章_食堂座位（食堂里任意一把凳子都行）", anySeat: true);
             EditorUtility.SetDirty(canteenSeat);
         }
         _log.AppendLine();
@@ -297,7 +297,8 @@ public static class Chapter4DoorTrip
     }
 
     /// 给锚点补一个 F 交互点（StoryInteractable）—— 已存在就只刷新参数（幂等，可反复跑）
-    static void EnsureInteract(Transform t, int chapter, float radius, string displayName, string promptText, string title)
+    static void EnsureInteract(Transform t, int chapter, float radius, string displayName, string promptText, string title,
+                               bool anySeat = false)
     {
         if (t == null) { _log.AppendLine("  ★ " + title + "：找不到锚点"); return; }
         var si = t.GetComponent<StoryInteractable>();
@@ -309,9 +310,10 @@ public static class Chapter4DoorTrip
         si.oneShot = true;
         si.displayName = displayName;
         si.promptText = promptText;
+        si.anySeat = anySeat;
         EditorUtility.SetDirty(si);
         _log.AppendLine("  " + (isNew ? "+ 新建" : "= 刷新") + " F 交互点 " + title +
-                        "  ch=" + chapter + " radius=" + radius +
+                        "  ch=" + chapter + " radius=" + radius + (anySeat ? "（任意凳子：碰到凳子才算）" : "") +
                         " prompt=" + (string.IsNullOrEmpty(promptText) ? ("与" + displayName + "交谈") : promptText));
     }
 
