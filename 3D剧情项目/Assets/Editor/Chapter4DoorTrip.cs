@@ -1,19 +1,17 @@
-// 第4章「走到门口 → 按 F → 去图书馆」的落地工具（用户 2026-09-29 反馈）。
+// 第4/5章「走到门口 → 按 F → 去下个地点」，到了之后让玩家自己找任务触发点（用户 2026-09-29 反馈）。
 //
-// 用法：菜单 Tools/干预项目/第4章门口引导　或丢 Assets/_ch4door_trigger.txt
+// 用法：菜单 Tools/干预项目/第4/5章门口引导　或丢 Assets/_ch4door_trigger.txt
 // 报告：assets/_报告/_第4章门口引导.txt
 //
-// 三件事（全部幂等，可反复跑）：
-//   ① 保证门口传送系统真的能用 —— 场景里 DoorTravelSystem 的 面板/列表/关闭按钮 是空的
-//      （历史遗留：UI_门口交互 画布某一轮整理时被删掉，之后没人再跑过搭建工具），
-//      于是「按 F 开门」只弹提示、面板根本不会出现。本工具检测到缺件就跑 GameDoorBuilder 重建。
-//   ② 第4章_图书馆座位 → 挪到【图书馆里林溪旁边那把椅子】上、朝向林溪。
-//      剧本 55 步的门口传送落点就是它；原先它在 (207.5,-6)，离林溪 6.4m 还背对她。
-//   ③ 宿舍书桌旁的剧情点归位：第2章_手机 / 第4章_班群通知 / 第4章_坐下看资料 / 第5章_回座位
-//      → 全摆到宿舍长桌（书桌）前面。剧本原文就是「徐夏走到书桌前」「把手机从桌角拿过来」，
-//      此前它们都在房间正中的工具默认位（离桌子 6 米）。
+// 做四件事（全部幂等，可反复跑）：
+//   ① 保证门口传送系统真的能用、并且【交互 UI 统一】—— 场景里 DoorTravelSystem 的 面板/列表/关闭按钮
+//      可能是空的（历史遗留：UI_门口交互 画布某一轮整理时被删掉），或者提示还指着自建的白底节点；
+//      本工具检测到不对就跑 GameDoorBuilder 重建（重建后的提示直接复用剧情那套 交互提示）。
+//   ② 第4章_图书馆座位 → 挪到【图书馆里林溪旁边那把椅子】上、朝向林溪（玩家自己走过来按 F 的触发点）。
+//   ③ 第5章 两个新触发点：图书馆「躲避」的位置、食堂座位（门口传送落地后要玩家自己走过去按 F）。
+//   ④ 宿舍书桌旁的剧情点归位：第2章_手机 / 第4章_班群通知 / 第4章_坐下看资料 / 第5章_回座位。
 //
-// ⚠ 只动这几个锚点 + 缺件时才重建门口 UI；对话/选择题/手机/WalkHint/黑幕等剧情 UI 一概不碰。
+// ⚠ 只动这几个锚点/触发盒 + 缺件时才重建门口 UI；对话/选择题/手机/WalkHint/黑幕等剧情 UI 一概不碰。
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -30,12 +28,12 @@ public static class Chapter4DoorTrip
 
     static readonly StringBuilder _log = new StringBuilder();
 
-    [MenuItem(MENU + "第4章门口引导（走到门口按F去图书馆）", false, 47)]
+    [MenuItem(MENU + "第4/5章门口引导（走到门口按F去下个地点）", false, 47)]
     public static void Run()
     {
         _log.Clear();
         _log.AppendLine("第4章门口引导  " + System.DateTime.Now.ToString("yyyy-MM-dd HH:mm"));
-        _log.AppendLine("（剧情步骤 door：走到门口按 F → 面板选图书馆 → 落到图书馆座位 → 剧情继续）");
+        _log.AppendLine("（剧情步骤 door：走到门口按 F → 面板选地点 → 落在【那个地点的门口】→ 玩家自己走进去找触发点）");
         _log.AppendLine();
 
         try { Core(); }
@@ -66,21 +64,25 @@ public static class Chapter4DoorTrip
 
         var scene = EditorSceneManager.OpenScene(GAME_SCENE, OpenSceneMode.Single);
 
-        // 1) 门口传送系统缺件 → 重建（GameDoorBuilder 的原职，见它自己的报告 _门口传送.txt）
+        // 1) 门口传送系统缺件 / 提示不是统一的那套 → 重建（GameDoorBuilder 的原职，见它自己的报告 _门口传送.txt）
         var dts = Object.FindObjectOfType<DoorTravelSystem>(true);
-        bool missing = dts == null || dts.panel == null || dts.listRoot == null || dts.promptRoot == null || dts.closeButton == null;
-        _log.AppendLine("【① 门口传送系统】");
+        bool uiMissing = dts == null || dts.panel == null || dts.listRoot == null || dts.promptRoot == null || dts.closeButton == null;
+        bool promptNotUnified = dts != null && dts.promptRoot != null && dts.promptRoot.name != "交互提示";
+        bool missing = uiMissing || promptNotUnified;
+        _log.AppendLine("【① 门口传送系统 / 交互 UI 统一】");
         if (missing)
         {
-            _log.AppendLine("  ★ 缺件（panel=" + (dts != null && dts.panel != null ? "有" : "空") +
+            _log.AppendLine("  ★ 需要重建：" + (uiMissing ? "缺件" : "提示没统一") +
+                            "（panel=" + (dts != null && dts.panel != null ? "有" : "空") +
                            " / listRoot=" + (dts != null && dts.listRoot != null ? "有" : "空") +
-                           " / closeButton=" + (dts != null && dts.closeButton != null ? "有" : "空") + "）");
-            _log.AppendLine("  → 调用 GameDoorBuilder 重建「门口传送 + UI_门口交互」（会重扫门触发盒/重建落点，明细见 _门口传送.txt）");
+                           " / closeButton=" + (dts != null && dts.closeButton != null ? "有" : "空") +
+                           " / promptRoot=" + (dts != null && dts.promptRoot != null ? dts.promptRoot.name : "空") + "）");
+            _log.AppendLine("  → 调用 GameDoorBuilder 重建「门口传送 + UI_门口交互」（提示复用 交互提示，明细见 _门口传送.txt）");
             GameDoorBuilder.Run();
             dts = Object.FindObjectOfType<DoorTravelSystem>(true);
             scene = SceneManager.GetActiveScene();
         }
-        else _log.AppendLine("  = 面板/列表/关闭按钮俱全，不动");
+        else _log.AppendLine("  = 面板/列表/关闭按钮俱全，提示也是共用的 交互提示，不动");
 
         // 1b) 伪门清理：剧情触发盒（StoryInteractable）不是门 —— 清掉误挂的 DoorInteractable
         //     （GameDoorBuilder 已加同样的规则，这里负责把【已经挂上去的】擦掉）
@@ -106,8 +108,8 @@ public static class Chapter4DoorTrip
                        "（教室/走廊/宿舍/食堂/办公室/图书馆 共 6 个地点都能进）");
         _log.AppendLine();
 
-        // 2) 第4章_图书馆座位 → 林溪旁边那把椅子
-        _log.AppendLine("【② 第4章_图书馆座位（门口传送落点）】");
+        // 2) 第4章_图书馆座位 → 林溪旁边那把椅子（玩家从门口走进来后要自己找到的 F 触发点）
+        _log.AppendLine("【② 第4章_图书馆座位（玩家自己走过去的触发点）】");
         var seat = GameObject.Find("第4章_图书馆座位");
         if (seat == null) _log.AppendLine("  ★ 找不到 第4章_图书馆座位（先跑『多章剧情/一键搭建第2-5章』）");
         else
@@ -132,6 +134,52 @@ public static class Chapter4DoorTrip
                     EditorUtility.SetDirty(seat);
                 }
             }
+        }
+        _log.AppendLine();
+
+        // 2b) 第4/5 章「到达后自己找」的 F 触发点：图书馆（第4章林溪旁 / 第5章躲避位）+ 食堂座位
+        _log.AppendLine();
+        _log.AppendLine("【②b 第4/5 章的任务触发点】");
+        EnsureInteract(seat != null ? seat.transform : null, 4, 3.0f, "林溪", "",
+                       "第4章_图书馆座位（与林溪交谈）");
+
+        var ch5Lib = GameObject.Find("第5章_图书馆躲避");
+        if (ch5Lib == null) _log.AppendLine("  ★ 找不到 第5章_图书馆躲避（先跑『一键搭建第2-5章』）");
+        else EnsureInteract(ch5Lib.transform, 5, 3.2f, "", "坐下，安静一会儿",
+                            "第5章_图书馆躲避（门口进来后往里走）");
+
+        // 食堂：把触发点摆在离「食堂门口落点」最近的那把椅子上（门口→座位，玩家自己走）
+        var canteenSeat = GameObject.Find("第5章_食堂座位");
+        if (canteenSeat == null)
+        {
+            var holder = FindChildByName("Loc_食堂", "多章锚点");
+            if (holder == null) _log.AppendLine("  ★ 找不到 Loc_食堂/多章锚点 —— 跳过第5章食堂座位");
+            else
+            {
+                canteenSeat = new GameObject("第5章_食堂座位");
+                canteenSeat.transform.SetParent(holder, false);
+                _log.AppendLine("  + 新建 Loc_食堂/多章锚点/第5章_食堂座位");
+            }
+        }
+        if (canteenSeat != null)
+        {
+            var arrive = GameObject.Find("Arrive_食堂");
+            if (arrive != null)
+            {
+                var chair = NearestChair(arrive.transform.position, 2.0f, 8f);
+                if (chair != null)
+                {
+                    Vector3 p = chair.position; p.y = 0f;
+                    _log.AppendLine("  食堂门口落点 " + V3(arrive.transform.position) + " → 最近的椅子 " + PathOf(chair) +
+                                    " @ " + V3(p) + "（" + Vector3.Distance(p, arrive.transform.position).ToString("F1") + "m）");
+                    canteenSeat.transform.position = p;
+                    canteenSeat.transform.rotation = Quaternion.Euler(0f, chair.eulerAngles.y, 0f);
+                }
+                else _log.AppendLine("  ★ 食堂门口 8m 内没找到椅子 —— 座位点保持原样");
+            }
+            EnsureInteract(canteenSeat.transform, 5, 3.0f, "", "坐下，和舍友们一起吃饭",
+                           "第5章_食堂座位（从食堂门口走进去坐下）");
+            EditorUtility.SetDirty(canteenSeat);
         }
         _log.AppendLine();
 
@@ -221,7 +269,12 @@ public static class Chapter4DoorTrip
 
         _log.AppendLine();
         _log.AppendLine("【怎么验】");
-        _log.AppendLine("  · 进 Play 选第4章 → 走到「宿舍门」（西南角）→ 底部「按 F 开门」→ 面板里只有「图书馆 / 自习区」能点 → 落到图书馆林溪旁边");        _log.AppendLine("  · 自动自检：Tools/干预项目/第4章剧情运行自检 → assets/_报告/_第4章剧情运行自检.txt");
+        _log.AppendLine("  · 第4章：宿舍书桌旁读旁白 → 走到宿舍门口（西南角）按 F → 面板里只有「图书馆」能点");
+        _log.AppendLine("    → 落在【图书馆门口】→ 自己走进图书馆找到林溪旁边那把椅子，按 F（与林溪交谈）→ 剧情继续");
+        _log.AppendLine("  · 第5章：宿舍 → 门口按 F 去图书馆 → 走到里侧座位按 F → 选完题 → 走到门口按 F 回宿舍");
+        _log.AppendLine("    → 走到书桌前按 F → 聊完 → 门口按 F 去食堂 → 走到最近的桌子坐下按 F → 最后一道题");
+        _log.AppendLine("  · 门口提示与「按 F 交谈」共用同一个节点（UI交互/交互提示），不会再出现两块提示叠在一起");
+        _log.AppendLine("  · 自动自检：Tools/干预项目/第4章、第5章剧情运行自检 → assets/_报告/_第N章剧情运行自检.txt");
         _log.AppendLine("  · 门口传送本身的自检：Tools/干预项目/门口传送运行自检 → assets/_报告/_门口传送运行自检.txt");
         Flush();
         Debug.Log("[Chapter4DoorTrip] 完成，报告：" + REPORT);
@@ -241,6 +294,25 @@ public static class Chapter4DoorTrip
         var s = t.name;
         for (var p = t.parent; p != null; p = p.parent) s = p.name + "/" + s;
         return s;
+    }
+
+    /// 给锚点补一个 F 交互点（StoryInteractable）—— 已存在就只刷新参数（幂等，可反复跑）
+    static void EnsureInteract(Transform t, int chapter, float radius, string displayName, string promptText, string title)
+    {
+        if (t == null) { _log.AppendLine("  ★ " + title + "：找不到锚点"); return; }
+        var si = t.GetComponent<StoryInteractable>();
+        bool isNew = si == null;
+        if (isNew) si = t.gameObject.AddComponent<StoryInteractable>();
+        si.mode = StoryInteractable.Mode.InteractF;
+        si.chapterTag = chapter;
+        si.radius = radius;
+        si.oneShot = true;
+        si.displayName = displayName;
+        si.promptText = promptText;
+        EditorUtility.SetDirty(si);
+        _log.AppendLine("  " + (isNew ? "+ 新建" : "= 刷新") + " F 交互点 " + title +
+                        "  ch=" + chapter + " radius=" + radius +
+                        " prompt=" + (string.IsNullOrEmpty(promptText) ? ("与" + displayName + "交谈") : promptText));
     }
 
     /// Loc 下按名找子物体（先看指定容器，再递归）

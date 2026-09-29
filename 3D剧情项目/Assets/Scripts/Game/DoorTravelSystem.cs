@@ -71,6 +71,14 @@ public class DoorTravelSystem : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        // ★ 目标列表/按钮列表必须在 Awake 里建，不能放 Start：
+        //   剧情 runner 的 Begin()（也在 Start 里）会把本系统 enabled=false，谁先跑不确定 ——
+        //   一旦被先关掉，Start() 就永远不跑 → Destinations 空着 → 开门面板一个按钮都没有
+        //   （2026-09-29 自检抳到过：门触发盒 8 个 / 去重后目标地点 0 个，时序时好时坏）。
+        if (player == null) player = FirstPersonController.Instance;
+        if (player == null) player = FindObjectOfType<FirstPersonController>();
+        RebuildDestinations();
+        BuildButtonLists();
     }
 
     void Start()
@@ -78,8 +86,7 @@ public class DoorTravelSystem : MonoBehaviour
         if (player == null) player = FirstPersonController.Instance;
         if (player == null) player = FindObjectOfType<FirstPersonController>();
 
-        RebuildDestinations();
-        BuildButtonLists();
+        if (Destinations.Count == 0) RebuildDestinations();      // Awake 之后又被清掉/doors 运行时才填的兜底
         if (panel != null) panel.Hide(true);
         if (promptRoot != null) promptRoot.SetActive(false);
 
@@ -248,6 +255,7 @@ public class DoorTravelSystem : MonoBehaviour
     public void OpenPanel()
     {
         if (panel == null) return;
+        if (Destinations.Count == 0) RebuildDestinations();     // 兜底（Start 没跑过也不至于面板空白）
         panel.Show();
 
         // 锁玩家 + 放开鼠标。
