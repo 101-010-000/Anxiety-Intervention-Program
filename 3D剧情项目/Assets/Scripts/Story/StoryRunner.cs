@@ -454,7 +454,7 @@ public class StoryRunner : MonoBehaviour
         if (blackFade != null)
         {
             float t = 0f;
-            while (t < 1f) { t += Time.unscaledDeltaTime / 0.4f; blackFade.canvasRenderer.SetAlpha(Mathf.Clamp01(t)); yield return null; }
+            while (t < 1f) { t += Mathf.Min(Time.unscaledDeltaTime, 1f / 30f) / 0.4f; blackFade.canvasRenderer.SetAlpha(Mathf.Clamp01(t)); yield return null; }
             blackFade.canvasRenderer.SetAlpha(1f);
         }
 
@@ -466,6 +466,7 @@ public class StoryRunner : MonoBehaviour
             _player.transform.position = target.position;
             _player.transform.rotation = Quaternion.Euler(0f, target.eulerAngles.y, 0f);
             if (cc != null) cc.enabled = true;
+            _player.ResetCameraNow();        // 第三人称：镜头立刻跟到新位置（此时屏幕是黑的）
         }
         else if (!string.IsNullOrEmpty(step.to))
             Debug.LogWarning("[StoryRunner] fade 找不到锚点「" + step.to + "」——检查 fadeAnchors 接线 / 锚点命名");
@@ -475,7 +476,7 @@ public class StoryRunner : MonoBehaviour
         if (blackFade != null)
         {
             float t = 0f;
-            while (t < 1f) { t += Time.unscaledDeltaTime / 0.4f; blackFade.canvasRenderer.SetAlpha(1f - Mathf.Clamp01(t)); yield return null; }
+            while (t < 1f) { t += Mathf.Min(Time.unscaledDeltaTime, 1f / 30f) / 0.4f; blackFade.canvasRenderer.SetAlpha(1f - Mathf.Clamp01(t)); yield return null; }
             blackFade.canvasRenderer.SetAlpha(0f);
         }
         _fadeRt = null;
