@@ -56,7 +56,7 @@ public class StoryRunner : MonoBehaviour
     public enum State
     {
         Idle, Card, Typing, Gap,
-        NarFree, WaitInteract, WaitWalk, Choice, Fade, Enter, EndCard, Done
+        NarFree, WaitInteract, WaitWalk, WaitDoor, Choice, Fade, Enter, EndCard, Done
     }
 
     public State CurrState { get; private set; }
@@ -287,6 +287,7 @@ public class StoryRunner : MonoBehaviour
             case "end": DoEnd(); break;
             case "choice": DoChoice(step); break;
             case "fade": DoFade(step); break;
+            case "door": DoDoor(step); break;
             case "enter": DoEnter(step); break;
             case "leave": DoLeave(step); break;
 
@@ -450,6 +451,8 @@ public class StoryRunner : MonoBehaviour
     {
         CurrState = State.Done;
         if (_player != null) { _player.allowEscToUnlock = _savedEsc; _player.SetLocked(false); _player.moveLocked = false; }
+        // 剧情跑完 → 把门口传送还给玩家（Begin 里整体关掉了，不恢复的话出了剧情也开不了门）
+        if (_doors != null) { _doors.ExitStoryMode(); _doors.enabled = true; }
     }
 
     // ------------------------------------------------------------------ 黑屏转场（第2-5章"黑屏/刷新"跳转）
@@ -496,6 +499,53 @@ public class StoryRunner : MonoBehaviour
             blackFade.canvasRenderer.SetAlpha(0f);
         }
         _fadeRt = null;
+        Next();
+    }
+
+    // ------------------------------------------------------------------ 门口传送引导（第4章「走到门口，按 F 去图书馆」）
+    // json：{ "t":"door", "to":"Loc_图书馆", "anchor":"第4章_图书馆座位", "x":"走到门口，按 F 前往图书馆" }
+    // 与 fade 的区别：fade 是剧情自己把玩家瞬移过去（用户 2026-09-29 反馈「场景不应该自己直接跳转」）；
+    // door 把玩家放回自己手里 —— 亮起目标卡 → 玩家走到任意一个门 → 按 F → 面板里只有目标地点可点
+    // → 选中即传送（落点=anchor 剧情锚点）→ 回调本类 → 关掉门系统 → 继续剧情。
+    // ★ 门系统在 Begin 里是整体关掉的（防跟剧情交互打架），只有 door 步骤临时打开；
+    //   找不到门系统 / 没给 to 时退回旧行为（直接传送到 anchor），不让流程卡死。
+    void DoDoor(StoryStep step)
+    {
+        var doors = DoorTravelSystem.Instance;
+        var anchor = FindFadeAnchor(step.anchor);
+
+        if (doors == null || string.IsNullOrEmpty(step.to) || !doors.HasDestination(step.to))
+        {
+            Debug.LogWarning("[StoryRunner] door 步骤缺门系统 / 没给 to / 门口列表里没有「" + step.to +
+                             "」—— 退回直接传送" +
+                             (anchor != null ? "（" + anchor.name + "）" : "（且没接 anchor！）"));
+            if (anchor != null && _player != null)
+            {
+                var cc = _player.GetComponent<CharacterController>();
+                if (cc != null) cc.enabled = false;
+                _player.transform.position = anchor.position;
+                _player.transform.rotation = Quaternion.Euler(0f, anchor.eulerAngles.y, 0f);
+                if (cc != null) cc.enabled = true;
+                _player.ResetCameraNow();
+            }
+            Next();
+            return;
+        }
+
+        _doors = doors;
+        doors.EnterStoryMode(step.to, anchor, OnDoorArrived);
+        Debug.Log("[StoryRunner] 第" + chapterIndex + "章：门口传送导流 → " + step.to +
+                  "（落点 " + (anchor != null ? anchor.name : "门自己的落点") + "）");
+        ShowWalkHint(step.x);
+        SetPerms(State.WaitDoor);
+    }
+
+    /// 门口传送系统到位回调（DoorTravelSystem.TravelTo → 此处）
+    void OnDoorArrived(string locationId)
+    {
+        if (CurrState != State.WaitDoor) return;
+        if (_doors != null) { _doors.ExitStoryMode(); _doors.enabled = false; }   // 剧情期间门系统整体关掉（照 Begin 的惯例）
+        HideWalkHint();
         Next();
     }
 
@@ -840,6 +890,7 @@ public class StoryRunner : MonoBehaviour
             case State.NarFree:                          // 开场旁白：能走能转
             case State.WaitInteract:
             case State.WaitWalk:
+            case State.WaitDoor:                         // 走去门口：能走能转（自己走到门前按 F）
                 _player.SetLocked(false);
                 _player.moveLocked = false;
                 _player.SetCursorLocked(true);
@@ -954,6 +1005,10 @@ public class StoryRunner : MonoBehaviour
             case State.NarFree: Next(); break;
             case State.WaitInteract: if (_currentF != null) _currentF.Fire(); break;
             case State.WaitWalk: if (_currentTouch != null) _currentTouch.Fire(); break;
+            case State.WaitDoor:                                  // 自检不等玩家走：直接走一遍「到达剧情目标地点」
+                if (_doors == null || !_doors.DebugTravelToStoryGoal())
+                { Debug.LogWarning("[StoryRunner] 自检：door 步骤没能走到目标地点，直接继续"); HideWalkHint(); Next(); }
+                break;
             case State.Enter: if (_entrance != null) _entrance.Skip(); break;   // 自检不等演出，直接终态
             case State.Choice:
                 if (choicePanel != null)

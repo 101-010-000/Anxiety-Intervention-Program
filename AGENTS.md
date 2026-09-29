@@ -79,6 +79,7 @@ Editor/                        agent 工具（菜单 Tools/干预项目/…）�
   SceneBuilder.cs              剧情主场景 Game.unity：6 个地点拼装 + 场景总览渲染（末尾会自动调 ScenePostFx）
   ScenePostFx.cs               剧情场景后期：辉光/模糊/抬黑/雾 + 6 个地点各自的氛围 Volume（见第五节）
   GameDoorBuilder.cs           门口传送：给场景里已有的门触发盒挂交互 + 「按 F 开门」+ 地点选择面板（见第五节）
+  Chapter4DoorTrip.cs          第4章门口引导：确保门口 UI 在（缺了就重建）+ 图书馆座位摆到林溪旁 + 宿舍剧情点摆到书桌前 + 清场景残留（见第五节）
   AnimPreviewSetup.cs          角色预览场景：每个角色挂一个不一样的动画 + 运行自检（见第五节）
   MainMenuAssets.cs            主界面 UI 贴图：程序化生成 57 张 + 中文字体 + 20 张收录图导入
   MainMenuSlices.cs            切《ui素材》设计稿：圆角抠图 + 内部压平 + 九宫格 border（稿_*.png）
@@ -282,6 +283,7 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
    - `_postfxfull_trigger.txt` → 后期布置 + 渲染每屋一张「原/后」对比预览（一次搞定，推荐）
    - `_postfx_trigger.txt` → 只布置后期；`_postfxpreview_trigger.txt` → 只渲染后期预览
    - `_doors_trigger.txt` → 搭/刷新门口传送；`_doorssmoke_trigger.txt` → 门口传送运行自检
+   - `_ch4door_trigger.txt` → 第4章门口引导（重建门口 UI + 修剧情点摆位 + 清场景残留）
    - `_animpreview_trigger.txt` → 角色预览场景：每个角色挂一个动画；`_animpreviewsmoke_trigger.txt` → 动画运行自检
    - `_menu_trigger.txt` → 重建主界面 MainMenu.unity
    - `_camera_trigger.txt` → 场景视图相机复位（视角斜了/跑飞了）
@@ -406,6 +408,32 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
     编辑器只负责置标志 → 进 Play → 轮询 `Finished` → 写报告 → 退出。
 - 想改门位/触发范围：直接改那个门自己的 BoxCollider；想改显示名/章节：改它上面的 `DoorInteractable`。
 
+#### ★ 剧情导流（`door` 步骤，2026-09-29 第4章定稿）
+
+- **需求**：剧情要换地点时**不能自己瞬移过去**（用户 2026-09-29：「场景不应该是自己直接跳转，而是引导玩家去门口选择跳转」）
+  —— 要亮目标卡把玩家引到门口，让玩家自己按 F 开门、在面板里选地点。
+- **json**：`{ "t": "door", "to": "Loc_图书馆", "anchor": "第4章_图书馆座位", "x": "走到门口，按 F 前往图书馆" }`
+  （`to` = 目的地点的 locationId；`anchor` = 到达后的剧情落点，缺省用门自己的 `arrivePoint`；`x` = 左上角目标卡文案）
+- **运行时**：`StoryRunner.DoDoor()` →`DoorTravelSystem.EnterStoryMode(to, anchor, 回调)` + 打开门系统（**平时剧情是把它整体关掉的**）
+  → `State.WaitDoor`（能走能转，左上角目标卡常驻）→ 玩家走到任意一个门按 F →
+  面板里**只有目标地点可点**（其余置灰并标「本章不去」，目标标「本章前往」）→ 点它即传送（落点 = anchor 剧情锚点）
+  → `TravelTo()` 回调 `StoryRunner.OnDoorArrived()` → 关掉门系统 → 继续剧情。
+  · 为什么只放行一个地点：全放行的话玩家点食堂/教室，剧情就断了（或得写一堆补丁）。
+  · `ToDone()`（章节跑完）会把门系统**重新打开**，不然出了剧情也开不了门（以前就是永远关着）。
+  · 自检/调试：`StoryRunner.DebugAdvance()` 在 `WaitDoor` 调 `DoorTravelSystem.DebugTravelToStoryGoal()`，
+    走的是和玩家完全同一条 `TravelTo()`。
+- ⚠ **门口 UI 曾经整个丢了**（`DoorTravelSystem.panel/listRoot/closeButton` 都是空 —— `UI_门口交互` 画布在某轮
+  UI 整理时被删掉），症状是「按 F 只弹提示、面板不出现」，而且**平时剧情把门系统整体关掉、根本没人发现**。
+  现在由 `Tools/干预项目/第4章门口引导`（`Assets/Editor/Chapter4DoorTrip.cs`）检测缺件并自动跑 `GameDoorBuilder` 重建。
+- ⚠ **剧情触发盒不是门**：`GameDoorBuilder.FindSceneDoorTriggers()` 现在会跳过带 `StoryInteractable` 的触发盒
+  （踩过：第5章_宿舍门口 的走动 Touch 盒、教室 `BumpPoint`（张知远撞人）都被误挂上 `DoorInteractable`，
+  站在那儿会弹「按 F 开门」）。已经误挂的由 `Chapter4DoorTrip` 清掉。
+- ⚠ **别把 `~PlayerThirdPersonSmoke` 存进场景**：它是主角第三人称自检的**运行时自举**驱动（看到 `_player3p_run` 才建），
+  落盘后**每次 Play 都会自己跑一遍自检、用虚拟输入挪玩家/镜头**（踩过：场景里残留了 2 个）。
+  `Chapter4DoorTrip` 会顺手清掉。
+- ⚠ **门口传送自检先停剧情**：选中的那一章 runner 会在 `Start` 里自动 `Begin()` 并把门系统关掉，
+  自检就会假失败（`DoorSmokeDriver` 现在先 `r.enabled=false` + `sys.enabled=true`，只改运行期状态、不落盘）。
+
 ### 角色动画预览（AnimPreviewSetup）
 
 - **场景**：`Assets/Scenes/角色资源预览场景.unity`（原名 `Test_徐夏_动画.unity`）——
@@ -486,6 +514,12 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
     打字机隐形跑维持节奏，气泡即时报）；旁白/独白走对话框，此时手机暂时收起；点完再遇微信台词
     → 对话框让位、手机回屏。干预面板出现时手机也收起（选项与手机不同屏）。
     `[比心]` 整句 → 1.png 贴纸。
+  · ★ **气泡内文字一律左对齐**（2026-09-29 用户反馈「文字没有靠左」）：发出方（右侧蓝泡）此前用
+    `MiddleRight`，多行时后几行被推到右边、换行处还会在行首留一大段空白，看着像整段没对齐。
+    现在两侧统一 `TextAnchor.MiddleLeft`（跟微信一样：文字贴着气泡左边起排）；气泡自身的左右位置不变。
+    自查：第4章「学姐」那段（= 用户截图的同一段）的对照图在 `预览/场景/手机聊天_第4章对齐检查.png`；
+    重渲的办法：临时把 `额外文件/历史Editor脚本/_PhoneAlignPreview.cs` 拷回 `Assets/Editor/`，
+    丢个 `Assets/_phonealign_trigger.txt` 触发即可（用完再移回去）。
   · 搭建：`Tools/干预项目/搭建手机聊天UI`（或 `_phonechat_trigger.txt`）→ 在 `UI交互` 下建唯一节点
     `手机聊天`（siblingIndex=1：遮罩之上、对话/选择题之下，默认禁用），接线 + 存场景 +
     报告 `assets/_报告/_手机聊天UI.txt` + 预览 `预览/场景/手机聊天UI_预览.png`。
@@ -518,6 +552,10 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 - **fade（黑屏转场）**：黑幕淡入 → 传送玩家到 `fadeAnchors` 里与 `to` 同名的锚点 → 淡出。
   用于更新版剧本的「黑屏/刷新」跳转（第3章进办公室、第5章宿舍↔图书馆等）。
   ⚠ BlackFade 在 UI 最上层，黑屏期间对话框不可见 → 时间流逝旁白用独立 nar 步骤（放 fade 前后）。
+- **door（门口传送导流，2026-09-29 第4章）**：`{ "t":"door", "to":"Loc_图书馆",
+  "anchor":"第4章_图书馆座位", "x":"走到门口，按 F 前往图书馆" }` —— 不再由剧情自己瞬移，
+  而是亮目标卡把玩家引到门口、让他自己按 F 选地点（面板里只有 `to` 可点）。机制详见§五「门口传送 / 剧情导流」。
+  第4章第 55 步已从 `fade` 换成它。
 - **交互点章节归属**：`StoryInteractable.chapterTag`（默认1）；`FindFree()` 只取本章未消费的点。
   `promptText` 非空时 F 提示整句显示它（如「拿起手机」），空则默认「与<displayName>交谈」。
 - ★ **interact 必须点名（`at` 字段，2026-09-28）**：一章多个 F 交互点时 json 里 `"at": "交互点GameObject名"`，
@@ -543,6 +581,19 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   不受影响；按 F 触发「拿起手机」类提示的瞬间 StoryRunner 会补拿（`OnInteractableFired`）。
 - **出生点按名约定**：场景里放一个名为「第N章起点」（汉字章号）的物体即为该章出生点
   （用户手放优先于工具接线的 startAnchor）。第2章用户已自放「第二章起点」。
+- ★ **剧情点要摆到「对应角色/家具」旁边，不能停在工具默认位**（2026-09-29 用户反馈：
+  「触发对话点也应该在对应的角色附近才行」）。已修：
+  · `第4章_图书馆座位` = 图书馆里 **林溪旁边那把椅子**（200.23, 0, −6.56，朝向林溪 65°）——
+    门口传送的落点就是它（以前在 207.5，离林溪 6.4m 还背对她）。
+  · 宿舍书桌旁的四个点归位到 **长桌（书桌）前 1.5m 处**（80.63, 0, 4.50，面朝桌子）：
+    `第2章_手机` / `第4章_班群通知` / `第4章_坐下看资料` / `第5章_回座位`
+    ——剧本原文就是「徐夏走到书桌前」「把手机从桌角拿过来」「回到自己的位置上」，
+    它们以前都在房间正中的工具默认位（离桌子 6.2m）。
+  · 摆位工具：`Tools/干预项目/第4章门口引导`（`Assets/Editor/Chapter4DoorTrip.cs`，幂等，
+    报告 `assets/_报告/_第4章门口引导.txt`）。改完仍可进 Scene 手调；重跑不会覆盖手动改过的坐标以外的锚点。
+  · ⚠ 还没动的地方（等用户确认后再改）：第3章 `第3章_点饭`（在 118.7,−2.5，离食堂窗口/厨师约 10m）、
+    `第3章_落座`（在 118.7,0.5，离坐着的林溪 118.85,5.99 约 5.5m）；第5章 27-28 步的
+    「走到宿舍门口 → fade 去图书馆」也还是剧情自己跳（要不要也改成 `door` 步骤待定）。
 - **手机换聊天对象**：微信台词里非「徐夏」的说话人 → 自动推导联系人名 → `PhoneChatUI.SetContact()`
   （换标题+清空聊天流）。第2章 李同学↔林溪、第4章 班群/学姐 自动切换。★ 头像占位：沿用第一章
   两张（用户约定缺素材先占位），有新头像在 `手机聊天` 节点 Inspector 换 `avatarLeft` 即可。
@@ -586,6 +637,7 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 | 角色预览场景里看动画 | `Tools/干预项目/角色预览场景：每个角色挂一个动画`（或丢 `_animpreview_trigger.txt`）→ 报告 `assets/_报告/_角色动画预览.txt` |
 | 验证动画真的在播 | `Tools/干预项目/角色预览场景：动画运行自检`（真进 Play 采样 normalizedTime）→ `assets/_报告/_角色动画预览自检.txt` |
 | 搭/刷新门口传送（按 F 选地点传走） | `Tools/干预项目/搭建门口传送`（或丢 `_doors_trigger.txt`） |
+| 门口面板不见了 / 剧情要引导玩家自己走过去 | `Tools/干预项目/第4章门口引导（走到门口按F去图书馆）`（`Chapter4DoorTrip.cs`，或丢 `_ch4door_trigger.txt`）→ `assets/_报告/_第4章门口引导.txt`（幂等：缺 UI 就重建、修剧情点摆位、清残留节点） |
 | 验证门口传送能不能用 | `Tools/干预项目/门口传送运行自检`（真进 Play 模式走一遍）→ `assets/_报告/_门口传送运行自检.txt` |
 | 重建/改第一章剧情 UI（谨慎） | 把 `额外文件/历史Editor脚本/Chapter1StoryBuilder.cs` 拷回 `Assets/Editor/` → **手动**跑菜单（会重建 `ChoicePanel`/`WalkHint`/`ChapterCard`/`BlackFade`；`对话/对话框/名字/对话内容` 已冻结只读）→ 用完移走 |
 | 第一章剧情运行自检 | `Tools/干预项目/第一章剧情运行自检`（PhoneChatSmoke.cs，独立入口）→ `assets/_报告/_第一章剧情运行自检.txt` |

@@ -234,6 +234,10 @@ public static class GameDoorBuilder
             if (bc == null || !bc.isTrigger) continue;
             if (bc.GetComponent<Volume>() != null) continue;                       // 后期氛围体积
             if (bc.GetComponent<DoorInteractable>() != null) { res.Add(bc); continue; }
+            // ★ 剧情触发盒不是门（踩过 2026-09-29）：第5章_宿舍门口（走动段 Touch 盒）、
+            //   教室 BumpPoint（张知远撞人）都勾了 Is Trigger 且在 Loc_* 下，
+            //   无差别挂 DoorInteractable 会让玩家在剧情触发盒前弹「按 F 开门」。
+            if (bc.GetComponent<StoryInteractable>() != null) continue;
             if (bc.name.StartsWith("Post_")) continue;
             var root = bc.transform.root;
             if (root != null && root.name == UI_NAME) continue;                    // UI 画布

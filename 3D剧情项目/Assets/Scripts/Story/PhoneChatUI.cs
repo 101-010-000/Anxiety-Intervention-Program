@@ -242,7 +242,11 @@ public class PhoneChatUI : MonoBehaviour
         trt.pivot = new Vector2(0.5f, 0.5f);
         trt.offsetMin = new Vector2(insetL, PAD_V);
         trt.offsetMax = new Vector2(-insetR, -PAD_V);
-        t.alignment = mine ? TextAnchor.MiddleRight : TextAnchor.MiddleLeft;
+        // ★ 气泡内文字一律【左对齐】（用户 2026-09-29 反馈「文字没有靠左」）：
+        //   微信里自己发的消息也是贴着气泡左边起排；此前发出方（右侧蓝泡）用 MiddleRight，
+        //   多行时后几行被推到右边（换行处还会留下标点前的大段空白），看着像整段没对齐。
+        //   气泡自身的左右位置不变（mine 靠右、对方靠左），只改气泡【内部】的行对齐。
+        t.alignment = TextAnchor.MiddleLeft;
 
         Image av = NewImage("头像", msg, mine ? avatarRight : avatarLeft);
         var art = (RectTransform)av.transform;

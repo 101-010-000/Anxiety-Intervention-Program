@@ -1,16 +1,18 @@
-门口传送搭建报告  2026-09-21 01:16
+门口传送搭建报告  2026-09-29 16:45
 
 字体：Assets/assets/05_UI/字体_Font/中文_Deng.ttf
-脚本预热：7/7 个 MonoScript 就绪
-发现门触发盒 8 个：
-  GameRoot/Locations/Loc_办公室/Content/门 (1)  尺寸 1.0×2.0×1.0  →  咨询办公室（新挂）  落点 Arrive_办公室
-  GameRoot/Locations/Loc_图书馆/Content/Door_G_Frame (1)  尺寸 2.0×2.1×1.2  →  图书馆 / 自习区（新挂）  落点 Arrive_图书馆
-  GameRoot/Locations/Loc_宿舍/Content/门 (1)  尺寸 1.7×2.5×1.0  →  女生宿舍（新挂）  落点 Arrive_宿舍
-  GameRoot/Locations/Loc_教室/content/门  尺寸 1.4×1.9×1.0  →  大学教室（新挂）  落点 Arrive_教室
-  GameRoot/Locations/Loc_教室/content/门 (2)  尺寸 1.4×1.9×1.0  →  大学教室（新挂）  落点 Arrive_教室
-  GameRoot/Locations/Loc_走廊/Content/Door_B_Frame  尺寸 1.3×2.1×0.7  →  教室外走廊（新挂）  落点 Arrive_走廊
-  GameRoot/Locations/Loc_走廊/Content/门 (2)  尺寸 1.0×1.8×1.1  →  教室外走廊（新挂）  落点 Arrive_走廊
-  GameRoot/Locations/Loc_食堂/Content/Door_G_Frame (1)  尺寸 2.0×2.1×0.5  →  食堂（新挂）  落点 Arrive_食堂
+脚本预热：11/11 个 MonoScript 就绪
+发现门触发盒 10 个：
+  GameRoot/Locations/Loc_办公室/Content/门 (1)  尺寸 1.0×2.0×1.0  →  咨询办公室（已挂过）  落点 Arrive_办公室
+  GameRoot/Locations/Loc_图书馆/Content/Door_G_Frame (1)  尺寸 2.0×2.1×1.2  →  图书馆 / 自习区（已挂过）  落点 Arrive_图书馆
+  GameRoot/Locations/Loc_宿舍/Content/门 (1)  尺寸 1.7×2.5×1.0  →  女生宿舍（已挂过）  落点 Arrive_宿舍
+  GameRoot/Locations/Loc_宿舍/多章锚点/第5章_宿舍门口  尺寸 1.6×2.0×1.6  →  女生宿舍（新挂）  落点 Arrive_宿舍
+  GameRoot/Locations/Loc_教室/BumpPoint  尺寸 1.8×2.6×1.8  →  大学教室（新挂）  落点 Arrive_教室
+  GameRoot/Locations/Loc_教室/content/门  尺寸 1.4×1.9×1.0  →  大学教室（已挂过）  落点 Arrive_教室
+  GameRoot/Locations/Loc_教室/content/门 (2)  尺寸 1.4×1.9×1.0  →  大学教室（已挂过）  落点 Arrive_教室
+  GameRoot/Locations/Loc_走廊/Content/Door_B_Frame  尺寸 1.3×2.1×0.7  →  教室外走廊（已挂过）  落点 Arrive_走廊
+  GameRoot/Locations/Loc_走廊/Content/门 (2)  尺寸 1.0×1.8×1.1  →  教室外走廊（已挂过）  落点 Arrive_走廊
+  GameRoot/Locations/Loc_食堂/Content/Door_G_Frame (1)  尺寸 2.0×2.1×0.5  →  食堂（已挂过）  落点 Arrive_食堂
 
 交互 UI：提示（底部居中）+ 选择面板 760×720（预建 8 个目标按钮）
 面板在场景里是收起状态；想手改就在 Hierarchy 里选中 UI_门口交互/面板_选择地点 打开看看

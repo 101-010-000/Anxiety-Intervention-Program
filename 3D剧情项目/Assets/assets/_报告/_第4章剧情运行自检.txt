@@ -1,9 +1,10 @@
-第4章剧情运行自检（真进 Play 模式走一遍）  2026-09-27 22:47
+第4章剧情运行自检（真进 Play 模式走一遍）  2026-09-29 17:05
 
 —— 第4章剧情运行自检 ——
 StoryRunner 就绪，总步骤 79
 走完全部 79/79 步 ✓
-状态计数：Typing 594 / Gap 70 / 开场旁白 4 / Choice 13 / Walk 0 / Interact 2 / Fade 70 / Enter 0
+玩家位置取证：起点=(80.0,0.0,-0.5)  最低Y=0.0  终点=(200.2,0.0,-6.6)
+状态计数：Typing 2285 / Gap 70 / 开场旁白 4 / Choice 13 / Walk 0 / Interact 2 / Fade 0 / Enter 0 / 门口导流 1
 运行期报错：无 ✓
 
 注：编辑器伪造不了 Input.GetKeyDown，交互/推进走的是 DebugAdvance()/Fire()，

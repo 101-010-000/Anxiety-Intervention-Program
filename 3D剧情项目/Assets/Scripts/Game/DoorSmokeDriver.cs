@@ -86,6 +86,16 @@ public class DoorSmokeDriver : MonoBehaviour
         var player = FirstPersonController.Instance;
         if (player == null) { Note("★ 找不到 FirstPersonController.Instance"); Finish(); yield break; }
 
+        // ★ 剧情会抢：GameProgress.SelectedChapter 选中的那章 runner 在 Start 里会自动 Begin()，
+        //   而 Begin() 会把门口传送【整体关掉】（防跟剧情交互打架）—— 于是本自检的
+        //   「按 F 弹提示 / 识别当前门」会假失败（2026-09-29 挂到过：3 条 ★，其实门是好的）。
+        //   自检期间让剧情停手、把门系统打开（只改运行期状态，不落盘）。
+        int stopped = 0;
+        foreach (var r in Object.FindObjectsOfType<StoryRunner>()) { r.enabled = false; stopped++; }
+        sys.enabled = true;
+        sys.ExitStoryMode();                      // 万一剧情已经把它设成了导流态
+        Note("自检期间停掉剧情 runner " + stopped + " 个（选中的章节会被剧情自动开跑）");
+
         Note("进入 Play 后第 " + Time.frameCount + " 帧");
 
         Check("DoorTravelSystem 已就位", true);

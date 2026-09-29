@@ -17,7 +17,7 @@ public class StorySmokeDriver : MonoBehaviour
     public static readonly List<string> Lines = new List<string>();
     public static readonly List<string> Errors = new List<string>();
 
-    int _sawTyping, _sawGap, _sawNarFree, _sawChoice, _sawWalk, _sawInteract, _sawFade, _sawEnter;
+    int _sawTyping, _sawGap, _sawNarFree, _sawChoice, _sawWalk, _sawInteract, _sawFade, _sawEnter, _sawDoor;
 
     void Awake()
     {
@@ -92,6 +92,7 @@ public class StorySmokeDriver : MonoBehaviour
                 case StoryRunner.State.NarFree: _sawNarFree++; break;
                 case StoryRunner.State.Choice: _sawChoice++; break;
                 case StoryRunner.State.WaitWalk: _sawWalk++; break;
+                case StoryRunner.State.WaitDoor: _sawDoor++; break;
                 case StoryRunner.State.WaitInteract: _sawInteract++; break;
                 case StoryRunner.State.Fade: _sawFade++; break;
                 case StoryRunner.State.Enter: _sawEnter++; break;
@@ -125,7 +126,7 @@ public class StorySmokeDriver : MonoBehaviour
                 pStart.x, pStart.y, pStart.z, pMinY, pEnd.x, pEnd.y, pEnd.z));
             Lines.Add("状态计数：Typing " + _sawTyping + " / Gap " + _sawGap + " / 开场旁白 " + _sawNarFree
                       + " / Choice " + _sawChoice + " / Walk " + _sawWalk + " / Interact " + _sawInteract
-                      + " / Fade " + _sawFade + " / Enter " + _sawEnter);
+                      + " / Fade " + _sawFade + " / Enter " + _sawEnter + " / 门口导流 " + _sawDoor);
             if (_sawChoice == 0) Fail("干预面板没开过");
             if (TargetChapter == 1)
             {   // 第1章既有门槛：walk/interact 必须都等待过；其它章按各自剧本可无
