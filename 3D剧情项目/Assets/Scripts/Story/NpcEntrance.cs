@@ -10,6 +10,8 @@
 //   参数缺失时报警一次，不再静默兜底。
 //   v7（2026-09-29）：Run 重构为 RunPath 分段走位（经由点）——enter/leave 可带 via 锚点列表
 //   绕开桌椅（StoryRunner 把 step.via 解析成 pts）；Run 保留签名改薄包装，现有调用零变化。
+//   v8（2026-09-29）：走位观感重构——每段【先原地转身到位再起步】（用户看了录屏反馈
+//   「过拐点后斜着走」：旧版边走边转 + 段尾/到位两处朝向瞬切）；到位面向目标也改原地平滑转身。
 using System.Collections;
 using System.Linq;
 using UnityEngine;
@@ -17,6 +19,8 @@ using UnityEngine;
 public class NpcEntrance : MonoBehaviour
 {
     const float SPEED = 1.35f;          // 入场步速（偏缓，演出感）
+    const float TURN_SPEED = 480f;      // 原地转身角速度（度/秒）
+    const float TURN_EPS = 10f;         // 起步前转身到位的容差（度）——剩余小角直接补齐，肉眼不可见
 
     Collider _collider;
     bool _hadCollider;
@@ -41,8 +45,9 @@ public class NpcEntrance : MonoBehaviour
     }
 
     // ------------------------------------------------------------------ 演出（由 runner 协程 yield 驱动）
-    /// 多段走位（v7）：pts 依次直线 Lerp 匀速连接；拐角边走边平滑转向（480°/s）。
-    /// fast==true（Skip 快进）时所有剩余段同帧直达终态，与旧单段版语义一致。
+    /// 多段走位（v8）：逐段直线匀速；★ 每段【先原地转身到位、再起步】——段内朝向锁死=段方向，
+    /// 不再"边走边转"（那是斜走感的根源）；到位面向目标（玩家）也是原地平滑转身，不再瞬切。
+    /// fast==true（Skip 快进）时转身/位移同帧直达终态，与旧版语义一致。
     public IEnumerator RunPath(Vector3[] pts, Transform faceTarget)
     {
         // 二次入场防护（trellis-check 2026-09-28）：同会话重新 Begin 再入场时，
@@ -55,36 +60,50 @@ public class NpcEntrance : MonoBehaviour
         if (_collider != null) _collider.enabled = false;   // 走位中不挡人（到位恢复）
         SetWalk(true);
 
-        bool firstSeg = true;
         for (int i = 1; i < pts.Length; i++)
         {
             Vector3 from = pts[i - 1], to = pts[i];
             if ((to - from).sqrMagnitude < 0.0001f) continue;   // 近零长度段（重复经由点）直接跳过
 
             Vector3 dir = to - from; dir.y = 0f;
-            Quaternion face = dir.sqrMagnitude > 0.0001f
-                ? Quaternion.LookRotation(dir.normalized) : transform.rotation;
-            // 第 1 段起步直接朝向走向（与旧行为一致）；第 2 段起每帧平滑转头（边走边转，不生硬）
-            if (firstSeg) { transform.rotation = face; firstSeg = false; }
+            if (dir.sqrMagnitude > 0.0001f)
+            {
+                // 原地转身到段方向（480°/s，像停下来迈两步转身的观感）；快进时直接到位。
+                // 转完把朝向补齐到 face：≤10° 的瞬时修正肉眼不可见，但保证段内身体=位移方向。
+                Quaternion face = Quaternion.LookRotation(dir.normalized);
+                while (!fast && Quaternion.Angle(transform.rotation, face) > TURN_EPS)
+                {
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, face, TURN_SPEED * Time.deltaTime);
+                    yield return null;
+                }
+                transform.rotation = face;
+            }
 
             float dur = Mathf.Max(0.6f, Vector3.Distance(from, to) / SPEED);
             float t = 0f;
             while (t < 1f && !fast)
             {
                 t = Mathf.Clamp01(t + Time.deltaTime / dur);
-                transform.position = Vector3.Lerp(from, to, t);            // 匀速
-                if (!firstSeg)
-                    transform.rotation = Quaternion.RotateTowards(transform.rotation, face, 480f * Time.deltaTime);
+                transform.position = Vector3.Lerp(from, to, t);            // 匀速直线
                 yield return null;
             }
             transform.position = to;
-            transform.rotation = face;
         }
 
+        // 到位后面向目标（enter=玩家；leave/hide 无）：原地平滑转身，不再瞬切
         if (faceTarget != null)
         {
             Vector3 d = faceTarget.position - transform.position; d.y = 0f;
-            if (d.sqrMagnitude > 0.0001f) transform.rotation = Quaternion.LookRotation(d.normalized);
+            if (d.sqrMagnitude > 0.0001f)
+            {
+                Quaternion face = Quaternion.LookRotation(d.normalized);
+                while (!fast && Quaternion.Angle(transform.rotation, face) > 1f)
+                {
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, face, TURN_SPEED * Time.deltaTime);
+                    yield return null;
+                }
+                transform.rotation = face;
+            }
         }
         SetWalk(false);
         Restore();
@@ -112,11 +131,12 @@ public class NpcEntrance : MonoBehaviour
     {
         if (_anim == null) return;
         // PC_徐夏_Walk.controller：Speed 混合树（0 待机 / 0.5+ 行走）
+        // 0.8：起步姿态更明确（0.65 贴着阈值，Idle↔Walk 混合过渡期姿态发飘——用户录屏反馈的斜走感之一）
         for (int i = 0; i < _anim.parameterCount; i++)
         {
             var p = _anim.GetParameter(i);
             if (p.type == AnimatorControllerParameterType.Float && p.name == "Speed")
-            { _anim.SetFloat("Speed", on ? 0.65f : 0f); return; }
+            { _anim.SetFloat("Speed", on ? 0.8f : 0f); return; }
             if (p.type == AnimatorControllerParameterType.Bool && p.name == "Walk")
             { _anim.SetBool("Walk", on); return; }
         }

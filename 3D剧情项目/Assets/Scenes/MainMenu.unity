@@ -10792,8 +10792,8 @@ MonoBehaviour:
   descText: {fileID: 1598750851}
   stateText: {fileID: 1775710022}
   stateIcon: {fileID: 1376088599}
-  lockOverlay: {fileID: 0}
-  cardImage: {fileID: 0}
+  lockOverlay: {fileID: 904137796}
+  cardImage: {fileID: 1317553743}
   chapter: 4
 --- !u!1 &952936471
 GameObject:
@@ -14950,8 +14950,8 @@ MonoBehaviour:
   descText: {fileID: 691316398}
   stateText: {fileID: 1141506890}
   stateIcon: {fileID: 1049550702}
-  lockOverlay: {fileID: 0}
-  cardImage: {fileID: 0}
+  lockOverlay: {fileID: 453896637}
+  cardImage: {fileID: 484139599}
   chapter: 5
 --- !u!1 &1357919101
 GameObject:
@@ -20391,8 +20391,8 @@ MonoBehaviour:
   descText: {fileID: 40644680}
   stateText: {fileID: 602047634}
   stateIcon: {fileID: 1722887149}
-  lockOverlay: {fileID: 0}
-  cardImage: {fileID: 0}
+  lockOverlay: {fileID: 985402912}
+  cardImage: {fileID: 2108869170}
   chapter: 3
 --- !u!1 &1783081877
 GameObject:
