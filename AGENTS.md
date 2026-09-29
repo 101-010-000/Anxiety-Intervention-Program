@@ -246,6 +246,7 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
    - `_menu_trigger.txt` → 重建主界面 MainMenu.unity
    - `_camera_trigger.txt` → 场景视图相机复位（视角斜了/跑飞了）
    - `_phonechat_trigger.txt` → 搭建手机聊天UI（第1章微信段）+ 渲染预览
+   - `_colliders_trigger.txt` → 给 6 个地点的墙板/家具补碰撞体（防穿模/掉虚空）
    > 触发器依赖"域重载"生效：改一下任意脚本文件、或让 Unity 窗口获得焦点/按 Ctrl+R 即可。
 4. **出现"洋红 / 空材质"**：先跑 `Tools/干预项目/全量强制重导`（等价 Assets → Reimport All），
    再用 `诊断角色材质` 核对（`_报告/_材质诊断.txt` 里应无 `MATERIAL_NULL`、无 `supported=False`）。
@@ -329,6 +330,23 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   · 放在角色**根节点**上（根节点只有 yaw、scale 1），所以跟着角色动；
   · **不碰 `Player_徐夏`** —— 它挂在 `GameRoot` 下、不在 `第X章角色` 里，而且它自己有 CharacterController。
 - 层就是 `Outline` 层，跟其它层默认碰撞，不需要改 Physics 矩阵。
+
+### 场景设施碰撞体（SceneColliders，2026-09-28）
+
+- **背景**：地板是 SceneBuilder 用 `CreatePrimitive(Cube)` 拼的（自带 BoxCollider），但四面墙是
+  走廊套件的 FBX 墙板、家具是寝室套件等 FBX prefab——**导入时不带碰撞体** → 玩家能穿过墙板/家具，
+  穿出墙就是地板外的虚空（用户反馈"贴墙掉下去"的根因）。
+- **工具**：`Assets/Editor/SceneColliders.cs`，菜单 `Tools/干预项目/场景碰撞体/`
+  （① 给设施加碰撞体（幂等）/ ② 只诊断），或丢 `_colliders_trigger.txt`。
+  报告 `assets/_报告/_场景碰撞体.txt`（每地点统计 + 新增明细 + 编辑器射线验证）。
+- **规则**：MeshFilter+Renderer、自己没有任何 Collider、最大边 ≥5cm → 加 **MeshCollider（convex=false，静态）**；
+  名字带「角色」的容器整棵跳过（胶囊体归 `EnsureCharacterColliders` 管）；已有 Collider 的一律不动
+  （门口触发盒 isTrigger、套件自带碰撞体的件都照旧）。
+- **裸边护栏**：某条地板边缘 1.2m 检查带内没有 ≥2m 宽的遮挡（=这条边没墙）→ 自动放无渲染的
+  `防坠护栏_方向` BoxCollider。门洞所在的边有墙板覆盖，不会误加；若某扇门扇是敞开模型，
+  走出去由掉出世界保护（FirstPersonController y<-20 拉回）兜底。
+- ⚠ **跑完会保存 Game.unity**（含你未保存的手改）；NPC 走位是 transform 直移、不受影响；
+  家具多在 Outline 层，第三人称镜头 `tpBlockMask` 排除该层 → 新碰撞体不会把镜头拉近。
 - **每个地点一套氛围**（走进去平滑换）：本地 Volume 是「覆盖」不是「叠加」，所以 `Moods()` 里写的是绝对值；
   **别把 DepthOfField 放进本地面板**，会盖掉全局的、远近分层就失效。
 - 改完记得看报告：`assets/_报告/_后期效果.txt`（布置明细）、`_后期预览.txt`（带亮度 + **近/远两段清晰度**；
@@ -491,10 +509,13 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   镜头 0.3s 平滑转向门口（`FirstPersonController.LookTowardRoutine`，yaw+pitch 一起动）。
   ★ 全程真实形象——虚实渐变（幽灵层/透明材质）已于 2026-09-28 按用户要求整体移除。
   锚点解析约定：接线池没有就全场景按名找——把「第2章_陆宣雨门口」拖到任意门前即生效。
-- **NPC 退场（leave 步骤，2026-09-28）**：`{ "t": "leave", "who": "角色实例名" }`——从当前位置走回
-  【开场原位】（Begin 快照 enter/leave 角色的场景手摆 pos/yaw；`to` 显式锚点可覆盖），到位回原朝向、
+- **NPC 退场（leave 步骤，2026-09-28）**：`{ "t": "leave", "who": "角色实例名", "to": "座位锚点名" }`——从当前位置走回
+  落点（`to` 显式锚点优先，同名解析同 fade；缺省=Begin 快照的场景手摆 pos/yaw），到位回原朝向、
   保持在场待机。状态复用 State.Enter（能转不能走），自检快进同 enter（`_entrance.Skip()`）。
   第2章陆宣雨对话完"回到自己的座位上"用它——演完站桩在玩家旁边不是正常游戏表现。
+  ⚠ **第2章陆宣雨的场景摆位就在门口锚点旁（实测差 0.3m）**——"开场原位"对她是门口不是座位，
+  所以 json 的 leave 带了 `"to": "第2章_陆宣雨座位"`：场景里放一个该名空物体（摆到她的桌椅旁）即生效；
+  不放该锚点则回落到摆位快照（想用摆位方案：直接把她的实例拖到座位旁即可）。
 - ★ **章末卡显示（2026-09-28）**：`EndRoutine` 显示「第N章 完」卡前运行时 `SetAsLastSibling()` 置顶——
   BlackFade 是全 UI 最上层的设计约定不能动，而章节卡排它下面，不置顶就被纯黑盖住（试玩实测
   "章末只有黑屏"）。置顶后随 EndCard → 主菜单离场，无需还原。
@@ -547,6 +568,7 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 | 验证动画真的在播 | `Tools/干预项目/角色预览场景：动画运行自检`（真进 Play 采样 normalizedTime）→ `assets/_报告/_角色动画预览自检.txt` |
 | 搭/刷新门口传送（按 F 选地点传走） | `Tools/干预项目/搭建门口传送`（或丢 `_doors_trigger.txt`） |
 | 验证门口传送能不能用 | `Tools/干预项目/门口传送运行自检`（真进 Play 模式走一遍）→ `assets/_报告/_门口传送运行自检.txt` |
+| 场景设施穿模/贴墙掉虚空 | `Tools/干预项目/场景碰撞体/① 给设施加碰撞体`（或丢 `_colliders_trigger.txt`）→ 报告 `assets/_报告/_场景碰撞体.txt` |
 | 重建/改第一章剧情 UI（谨慎） | 把 `额外文件/历史Editor脚本/Chapter1StoryBuilder.cs` 拷回 `Assets/Editor/` → **手动**跑菜单（会重建 `ChoicePanel`/`WalkHint`/`ChapterCard`/`BlackFade`；`对话/对话框/名字/对话内容` 已冻结只读）→ 用完移走 |
 | 第一章剧情运行自检 | `Tools/干预项目/第一章剧情运行自检`（PhoneChatSmoke.cs，独立入口）→ `assets/_报告/_第一章剧情运行自检.txt` |
 | 搭建第2-5章剧情（runner/锚点/接线） | `Tools/干预项目/多章剧情/一键搭建第2-5章（幂等）`（ChapterStoriesSetup.cs）→ 报告 `assets/_报告/_多章剧情搭建.txt`；摆位默认值可随后在 Scene 里手调（重跑不覆盖） |

@@ -1,0 +1,12 @@
+{
+ "glb_sha256": "49dc219ca1ebd409a6569a9408b623ab84739dc66d1e9af4231b4f193ceb7066",
+ "source": "Sketchfab 4ff99cf17b164e7b9790638c5d2ef4ce Low Poly Mobile Phone",
+ "author": "kimmy.k",
+ "license": "CC-BY 4.0（需署名）",
+ "converter": "额外文件/工具脚本/glb2obj_phone.py",
+ "baked_size_m": [
+  0.0811,
+  0.0162,
+  0.155
+ ]
+}

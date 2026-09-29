@@ -36,6 +36,7 @@ public class MainMenuUI : MonoBehaviour
     public SaveSlotUI[] slots = new SaveSlotUI[SaveSystem.SlotCount];
     public Button btnSaveRead, btnSaveDelete, btnSaveBack;
     public Text   txtSaveTip;
+    public Sprite[] chapterArt = new Sprite[5];   // 每章定妆照（存档卡整卡铺图，SaveCardArt 工具接线）
 
     [Header("章节选择页")]
     public ChapterCardUI[] chapters = new ChapterCardUI[5];
@@ -88,6 +89,8 @@ public class MainMenuUI : MonoBehaviour
         WireChapterPanel();
         WireOverview();
         WireImageViewer();
+
+        SaveSlotUI.ChapterArt = chapterArt;   // 定妆照注入（空/越界由 SaveSlotUI 回退到运行时截图）
 
         RefreshProgressHint();
         RefreshSlots();
