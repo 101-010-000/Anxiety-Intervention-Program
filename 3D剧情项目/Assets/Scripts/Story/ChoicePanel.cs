@@ -60,6 +60,9 @@ public class ChoicePanel : MonoBehaviour
     [Tooltip("第几章（StoryRunner.Open 前设置）。选择顺序记录键按章隔离：story.choice.ch<N>.<题号>")]
     public int chapter = 1;
 
+    [Tooltip("最后一次退出解释态且已全选时通知（StoryRunner 用来抓存档缩略图：此刻面板完整显示全部已选）")]
+    public System.Action onPanelComplete;
+
     StoryStep _step;
     System.Action<List<int>> _onDone;
     readonly List<int> _order = new List<int>();
@@ -197,6 +200,9 @@ public class ChoicePanel : MonoBehaviour
         }
         RefreshConfirmLabel();
         Rebuild();
+
+        // 全选后的解释退出 = 面板完整显示全部已选、确认键点亮的一帧 → 存档缩略图在这里抓
+        if (AllSelected && onPanelComplete != null) onPanelComplete();
     }
 
     /// 自检用：选中下一个未选项；返回是否还有剩余
