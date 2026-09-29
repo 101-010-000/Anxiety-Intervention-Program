@@ -217,7 +217,9 @@ static class SitPrompt
         var tx = new GameObject("文字");
         tx.transform.SetParent(bg.transform, false);
         _text = tx.AddComponent<Text>();
-        _text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+        // ⚠ Unity 2022.3 起内置字体叫 LegacyRuntime.ttf（Arial.ttf 会抛 ArgumentException，踩过）
+        _text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        if (_text.font == null) _text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
         _text.alignment = TextAnchor.MiddleCenter;
         _text.color = Color.white;
         _text.fontSize = 26;

@@ -202,6 +202,57 @@ public static class GameCharSwap
         return ctrlPath;
     }
 
+    // ============================================================ ⓪ 刷新循环剪辑（源 FBX 换过之后）
+    /// <summary>
+    /// 把已生成的 <角色>_Idle.anim / <角色>_Sit.anim 用【当前 FBX 里的剪辑】原地刷一遍。
+    /// 为什么需要：那些 .anim 是当初从 FBX 复制的副本，用户之后换了 FBX（比如换了个新的 Idle 动画），
+    /// 控制器还指着旧副本 → 播的还是老动画。这里原地改（不清除/重建资产），GUID 不变 → 引用不断。
+    /// </summary>
+    [MenuItem("Tools/干预项目/Game角色替换/⓪ 刷新角色循环剪辑（源 FBX 换过之后）", false, 118)]
+    public static void RefreshLoopClips()
+    {
+        var log = new List<string>();
+        log.Add("刷新角色循环剪辑  " + System.DateTime.Now.ToString("yyyy-MM-dd HH:mm"));
+        log.Add("");
+        if (!Directory.Exists(NEW_ROOT)) { log.Add("★ 找不到 " + NEW_ROOT); Flush(log, REPORT); return; }
+
+        int done = 0;
+        foreach (var dir in Directory.GetDirectories(NEW_ROOT).OrderBy(p => p))
+        {
+            string ch = Path.GetFileName(dir);
+            foreach (var pair in new[] { new[] { "Idle.fbx", ch + "_Idle.anim" }, new[] { "Sitting Idle.fbx", ch + "_Sit.anim" } })
+            {
+                string fbx = (dir + "/" + pair[0]).Replace('\\', '/');
+                string dst = ANIM_DIR + "/" + pair[1];
+                if (!File.Exists(fbx)) continue;
+                var dstClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(dst);
+                if (dstClip == null) { log.Add("  " + ch + "：" + pair[1] + " 不存在（跳过，跑一次坐姿/替换工具会建）"); continue; }
+                var src = AssetDatabase.LoadAllAssetsAtPath(fbx).OfType<AnimationClip>()
+                              .Where(c => !c.name.StartsWith("__preview__"))
+                              .OrderByDescending(c => c.length).FirstOrDefault();
+                if (src == null) { log.Add("  ★ " + ch + "：" + pair[0] + " 里没有剪辑"); continue; }
+
+                float oldLen = dstClip.length;
+                dstClip.ClearCurves();
+                foreach (var b in AnimationUtility.GetCurveBindings(src))
+                    AnimationUtility.SetEditorCurve(dstClip, b, AnimationUtility.GetEditorCurve(src, b));
+                foreach (var b in AnimationUtility.GetObjectReferenceCurveBindings(src))
+                    AnimationUtility.SetObjectReferenceCurve(dstClip, b, AnimationUtility.GetObjectReferenceCurve(src, b));
+                var st = AnimationUtility.GetAnimationClipSettings(dstClip);
+                st.loopTime = true;
+                AnimationUtility.SetAnimationClipSettings(dstClip, st);
+                EditorUtility.SetDirty(dstClip);
+                done++;
+                log.Add(string.Format("  {0,-8} {1,-16} {2:0.00}s → {3:0.00}s（曲线 {4} 条）✓",
+                    ch, pair[1], oldLen, src.length, AnimationUtility.GetCurveBindings(src).Length));
+            }
+        }
+        AssetDatabase.SaveAssets();
+        log.Add("");
+        log.Add("合计刷新 " + done + " 份循环剪辑（GUID 不变，控制器引用不受影响）");
+        Flush(log, REPORT);
+    }
+
     // ============================================================ ① 试运行
     [MenuItem("Tools/干预项目/Game角色替换/① 试运行（只报告，不改）", false, 120)]
     public static void DryRun()
@@ -581,35 +632,37 @@ static class GameCharSwapTrigger
     const string T1 = "Assets/_gcharprobe_trigger.txt";
     const string T2 = "Assets/_gcharsvap_trigger.txt";
     const string T3 = "Assets/_gcharsmoke_trigger.txt";
+    const string T4 = "Assets/_gcharclips_trigger.txt";
+    static double _next;
+
+    // ★ 常驻轮询：丢触发器文件就跑，不靠域重载/焦点（用户随手丢文件就能触发）
     static GameCharSwapTrigger()
     {
-        // ★ 域重载后（尤其进 Play 那次）要把自检的 tick 重新挂上，否则订阅会被冲掉
-        if (GameCharSwap.SmokeRequested())
-            EditorApplication.delayCall += () =>
-            {
-                GameCharSwap.BeginSmokeTick();
-                if (!Application.isPlaying) EditorApplication.isPlaying = true;
-            };
+        EditorApplication.update -= Poll;
+        EditorApplication.update += Poll;
+    }
 
-        bool probe = File.Exists(T1), go = File.Exists(T2), smoke = File.Exists(T3);
-        if (!probe && !go && !smoke) return;
-        EditorApplication.delayCall += () =>
+    static void Poll()
+    {
+        if (EditorApplication.timeSinceStartup < _next) return;
+        _next = EditorApplication.timeSinceStartup + 0.5;
+        if (Application.isPlaying || EditorApplication.isCompiling || EditorApplication.isUpdating) return;
+
+        bool probe = File.Exists(T1), go = File.Exists(T2), smoke = File.Exists(T3), clips = File.Exists(T4);
+        if (!probe && !go && !smoke && !clips) return;
+        try
         {
-            try
-            {
-                if (File.Exists(T1)) File.Delete(T1);
-                if (File.Exists(T2)) File.Delete(T2);
-                if (File.Exists(T3)) File.Delete(T3);
-                if (go) GameCharSwap.Execute();
-                else if (smoke) GameCharSwap.SmokeTest();
-                else GameCharSwap.DryRun();
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError("[GameCharSwap] " + e);
-                Directory.CreateDirectory("../额外文件");
-                File.WriteAllText("../额外文件/错误_Game角色替换.txt", e.ToString());
-            }
-        };
+            if (go) GameCharSwap.Execute();
+            else if (smoke) GameCharSwap.SmokeTest();
+            else if (clips) GameCharSwap.RefreshLoopClips();
+            else GameCharSwap.DryRun();
+            foreach (var f in new[] { T1, T2, T3, T4 }) if (File.Exists(f)) File.Delete(f);   // 成功才删
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("[GameCharSwap] " + e);
+            Directory.CreateDirectory("../额外文件");
+            File.WriteAllText("../额外文件/错误_Game角色替换.txt", e.ToString());
+        }
     }
 }

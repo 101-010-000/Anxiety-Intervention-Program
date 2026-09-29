@@ -33,6 +33,10 @@ public static class SitSetup
     // ★ 用户 2026-09-29：第5章不要玩家坐下
     static readonly string[] NO_SIT = { "第5章_回座位" };
 
+    // ★★ 总开关（用户 2026-09-29：「都不要玩家坐下了」）
+    //    false = 场景里所有座位的 SitSpot 全部停用（不删组件，改回 true 再跑一次工具就恢复）
+    const bool ENABLE_SITTING = false;
+
     // 自由可坐点（按 F 坐）的允许章节：★ 第5章一律不允许坐（用户 2026-09-29）
     //   宿舍那个（凳子2 (45) 上）只在第 2、4 章；其余（食堂 凳子2 (8)(11)）第 1~4 章都可以
     static readonly string[] DORM_SPOT_PATH = { "Loc_宿舍" };
@@ -111,9 +115,10 @@ public static class SitSetup
                 if (spot.mode != want) { spot.mode = want; fixedMode++; }
 
                 // 不坐名单：停用（不删组件，想恢复就把 NO_SIT 里那项去掉再跑一次）
-                bool noSit = NO_SIT.Any(k => n.Contains(k));
+                bool noSit = !ENABLE_SITTING || NO_SIT.Any(k => n.Contains(k));
                 if (spot.enabled == noSit) { spot.enabled = !noSit; fixedMode++; }
-                if (noSit) log.Add("     ★ 按【不坐名单】停用了这个座位的 SitSpot");
+                if (noSit) log.Add(ENABLE_SITTING ? "     ★ 按【不坐名单】停用了这个座位的 SitSpot"
+                                                 : "     ★ 总开关 ENABLE_SITTING=false → 停用");
 
                 // 宿舍的可坐点：只在第 2/4 章能坐
                 string path = PathOf(tr);
@@ -235,7 +240,7 @@ static class SitSetupTrigger
         _next = EditorApplication.timeSinceStartup + 0.5;
         if (Application.isPlaying || EditorApplication.isCompiling || EditorApplication.isUpdating) return;
         if (!File.Exists(T)) return;
-        try { File.Delete(T); SitSetup.Run(); }
+        try { SitSetup.Run(); File.Delete(T); }        // ★ 跑成功才删（失败留着重试）
         catch (System.Exception e)
         {
             Debug.LogError("[SitSetup] " + e);

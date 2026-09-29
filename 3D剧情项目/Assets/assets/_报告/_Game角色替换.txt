@@ -1,62 +1,17 @@
-Game 场景角色替换 —— 执行  2026-09-28 08:22
+刷新角色循环剪辑  2026-09-29 14:10
 
-角色实例 52 个（路人 41）
+  张知远      张知远_Idle.anim    13.93s → 13.93s（曲线 355 条）✓
+  徐夏       徐夏_Idle.anim     16.63s → 16.63s（曲线 355 条）✓
+  徐夏       徐夏_Sit.anim      2.97s → 2.97s（曲线 355 条）✓
+  李老师      李老师_Idle.anim    8.33s → 8.33s（曲线 355 条）✓
+  林溪       林溪_Idle.anim     16.63s → 16.63s（曲线 355 条）✓
+  林溪       林溪_Sit.anim      2.97s → 2.97s（曲线 355 条）✓
+  王含       王含_Idle.anim     16.63s → 16.63s（曲线 355 条）✓
+  王含       王含_Sit.anim      2.97s → 2.97s（曲线 355 条）✓
+  组长       组长_Idle.anim     13.93s → 13.93s（曲线 355 条）✓
+  舍友A      舍友A_Idle.anim    16.63s → 16.63s（曲线 355 条）✓
+  舍友B      舍友B_Idle.anim    6.00s → 6.00s（曲线 355 条）✓
+  陆宣雨      陆宣雨_Idle.anim    2.00s → 6.00s（曲线 355 条）✓
+  陆宣雨      陆宣雨_Sit.anim     6.40s → 6.40s（曲线 355 条）✓
 
-── 控制器 / 循环剪辑
-
-── 逐个替换
-   GameRoot/Locations/Loc_办公室/第三章角色/李老师_可动      李老师        删旧模型 1(留 0) → 李老师_已绑定  layer=Outline 补碰撞体 0 材质覆盖 0 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_图书馆/第五章角色/路人 (3)      舍友A/路人     删旧模型 1(留 0) → 舍友A_已绑定  layer=Outline 补碰撞体 0 材质覆盖 11 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_图书馆/第五章角色/路人 (4)      舍友A/路人     删旧模型 1(留 0) → 舍友A_已绑定  layer=Outline 补碰撞体 0 材质覆盖 11 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_图书馆/第五章角色/路人 (5)      舍友A/路人     删旧模型 1(留 0) → 舍友A_已绑定  layer=Outline 补碰撞体 0 材质覆盖 11 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_图书馆/第五章角色/路人 (6)      舍友A/路人     删旧模型 1(留 0) → 舍友A_已绑定  layer=Outline 补碰撞体 0 材质覆盖 11 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_图书馆/第五章角色/路人 (7)      舍友A/路人     删旧模型 1(留 0) → 舍友A_已绑定  layer=Outline 补碰撞体 0 材质覆盖 11 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_图书馆/第五章角色/路人男 (10)    组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_图书馆/第五章角色/路人男 (11)    组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_图书馆/第五章角色/路人男 (12)    组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_图书馆/第五章角色/路人男 (13)    组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_图书馆/第四章角色/林溪_可动       林溪         删旧模型 1(留 0) → 林溪_已绑定  layer=Outline 补碰撞体 0 材质覆盖 0 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_图书馆/第四章角色/路人 (3)      舍友A/路人     删旧模型 1(留 0) → 舍友A_已绑定  layer=Outline 补碰撞体 0 材质覆盖 11 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_图书馆/第四章角色/路人 (4)      舍友A/路人     删旧模型 1(留 0) → 舍友A_已绑定  layer=Outline 补碰撞体 0 材质覆盖 11 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_图书馆/第四章角色/路人 (5)      舍友A/路人     删旧模型 1(留 0) → 舍友A_已绑定  layer=Outline 补碰撞体 0 材质覆盖 11 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_图书馆/第四章角色/路人 (6)      舍友A/路人     删旧模型 1(留 0) → 舍友A_已绑定  layer=Outline 补碰撞体 0 材质覆盖 11 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_图书馆/第四章角色/路人 (7)      舍友A/路人     删旧模型 1(留 0) → 舍友A_已绑定  layer=Outline 补碰撞体 0 材质覆盖 11 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_图书馆/第四章角色/路人男 (10)    组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_图书馆/第四章角色/路人男 (11)    组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_图书馆/第四章角色/路人男 (12)    组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_图书馆/第四章角色/路人男 (13)    组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_宿舍/第二章角色/陆宣雨_可动       陆宣雨        删旧模型 1(留 0) → 陆宣雨_已绑定  layer=Outline 补碰撞体 0 材质覆盖 0 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_宿舍/第五章角色/舍友A_可动       舍友A        删旧模型 1(留 0) → 舍友A_已绑定  layer=Outline 补碰撞体 0 材质覆盖 0 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_宿舍/第五章角色/舍友B_可动       舍友B        删旧模型 1(留 0) → 舍友B_已绑定  layer=Outline 补碰撞体 0 材质覆盖 0 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_宿舍/第五章角色/陆宣雨_可动       陆宣雨        删旧模型 1(留 0) → 陆宣雨_已绑定  layer=Outline 补碰撞体 0 材质覆盖 0 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_教室/第一章角色/组长_可动        组长         删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 0 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_教室/第一章角色/路人 (1)       舍友A/路人     删旧模型 1(留 0) → 舍友A_已绑定  layer=Outline 补碰撞体 0 材质覆盖 11 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_教室/第一章角色/路人男          组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_教室/第一章角色/路人男 (1)      组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_教室/第一章角色/路人男 (2)      组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_教室/第一章角色/路人男 (3)      组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_教室/第一章角色/路人男 (4)      组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_走廊/第一章角色/张知远_可动       张知远        删旧模型 1(留 0) → 张知远_已绑定  layer=Outline 补碰撞体 0 材质覆盖 0 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_走廊/第一章角色/路人男 (10)     组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_走廊/第一章角色/路人男 (11)     组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_食堂/第3章角色/厨师           李老师/路人     删旧模型 1(留 0) → 李老师_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_食堂/第3章角色/厨师 (1)       李老师/路人     删旧模型 1(留 0) → 李老师_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_食堂/第3章角色/厨师 (2)       李老师/路人     删旧模型 1(留 0) → 李老师_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_食堂/第3章角色/林溪_可动        林溪         删旧模型 1(留 0) → 林溪_已绑定  layer=Outline 补碰撞体 0 材质覆盖 0 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_食堂/第3章角色/王含_可动        王含         删旧模型 1(留 0) → 王含_已绑定  layer=Outline 补碰撞体 0 材质覆盖 0 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_食堂/第3章角色/路人           舍友A/路人     删旧模型 1(留 0) → 舍友A_已绑定  layer=Outline 补碰撞体 0 材质覆盖 11 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_食堂/第3章角色/路人 (1)       舍友A/路人     删旧模型 1(留 0) → 舍友A_已绑定  layer=Outline 补碰撞体 0 材质覆盖 11 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_食堂/第3章角色/路人 (2)       舍友A/路人     删旧模型 1(留 0) → 舍友A_已绑定  layer=Outline 补碰撞体 0 材质覆盖 11 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_食堂/第3章角色/路人 (3)       舍友A/路人     删旧模型 1(留 0) → 舍友A_已绑定  layer=Outline 补碰撞体 0 材质覆盖 11 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_食堂/第3章角色/路人 (4)       舍友A/路人     删旧模型 1(留 0) → 舍友A_已绑定  layer=Outline 补碰撞体 0 材质覆盖 11 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_食堂/第3章角色/路人男 (10)     组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_食堂/第3章角色/路人男 (4)      组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_食堂/第3章角色/路人男 (5)      组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_食堂/第3章角色/路人男 (6)      组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_食堂/第3章角色/路人男 (7)      组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_食堂/第3章角色/路人男 (8)      组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   GameRoot/Locations/Loc_食堂/第3章角色/路人男 (9)      组长/路人      删旧模型 1(留 0) → 组长_已绑定  layer=Outline 补碰撞体 0 材质覆盖 9 新Animator 1 | NPC：旧 Animator 已停用（旧骨架已删）
-   Player_徐夏                                    徐夏         删旧模型 1(留 1) → 徐夏_已绑定  layer=Default 补碰撞体 0 材质覆盖 0 新Animator 1 | 玩家：接新控制器（参数 Speed/Phone/TakePhone 都在） | 第一人称只投影名单 ← [torso,_mixamo_徐夏_可动]
-
-替换完成：成功 52，失败 0
-存场景 Assets/Scenes/Game.unity：成功 ✓
+合计刷新 13 份循环剪辑（GUID 不变，控制器引用不受影响）
