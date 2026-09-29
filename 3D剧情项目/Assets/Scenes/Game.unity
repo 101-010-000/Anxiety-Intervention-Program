@@ -6371,7 +6371,7 @@ MonoBehaviour:
   snapToGround: 1
   groundOffset: 0
   standDistance: 1.8
-  onlyChapters: 
+  onlyChapters: 01000000020000000300000004000000
   showPrompt: 1
 --- !u!1001 &59222279
 PrefabInstance:
@@ -25434,7 +25434,7 @@ MonoBehaviour:
   snapToGround: 1
   groundOffset: 0
   standDistance: 1.8
-  onlyChapters: 
+  onlyChapters: 01000000020000000300000004000000
   showPrompt: 1
 --- !u!1001 &349475872
 PrefabInstance:
@@ -29539,7 +29539,7 @@ MonoBehaviour:
   snapToGround: 1
   groundOffset: 0
   standDistance: 1.8
-  onlyChapters: 
+  onlyChapters: 01000000020000000300000004000000
   showPrompt: 1
 --- !u!1 &425662831
 GameObject:
@@ -49105,7 +49105,7 @@ MonoBehaviour:
   snapToGround: 1
   groundOffset: 0
   standDistance: 1.8
-  onlyChapters: 
+  onlyChapters: 01000000020000000300000004000000
   showPrompt: 1
 --- !u!1001 &724848673
 PrefabInstance:
@@ -124046,7 +124046,7 @@ MonoBehaviour:
   snapToGround: 1
   groundOffset: 0
   standDistance: 1.8
-  onlyChapters: 
+  onlyChapters: 01000000020000000300000004000000
   showPrompt: 1
 --- !u!1001 &1909571851
 PrefabInstance:

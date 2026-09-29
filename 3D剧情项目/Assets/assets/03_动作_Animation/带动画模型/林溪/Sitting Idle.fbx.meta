@@ -3,7 +3,72 @@ guid: c535bfe6c1ef58344b7250326545fb6f
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: bot_mat_bot_002_shorts
+    second: {fileID: 2100000, guid: d91079779692b7246aff8bb4661591b2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: brow_mat_eyebrows
+    second: {fileID: 2100000, guid: e06ec5c3105c9c042b69a55c0f6dee89, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: brow_mat_eyelashes
+    second: {fileID: 2100000, guid: f37ec1712fb853c47a4f1924b6b035f6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: hair_mat_hair_bangs_002
+    second: {fileID: 2100000, guid: 524e5388da5076f4786386b53d913a2e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: hair_mat_hair_tied_002
+    second: {fileID: 2100000, guid: 80a53824fbfe30743929f2a9d379703b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: hair_mat_hair_tied_002___twintails
+    second: {fileID: 2100000, guid: 339033e13ec193f438b40cf3baee705d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_base_eye_001
+    second: {fileID: 2100000, guid: 299a3fe36b6608843a2fa06440ffe4cd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_base_mouth
+    second: {fileID: 2100000, guid: cd14b83239bc05d47bcd2d8390163c6f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_eye_highlight
+    second: {fileID: 2100000, guid: 802b430427fe24e4786838796ec41b9a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: shoes_mat_shoes_002_sneakers
+    second: {fileID: 2100000, guid: 7bbccff53e0635e42a1d9921e7545615, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: skin_mat_base_F_body
+    second: {fileID: 2100000, guid: 47b6f35fa49310342bafae466e34f2be, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: skin_mat_base_F_face
+    second: {fileID: 2100000, guid: bbc2eddbc5b9ce24998163b80d5136a8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: top_mat_top_002_jacket
+    second: {fileID: 2100000, guid: 625a72feb75d60d47a064292648430fd, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

@@ -3,7 +3,67 @@ guid: 121d7bb66cce6774b9191a9086776ac6
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: brow_mat_eyebrows
+    second: {fileID: 2100000, guid: e99bc8f07b6bc5046a1dbe7cc9edc842, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: brow_mat_eyelashes
+    second: {fileID: 2100000, guid: 33927d1426972234aa37b176a9bd6bbb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: hair_mat_hair_bangs_002
+    second: {fileID: 2100000, guid: 6411db8f64ba9c242b770140b426ada2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: hair_mat_hair_medium_002
+    second: {fileID: 2100000, guid: e83e36af2af8a2c4cb12bc46b1cbc05b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_base_eye_001
+    second: {fileID: 2100000, guid: 299a3fe36b6608843a2fa06440ffe4cd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_base_mouth
+    second: {fileID: 2100000, guid: cd14b83239bc05d47bcd2d8390163c6f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_eye_highlight
+    second: {fileID: 2100000, guid: 802b430427fe24e4786838796ec41b9a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_glasses_001_square
+    second: {fileID: 2100000, guid: 8df2ff4c5206eea49ad0be175ca08d6b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: shoes_mat_shoes_007_chelseas
+    second: {fileID: 2100000, guid: b98812e701a779c488c404500946b5ea, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: skin_mat_base_F_body
+    second: {fileID: 2100000, guid: a01b336d6f5bdc547880748feadfcf0d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: skin_mat_base_F_face
+    second: {fileID: 2100000, guid: ac3d8f8e1769cd84b910e151a15a0fa7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: top_mat_outfit_003
+    second: {fileID: 2100000, guid: c3bc0043c407f0d4ebe554cbe816b03c, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
