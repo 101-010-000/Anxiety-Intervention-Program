@@ -289,6 +289,8 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
    - `_phonechat_trigger.txt` → 搭建手机聊天UI（第1章微信段）+ 渲染预览
    - `_colliders_trigger.txt` → 给 6 个地点的墙板/家具补碰撞体（防穿模/掉虚空）
    - `_phonech2_trigger.txt` → 手机摆进宿舍+接第2章交互（半径1.2m、F 拿起隐藏、下次交互重现）
+   - `_officedoorflow_trigger.txt` → 办公室进出流程（南墙换门框墙+门外走廊4×4m+锚点重摆+出口交互点，幂等，跑完自删）
+     （工具 `Assets/Editor/OfficeDoorFlowSetup.cs`，报告 `assets/_报告/_办公室进出流程.txt`、预览 `预览/场景/办公室门_外|内.png`）
    > 触发器依赖"域重载"生效：改一下任意脚本文件、或让 Unity 窗口获得焦点/按 Ctrl+R 即可。
 4. **出现"洋红 / 空材质"**：先跑 `Tools/干预项目/全量强制重导`（等价 Assets → Reimport All），
    再用 `诊断角色材质` 核对（`_报告/_材质诊断.txt` 里应无 `MATERIAL_NULL`、无 `supported=False`）。

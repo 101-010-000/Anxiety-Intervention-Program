@@ -230,6 +230,10 @@ public class StoryRunner : MonoBehaviour
                 _choiceCounter++;                           // 题号对齐（交卷计数与缩略图命名都要连续）
                 break;
 
+            case "cut":
+                CutawayCamera.Restore();                    // 快进不演切视角；兜底收掉（正常配对时本来就空）
+                break;
+
             case "fade":
             {
                 var target = FindFadeAnchor(step.to);
@@ -440,6 +444,7 @@ public class StoryRunner : MonoBehaviour
             case "fade": DoFade(step); break;
             case "enter": DoEnter(step); break;
             case "leave": DoLeave(step); break;
+            case "cut": DoCut(step); break;
 
             case "walk":
                 _currentTouch = FindFree(StoryInteractable.Mode.Touch);
@@ -598,10 +603,31 @@ public class StoryRunner : MonoBehaviour
         }
     }
 
+    // ------------------------------------------------------------------ 切视角（cut 步骤，2026-09-29）
+    // {"t":"cut","who":"李老师_可动"} = 镜头切成 TA 的第三人称跟拍视角（CutawayCamera），
+    // 主角原地不动、输入暂停（对话本就锁行走）；{"t":"cut"}（who 空）= 切回主角相机。
+    // cut 是瞬时状态翻转，紧跟的 dlg/nar 承担时长；进出场都靠台词节奏，无需黑幕。
+    void DoCut(StoryStep step)
+    {
+        if (string.IsNullOrEmpty(step.who))
+        {
+            CutawayCamera.Restore();
+            if (_player != null) _player.enabled = true;
+            Next();
+            return;
+        }
+        var t = FindCharacterTransform(step.who);
+        if (t == null) { Debug.LogWarning("[StoryRunner] cut 找不到角色「" + step.who + "」，跳过切视角"); Next(); return; }
+        if (_player != null) _player.enabled = false;    // 停输入 + 停相机控制（组件停用，方法调用不受影响）
+        CutawayCamera.Show(t);
+        Next();
+    }
+
     void ToDone()
     {
         CurrState = State.Done;
-        if (_player != null) { _player.allowEscToUnlock = _savedEsc; _player.SetLocked(false); _player.moveLocked = false; }
+        CutawayCamera.Restore();                          // 章末兜底：万一 cut 没配对收掉
+        if (_player != null) { _player.enabled = true; _player.allowEscToUnlock = _savedEsc; _player.SetLocked(false); _player.moveLocked = false; }
     }
 
     // ------------------------------------------------------------------ 黑屏转场（第2-5章"黑屏/刷新"跳转）
