@@ -53,10 +53,10 @@ public static class CharRebuild
             Skin="F2CBAF|FBE1CD", HairC="16100F|2E2320",
             TopC="8FB4DC|DCEBF7", TopB="FFFFFF|F5F5F5", BotC="5A7BA8|9CBCDC", ShoeC="E04A4A|FFFFFF" },
 
-        // 陆宣雨：连体装 3 号（藕荷色连衣裙）+ 中长发 + 刘海 + 方框眼镜（明显女性化）
+        // 陆宣雨：连体装 3 号（藕荷色连衣裙）+ 中长发 + 刘海（无眼镜，用户 2026-09-29 要求去掉）
         new Cfg{ Name="陆宣雨", Body="F_body", Head="F_head.003",
             Outfit="F_outfit.003", Shoes="F_shoes.007_chelsea", Remove="hips,torso.001",
-            Hair="C_hair_medium.002", Bangs="C_hair_bangs.002", Glasses="C_glasses.01_square",
+            Hair="C_hair_medium.002", Bangs="C_hair_bangs.002",   // 无眼镜（用户 2026-09-29 要求去掉）
             Skin="E7BFA3|F4D5C0", HairC="40261A|6A4526",
             TopC="C08AA4|E4BCCE", TopB="F2ECE2|FFFFFF", BotC="C08AA4|E4BCCE", ShoeC="4A3122|6E4A30" },
 

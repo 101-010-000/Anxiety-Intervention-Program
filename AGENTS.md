@@ -146,6 +146,27 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   得在 Rig 里设 **Humanoid + Create From This Model**（`MixamoRigCheck.cs` 里有同类代码可参考），
   否则 Animator 挂着也不动。另外每条剪辑默认都叫 `mixamo.com`，接控制器前最好改个名。
 
+### 去掉某部件（眼镜等）  `Assets/Editor/HidePart.cs`
+
+- **需求**：陆宣雨不带眼镜（用户 2026-09-29）。
+- **做法：把那个子网格的三角形清空**，不是换透明材质 ——
+  带动画模型整身是「一块合并网格 + 多个子网格」，眼镜就是其中一个子网格；
+  **描边（OutlineFeature）给对象的每个子网格都画外壳，跟材质无关** → 换透明材质也会剩一副黑眼镜框。
+  工具会：① 拷一份网格资产（`角色_URP/去部件/<角色>_<源>_无glasses.asset`）把该子网格置空
+  （**自检：剩余三角形必须为 0**，只读网格上 SetTriangles 会静默失败）；
+  ② 把当前场景里对应实例的 `SkinnedMeshRenderer.sharedMesh` 换成它；③ 清掉 `CharRebuild` 里该角色的 `Glasses=`。
+- 工具**同时**做两件事：
+  · ①**清空子网格**（网格资产 `角色_URP/去部件/<角色>_<源>_无glasses.asset`）+ 把它挂到**所有场景**（Game / 角色资源预览场景 /
+    MainMenu）里对应实例上 —— 这步才是真正把眼镜去掉（连描边外壳一起）。
+  · ②把 FBX 导入器里那个材质映射成 `隐藏部件_不渲染.mat`（全透明、不写深度）—— 管的是**新拖进来的实例、
+    工程窗口缩略图、带动画模型预览渲染**（这些不在场景里，清空网格管不到）。
+- ⚠ **网格覆盖是加在实例上的**：以后若重跑「Game角色替换」或新拖 FBX 进场景，**要再跑一次本工具**
+  （导入器映射是永久的，所以至少不会显示眼镜本体，只会剩描边外壳）。
+- ⚠ 定槽位要用【FBX 文件里的材质名顺序】（`FbxMaterialNames`）或【网格引用】，**不能靠"材质名里有 glasses"** ——
+  ① 被映射成隐形材质后就认不出来了；踩过两次（第一次漏掉预览场景，第二次整个模型都认不出）。
+- ⚠ 重建网格资产要**原地改**，不要 DeleteAsset + CreateAsset（会换 GUID，把场景里已挂的引用弄断）。
+- 菜单：`Tools/干预项目/角色：去掉部件（眼镜）`（触发器 `Assets/_hidepart_trigger.txt`）；报告 `assets/_报告/_去掉部件.txt`。
+
 ### Game 场景角色替换（GameCharSwap）  `Assets/Editor/GameCharSwap.cs`
 
 - **做了什么**（2026-09-28 定稿）：把 `Game.unity` 里 52 个角色实例（11 个剧情角色 + 41 个路人）的

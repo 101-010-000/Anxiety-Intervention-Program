@@ -1,0 +1,24 @@
+角色去掉部件（关键字 glasses）  2026-09-29 10:53
+
+隐形材质：Assets/assets/02_角色_Character/角色_URP/去部件/隐藏部件_不渲染.mat
+
+── 1) 模型：清空子网格 + 改 FBX 导入器材质映射
+  Idle.fbx：清空第 2 槽「mat_glasses_001_square」 → 陆宣雨_Idle_无glasses.asset
+      FBX 导入器映射：mat_glasses_001_square → 隐藏部件_不渲染 ✓
+  Walk.fbx：清空第 2 槽「mat_glasses_001_square」 → 陆宣雨_Walk_无glasses.asset
+      FBX 导入器映射：mat_glasses_001_square → 隐藏部件_不渲染 ✓
+  已绑定.fbx：清空第 2 槽「mat_glasses_001_square」 → 陆宣雨_已绑定_无glasses.asset
+      FBX 导入器映射：mat_glasses_001_square → 隐藏部件_不渲染 ✓
+
+── 2) 场景实例换网格
+  角色资源预览场景：Idle (8)/_mixamo_陆宣雨_可动
+  存场景 角色资源预览场景：成功 ✓（改了 1 个实例）
+  场景 Game：没有需要改的实例
+  场景 MainMenu：没有需要改的实例
+
+── 3) CharRebuild 装配表
+  装配表里已经没有目标角色的 Glasses 字段了 ✓
+
+合计：新网格 3 份，场景实例改了 1 个
+注意：网格覆盖是加在实例上的 —— 以后若重跑「Game角色替换」换新模型，要再跑一次本工具
+      （不过 FBX 导入器映射是永久的，新拖进来的实例至少不会再显示眼镜本体）

@@ -143133,6 +143133,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: -1965336706813950332, guid: edb2e4414efae394da0d8c4f2ad5cf52, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4300000, guid: 720c87e122719c94a9c0a0171064bff4, type: 2}
     - target: {fileID: -1781356600409242780, guid: edb2e4414efae394da0d8c4f2ad5cf52, type: 3}
       propertyPath: m_Layer
       value: 8
@@ -183105,6 +183109,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: -1965336706813950332, guid: edb2e4414efae394da0d8c4f2ad5cf52, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4300000, guid: 720c87e122719c94a9c0a0171064bff4, type: 2}
     - target: {fileID: -1781356600409242780, guid: edb2e4414efae394da0d8c4f2ad5cf52, type: 3}
       propertyPath: m_Layer
       value: 8

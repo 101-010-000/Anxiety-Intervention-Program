@@ -448,6 +448,7 @@ public class FirstPersonController : MonoBehaviour
         float yaw0 = transform.eulerAngles.y;
         float yaw1 = Quaternion.LookRotation(d.normalized).eulerAngles.y;
         float p0 = pitch;
+        float camYaw0 = camYaw;                 // ★ 第三人称的镜头水平角要一起转，否则镜头不跟（只扭角色）
         float t = 0f;
         while (t < 1f)
         {
@@ -455,6 +456,7 @@ public class FirstPersonController : MonoBehaviour
             float k = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(t));
             transform.rotation = Quaternion.Euler(0f, Mathf.LerpAngle(yaw0, yaw1, k), 0f);
             pitch = Mathf.LerpAngle(p0, targetPitch, k);
+            if (thirdPerson) camYaw = Mathf.LerpAngle(camYaw0, yaw1, k);   // 镜头跟着转到同一水平角
             if (cameraPivot != null)
             {
                 var e = cameraPivot.localEulerAngles;
