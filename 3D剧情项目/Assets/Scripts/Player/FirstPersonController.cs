@@ -408,6 +408,12 @@ public class FirstPersonController : MonoBehaviour
     /// </summary>
     public void MoveWithInput(float ix, float iz)
     {
+        // 走动 = 收起手机（2026-09-28 修复"低头漂移"）：Phone 姿势此前只被剧情置 true，没有任何路径
+        // 在移动时清掉，而 Texting 状态的出口只看 Phone、不看 Speed → 低头滑行到交互点。
+        // 剧情锁住时输入为 0 不会误清；微信段（全锁）手机姿势保持。
+        if ((Mathf.Abs(ix) > 0.01f || Mathf.Abs(iz) > 0.01f) && animator != null && animator.GetBool("Phone"))
+            animator.SetBool("Phone", false);
+
         Vector3 wish = WishDir(ix, iz);
 
         float speed = Input.GetKey(runKey) ? runSpeed : walkSpeed;

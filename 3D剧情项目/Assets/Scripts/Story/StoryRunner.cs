@@ -76,13 +76,18 @@ public class StoryRunner : MonoBehaviour
     StoryInteractable _currentF;
     StoryInteractable _currentTouch;
     int _choiceCounter;
+    string _pendingThumb;   // 选择题全选时的抓屏文件名（存档缩略图；章末存档复用最后一张）
     int _lastLineLen;
     Coroutine _cardRt;
     Coroutine _fadeRt;
     Coroutine _enterRt;
+    Coroutine _leaveRt;
     Coroutine _walkHintRt;
     NpcEntrance _entrance;                                  // 当前入场演出（DebugAdvance 快进用）
     readonly Dictionary<string, GameObject> _entranceNpcs = new Dictionary<string, GameObject>();
+    // leave 步骤的"回家位"：Begin 快照 enter/leave 角色的开场 pos/yaw（enter 会挪动她，退场走回这里）
+    readonly Dictionary<string, Vector3> _npcHomePos = new Dictionary<string, Vector3>();
+    readonly Dictionary<string, float> _npcHomeYaw = new Dictionary<string, float>();
 
     // 拿/放手机的 3D 动画钩子（第1章是逐字硬编码；多章后改关键词数组，旁白原文即可命中）：
     //   拿起 → animator TakePhone(Trigger) + Phone=true；放下（关键词或转入当面对话）→ Phone=false。
@@ -211,18 +216,24 @@ public class StoryRunner : MonoBehaviour
                   "（其余容器状态本就正确）");
     }
 
-    // json 是唯一事实源：Begin 时扫本章所有 enter 步骤的 who → 预禁用这些角色（记录引用，
-    // enter 时再启用——FindObjectsOfType 找不到禁用对象，所以必须先存）。
+    // json 是唯一事实源：Begin 时扫本章所有 enter/leave 步骤的 who → 记引用（FindObjectsOfType
+    // 找不到禁用对象，所以必须先存）+ 快照【开场原位】（leave 退场走回这里）。enter 的 who 预禁用
+    // （开场不在场）；leave-only 的角色开场在场，只快照不禁用（2026-09-28）。
     void CollectAndHideEntranceNpcs()
     {
         _entranceNpcs.Clear();
+        _npcHomePos.Clear();
+        _npcHomeYaw.Clear();
         foreach (var step in _ch.steps)
         {
-            if (step.t != "enter" || string.IsNullOrEmpty(step.who) || _entranceNpcs.ContainsKey(step.who)) continue;
+            if ((step.t != "enter" && step.t != "leave") || string.IsNullOrEmpty(step.who)
+                || _entranceNpcs.ContainsKey(step.who)) continue;
             var t = FindCharacterTransform(step.who);
-            if (t == null) { Debug.LogWarning("[StoryRunner] enter 角色没找到：" + step.who + "（enter 时会再找一次）"); continue; }
+            if (t == null) { Debug.LogWarning("[StoryRunner] enter/leave 角色没找到：" + step.who + "（步骤触发时会再找一次）"); continue; }
             _entranceNpcs[step.who] = t.gameObject;
-            if (t.gameObject.activeSelf) t.gameObject.SetActive(false);
+            _npcHomePos[step.who] = t.position;                 // 此刻必是场景手摆原位（enter 还没挪过她）
+            _npcHomeYaw[step.who] = t.eulerAngles.y;
+            if (step.t == "enter" && t.gameObject.activeSelf) t.gameObject.SetActive(false);
         }
     }
 
@@ -277,6 +288,7 @@ public class StoryRunner : MonoBehaviour
             case "choice": DoChoice(step); break;
             case "fade": DoFade(step); break;
             case "enter": DoEnter(step); break;
+            case "leave": DoLeave(step); break;
 
             case "walk":
                 _currentTouch = FindFree(StoryInteractable.Mode.Touch);
@@ -287,7 +299,7 @@ public class StoryRunner : MonoBehaviour
                 break;
 
             case "interact":
-                _currentF = FindFree(StoryInteractable.Mode.InteractF);
+                _currentF = FindFree(StoryInteractable.Mode.InteractF, step.at);
                 if (_currentF == null) { Debug.LogWarning("[StoryRunner] 没有 F 交互点，跳过"); Next(); return; }
                 _currentF.armed = true;
                 ShowWalkHint(step.x);
@@ -423,6 +435,10 @@ public class StoryRunner : MonoBehaviour
         }
         if (chapterCardGroup != null)
         {
+            // ★ 章末卡必须压在 BlackFade 之上（2026-09-28 修复"章末只有黑屏"）：BlackFade 是全 UI
+            //   最上层的设计约定（转场黑幕）不能动，而章节卡排在它下面——上面的淡黑停在全黑后，
+            //   卡片淡入得再好也被纯黑盖住。运行时置顶解决，不改场景文件；随后即转主菜单，无需还原。
+            chapterCardGroup.transform.SetAsLastSibling();
             chapterCardGroup.gameObject.SetActive(true);
             float t = 0f;
             while (t < 1f) { t += Time.unscaledDeltaTime / 0.6f; chapterCardGroup.alpha = Mathf.Clamp01(t); yield return null; }
@@ -558,6 +574,59 @@ public class StoryRunner : MonoBehaviour
         Next();
     }
 
+    // ------------------------------------------------------------------ NPC 退场（leave 步骤，2026-09-28）
+    // 与 enter 对称：who 从当前位置走回【开场原位】（Begin 快照；to 显式锚点可覆盖，同名解析同 fade），
+    // 到后面向原朝向、保持在场待机。第2章陆宣雨对话完"回到自己的座位上"，不再站桩在玩家旁边。
+    // 状态复用 State.Enter（演出语义一致：能转不能走）；_entrance 字段同步指向退场演出，自检快进可用。
+    void DoLeave(StoryStep step)
+    {
+        if (_leaveRt != null) StopCoroutine(_leaveRt);
+        _leaveRt = StartCoroutine(LeaveRoutine(step));
+    }
+
+    IEnumerator LeaveRoutine(StoryStep step)
+    {
+        CurrState = State.Enter;
+        SetPerms(State.Enter);                          // 同入场演出：能转不能走
+
+        GameObject go = null;
+        _entranceNpcs.TryGetValue(step.who, out go);
+        if (go == null)
+        {
+            var t = FindCharacterTransform(step.who);   // 没进过预记录表（json 后补的 leave）也能兜底
+            go = t != null ? t.gameObject : null;
+        }
+        if (go == null || !go.activeSelf)
+        {
+            Debug.LogWarning("[StoryRunner] leave 找不到在场的角色「" + step.who + "」——跳过退场");
+            Next(); yield break;
+        }
+
+        Vector3 target;
+        float yaw;
+        Transform toT = FindFadeAnchor(step.to);
+        if (toT != null) { target = toT.position; yaw = toT.eulerAngles.y; }
+        else if (_npcHomePos.TryGetValue(step.who, out target) && _npcHomeYaw.TryGetValue(step.who, out yaw))
+        {
+            // 走回 Begin 快照的开场原位（enter 把她挪到了玩家旁边，"自己的座位"= 场景手摆原位）
+        }
+        else
+        {
+            Debug.LogWarning("[StoryRunner] leave 没有「" + step.who + "」的原位快照、也没给 to 锚点——跳过退场");
+            Next(); yield break;
+        }
+
+        _entrance = go.GetComponent<NpcEntrance>();
+        if (_entrance == null) _entrance = go.AddComponent<NpcEntrance>();
+        Vector3 from = go.transform.position;
+        yield return _entrance.Run(from, target, null); // faceTarget=null：保持走向（面朝座位方向走回去）
+
+        go.transform.rotation = Quaternion.Euler(0f, yaw, 0f);   // 到位回原朝向（如面朝书桌）
+        _entrance = null;
+        _leaveRt = null;
+        Next();
+    }
+
     static bool HitsAny(string text, string[] keys)
     {
         if (keys == null) return false;
@@ -577,21 +646,56 @@ public class StoryRunner : MonoBehaviour
     // ------------------------------------------------------------------ 自动存档（2026-09-27 接线）
     // 时机：每道干预题交卷后（受设置"选择后自动存档"开关控制）+ 章节通关（始终存，进度兜底）。
     // 槽位：最近使用的手动槽，从没存过 → 1 号槽。存到章级（读档 = 从该章第 1 步重播；
-    // nodeId/step 先留档，章内续播以后要再做）。自检（StorySmokeDriver 在场）不写档，防污染真实存档。
+    // nodeId/step 先留档，章内续播以后要再做）。
+    // 缩略图：选择题全选完毕、面板完整显示的那一刻抓屏（ChoicePanel.onPanelComplete），
+    // 章末存档复用本章最后一题的截图。自检（StorySmokeDriver.Requested）不写档，防污染真实存档。
     void AutoSave(string reason, bool force = false)
     {
         if (!force && !GameSettings.AutoSave) return;
-        if (FindObjectOfType<StorySmokeDriver>() != null) return;
+        if (StorySmokeDriver.Requested) return;   // ★只看"自检真的在跑"标志；场景里常驻的驱动组件不代表在自检（FindObjectOfType 会把真实游玩的存档也挡掉，踩过）
         int slot = SaveSystem.LatestSlot();
         if (slot < 0) slot = 0;
+
+        // 覆盖槽位前清掉旧缩略图文件（防孤儿文件越攒越多）
+        var old = SaveSystem.Info(slot);
+        string oldThumb = old != null && old.data != null ? old.data.thumbnail : "";
+        string newThumb = _pendingThumb ?? "";
+        if (!string.IsNullOrEmpty(oldThumb) && oldThumb != newThumb)
+        {
+            try { System.IO.File.Delete(System.IO.Path.Combine(SaveSystem.Dir, oldThumb)); } catch { }
+        }
+
         var d = new SaveData
         {
-            chapter = chapterIndex,
-            step    = StepIndex,
-            nodeId  = "step" + StepIndex,
+            chapter   = chapterIndex,
+            step      = StepIndex,
+            nodeId    = "step" + StepIndex,
+            thumbnail = newThumb,
         };
         SaveSystem.Write(slot, d);
-        Debug.Log("[StoryRunner] 自动存档（" + reason + "）→ 槽 " + (slot + 1) + " · 第" + chapterIndex + "章 step " + StepIndex);
+        Debug.Log("[StoryRunner] 自动存档（" + reason + "）→ 槽 " + (slot + 1) + " · 第" + chapterIndex + "章 step " + StepIndex +
+                  (string.IsNullOrEmpty(newThumb) ? "" : " · 缩略图 " + newThumb));
+    }
+
+    /// 选择题缩略图抓屏（ChoicePanel.onPanelComplete → 全选且面板完整显示的那一刻）
+    void CaptureChoiceThumb()
+    {
+        if (StorySmokeDriver.Requested) return;
+        string name = "ch" + chapterIndex + "_c" + _choiceCounter + "_" +
+                      System.DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".png";
+        StartCoroutine(CaptureThumbCo(System.IO.Path.Combine(SaveSystem.Dir, name), name));
+    }
+
+    IEnumerator CaptureThumbCo(string absPath, string fileName)
+    {
+        yield return new WaitForEndOfFrame();
+        ScreenCapture.CaptureScreenshot(absPath);          // 帧末呈现时落盘（异步写文件）
+        // 换新图前删掉上一题的临时截图（还没被存档引用过的）
+        if (!string.IsNullOrEmpty(_pendingThumb) && _pendingThumb != fileName)
+        {
+            try { System.IO.File.Delete(System.IO.Path.Combine(SaveSystem.Dir, _pendingThumb)); } catch { }
+        }
+        _pendingThumb = fileName;
     }
 
     // ------------------------------------------------------------------ 干预题
@@ -601,6 +705,7 @@ public class StoryRunner : MonoBehaviour
         SetPerms(State.Choice);
         if (phoneChat != null && phoneChat.IsShown) phoneChat.Hide();   // 干预面板与手机不同屏（用户 2026-09-27）
         if (choicePanel != null) choicePanel.chapter = chapterIndex;    // 记录键按章隔离 story.choice.ch<N>.<idx>
+        if (choicePanel != null) choicePanel.onPanelComplete = CaptureChoiceThumb;   // 全选完整显示时抓存档缩略图
         choicePanel.Open(step, idx, order =>
         {
             AutoSave("干预题交卷");
@@ -611,16 +716,32 @@ public class StoryRunner : MonoBehaviour
     }
 
     // ------------------------------------------------------------------ 交互触发
-    // 多章并存：只认本章（chapterTag）且未消费的交互点，防止第2章等待时抓走第3章的触发盒
-    StoryInteractable FindFree(StoryInteractable.Mode m)
+    // 多章并存：只认本章（chapterTag）且未消费的交互点，防止第2章等待时抓走第3章的触发盒。
+    // at（2026-09-28）：interact 步骤点名要哪个交互点（GameObject 名）。★ 必须点名——第3章一章
+    // 3 个 F 点（点饭/落座/办公室门），按"第一个找到的"取会武装错点（试玩实测：点餐步骤武装了
+    // 座位点，走到窗口没提示）。同名点已全部消费 → Revive 复用（第2章两次"拿起手机"）；
+    // 点名没匹配上 → 警告后退回旧逻辑（第一章 json 不带 at，走的就是旧逻辑）。
+    StoryInteractable FindFree(StoryInteractable.Mode m, string at = null)
     {
         var all = FindObjectsOfType<StoryInteractable>();
         StoryInteractable best = null;
+        StoryInteractable named = null, namedUsed = null;
         foreach (var si in all)
         {
-            if (si == null || si.mode != m || si.Consumed) continue;
+            if (si == null || si.mode != m) continue;
             if (si.chapterTag != chapterIndex) continue;
-            if (best == null) best = si;
+            if (!string.IsNullOrEmpty(at) && si.name == at)
+            {
+                if (!si.Consumed) named = si;
+                else if (namedUsed == null) namedUsed = si;
+            }
+            if (!si.Consumed && best == null) best = si;
+        }
+        if (!string.IsNullOrEmpty(at))
+        {
+            if (named != null) return named;
+            if (namedUsed != null) { namedUsed.Revive(); return namedUsed; }
+            Debug.LogWarning("[StoryRunner] 没找到名为「" + at + "」的本章交互点——退回第一个可用点（检查 at 拼写/场景点名）");
         }
         return best;
     }
@@ -636,6 +757,11 @@ public class StoryRunner : MonoBehaviour
         }
         else if (si.mode == StoryInteractable.Mode.InteractF && CurrState == State.WaitInteract)
         {
+            // 「拿起手机」类提示 = 按 F 这一刻才拿（2026-09-28：此前 nar 命中关键词就提前低头，
+            // 走过去的过程被清 Phone 修正为走路姿势，到达按下才真正拿起）
+            if (_player != null && _player.animator != null && !string.IsNullOrEmpty(si.promptText)
+                && HitsAny(si.promptText, PHONE_TAKE_KEYS))
+            { _player.animator.SetTrigger("TakePhone"); _player.animator.SetBool("Phone", true); }
             si.armed = false;
             HideWalkHint();
             HidePrompt();

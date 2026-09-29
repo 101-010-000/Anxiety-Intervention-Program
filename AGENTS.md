@@ -501,12 +501,27 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   ⚠ BlackFade 在 UI 最上层，黑屏期间对话框不可见 → 时间流逝旁白用独立 nar 步骤（放 fade 前后）。
 - **交互点章节归属**：`StoryInteractable.chapterTag`（默认1）；`FindFree()` 只取本章未消费的点。
   `promptText` 非空时 F 提示整句显示它（如「拿起手机」），空则默认「与<displayName>交谈」。
+- ★ **interact 必须点名（`at` 字段，2026-09-28）**：一章多个 F 交互点时 json 里 `"at": "交互点GameObject名"`，
+  FindFree 按名精确匹配。不点名 = 取"第一个找到的未消费点"，**会武装错点**（试玩实测：第3章点餐
+  步骤武装了座位点，走到窗口没提示；自检 Fire() 不看位置验不出来）。同名点已全部消费 →
+  `StoryInteractable.Revive()` 复用（第2章两次拿手机；⚠ 不能叫 `Reset()`，撞编辑器消息）；
+  点名没匹配 → 警告后回退旧行为（第1章 json 不带 at，走旧逻辑）。第2-5章 interact 已全部补 at。
 - **NPC 入场（enter 步骤，第2章陆宣雨）**：`{ "t": "enter", "who": "角色实例名", "from": "门口锚点名" }`。
   Begin 时按 json 预禁用 who（开场不在场）；enter 时启用并从 from 锚点走到玩家面前
   （缺省落点=玩家面前 1.3m，`to` 显式锚点可覆盖），播行走动画、到位面向玩家接对话。
   镜头 0.3s 平滑转向门口（`FirstPersonController.LookTowardRoutine`，yaw+pitch 一起动）。
   ★ 全程真实形象——虚实渐变（幽灵层/透明材质）已于 2026-09-28 按用户要求整体移除。
   锚点解析约定：接线池没有就全场景按名找——把「第2章_陆宣雨门口」拖到任意门前即生效。
+- **NPC 退场（leave 步骤，2026-09-28）**：`{ "t": "leave", "who": "角色实例名" }`——从当前位置走回
+  【开场原位】（Begin 快照 enter/leave 角色的场景手摆 pos/yaw；`to` 显式锚点可覆盖），到位回原朝向、
+  保持在场待机。状态复用 State.Enter（能转不能走），自检快进同 enter（`_entrance.Skip()`）。
+  第2章陆宣雨对话完"回到自己的座位上"用它——演完站桩在玩家旁边不是正常游戏表现。
+- ★ **章末卡显示（2026-09-28）**：`EndRoutine` 显示「第N章 完」卡前运行时 `SetAsLastSibling()` 置顶——
+  BlackFade 是全 UI 最上层的设计约定不能动，而章节卡排它下面，不置顶就被纯黑盖住（试玩实测
+  "章末只有黑屏"）。置顶后随 EndCard → 主菜单离场，无需还原。
+- ★ **走动自动收手机（2026-09-28）**：`FirstPersonController.MoveWithInput` 有输入即清 `Phone`
+  （低头漂移修复：Texting 出口只看 Phone 不看 Speed，此前没有任何路径清它）。微信段全锁不动、
+  不受影响；按 F 触发「拿起手机」类提示的瞬间 StoryRunner 会补拿（`OnInteractableFired`）。
 - **出生点按名约定**：场景里放一个名为「第N章起点」（汉字章号）的物体即为该章出生点
   （用户手放优先于工具接线的 startAnchor）。第2章用户已自放「第二章起点」。
 - **手机换聊天对象**：微信台词里非「徐夏」的说话人 → 自动推导联系人名 → `PhoneChatUI.SetContact()`

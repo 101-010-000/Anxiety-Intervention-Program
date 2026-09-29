@@ -79,4 +79,14 @@ public class StoryInteractable : MonoBehaviour
         }
         if (onTriggered != null) onTriggered(this);
     }
+
+    /// 消费后复用（2026-09-28）：同一章多次用同一个点（第2章两次"拿起手机"）。
+    /// ⚠ 不能叫 Reset()——那会撞 Unity 编辑器给 MonoBehaviour 的 Reset 消息（组件被重置时被编辑器调用）。
+    public void Revive()
+    {
+        Consumed = false;
+        PlayerInRange = false;
+        var col = GetComponent<Collider>();
+        if (col != null) col.enabled = true;
+    }
 }
