@@ -1,3 +1,23 @@
+开局探针  2026-09-29 14:23
+（逐帧看角色根位置；只看前 150 帧）
+   帧   1: BlackFade(active=True) alpha=0.45  角色位置 (77.53,0.03,-0.88)
+   帧   2: BlackFade(active=True) alpha=0.45  角色位置 (77.53,0.03,-0.88)
+   帧   3: BlackFade(active=True) alpha=0.44  角色位置 (77.53,0.03,-0.88)
+   帧   4: BlackFade(active=True) alpha=0.44  角色位置 (77.53,0.03,-0.88)
+   帧   5: BlackFade(active=True) alpha=0.44  角色位置 (77.53,0.03,-0.88)
+   帧   6: BlackFade(active=True) alpha=0.44  角色位置 (77.53,0.03,-0.88)
+   帧   7: BlackFade(active=True) alpha=0.43  角色位置 (77.53,0.03,-0.88)
+   帧   8: BlackFade(active=True) alpha=0.43  角色位置 (77.53,0.03,-0.88)
+   帧   9: BlackFade(active=True) alpha=0.43  角色位置 (77.53,0.03,-0.88)
+   帧  10: BlackFade(active=True) alpha=0.43  角色位置 (77.53,0.03,-0.88)
+   帧  11: BlackFade(active=True) alpha=0.42  角色位置 (77.53,0.03,-0.88)
+   帧  12: BlackFade(active=True) alpha=0.42  角色位置 (77.53,0.03,-0.88)
+
+总计：150 帧里移动了 0.000m（单帧最大 0.000m，出现在第 -1 帧）
+落点：起点 (77.53,0.03,-0.88) → 现在 (77.53,0.03,-0.88)
+模型 Hips 高度：第 0 帧 0.929 → 现在 0.930（差 0.001m，纯动画姿势）
+黑幕对象：BlackFade  alpha=0.06
+⑥ 本次自检实测帧率：6451 帧 / 9.4s ≈ 685.4 fps
 主角第三人称自检  2026-09-29 00:52
 
 玩家：Player_徐夏   第三人称=True

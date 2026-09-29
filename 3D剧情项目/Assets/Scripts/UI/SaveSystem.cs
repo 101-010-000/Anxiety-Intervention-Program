@@ -202,7 +202,19 @@ public static class GameProgress
         set { PlayerPrefs.SetInt(K_DONE, Mathf.Clamp(value, 0, ChapterTitles.Length)); PlayerPrefs.Save(); }
     }
 
-    public static bool IsUnlocked(int chapter) { return chapter <= Unlocked; }
+    /// <summary>
+    /// ★ 测试期开关（用户 2026-09-29 要求「暂时解锁所有章节，好测试」）：
+    ///   true  = 所有章节都当作已解锁（章节选择页 / 概览页都能直接进，不看 flow.unlocked 进度）
+    ///   false = 恢复正式行为：按进度解锁（每章通关解锁下一章）
+    /// 测试完把这里改回 false 即可（就这一行）。
+    /// </summary>
+    public static bool DebugUnlockAll = true;
+
+    public static bool IsUnlocked(int chapter)
+    {
+        if (DebugUnlockAll) return true;
+        return chapter <= Unlocked;
+    }
     public static bool IsCompleted(int chapter) { return chapter <= Completed; }
 
     /// 每章通关：解锁下一章。需求规定通关后不自动跳转，所以这里只记进度。
