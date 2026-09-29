@@ -163,6 +163,7 @@ public static class SaveCardArt
             log.Add(string.Format("  ch{0} ← {1}（{2:0.#}×{3:0.#}m，{4}，偏转 {5}°）→ 存档插图/ch{0}.png ✓",
                 def.Ch, def.Loc, w, d, alongX ? "沿长边" : "朝北看", def.YawOff));
         }
+        cam.targetTexture = null;              // 先解绑再销毁（还挂在相机上就释放会报 "Releasing render texture…"）
         Object.DestroyImmediate(rt);
         Object.DestroyImmediate(camGO);
 

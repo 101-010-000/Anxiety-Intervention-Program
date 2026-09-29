@@ -601,6 +601,7 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 | 主界面能不能点 | `Tools/干预项目/主界面运行自检`（真进 Play 模式点一遗 25 步）→ `assets/_报告/_主界面运行自检.txt` |
 | 重新切《ui素材》设计稿 | `Tools/干预项目/切分 UI 设计稿`（改切图框改 `MainMenuSlices.cs` 的 `TABLE`）→ `assets/_报告/预览/主界面/00_设计稿切图_对照.png` 看切得对不对 |
 | 在场景里直接手改弹层 | 打开 `Scenes/MainMenu.unity` 直接改（弹层默认展开可见）；若被收起/想一键恢复，丢 `Assets/_panels_visible_trigger.txt`，刷新后自动全展开并存盘 |
+| 存读档卡片美化 / 重渲定妆照 | `Tools/干预项目/存档卡定妆照/`（① 渲染5章定妆照 ② 接线存读档槽位 ③ 渲染槽位预览；或丢 `_savecard_trigger.txt` 自动①②③）→ 报告 `assets/_报告/_存档卡定妆照.txt`、预览 `预览/存档卡/`、图 `05_UI/存档插图/` |
 
 ---
 
@@ -652,6 +653,15 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   **别为这事跑整场景重建**，会把手改冲掉（如已删的 Logo 徽标、用户自换的按钮素材）。
 - 子页（设置/存读档/章节/概览）的整屏底按 ui-002 的样子：**深色底(0.94) + 中间浅色大圆角面板**
   （面板就是 ui-002 切出来的 `稿_面板_弹窗`）。
+- **存读档槽位（2026-09-28 起用「章节定妆照」，用户定稿）**：有档卡整卡铺每章预渲染场景图
+  （`05_UI/存档插图/ch1..ch5.png`，圆角+底部暗带烘进 PNG，ch1教室/ch2宿舍/ch3办公室/ch4图书馆/ch5宿舍180°反打），
+  白色实底恒隐藏，章名/时间压在暗带上（章节 (0,-64) 白、时间 (0,-88) 浅灰 17 号）。
+  运行时 `SaveSlotUI.ChapterArt`（`MainMenuUI.Awake` 注入），缺图回退旧截图 `ThumbnailCache`
+  （StoryRunner 抓屏逻辑保留，`SaveData.thumbnail` 照写）。工具与布局基线见
+  `Tools/干预项目/存档卡定妆照/`（幂等补丁，只动 `槽位_1..6` 子树 + `chapterArt` 字段）。
+  ⚠ **真实场景里 `SaveSlotUI.selectFrame` 全部未接线（`{fileID: 0}`），选中态由 `SlotSelectFx`
+  （角标+空框变色）驱动**——别按 `MainMenuBuilder.BuildSlot` 源码以为有「选中框」节点，
+  手术工具接线前先 grep 场景 YAML 核实（踩过：硬校验选中框导致 6 槽全报错）。
 
 ---
 
