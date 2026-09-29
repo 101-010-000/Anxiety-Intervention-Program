@@ -1,10 +1,10 @@
-第5章剧情运行自检（真进 Play 模式走一遍）  2026-09-29 18:26
+第5章剧情运行自检（真进 Play 模式走一遍）  2026-09-29 18:40
 
 —— 第5章剧情运行自检 ——
 StoryRunner 就绪，总步骤 94
 走完全部 94/94 步 ✓
 玩家位置取证：起点=(80.0,0.0,-0.5)  最低Y=0.0  终点=(118.7,0.0,-5.5)
-状态计数：Typing 2675 / Gap 82 / 开场旁白 3 / Choice 13 / Walk 0 / Interact 4 / Fade 0 / Enter 0 / 门口导流 3
+状态计数：Typing 2291 / Gap 82 / 开场旁白 3 / Choice 13 / Walk 0 / Interact 4 / Fade 0 / Enter 0 / 门口导流 3
 运行期报错：无 ✓
 
 注：编辑器伪造不了 Input.GetKeyDown，交互/推进走的是 DebugAdvance()/Fire()，

@@ -1,17 +1,19 @@
-第5章「任意凳子坐下」触发判定探针  2026-09-29 18:25
+第5章「碰到任意一把凳子就能坐下」逐凳自检  2026-09-29 18:40
 
-宿舍里的凳子（用来验证“本地点之外不算”）：6 把，例：凳子2 (39) @ (78.9, 1.0, 4.5)
+【第5章_图书馆躲避】Loc_图书馆：radius=0.4 anySeat=True，凳子 34 把
+  逐凳【贴住凳子站】（34/34）判定为“碰到”✓
+  凳子横向尺寸范围 0.71~0.97m；判定时离凳子面的最大间隙 0.30m（阈值 radius=0.4）
+  离第1把凳子 1.2m（该点离最近别的凳子 1.54m）→ PlayerInRange=False ✓
+  站到宿舍的凳子上（本地点之外）→ PlayerInRange=False ✓
+  站到房间正中（玩家实际落点 (200.0, 0.0, 0.0)，离最近凳子面 0.06m）→ PlayerInRange=True ✓
+      ← 判定到的凳子：GameRoot/Locations/Loc_图书馆/Content/凳子2 (50) 节点位置 (202.8, 1.0, -0.2)，渲染包围盒 center (199.8, 0.6, -0.5) size (0.96, 1.25, 0.96)，面距 0.06m
 
-【第5章_图书馆躲避】所在地点 Loc_图书馆，里面 34 把凳子；radius=0.9 anySeat=True
-  ① 站到第1把凳子（凳子2 (43) (194.3, 1.0, 1.7)）→ PlayerInRange=True ✓
-  ② 站到另一把凳子（凳子2 (61) (206.2, 1.0, -3.6)）→ PlayerInRange=True ✓
-  ③ 站到凳旁 1.6m → PlayerInRange=False ✓
-  ④ 站到宿舍的凳子上（本地点之外）→ PlayerInRange=False ✓
-
-【第5章_食堂座位】所在地点 Loc_食堂，里面 45 把凳子；radius=0.9 anySeat=True
-  ① 站到第1把凳子（凳子2 (118.0, 1.0, 7.9)）→ PlayerInRange=True ✓
-  ② 站到另一把凳子（凳子2 (16) (113.3, 1.0, 2.9)）→ PlayerInRange=True ✓
-  ③ 站到凳旁 1.6m → PlayerInRange=False ✓
-  ④ 站到宿舍的凳子上（本地点之外）→ PlayerInRange=False ✓
+【第5章_食堂座位】Loc_食堂：radius=0.4 anySeat=True，凳子 45 把
+  逐凳【贴住凳子站】（45/45）判定为“碰到”✓
+  凳子横向尺寸范围 0.71~0.96m；判定时离凳子面的最大间隙 0.30m（阈值 radius=0.4）
+  离第1把凳子 1.2m（该点离最近别的凳子 0.98m）→ PlayerInRange=False ✓
+  站到宿舍的凳子上（本地点之外）→ PlayerInRange=False ✓
+  站到房间正中（玩家实际落点 (120.0, 0.0, 0.0)，离最近凳子面 0.23m）→ PlayerInRange=True ✓
+      ← 判定到的凳子：GameRoot/Locations/Loc_食堂/Content/凳子2 (26) 节点位置 (122.3, 1.0, 1.1)，渲染包围盒 center (119.9, 0.6, -0.6) size (0.71, 1.25, 0.71)，面距 0.23m
 
 （探针结束）

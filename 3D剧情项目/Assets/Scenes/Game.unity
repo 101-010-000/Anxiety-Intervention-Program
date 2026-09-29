@@ -3169,7 +3169,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mode: 0
   displayName: 
-  radius: 0.9
+  radius: 0.4
   key: 102
   oneShot: 1
   chapterTag: 5
@@ -73774,7 +73774,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mode: 0
   displayName: 
-  radius: 0.9
+  radius: 0.4
   key: 102
   oneShot: 1
   chapterTag: 5

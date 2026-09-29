@@ -23,8 +23,8 @@ public class StoryInteractable : MonoBehaviour
     [Tooltip("F 提示整句（如「拿起手机」）。留空 = 默认「与<displayName>交谈」。")]
     public string promptText = "";
 
-    [Tooltip("任意座位模式：玩家 radius 米内有【本节点所在地点（Loc_*）】里的任意一把凳子/椅子，就算到位" +
-             "（第5章「找个凳子坐下」；判定扫描只在本地点内，跑宿舍里坐不算）")]
+    [Tooltip("任意座位模式：玩家【碰到】本地点（Loc_*）里任意一把凳子/椅子就算到位" +
+             "（第5章「找个凳子坐下」；radius = 允许离凳子表面的间隙，0.4 ≈ 贴着凳子；判定只看本地点内）")]
     public bool anySeat;
 
     /// 是否允许触发/显示（StoryRunner 只在进入对应的等待步骤时置 true）。
@@ -89,24 +89,37 @@ public class StoryInteractable : MonoBehaviour
         return list;
     }
 
-    /// 判定用的目标点：普通模式就是本节点；任意座位模式 = 玩家脚下最近的那把凳子
-    /// （最近的那把也得在 radius 内 → 真的“走到凳子旁/碰到凳子”才算）。
+    /// 判定用的目标点：普通模式就是本节点；任意座位模式 = 玩家碰到的那把凳子
+    /// （用凳子自身碰撞体/渲染包围盒算【表面】距离，不看节点原点 —— 原点可能在模型角落）。
     Vector3 AnchorFor(Vector3 playerPos)
     {
         if (!anySeat) return transform.position;
-        Transform best = null;
-        float bestSqr = radius * radius;
         var seats = SeatsHere();
+        Transform best = null;
+        Vector3 bestPoint = Vector3.zero;
+        float bestD = radius;                       // 只有“碰得到的距离”才算
         for (int i = 0; i < seats.Count; i++)
         {
             var s = seats[i];
             if (s == null || !s.gameObject.activeInHierarchy) continue;
-            Vector3 q = s.position;
-            float sq = (q.x - playerPos.x) * (q.x - playerPos.x) + (q.z - playerPos.z) * (q.z - playerPos.z);
-            if (sq <= bestSqr) { bestSqr = sq; best = s; }
+            Vector3 q = SurfacePoint(s, playerPos);
+            float d = new Vector2(q.x - playerPos.x, q.z - playerPos.z).magnitude;
+            if (d <= bestD) { bestD = d; best = s; bestPoint = q; }
         }
-        // 身边没有凳子 → 回退到本节点自身位置（半径很小，基本等于不触发）
-        return best != null ? best.position : transform.position;
+        // 身边没碰到凳子 → 回退到本节点自身位置（radius 很小，基本等于不触发）
+        return best != null ? bestPoint : transform.position;
+    }
+
+    /// 凳子上离 point 最近的一点（优先碰撞体，其次渲染包围盒，都没有才回退节点原点）
+    static Vector3 SurfacePoint(Transform seat, Vector3 point)
+    {
+        var col = seat.GetComponentInChildren<Collider>();
+        if (col != null && col.enabled && col.gameObject.activeInHierarchy)
+            return col.ClosestPoint(point);
+        var r = seat.GetComponentInChildren<Renderer>();
+        if (r != null && r.enabled && r.gameObject.activeInHierarchy)
+            return r.bounds.ClosestPoint(point);
+        return seat.position;
     }
 
     void OnTriggerEnter(Collider other)

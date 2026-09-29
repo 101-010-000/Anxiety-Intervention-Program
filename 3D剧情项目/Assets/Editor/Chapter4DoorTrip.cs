@@ -145,7 +145,7 @@ public static class Chapter4DoorTrip
 
         var ch5Lib = GameObject.Find("第5章_图书馆躲避");
         if (ch5Lib == null) _log.AppendLine("  ★ 找不到 第5章_图书馆躲避（先跑『一键搭建第2-5章』）");
-        else EnsureInteract(ch5Lib.transform, 5, 0.9f, "", "坐下，安静一会儿",
+        else EnsureInteract(ch5Lib.transform, 5, 0.4f, "", "坐下，安静一会儿",
                             "第5章_图书馆躲避（图书馆里任意一把凳子都行）", anySeat: true);
 
         // 食堂：把触发点摆在离「食堂门口落点」最近的那把椅子上（门口→座位，玩家自己走）
@@ -177,7 +177,7 @@ public static class Chapter4DoorTrip
                 }
                 else _log.AppendLine("  ★ 食堂门口 8m 内没找到椅子 —— 座位点保持原样");
             }
-            EnsureInteract(canteenSeat.transform, 5, 0.9f, "", "坐下，和舍友们一起吃饭",
+            EnsureInteract(canteenSeat.transform, 5, 0.4f, "", "坐下，和舍友们一起吃饭",
                            "第5章_食堂座位（食堂里任意一把凳子都行）", anySeat: true);
             EditorUtility.SetDirty(canteenSeat);
         }
@@ -313,7 +313,7 @@ public static class Chapter4DoorTrip
         si.anySeat = anySeat;
         EditorUtility.SetDirty(si);
         _log.AppendLine("  " + (isNew ? "+ 新建" : "= 刷新") + " F 交互点 " + title +
-                        "  ch=" + chapter + " radius=" + radius + (anySeat ? "（任意凳子：碰到凳子才算）" : "") +
+                        "  ch=" + chapter + " radius=" + radius + (anySeat ? "（任意凳子：碰到凳子才算，半径=允许离凳子表面的间隙）" : "") +
                         " prompt=" + (string.IsNullOrEmpty(promptText) ? ("与" + displayName + "交谈") : promptText));
     }
 
