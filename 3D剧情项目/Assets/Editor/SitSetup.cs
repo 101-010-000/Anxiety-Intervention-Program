@@ -83,24 +83,37 @@ public static class SitSetup
                 UnityEditor.SceneManagement.OpenSceneMode.Single);
         }
         var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
-        int spots = 0;
+        int spots = 0, fixedMode = 0;
         foreach (var root in scene.GetRootGameObjects())
             foreach (var tr in root.GetComponentsInChildren<Transform>(true))
             {
                 string n = tr.name;
-                if (!(n.Contains("落座") || n.Contains("坐下") || n.Contains("回座位"))) continue;
-                if (tr.GetComponent<SitSpot>() != null) { log.Add("  已有 SitSpot：" + n); continue; }
-                tr.gameObject.AddComponent<SitSpot>();
-                spots++;
-                log.Add("  挂上 SitSpot：" + PathOf(tr));
+                bool storyAnchor = n.Contains("落座") || n.Contains("坐下") || n.Contains("回座位");
+                bool freeSpot = n.Contains("可坐点");
+                if (!storyAnchor && !freeSpot) continue;
+
+                var spot = tr.GetComponent<SitSpot>();
+                if (spot == null) { spot = tr.gameObject.AddComponent<SitSpot>(); spots++; log.Add("  挂上 SitSpot：" + PathOf(tr)); }
+                else log.Add("  已有 SitSpot：" + PathOf(tr));
+
+                // 剧情锚点 = 锁住自动坐；玩家自己的可坐点 = 按 F 坐（用户 2026-09-29 定稿）
+                var want = storyAnchor ? SitMode.剧情锁住自动坐下 : SitMode.按F坐下;
+                if (spot.mode != want) { spot.mode = want; fixedMode++; }
+
+                // 自检：椅子找得到吗、点在不在空中
+                var seat = spot.seat != null ? spot.seat : spot.FindNearestSeatPublic();
+                log.Add(string.Format("     模式={0}  位置={1}  板凳={2}",
+                    want, tr.position.ToString("F2"), seat != null ? seat.name : "★ 附近没找到板凳/椅子"));
+                if (tr.parent == null)
+                    log.Add("     ⚠ 这个可坐点在【场景根】下（不在任何 Loc_* 里），确认是你要的位置");
             }
-        if (spots > 0)
+        if (spots > 0 || fixedMode > 0)
         {
             UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(scene);
             bool ok = UnityEditor.SceneManagement.EditorSceneManager.SaveScene(scene);
             log.Add("  存场景：" + (ok ? "成功 ✓" : "★ 失败"));
         }
-        else log.Add("  （没有新增，可能都挂过了）");
+        else log.Add("  （没有新增/调整，可能都挂过了）");
 
         log.Add("");
         log.Add(string.Format("合计：{0} 个角色有坐姿剪辑，改了 {1} 个控制器，新挂座位 {2} 个", okCh, ctrlDone, spots));
