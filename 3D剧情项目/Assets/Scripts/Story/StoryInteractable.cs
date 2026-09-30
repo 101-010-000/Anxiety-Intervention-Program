@@ -23,9 +23,17 @@ public class StoryInteractable : MonoBehaviour
     [Tooltip("F 提示整句（如「拿起手机」）。留空 = 默认「与<displayName>交谈」。")]
     public string promptText = "";
 
+    [Tooltip("道具联动（可空）：场景里的道具 GameObject 名（如 手机_淡蓝）。" +
+             "① 交互判定中心 = 道具位置（玩家要走近道具才能交互，按名解析，手挪道具自动跟随）；" +
+             "② Fire 后道具整棵隐藏（「拿起」的可见反馈）；③ Revive/重新武装时道具重新出现（下次交互前）。")]
+    public string propObjectName = "";
     [Tooltip("任意座位模式：玩家【碰到】本地点（Loc_*）里任意一把凳子/椅子就算到位" +
              "（第5章「找个凳子坐下」；radius = 允许离凳子表面的间隙，0.4 ≈ 贴着凳子；判定只看本地点内）")]
     public bool anySeat;
+    [Tooltip("任意座位模式的限定（可空）：只认名字等于它的那一把凳子（如「凳子2 (24)」）——" +
+             "剧情角色坐在固定桌旁，要在【那把】凳子边才触发（第5章食堂）。留空 = 本地点内任意凳子。" +
+             "判定仍按凳子表面距离算，与节点原点无关（这批凳子节点原点能偏 3m）。")]
+    public string seatObjectName = "";
 
     /// 是否允许触发/显示（StoryRunner 只在进入对应的等待步骤时置 true）。
     /// ★ 不加这个开关：开场旁白段（自由走动）路过组长时按一下 F 就会把交互点消费掉，
@@ -39,6 +47,42 @@ public class StoryInteractable : MonoBehaviour
     public bool Consumed { get; private set; }
 
     FirstPersonController _player;
+    GameObject _prop;          // 按名解析后缓存（隐藏后是 inactive，GameObject.Find 找不到，必须缓存）
+    bool _propMissing;         // 找过没找到：不再每帧 Find（ShowProp 时会再给一次机会）
+
+    /// 交互判定中心：联动道具的位置，没配道具就用自身（水平距离判定会把 y 清零）
+    public Vector3 PromptCenter
+    {
+        get { var p = ResolveProp(); return p != null ? p.transform.position : transform.position; }
+    }
+
+    GameObject ResolveProp()
+    {
+        if (string.IsNullOrEmpty(propObjectName)) return null;
+        if (_prop != null) return _prop;
+        if (_propMissing) return null;
+        _prop = GameObject.Find(propObjectName);
+        if (_prop == null)
+        {
+            _propMissing = true;
+            Debug.LogWarning("[StoryInteractable] 没找到联动道具「" + propObjectName + "」（交互中心回退到自身位置，隐藏/重现不生效）", this);
+        }
+        return _prop;
+    }
+
+    /// 重新武装时让联动道具回到场景（StoryRunner 进入 interact 步骤时调；Revive 里也会调）
+    public void ShowProp()
+    {
+        if (_prop == null) _propMissing = false;   // 每次武装都再试一次，别让一次 Find 失败永久失效
+        var p = ResolveProp();
+        if (p != null && !p.activeSelf) p.SetActive(true);
+    }
+
+    void HideProp()
+    {
+        var p = ResolveProp();
+        if (p != null) p.SetActive(false);
+    }
 
     FirstPersonController Player
     {
@@ -93,7 +137,7 @@ public class StoryInteractable : MonoBehaviour
     /// （用凳子自身碰撞体/渲染包围盒算【表面】距离，不看节点原点 —— 原点可能在模型角落）。
     Vector3 AnchorFor(Vector3 playerPos)
     {
-        if (!anySeat) return transform.position;
+        if (!anySeat) return PromptCenter;   // 普通模式：道具联动（手机）时判定中心跟道具走，否则本节点
         var seats = SeatsHere();
         Transform best = null;
         Vector3 bestPoint = Vector3.zero;
@@ -102,13 +146,21 @@ public class StoryInteractable : MonoBehaviour
         {
             var s = seats[i];
             if (s == null || !s.gameObject.activeInHierarchy) continue;
+            if (!string.IsNullOrEmpty(seatObjectName) && s.name != seatObjectName) continue;
             Vector3 q = SurfacePoint(s, playerPos);
             float d = new Vector2(q.x - playerPos.x, q.z - playerPos.z).magnitude;
             if (d <= bestD) { bestD = d; best = s; bestPoint = q; }
         }
+        if (best == null && !string.IsNullOrEmpty(seatObjectName) && !_seatWarned)
+        {
+            _seatWarned = true;              // 限定凳子不存在（改过名/删了）→ 提示一次，之后按旧逻辑回退（不会触发）
+            Debug.LogWarning("[StoryInteractable] 限定的凳子「" + seatObjectName + "」在本地点里没找到，交互永远到不了位", this);
+        }
         // 身边没碰到凳子 → 回退到本节点自身位置（radius 很小，基本等于不触发）
         return best != null ? bestPoint : transform.position;
     }
+
+    bool _seatWarned;
 
     /// 凳子上离 point 最近的一点（优先碰撞体，其次渲染包围盒，都没有才回退节点原点）
     static Vector3 SurfacePoint(Transform seat, Vector3 point)
@@ -141,6 +193,7 @@ public class StoryInteractable : MonoBehaviour
             if (col != null) col.enabled = false;
         }
         if (onTriggered != null) onTriggered(this);
+        HideProp();      // 联动道具整棵隐藏 = 「被拿起」的可见反馈（没配道具时 no-op）
     }
 
     /// 消费后复用（2026-09-28）：同一章多次用同一个点（第2章两次"拿起手机"）。
@@ -151,5 +204,6 @@ public class StoryInteractable : MonoBehaviour
         PlayerInRange = false;
         var col = GetComponent<Collider>();
         if (col != null) col.enabled = true;
+        ShowProp();      // 下一次交互快要开始时，道具先回到桌上（第2章第二次拿手机）
     }
 }

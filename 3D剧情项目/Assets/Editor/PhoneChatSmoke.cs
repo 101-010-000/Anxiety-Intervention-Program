@@ -92,7 +92,9 @@ public static class PhoneChatSmoke
     static void SmokePoll()
     {
         if (!_active) return;
-        if (EditorApplication.timeSinceStartup - _start > 600) { Finish("超时(600 秒)"); return; }
+        // 1800 秒：机器上同时开着多个 Unity 实例时 Play 帧率会被压得很低，
+        // 600 秒不够走完 108 步（2026-09-30 第3章超时的根因，报告里没有卡死/异常就是饿帧）
+        if (EditorApplication.timeSinceStartup - _start > 1800) { Finish("超时(1800 秒)"); return; }
         if (!EditorApplication.isPlaying) { EditorApplication.isPlaying = true; return; }
         // 兜底开跑在 StorySmokeDriver 里做（按 TargetChapter 找 runner，多 runner 并存时不能信 Instance）
         if (!StorySmokeDriver.Finished) return;

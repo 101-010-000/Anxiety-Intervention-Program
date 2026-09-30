@@ -14,6 +14,15 @@ Thumbs.db
 额外文件/*
 !额外文件/.gitkeep
 
+# asset-search 技能的下载缓存（agent 副产物，不入库）
+Downloads/
+
+# asset-search 技能的下载缓存（agent 副产物，不入库）
+Downloads/
+
 # 一次性触发器（丢进 Assets 用完即删，不入库）
 3D剧情项目/Assets/_*_trigger.txt
 3D剧情项目/Assets/_*_trigger.txt.meta
+
+# ZCode 会话本地配置（agent 环境，不入库）
+.zcode/

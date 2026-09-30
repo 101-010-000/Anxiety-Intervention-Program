@@ -16,6 +16,9 @@ public class SaveSlotUI : MonoBehaviour
 
     public int index;
 
+    /// 每章定妆照（MainMenuUI.Awake 注入，索引 = 章-1）；优先于运行时截图整卡铺图
+    public static Sprite[] ChapterArt;
+
     public void Refresh(bool selected)
     {
         var info = SaveSystem.Info(index);
@@ -33,16 +36,27 @@ public class SaveSlotUI : MonoBehaviour
         }
         if (emptyText != null) emptyText.gameObject.SetActive(!has);
         if (frameEmpty != null)  frameEmpty.enabled = !has;
-        if (frameFilled != null) frameFilled.enabled = has;
+        if (frameFilled != null) frameFilled.enabled = false;   // 有档卡整卡铺定妆照，白实底不再用
 
         if (thumb != null)
         {
-            var sprite = !has || string.IsNullOrEmpty(info.thumbPath) ? null : ThumbnailCache.Get(info.thumbPath);
+            var sprite = ChapterSpriteOf(has, info);            // 优先本章定妆照（圆角+暗带已烘进图）
+            if (sprite == null && has && !string.IsNullOrEmpty(info.thumbPath))
+                sprite = ThumbnailCache.Get(info.thumbPath);    // 缺图/老档 → 回退运行时截图
             thumb.enabled = sprite != null;
             if (sprite != null) thumb.sprite = sprite;
         }
         if (selectFx != null) selectFx.SetSelected(selected);
         else if (selectFrame != null) selectFrame.enabled = selected;   // 未接动效的旧场景兜底
+    }
+
+    /// 本章定妆照（章号越界 / 数组空 / 那张为空 → null，由调用方回退运行时截图）
+    static Sprite ChapterSpriteOf(bool has, SaveSlotInfo info)
+    {
+        if (!has || ChapterArt == null || info == null || info.data == null) return null;
+        int ch = info.data.chapter;
+        if (ch < 1 || ch > ChapterArt.Length) return null;
+        return ChapterArt[ch - 1];
     }
 }
 

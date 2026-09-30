@@ -1,0 +1,24 @@
+手机道具（Sketchfab CC-BY 淡蓝低模手机）
+==============================================
+
+手机道具导入  2026-09-28 21:34
+
+材质 手机_外壳: Universal Render Pipeline/Lit  颜色 #8AADC2
+材质 手机_屏幕: Universal Render Pipeline/Lit  颜色 #000000
+材质 手机_按键: Universal Render Pipeline/Lit  颜色 #464646
+材质 手机_镜头: Universal Render Pipeline/Lit  颜色 #FFFFFF
+几何：0.081 × 0.016 × 0.155 m，1796 三角，4 件
+预置体：Assets/assets/06_道具_Props/手机/手机_淡蓝.prefab ✓
+Outline 层：Outline (8)
+预览：Assets/assets/_报告/预览/道具/手机_淡蓝.png
+
+自检：
+  渲染器 4 个，空材质 0 个 ✓
+  层级：非 Outline 的节点 0 个 ✓
+  网格 4/4 ✓
+  许可：CC-BY 4.0（kimmy.k）★ 发布时需在致谢中署名
+
+来源：Sketchfab 4ff99cf17b164e7b9790638c5d2ef4ce「Low Poly Mobile Phone」by kimmy.k
+许可：CC-BY 4.0（★ 发布/商用需署名作者 kimmy.k）
+转换：额外文件/工具脚本/glb2obj_phone.py（GLB sha256 49dc219c…）
+约定：与其他道具一致 —— 整棵 Outline 层吃全局描边；URP Lit；无碰撞体（桌面道具不需要）

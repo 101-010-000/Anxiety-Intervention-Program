@@ -36,6 +36,7 @@ public class MainMenuUI : MonoBehaviour
     public SaveSlotUI[] slots = new SaveSlotUI[SaveSystem.SlotCount];
     public Button btnSaveRead, btnSaveDelete, btnSaveBack;
     public Text   txtSaveTip;
+    public Sprite[] chapterArt = new Sprite[5];   // 每章定妆照（存档卡整卡铺图，SaveCardArt 工具接线）
 
     [Header("章节选择页")]
     public ChapterCardUI[] chapters = new ChapterCardUI[5];
@@ -88,6 +89,8 @@ public class MainMenuUI : MonoBehaviour
         WireChapterPanel();
         WireOverview();
         WireImageViewer();
+
+        SaveSlotUI.ChapterArt = chapterArt;   // 定妆照注入（空/越界由 SaveSlotUI 回退到运行时截图）
 
         RefreshProgressHint();
         RefreshSlots();
@@ -368,7 +371,20 @@ public class MainMenuUI : MonoBehaviour
             if (_selectedSlot < 0) { Toast("先选一个存档位"); return; }
             var info = SaveSystem.Info(_selectedSlot);
             if (info == null || !info.exists) { Toast("这个存档位是空的"); return; }
-            GameProgress.SelectChapter(info.data.chapter);
+            int ch = info.data.chapter;
+            if (info.data.chapterDone)
+            {
+                // 通关档（step=总步数）：续播只剩一张结束卡，没内容可回——确认后从本章开头重玩
+                ShowConfirm("本章已通关", "「" + info.chapterText + "」是通关时留下的存档：读取会从本章开头重新开始，过程中的选择题会重新记录。", delegate
+                {
+                    GameProgress.SelectChapter(ch);   // SelectChapter 顺带清续播标记 = 从头播本章
+                    LoadGameScene();
+                }, "重玩本章", "取消");
+                return;
+            }
+            GameProgress.SelectChapter(ch);
+            // 章内续播（2026-09-28）：把存档里记的步号带进 Game 场景，Begin 静默快进到该步再继续播
+            GameProgress.SetResume(ch, info.data.step);
             LoadGameScene();
         });
         if (btnSaveDelete != null) btnSaveDelete.onClick.AddListener(delegate
