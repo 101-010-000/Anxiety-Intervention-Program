@@ -1,8 +1,18 @@
-坐姿换模型截图  00:04
-站立模型 enabled 渲染器 = 1；坐姿模型 active = False
-  截图 01_坐下前_站着 → D:\workspace\unity project\干预\额外文件\坐姿截图\01_坐下前_站着.png
-坐下后 Seated=True；站立模型 enabled 渲染器 = 0；坐姿模型 active = True
-  截图 02_坐下后_坐姿徐夏 → D:\workspace\unity project\干预\额外文件\坐姿截图\02_坐下后_坐姿徐夏.png
-走开后 Seated=True；站立模型 enabled 渲染器 = 1；坐姿模型 active = False
-  截图 03_起身后_站着 → D:\workspace\unity project\干预\额外文件\坐姿截图\03_起身后_站着.png
+坐姿换模型截图  2026-10-01 01:16
+【第3章_落座】座位 (119.99, 0.00, 3.95)  朝向 1°
+  坐下前：站立模型 enabled 渲染器=0；坐姿模型 active=True
+  坐下后：Seated=True；站立模型 enabled 渲染器=0；坐姿模型 active=True
+  截图 01_第3章_落座_坐下 → D:\workspace\unity project\干预\3D剧情项目\Assets\assets\_报告\预览\坐姿换模型\01_第3章_落座_坐下.png
+  截图 01_第3章_落座_侧面 → D:\workspace\unity project\干预\3D剧情项目\Assets\assets\_报告\预览\坐姿换模型\01_第3章_落座_侧面.png
+  起身后：Seated=False；站立模型 enabled 渲染器=1；坐姿模型 active=False
+  截图 01_第3章_落座_起身后 → D:\workspace\unity project\干预\3D剧情项目\Assets\assets\_报告\预览\坐姿换模型\01_第3章_落座_起身后.png
+
+【第5章_回座位】座位 (79.23, 0.00, 3.58)  朝向 253°
+  坐下前：站立模型 enabled 渲染器=1；坐姿模型 active=False
+  坐下后：Seated=True；站立模型 enabled 渲染器=0；坐姿模型 active=True
+  截图 02_第5章_回座位_坐下 → D:\workspace\unity project\干预\3D剧情项目\Assets\assets\_报告\预览\坐姿换模型\02_第5章_回座位_坐下.png
+  截图 02_第5章_回座位_侧面 → D:\workspace\unity project\干预\3D剧情项目\Assets\assets\_报告\预览\坐姿换模型\02_第5章_回座位_侧面.png
+  起身后：Seated=False；站立模型 enabled 渲染器=1；坐姿模型 active=False
+  截图 02_第5章_回座位_起身后 → D:\workspace\unity project\干预\3D剧情项目\Assets\assets\_报告\预览\坐姿换模型\02_第5章_回座位_起身后.png
+
 （完）

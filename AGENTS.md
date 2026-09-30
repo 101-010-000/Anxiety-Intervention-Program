@@ -80,7 +80,8 @@ Editor/                        agent 工具（菜单 Tools/干预项目/…）�
   ScenePostFx.cs               剧情场景后期：辉光/模糊/抬黑/雾 + 6 个地点各自的氛围 Volume（见第五节）
   GameDoorBuilder.cs           门口传送：给场景里已有的门触发盒挂交互 + 「按 F 开门」+ 地点选择面板（见第五节）
   Chapter4DoorTrip.cs          第4/5章门口引导：门口 UI 在且提示统一（缺了就重建）+ 第4/5章任务触发点摆位 + 清场景残留（见第五节）
-  SitSetup.cs / SitSwapSetup.cs  坐姿：生成 Sit 剪辑 + 控制器 Sit 状态 / 坐下换模型接线（宿舍 + 食堂 6 个点位，见第三节）
+  SitSetup.cs / SitSwapSetup.cs  坐姿：生成 Sit 剪辑 + 控制器 Sit 状态 / 坐下换模型接线（宿舍×2 + 食堂×1 剧情座位，见第三节）
+  ChoiceTitleColor.cs          选择题题干标题配色（改蓝白色 #CCE3FF，用户 2026-10-01）
   AnimPreviewSetup.cs          角色预览场景：每个角色挂一个不一样的动画 + 运行自检（见第五节）
   MainMenuAssets.cs            主界面 UI 贴图：程序化生成 57 张 + 中文字体 + 20 张收录图导入
   MainMenuSlices.cs            切《ui素材》设计稿：圆角抠图 + 内部压平 + 九宫格 border（稿_*.png）
@@ -160,27 +161,35 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 - **工具**（`Tools/干预项目/坐姿：生成剪辑 + 加 Sit 状态`）：① 生成循环剪辑 `<角色>_Sit.anim`；
   ② 给 `<角色>_Idle.controller` 与 `徐夏_第三人称.controller` 加 Bool 参数 `Sitting` + 状态 `Sit`
   （AnyState→Sit 当 Sitting=true；Sit→默认状态 当 false）；③ 给名字含「落座/坐下/回座位」的锚点挂 `SitSpot`。
-- ★ **坐下的表现 = 换模型（用户 2026-09-30 定稿）**：
-  · 场景里预先摆一个**默认隐藏的坐姿模型**（`Player_徐夏/徐夏_坐姿` = 带动画模型/徐夏/已绑定.fbx 的实例，
+- ★ **坐下的表现 = 换模型（用户 2026-09-30 定稿；2026-10-01 升级为「跟用户摆的坐姿模型」）**：
+  · 场景里预先摆一份**默认隐藏的坐姿模型**（`带动画模型/徐夏/Sitting Idle.fbx` 的实例，
     Animator = `徐夏_第三人称.controller` + `SitHere` 强制坐姿）；
-  · 坐下（按 F / 剧情锁住自动坐）→ **站立模型（`徐夏_已绑定`）整棵藏掉 + 坐姿模型亮出并摆到座位上**；
-    按 WASD / 走开 / 再按 F → 换回站立模型（`SitSpot.seatedModel` / `hideStandingModel`；留空才是老路子置动画器）。
+  · 坐下（剧情锁住自动坐）→ **站立模型（`徐夏_已绑定`）整棵藏掉 + 坐姿模型亮出**；
+    对话结束（解锁）后按 WASD / 走开 / 再按 F → 换回站立模型（`SitSpot.seatedModel` / `hideStandingModel`）。
+  · ★ **坐姿位置/朝向 = 坐姿模型在场景里摆好的位置/朝向**（`SitSpot.useSeatedModelPose`，默认开）：
+    用户把模型摆到椅子上，坐姿就坐那儿；**座位标记点同时对齐到模型**（X/Z + 朝向），所以 F 提示点也在椅子边。
+    ⚠ 以前坐姿是「座位标记点 + 最近凳子朝向」，标记点在书桌边 → 人会坐在桌边悬空（用户 10-01 反馈后改的）。
+  · ⚠ **座位标记半径 = 2.2m**（≥ 剧情 F 交互点半径），否则玩家站在「按 F」提示范围内按下 F 却不会坐下。
+  · ⚠ **剧情锁住（对话中）时 WASD / F 都不起身**（`SitSpot.Update` 判 `!_fpc.locked`）——坐的模型不许动；
+    但 `d > standDistance`（走开 / 剧情传送）不受锁影响，转场照样会起身。
   · 藏站立模型 = 把它的渲染器 `enabled=false`（描边外壳一起没，比换透明材质干净）——
     `FirstPersonController.SetStandingModelVisible(bool)`。
   · ⚠ **两个模型名都要列进 `firstPersonShadowsOnlyParts`**，否则第一人称坐姿模型的头会怼进相机。
   · ★ **只有剧情要坐的才坐**（用户 2026-09-30 定稿）：自由「按 F 坐下」的点**一律关掉**（`SitSpot.enabled=false`），
     只留三个剧情座位：`Loc_食堂/多章锚点/第3章_落座`、`Loc_宿舍/多章锚点/第4章_坐下看资料`、
-    `Loc_宿舍/多章锚点/第5章_回座位`（都是 `剧情锁住自动坐下` 模式 —— 玩家被剧情锁在该点 1.3m 内就自动换模型）。
-  · 坐姿模型 = 用户按地点各摆的一份「玩家切换」（`带动画模型/徐夏/Sitting Idle.fbx` 的实例，2026-09-30 晚）：
-    `Loc_宿舍/第五章角色/玩家切换`（宿舍用）、`Loc_食堂/第五章角色/玩家切换`（食堂用）。
-    工具会：① 从「第N章角色」容器挪到该 Loc 的 `多章锚点` 下（容器按章隐藏时它跟着没 → 第3/4章的座位就换不了）；
-    ② 默认 `SetActive(false)`；③ 补 Animator（`徐夏_第三人称.controller`，Sit 状态）+ `SitHere`
-    （Mixamo 的 FBX 本身不带 Animator，不补就是 T-pose）；④ **按地点分配**：宿舍的两个座位用宿舍那份、
-    食堂的座位用食堂那份（就近匹配，找不到才回退）。
-    旧的 `Player_徐夏/徐夏`（上一版接的）留作隐藏备用，别删也别显示。
+    `Loc_宿舍/多章锚点/第5章_回座位`（都是 `剧情锁住自动坐下` 模式）。
+  · 坐姿模型 = **用户按地点各摆的一份**（2026-10-01：`Loc_宿舍/…/徐夏任务视角切换`、`Loc_食堂/…/徐夏任务视角切换`；
+    上一版叫「玩家切换」，现留作隐藏备用）。工具会：① 从「第N章角色」容器挪到该 Loc 的 `多章锚点` 下
+    （容器按章隐藏时它跟着没 → 第4章的座位就换不了模型）；② 默认 `SetActive(false)`；
+    ③ 补 Animator（`徐夏_第三人称.controller`，Sit 状态）+ `SitHere`（Mixamo 的 FBX 本身不带 Animator，不补就是 T-pose）；
+    ④ **按地点分配**：宿舍的两个座位用宿舍那份、食堂的座位用食堂那份（优先名字带「任务视角」= 用户最新摆的，
+    其次「玩家切换」，再其次离地点最近的）；⑤ 把座位标记点对齐到模型。
   · 接线工具：`Tools/干预项目/坐姿换模型：接线（宿舍 + 食堂）`（`Assets/Editor/SitSwapSetup.cs`，幂等，
     报告 `assets/_报告/_坐姿换模型.txt`）；自检 `assets/_报告/_坐姿换模型自检.txt`（逐座位查：坐姿模型亮、
-    站立模型藏、Animator 在 `Sit`、Hips 0.55m / 站姿 0.90m、走开能换回来）。
+    站立模型藏、Animator 在 `Sit`、Hips 0.55m / 站姿 0.90m、坐姿与用户摆位偏差 0.00m、走开能换回来）；
+    截图存档 `assets/_报告/预览/坐姿换模型/`（临时截图驱动用完归档在 `额外文件/历史脚本_运行时/`）。
+  · ⚠ 还没接的「坐下」点：第5章 `第5章_食堂座位` / `第5章_图书馆躲避`（都是 `anySeat` 任意凳子模式，
+    没有固定座位 → 没有换模型；用户要的话得在那把凳子旁各摆一份坐姿模型再挂 SitSpot）。
   · ⚠ 找坐姿模型时**只认 prefab/FBX 实例的根**（`GetOutermostPrefabInstanceRoot(go)==go`）——
     `FindObjectsOfType<GameObject>` 会把 `mixamorig:*` 骨头也列出来，光看“源资产路径”会选到骨头上（踩过）。
 - ⚠ 坐姿剪辑的基准是**脚在地面、屁股在椅面** → 实测 Hips Y ≈ **0.55m**（站姿 Idle ≈ 0.93m），
@@ -190,8 +199,9 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   · 坐下期间 `CharacterController` **保持关闭**（`Stand()` 再打开）：胶囊插在凳子正中间，
     开着会被 collide-and-slide 顶到凳面上去；`FirstPersonController.Step()` 已加 `!cc.enabled` 早退。
 - **运行时**：`SitSpot`（座位点）—— 玩家站到座位上且**剧情把玩家锁住**（locked=true，即正在对话）→ 自动坐下；
-  按 WASD 或离座/被传送 → 起身。**不需要改 StoryRunner**（靠"站在座位上 + 被锁住"这个组合判定，
-  和现有 interact 流程天然对上）。宿舍/食堂的六个点（含两个「任意凳子」的 `可坐点`）都已接线，`onlyChapters` 清空 = 不限章节。
+  对话结束（解锁）后按 WASD / 走开 / 被传送 → 起身（锁住期间 WASD 不起身）。
+  **不需要改 StoryRunner**（靠"站在座位上 + 被锁住"这个组合判定，和现有 interact 流程天然对上）。
+  现在只有 3 个剧情座位（宿舍×2、食堂×1）挂着启用的 SitSpot，`onlyChapters` 清空 = 不限章节。
   NPC 用 `SitHere`（Start 把 Sitting 置 true），把 NPC 实例摆到座位上即可。
 - 第三人称镜头有**坐姿档**：`FirstPersonController.SetSitting(true)` 会把 `tpHeight` 1.45→0.95、
   `tpLookHeight` 1.2→0.72（不然坐着镜头盯头顶），起身自动还原。
@@ -324,7 +334,11 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
    - `_officedoorflow_trigger.txt` → 办公室进出流程（南墙换门框墙+门外走廊4×4m+锚点重摆+出口交互点，幂等，跑完自删）
      （工具 `Assets/Editor/OfficeDoorFlowSetup.cs`，报告 `assets/_报告/_办公室进出流程.txt`、预览 `预览/场景/办公室门_外|内.png`）
    - `_npcwalk_trigger.txt` → NPC 走路动画接入（扫描带 Walk.fbx 的角色：生成 `<角色>_Walk.anim` 循环副本 + Idle↔Walk 过渡，幂等，跑完自删）
+   - `_sitswap_trigger.txt` → 坐姿换模型接线（宿舍/食堂剧情座位；用用户摆好的坐姿模型，幂等）→ 报告 `assets/_报告/_坐姿换模型.txt`
+   - `_choicetitle_trigger.txt` → 选择题题干标题改蓝白色 `#CCE3FF`（幂等）→ 报告 `assets/_报告/_选择题标题配色.txt`
    > 触发器依赖"域重载"生效：改一下任意脚本文件、或让 Unity 窗口获得焦点/按 Ctrl+R 即可。
+   > ⚠ 编辑器在**后台未聚焦**时不会自动刷新：要么手动 `资产 → 刷新`，要么让窗口获得焦点（2026-10-01 实测：
+   >   鼠标点菜单栏（`资产`）→ 点`刷新` 这条路是可靠的；直接向窗口发合成 Ctrl+R 不一定送达）。
 4. **出现"洋红 / 空材质"**：先跑 `Tools/干预项目/全量强制重导`（等价 Assets → Reimport All），
    再用 `诊断角色材质` 核对（`_报告/_材质诊断.txt` 里应无 `MATERIAL_NULL`、无 `supported=False`）。
 5. **产物流向**：报告 / 清单 / 预览图 → `3D剧情项目/Assets/assets/_报告/`；
@@ -592,6 +606,10 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   · `BlackFade` = 章节转场黑幕（不透明，**最上层**，开场淡出 / 章末淡入，`StoryRunner` 驱动）；
   · `遮罩` = 对话压暗层（半透明 68%，**最底层**，按语态开关）。
 - **干预选择题（ChoicePanel，2026-09-27 定稿「按钮⇄解释」互斥）**：
+  · ★ **题干标题 = 蓝白色 #CCE3FF**（用户 2026-10-01）：面板背景透明、题干直接压在深色 Dim 上，
+    原来的深蓝灰 `#293342` 几乎看不见 → 改成蓝白。改色工具 `Tools/干预项目/选择题：题干标题改蓝白色`
+    （`Assets/Editor/ChoiceTitleColor.cs`，幂等；触发器 `_choicetitle_trigger.txt`）→ 报告 `assets/_报告/_选择题标题配色.txt`。
+    只改 `ChoicePanel.titleLabel`（选项行/确认按钮配色不动）。
   · 全选流程：一题内所有选项各选一遍才能交卷；选择顺序存 `story.choice.<题号>`（第1章 4 题 = 0~3）。
   · 交互闭环：点选项 → 该行**只变灰**（Button ColorTint 的 disabled 态，★不换贴图，`rowSelected` 字段已删）
     → 进解释态：选项行 + Confirm + **面板自己的 Dim** 全部临时隐藏，解释借**底部对话框**播 mon 独白
@@ -886,8 +904,10 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 | 第N章剧情运行自检（N=1..5） | `Tools/干预项目/第N章剧情运行自检`（或丢 `Assets/_storyNsmoke_trigger.txt`）→ `assets/_报告/_第N章剧情运行自检.txt`；⚠ 自检前场景要先保存（会重开场景） |
 | 调试：回退到上一句（仅编辑器） | Play 中按 **`Backspace`** 逐句回退并重播（含语音）；只在正停在一句话上时生效，不跨交互/走位/转场，也不跨手机聊天换段（实现见 `.trellis/spec/guides/unity-story-step-conventions.md` §三） |
 | 台词语音：生成/补缺（改了第N章 json 后） | `python 额外文件/工具脚本/voice_batch_generate.py N`（幂等）→ 把 `额外文件/语音生成/output/ch{N}` 拷进 `Assets/Resources/语音/ch{N}`、`manifest.json` 拷成 `manifest.txt` → Unity 菜单 `Tools/干预项目/台词语音/诊断` 对账（报告 `assets/_报告/_台词语音.txt`）；选角/管线细节见 §五「台词语音」节 |
-| 坐下换模型（宿舍/食堂 6 个点位接线） | `Tools/干预项目/坐姿换模型：接线（宿舍 + 食堂）`（`Assets/Editor/SitSwapSetup.cs`，或丢 `_sitswap_trigger.txt`）→ `assets/_报告/_坐姿换模型.txt`；自检 `_坐姿换模型自检.txt` |
+| 坐下换模型（宿舍×2 + 食堂×1 剧情座位；用用户手摆的坐姿模型） | `Tools/干预项目/坐姿换模型：接线（宿舍 + 食堂）`（`Assets/Editor/SitSwapSetup.cs`，或丢 `_sitswap_trigger.txt`）→ `assets/_报告/_坐姿换模型.txt`；自检 `_坐姿换模型自检.txt` |
+| 换人后坐姿位置不对（坐在桌边悬空） | 把坐姿模型（场景里 `徐夏任务视角切换`）拖到椅子上/转个方向 → 重跑上面那个工具（会把座位标记点也对齐到模型） |
 | 生成/修复选择题选项行 | `Tools/干预项目/生成选择题按钮行`（预置3行 = 补缺接线 / 强制重建 = 弃手调重建 / 选择题行去掉解释块）→ `assets/_报告/_选择题按钮行.txt`；选项行样式直接在 Scene 里改 |
+| 选择题题干看不清（深色 Dim 上压深字） | `Tools/干预项目/选择题：题干标题改蓝白色`（`Assets/Editor/ChoiceTitleColor.cs`，或丢 `_choicetitle_trigger.txt`）→ `#CCE3FF`、报告 `assets/_报告/_选择题标题配色.txt` |
 | 搭/看手机聊天 UI（微信段） | `Tools/干预项目/搭建手机聊天UI`（或丢 `_phonechat_trigger.txt`，自动搭+出预览）→ 报告 `assets/_报告/_手机聊天UI.txt`、预览 `预览/场景/手机聊天UI_预览.png` |
 | 改走动段任务栏样式（左上角目标卡） | `Tools/干预项目/任务栏样式/改为左上角目标卡`（幂等，只写 WalkHint 子树，覆盖其手调值）→ 报告 `assets/_报告/_任务栏改造.txt`、预览 `预览/任务栏_目标卡.png` |
 | 主界面工具报了什么 | `assets/_报告/_主界面搭建.txt`（层级树 + 越界/贴图/字体自检 + 按钮对照表） |

@@ -9,6 +9,8 @@
 //   【坐姿模型】（`seatedModel`，一般挂在 Player_<角色> 下、名字带 _坐姿）显出来，
 //   看上去就是“坐在了座位上”；按 WASD / 走开 / 再按 F → 切回站立模型。
 //   `seatedModel` 留空时才是老路子（给玩家的 Animator 置 Sitting 布尔）。
+//   ★ 坐姿的位置/朝向默认按【坐姿模型在场景里摆好的位置/朝向】来（useSeatedModelPose，2026-10-01）：
+//     用户把坐姿模型摆到椅子上，坐姿就坐那儿；座位标记点只当 F 交互点用。
 //
 // 朝向：**跟板凳一样** —— `seat` 指到板凳/椅子（留空则自动找最近的），坐下时角色朝向 = 板凳的朝向。
 // 高度：坐姿剪辑是「脚在地面、屁股在椅面」的基准（Hips≈0.55m），所以角色根必须在【地面】：
@@ -53,6 +55,9 @@ public class SitSpot : MonoBehaviour
     public GameObject seatedModel;
     [Tooltip("坐下时把玩家的站立模型整个藏掉（默认开）；起身时恢复")]
     public bool hideStandingModel = true;
+    [Tooltip("坐姿位置/朝向按【场景里摆好的坐姿模型】来（用户 2026-10-01 定稿：模型摆哪就坐哪）；" +
+             "关掉 = 老行为「坐到座位标记点 / 最近凳子的朝向」")]
+    public bool useSeatedModelPose = true;
 
     static readonly int SittingHash = Animator.StringToHash("Sitting");
     static readonly int SitStateHash = Animator.StringToHash("Sit");   // SitSetup 生成的状态名
@@ -89,11 +94,17 @@ public class SitSpot : MonoBehaviour
         }
         else
         {
-            bool wantMove = Input.GetAxisRaw("Horizontal") != 0f || Input.GetAxisRaw("Vertical") != 0f;
-            if (Input.GetKeyDown(key) || wantMove || d > standDistance) Stand();
+            // ★ 剧情把玩家锁住（正在对话）时：WASD / F 都不起身——坐的模型不许动，
+            //   等对话结束（unlock）后按 WASD 才恢复站立模型（用户 2026-10-01）。
+            //   走开/被传走（d > standDistance）不受锁影响，转场照样会起身。
+            bool wantMove = !_fpc.locked && (Input.GetAxisRaw("Horizontal") != 0f || Input.GetAxisRaw("Vertical") != 0f);
+            bool wantUp = !_fpc.locked && Input.GetKeyDown(key);
+            if (wantUp || wantMove || d > standDistance) Stand();
         }
 
-        if (showPrompt) SitPrompt.Set(inRange, _seated, key);
+        // 提示：剧情锁住（对话中）时 F 不起身，就别显示「按 F 起身」（用户 2026-10-01）
+        if (showPrompt && !_fpc.locked) SitPrompt.Set(inRange, _seated, key);
+        else SitPrompt.Hide(this);
     }
 
     void OnDisable()
@@ -105,7 +116,9 @@ public class SitSpot : MonoBehaviour
     /// <summary>坐姿点：贴地后的位置（坐姿剪辑要求根在地面）</summary>
     public Vector3 SeatPos()
     {
-        Vector3 p = transform.position;
+        // ★ 有坐姿模型时以【模型摆好的位置】为准（用户 2026-10-01）：座位标记点常常在书桌边，
+        //   而用户把坐姿模型摆在了椅子上/想要的座位上——坐姿要跟模型走，不然人会坐在桌子边悬空。
+        Vector3 p = (useSeatedModelPose && seatedModel != null) ? seatedModel.transform.position : transform.position;
         if (snapToGround)
         {
             // ★ 用【玩家此刻的脚底高度】当地面（用户 2026-09-30 实测踩到）：
@@ -126,6 +139,7 @@ public class SitSpot : MonoBehaviour
     /// <summary>坐姿朝向：跟板凳一致（没有板凳则用座位点自身朝向）</summary>
     public float SeatYaw()
     {
+        if (useSeatedModelPose && seatedModel != null) return seatedModel.transform.eulerAngles.y;   // 用户摆好的朝向优先
         var s = seat != null ? seat : FindNearestSeat();
         return s != null ? s.eulerAngles.y : transform.eulerAngles.y;
     }

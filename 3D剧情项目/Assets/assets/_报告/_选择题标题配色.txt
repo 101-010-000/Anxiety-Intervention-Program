@@ -1,0 +1,12 @@
+选择题题干标题配色  2026-10-01 01:08
+目标颜色：蓝白 #CCE3FF  rgb(0.80, 0.89, 1.00)
+
+题干标题节点：UI交互/ChoicePanel/Panel/Title
+  字号 38 / 粗体 Bold / 对齐 UpperCenter / 字体 中文_Deng
+  改前颜色 rgba(0.16, 0.20, 0.26, 1.00)  #293342
+  改后颜色 rgba(0.80, 0.89, 1.00, 1.00)  #CCE3FF ✓
+  （注意：Text 上有材质覆盖 Default UI Material，颜色可能被材质压住）
+
+保存场景 Assets/Scenes/Game.unity：成功 ✓
+
+怎么验：Play 进任意一章的干预选择题 → 选项行上方那句题干应是蓝白色，在深色遮罩上清晰可读。
