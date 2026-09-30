@@ -4,6 +4,12 @@
 //   · 按F坐下      —— 玩家靠近（radius 内）按 F 坐下，再按 F / 按 WASD / 走开 起身（用户 2026-09-29 定稿）
 //   · 剧情锁住自动坐 —— 站到座位上 + 剧情开始对话（locked=true）自动坐下（给 第3章_落座 等剧情锚点用）
 //
+// ★ 坐下的表现（2026-09-30 用户定稿）：【换模型】，不是给玩家动画器切坐姿状态 ——
+//   坐下时把玩家的【站立模型】（<角色>_已绑定）整个藏掉，把场景里预先摆好、默认隐藏的
+//   【坐姿模型】（`seatedModel`，一般挂在 Player_<角色> 下、名字带 _坐姿）显出来，
+//   看上去就是“坐在了座位上”；按 WASD / 走开 / 再按 F → 切回站立模型。
+//   `seatedModel` 留空时才是老路子（给玩家的 Animator 置 Sitting 布尔）。
+//
 // 朝向：**跟板凳一样** —— `seat` 指到板凳/椅子（留空则自动找最近的），坐下时角色朝向 = 板凳的朝向。
 // 高度：坐姿剪辑是「脚在地面、屁股在椅面」的基准（Hips≈0.55m），所以角色根必须在【地面】：
 //       开 snapToGround 会从标记点向下打射线找地面，标记点放高放低都不会陷进地里。
@@ -42,7 +48,14 @@ public class SitSpot : MonoBehaviour
     [Tooltip("靠近时显示「按 F 坐下」提示（运行时自建小画布，不影响剧情/门口那两套 UI）")]
     public bool showPrompt = true;
 
+    [Header("坐姿模型（换模型，用户 2026-09-30）")]
+    [Tooltip("坐下时显示的【坐姿模型】（场景里预先摆好、默认隐藏）。留空 = 老路子：给玩家动画器置 Sitting")]
+    public GameObject seatedModel;
+    [Tooltip("坐下时把玩家的站立模型整个藏掉（默认开）；起身时恢复")]
+    public bool hideStandingModel = true;
+
     static readonly int SittingHash = Animator.StringToHash("Sitting");
+    static readonly int SitStateHash = Animator.StringToHash("Sit");   // SitSetup 生成的状态名
 
     FirstPersonController _fpc;
     bool _seated;
@@ -95,10 +108,17 @@ public class SitSpot : MonoBehaviour
         Vector3 p = transform.position;
         if (snapToGround)
         {
-            RaycastHit hit;
-            // 从标记点上方 2m 往下打，找地面（忽略触发盒）
-            if (Physics.Raycast(p + Vector3.up * 2f, Vector3.down, out hit, 6f, ~0, QueryTriggerInteraction.Ignore))
-                p.y = hit.point.y;
+            // ★ 用【玩家此刻的脚底高度】当地面（用户 2026-09-30 实测踩到）：
+            //   标记点常常摆在家具上方（可坐点是凳子的子物体、Y≈0.5 坐垫高度；书桌旁的锚点在桌边），
+            //   而“从标记点向下打一条射线取第一个命中”会打到凳子/桌面 → 人坐在半空（Hips 被抬到 2m+）。
+            //   玩家此刻正站在座位旁的地面上，他的 Y 就是地面。
+            var fpc = FirstPersonController.Instance;
+            float y = fpc != null ? fpc.transform.position.y : float.MaxValue;
+            // 再拿“向下打到的所有面里最低的那个”（地板）兜一道：
+            // 玩家万一正站在凳子/桌子上触发，光看他的 Y 会把家具高度当地面
+            foreach (var h in Physics.RaycastAll(p + Vector3.up * 2f, Vector3.down, 6f, ~0, QueryTriggerInteraction.Ignore))
+                if (h.point.y < y) y = h.point.y;
+            if (y < float.MaxValue) p.y = y;
         }
         return p + Vector3.up * groundOffset;
     }
@@ -142,18 +162,52 @@ public class SitSpot : MonoBehaviour
         if (cc != null) cc.enabled = false;                  // 挪人必须关 CC（门口传送同款坑）
         _fpc.transform.position = SeatPos();
         _fpc.transform.rotation = Quaternion.Euler(0f, SeatYaw(), 0f);
-        if (cc != null) cc.enabled = true;
+        // ★ 坐着期间【保持关闭】：座位点大多在凳子/桌子正中间，胶囊插在家具里会被顶到凳面上去
+        //   （实测人浮在凳子上 0.5m）。起身时（Stand）再打开，顺便让 collide-and-slide 把人挪出家具。
 
-        _fpc.animator.SetBool(SittingHash, true);
+        // ★ 换模型：藏站立模型 + 亮出坐姿模型（坐姿模型跟人站同一个位置/朝向）
+        if (seatedModel != null)
+        {
+            seatedModel.transform.SetPositionAndRotation(SeatPos(), Quaternion.Euler(0f, SeatYaw(), 0f));
+            seatedModel.SetActive(true);
+            if (hideStandingModel) _fpc.SetStandingModelVisible(false);
+            // 坐姿模型自己的 Animator 要【立刻】在 Sit 状态：置参数 + 直接 Play("Sit") + Update(0)
+            // （不然刚亮出来的那一瞬间还停在默认站姿，会看到“站着的人突然坐下”的抽一下）
+            var sa = seatedModel.GetComponentInChildren<Animator>(true);
+            if (sa != null)
+            {
+                sa.SetBool(SittingHash, true);
+                if (sa.HasState(0, SitStateHash)) sa.Play(SitStateHash, 0, 0f);
+                sa.Update(0f);
+            }
+        }
+        else
+        {
+            _fpc.animator.SetBool(SittingHash, true);        // 老路子：玩家的动画器切坐姿
+        }
         _fpc.SetSitting(true);                                // 镜头切坐姿档（支点压低）
         _seated = true;
-        Debug.Log("[SitSpot] 坐下：" + name + "  朝向=" + SeatYaw().ToString("0.0") + "°");
+        Debug.Log("[SitSpot] 坐下：" + name + "  朝向=" + SeatYaw().ToString("0.0") + "°" +
+                  (seatedModel != null ? "（换坐姿模型「" + seatedModel.name + "」）" : "（动画器 Sitting）"));
     }
 
     void Stand()
     {
-        if (_fpc != null && _fpc.animator != null) _fpc.animator.SetBool(SittingHash, false);
-        if (_fpc != null) _fpc.SetSitting(false);
+        if (seatedModel != null)
+        {
+            seatedModel.SetActive(false);                    // 收起坐姿模型
+            if (hideStandingModel) _fpc.SetStandingModelVisible(true);   // 站立模型回来
+        }
+        else if (_fpc != null && _fpc.animator != null)
+        {
+            _fpc.animator.SetBool(SittingHash, false);
+        }
+        if (_fpc != null)
+        {
+            _fpc.SetSitting(false);
+            var cc = _fpc.GetComponent<CharacterController>();
+            if (cc != null) cc.enabled = true;               // 起身：CC 回来（顺手把插在家具里的胶囊顶出来）
+        }
         _seated = false;
         SitPrompt.Hide(this);
         Debug.Log("[SitSpot] 起身：" + name);
@@ -164,6 +218,7 @@ public class SitSpot : MonoBehaviour
 public class SitHere : MonoBehaviour
 {
     static readonly int SittingHash = Animator.StringToHash("Sitting");
+    static readonly int SitStateHash = Animator.StringToHash("Sit");   // SitSetup 生成的状态名
 
     void Start()
     {

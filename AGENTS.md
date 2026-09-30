@@ -80,6 +80,7 @@ Editor/                        agent 工具（菜单 Tools/干预项目/…）�
   ScenePostFx.cs               剧情场景后期：辉光/模糊/抬黑/雾 + 6 个地点各自的氛围 Volume（见第五节）
   GameDoorBuilder.cs           门口传送：给场景里已有的门触发盒挂交互 + 「按 F 开门」+ 地点选择面板（见第五节）
   Chapter4DoorTrip.cs          第4/5章门口引导：门口 UI 在且提示统一（缺了就重建）+ 第4/5章任务触发点摆位 + 清场景残留（见第五节）
+  SitSetup.cs / SitSwapSetup.cs  坐姿：生成 Sit 剪辑 + 控制器 Sit 状态 / 坐下换模型接线（宿舍 + 食堂 6 个点位，见第三节）
   AnimPreviewSetup.cs          角色预览场景：每个角色挂一个不一样的动画 + 运行自检（见第五节）
   MainMenuAssets.cs            主界面 UI 贴图：程序化生成 57 张 + 中文字体 + 20 张收录图导入
   MainMenuSlices.cs            切《ui素材》设计稿：圆角抠图 + 内部压平 + 九宫格 border（稿_*.png）
@@ -154,15 +155,31 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   **第3章 `interact` @ `Loc_食堂/多章锚点/第3章_落座`**、**第4章 `interact` @ `Loc_宿舍/多章锚点/第4章_坐下看资料`**、
   第5章（`第5章_回座位`）。
 - **素材**：Mixamo 的 `Sitting Idle.fbx`（勾 In Place），放 `带动画模型/<角色>/`（和 Idle/Walk 同格式，带模型那种）。
-  已有的：徐夏 / 林溪 / 王含 / 陆宣雨（李老师、舍友 A/B 还没）。
+  已有的：徐夏 / 林溪 / 王含 / 陆宣雨 / 李老师 / 组长 / 舍友A / 舍友B（2026-09-30 补齐后八个都有；
+  ⚠ 文件名必须叫 `Sitting Idle.fbx`，`SitSetup` 只认这个名字。材质走「带动画模型：贴回角色材质」）。
 - **工具**（`Tools/干预项目/坐姿：生成剪辑 + 加 Sit 状态`）：① 生成循环剪辑 `<角色>_Sit.anim`；
   ② 给 `<角色>_Idle.controller` 与 `徐夏_第三人称.controller` 加 Bool 参数 `Sitting` + 状态 `Sit`
   （AnyState→Sit 当 Sitting=true；Sit→默认状态 当 false）；③ 给名字含「落座/坐下/回座位」的锚点挂 `SitSpot`。
+- ★ **坐下的表现 = 换模型（用户 2026-09-30 定稿）**：
+  · 场景里预先摆一个**默认隐藏的坐姿模型**（`Player_徐夏/徐夏_坐姿` = 带动画模型/徐夏/已绑定.fbx 的实例，
+    Animator = `徐夏_第三人称.controller` + `SitHere` 强制坐姿）；
+  · 坐下（按 F / 剧情锁住自动坐）→ **站立模型（`徐夏_已绑定`）整棵藏掉 + 坐姿模型亮出并摆到座位上**；
+    按 WASD / 走开 / 再按 F → 换回站立模型（`SitSpot.seatedModel` / `hideStandingModel`；留空才是老路子置动画器）。
+  · 藏站立模型 = 把它的渲染器 `enabled=false`（描边外壳一起没，比换透明材质干净）——
+    `FirstPersonController.SetStandingModelVisible(bool)`。
+  · ⚠ **两个模型名都要列进 `firstPersonShadowsOnlyParts`**，否则第一人称坐姿模型的头会怼进相机。
+  · 接线工具：`Tools/干预项目/坐姿换模型：接线（宿舍 + 食堂）`（`Assets/Editor/SitSwapSetup.cs`，幂等，
+    报告 `assets/_报告/_坐姿换模型.txt`）；自检 `assets/_报告/_坐姿换模型自检.txt`（逐座位查：坐姿模型亮、
+    站立模型藏、Animator 在 `Sit`、Hips 0.55m / 站姿 0.90m、走开能换回来）。
 - ⚠ 坐姿剪辑的基准是**脚在地面、屁股在椅面** → 实测 Hips Y ≈ **0.55m**（站姿 Idle ≈ 0.93m），
   所以**座位点的 Y 必须是地面（0）**、朝向 = 面向桌子（现有三个锚点正好都在 Y=0）。
-- **运行时**：`SitSpot`（座位点）—— 玩家站到座位上且**剧情把玩家锁住**（locked=true，即正在对话）→ 自动坐下
-  （关 CC→挪人→`animator.SetBool("Sitting",true)`→`fpc.SetSitting(true)`）；按 WASD 或离座/被传送 → 起身。
-  **不需要改 StoryRunner**（靠"站在座位上 + 被锁住"这个组合判定，和现有 interact 流程天然对上）。
+  · `SitSpot.SeatPos()` 取地面：**玩家脚底 Y 与“向下打到的所有面里最低的那个”取小**。
+    别用“第一次向下命中的面”—— 座位标记常是凳子的子物体（Y≈0.5 坐垫高度），会把人坐到半空（实测 Hips 2m+）。
+  · 坐下期间 `CharacterController` **保持关闭**（`Stand()` 再打开）：胶囊插在凳子正中间，
+    开着会被 collide-and-slide 顶到凳面上去；`FirstPersonController.Step()` 已加 `!cc.enabled` 早退。
+- **运行时**：`SitSpot`（座位点）—— 玩家站到座位上且**剧情把玩家锁住**（locked=true，即正在对话）→ 自动坐下；
+  按 WASD 或离座/被传送 → 起身。**不需要改 StoryRunner**（靠"站在座位上 + 被锁住"这个组合判定，
+  和现有 interact 流程天然对上）。宿舍/食堂的六个点（含两个「任意凳子」的 `可坐点`）都已接线，`onlyChapters` 清空 = 不限章节。
   NPC 用 `SitHere`（Start 把 Sitting 置 true），把 NPC 实例摆到座位上即可。
 - 第三人称镜头有**坐姿档**：`FirstPersonController.SetSitting(true)` 会把 `tpHeight` 1.45→0.95、
   `tpLookHeight` 1.2→0.72（不然坐着镜头盯头顶），起身自动还原。
@@ -857,6 +874,7 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 | 第N章剧情运行自检（N=1..5） | `Tools/干预项目/第N章剧情运行自检`（或丢 `Assets/_storyNsmoke_trigger.txt`）→ `assets/_报告/_第N章剧情运行自检.txt`；⚠ 自检前场景要先保存（会重开场景） |
 | 调试：回退到上一句（仅编辑器） | Play 中按 **`Backspace`** 逐句回退并重播（含语音）；只在正停在一句话上时生效，不跨交互/走位/转场，也不跨手机聊天换段（实现见 `.trellis/spec/guides/unity-story-step-conventions.md` §三） |
 | 台词语音：生成/补缺（改了第N章 json 后） | `python 额外文件/工具脚本/voice_batch_generate.py N`（幂等）→ 把 `额外文件/语音生成/output/ch{N}` 拷进 `Assets/Resources/语音/ch{N}`、`manifest.json` 拷成 `manifest.txt` → Unity 菜单 `Tools/干预项目/台词语音/诊断` 对账（报告 `assets/_报告/_台词语音.txt`）；选角/管线细节见 §五「台词语音」节 |
+| 坐下换模型（宿舍/食堂 6 个点位接线） | `Tools/干预项目/坐姿换模型：接线（宿舍 + 食堂）`（`Assets/Editor/SitSwapSetup.cs`，或丢 `_sitswap_trigger.txt`）→ `assets/_报告/_坐姿换模型.txt`；自检 `_坐姿换模型自检.txt` |
 | 生成/修复选择题选项行 | `Tools/干预项目/生成选择题按钮行`（预置3行 = 补缺接线 / 强制重建 = 弃手调重建 / 选择题行去掉解释块）→ `assets/_报告/_选择题按钮行.txt`；选项行样式直接在 Scene 里改 |
 | 搭/看手机聊天 UI（微信段） | `Tools/干预项目/搭建手机聊天UI`（或丢 `_phonechat_trigger.txt`，自动搭+出预览）→ 报告 `assets/_报告/_手机聊天UI.txt`、预览 `预览/场景/手机聊天UI_预览.png` |
 | 改走动段任务栏样式（左上角目标卡） | `Tools/干预项目/任务栏样式/改为左上角目标卡`（幂等，只写 WalkHint 子树，覆盖其手调值）→ 报告 `assets/_报告/_任务栏改造.txt`、预览 `预览/任务栏_目标卡.png` |

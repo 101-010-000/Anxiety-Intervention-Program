@@ -25,6 +25,8 @@ public class FirstPersonController : MonoBehaviour
     public Transform cameraPivot;
     [Tooltip("待机/行走动画的 Animator。留空则自动找")]
     public Animator animator;
+    [Tooltip("站着时的身体模型根（坐下换模型时整个藏掉它）。留空 = 自动找第一个带 SkinnedMeshRenderer 的子物体")]
+    public GameObject standingModel;
 
     [Header("身高（改这两个，不要改物体 Y）")]
     [Tooltip("角色总身高。CharacterController 的 height 和 center 会自动跟随")]
@@ -350,6 +352,30 @@ public class FirstPersonController : MonoBehaviour
     }
 #endif
 
+    /// <summary>
+    /// 站着时的身体模型显隐（坐下换模型用，SitSpot 调）：
+    /// 直接把那一整棵子树的渲染器 enabled 关掉 —— 比换透明材质干净，描边外壳也一起没（描边是按层重画同一个渲染器的）。
+    /// 恢复时重新按第一/第三人称规则刷一遍影子模式。
+    /// </summary>
+    public void SetStandingModelVisible(bool v)
+    {
+        var go = standingModel != null ? standingModel : AutoFindStandingModel();
+        if (go == null) { Debug.LogWarning("[FirstPersonController] 找不到站立模型，坐姿换模型失败", this); return; }
+        foreach (var r in go.GetComponentsInChildren<Renderer>(true)) r.enabled = v;
+        if (v) ApplyFirstPersonParts();
+    }
+
+    GameObject AutoFindStandingModel()
+    {
+        foreach (Transform c in transform)
+        {
+            if (cameraPivot != null && (c == cameraPivot || c.IsChildOf(cameraPivot))) continue;
+            if (c.name.Contains("坐姿")) continue;                 // 别把坐姿模型当成站立模型
+            if (c.GetComponentInChildren<SkinnedMeshRenderer>(true) != null) return c.gameObject;
+        }
+        return null;
+    }
+
     /// <summary>身体可见性：第一人称下只把相机所在的躯干设成“只投影”，四肢/腿照常显示；第三人称全部正常显示</summary>
     public void ApplyFirstPersonParts()
     {
@@ -505,6 +531,9 @@ public class FirstPersonController : MonoBehaviour
 
     void Step(bool noHoriz)
     {
+        // ★ 坐着的时候 SitSpot 会把 CharacterController 关掉（不然胶囊插在凳子里，会被 collide-and-slide
+        //   顶到凳面上去，人就“浮”在凳子上 0.5m）。关着时不要调 Move——Unity 会报 inactive controller。
+        if (cc == null || !cc.enabled) return;
         // 掉出世界保护（2026-09-28）：y 低于地面 20m = 已经在虚空里下坠（正常游玩地面在 y≈0，
         // 台阶/床铺高度远不到 -20）。拉回【最后一次踩到地面的位置】并清速度——根因无论是什么
         // （传送未执行/锚点悬空/碰撞未加载），玩家都不会无限坠落。从未落地过则回世界原点（教室地板）。
