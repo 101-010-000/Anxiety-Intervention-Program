@@ -625,6 +625,16 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 - **fade（黑屏转场）**：黑幕淡入 → 传送玩家到 `fadeAnchors` 里与 `to` 同名的锚点 → 淡出。
   用于更新版剧本的「黑屏/刷新」跳转（第3章进办公室、第5章宿舍↔图书馆等）。
   ⚠ BlackFade 在 UI 最上层，黑屏期间对话框不可见 → 时间流逝旁白用独立 nar 步骤（放 fade 前后）。
+  ★ **`"showChars": true`（2026-09-30）**：落地时点亮【落点锚点所在 `Loc_*`】下的本章角色容器
+  （`Begin` 时 `PreHideDeferredChars` 先预藏，黑屏期间 `SetCharContainersAt` 点亮 → 淡出时人已在座不穿帮；
+  `SilentApply` 续播同路径）。用于「剧中才出现」的角色：`Loc_食堂/第五章角色`（陆宣雨+舍友A/B 坐着）
+  只在第5章到食堂那幕出现——宿舍/图书馆的第五章容器不带此标记，`Begin` 全地点显示不受影响。
+- **cut（切视角，2026-09-30 第3章）**：`{ "t": "cut", "who": "李老师_可动" }` = 镜头切成该角色的
+  **第三人称跟拍视角**（`CutawayCamera`：角色身后 2.6m/高 1.55 LookAt 头部，持续跟随，开 URP 后期与主相机同质感）；
+  `{"t":"cut"}`（who 空）= 切回主角相机。**主角原地不动、不传送**——cutaway 期间 FPC 整个停用（对话本就锁行走），
+  Show 会关 `FP_相机` 防双渲染/双 AudioListener。cut 是瞬时状态翻转，紧跟的 dlg/nar 承担时长；
+  `SilentApply` 快进直接 Restore；`ToDone` 兜底恢复。第3章用法：食堂听完干预题后切到李老师办公室
+  看她说"到时间了……"那段，说完切回，主角还在座位上。
 - **door（门口传送导流，2026-09-29 第4/5章）**：`{ "t":"door", "to":"Loc_图书馆",
   "x":"走到门口，按 F 前往图书馆" }` —— 不再由剧情自己瞬移，而是亮目标卡把玩家引到门口、
   让他自己按 F 选地点（面板里只有 `to` 可点），**落点就是那个地点的门口**，
@@ -640,7 +650,10 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
     **不能用节点原点**：这批 `凳子2` 的**节点位置和它真正可见的网格差了近 3m**（例：
     `凳子2 (50)` 节点在 (202.8,1.0,−0.2)、渲染包围盒中心在 (199.8,0.6,−0.5)）——按原点判会
     「大多数凳子不触发、却在凳子旁边 3m 的空地上触发」（2026-09-29 逐凳探针实测：按原点只有 8/34 触发）。
-  · `radius` = 允许离**凳子表面**的间隙（玩家胶囊半径 0.28 → 0.4 就是“贴住凳子”）；
+  · `radius` = 允许离**凳子表面**的间隙（玩家胶囊半径 0.28 → 0.3 = 必须实贴凳子，0.4 = 贴住再留 0.12m）；
+  · ★ **`seatObjectName` 限定单凳（2026-09-30）**：非空时 anySeat 只认名字等于它的那一把
+    （第5章食堂 `第5章_食堂座位` = `凳子2 (24)`，舍友们坐的那桌——之前食堂 45 把凳子全都能触发）。
+    找不到该凳子只警告一次，交互永远到不了位；节点原点无关（过滤后仍按表面距离算）。
 - ★ **interact 必须点名（`at` 字段，2026-09-28）**：一章多个 F 交互点时 json 里 `"at": "交互点GameObject名"`，
   FindFree 按名精确匹配。不点名 = 取"第一个找到的未消费点"，**会武装错点**（试玩实测：第3章点餐
   步骤武装了座位点，走到窗口没提示；自检 Fire() 不看位置验不出来）。同名点已全部消费 →
@@ -676,6 +689,13 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   ⚠ **第2章陆宣雨的场景摆位就在门口锚点旁（实测差 0.3m）**——"开场原位"对她是门口不是座位，
   所以 json 的 leave 带了 `"to": "第2章_陆宣雨座位"`：场景里放一个该名空物体（摆到她的桌椅旁）即生效；
   不放该锚点则回落到摆位快照（想用摆位方案：直接把她的实例拖到座位旁即可）。
+  ★ **第5章舍友三人组出门（2026-09-30）**：json 84-86 步三个 leave（`hide:true`）= 陆宣雨/舍友A/舍友B
+  从座位走【各自】的门口点消失（"他们先去食堂"），演完才轮到玩家的 第5章_去食堂 交互。
+  ⚠ **路线/门口锚点每人独立、不共用**（用户定稿）：`第5章_陆宣雨|舍友A|舍友B_路线_1` +
+  `…_门口` 共 6 个，都在 `Loc_宿舍/多章锚点/` 下，手拖各自生效。
+  ⚠ **坐姿 NPC 起身**：`NpcEntrance.SetWalk(true)` 会清 `Sitting`（陆宣雨_可动_坐着 是 SitHere 坐姿，
+  不清会坐着滑走）；舍友A/B 无自身 Walk.fbx，`NpcWalkSetup` 会借陆宣雨的同骨架 Walk 剪辑生成
+  各自循环副本并接线（同源骨架 Humanoid 重定向）。
 - ★ **走位绕路（via 经由点，2026-09-29）**：`enter`/`leave` 可带 `"via": ["锚点名", …]` 分段走
   （`NpcEntrance.RunPath`：逐段直线匀速；★ v8 起每段【先原地转身到位再起步】、段内朝向锁死，
   到位面向玩家是原地平滑转身——用户录屏反馈"过拐点斜着走"，旧的边走边转+瞬切已废；
@@ -713,8 +733,8 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
     它们以前都在房间正中的工具默认位（离桌子 6.2m）。
   · 第5章两个“到了地点之后要自己找”的触发点 = **任意凳子模式**（`StoryInteractable.anySeat`，2026-09-29 用户：
     「在图书馆和食堂都有，走到任意一个板凳旁就可以触发，触发范围要缩小，碰到凳子才触发」）：
-    `第5章_图书馆躲避`（207.5,−6）、`第5章_食堂座位`（115.86,−4.29）—— 两点的 radius 都是 **0.4**、
-    `anySeat=true`（判定细节见上一条：按凳子**表面**算距离，不看节点原点）。
+    `第5章_图书馆躲避`（207.5,−6）保持任意凳子 radius 0.4；`第5章_食堂座位` 2026-09-30 起
+    加 `seatObjectName="凳子2 (24)"` 只认舍友们那桌的凳子、radius 收紧到 **0.3**（实测反馈“范围有点大”）。
     · 凳子名单按 Loc 缓存（`SitSpot.IsSeatName`：凳/椅/chair/stool/bench/沙发），图书馆 34 把、食堂 45 把；
       **跨地点不算**（在宿舍坐着不能过关），离凳 1.2m 也不算。
     · 自检报告见 `assets/_报告/_第5章凳子触发自检.txt`（临时探针已归档：`额外文件/历史Editor脚本/_SeatProbe.cs`、
@@ -753,6 +773,53 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 - **待补（用户黄亮标注，内容等用户提供后加 json 步骤即可）**：第3章食堂隔壁桌外人对话、
   第4章宿舍舍友抱怨对话——预留 `dlg s=旁人甲/旁人乙`（名牌对话，无实体）。
 
+### 台词语音（DialogueVoicePlayer，2026-09-29）
+
+- **声源**：阿里云百炼 `cosyvoice-v3-flash`（CosyVoice 大模型 TTS），经 **bailian-cli**（`bl`，npm 全局装，
+  key 在 `C:\Users\LF\.bailian\config.json`，⚠ 别让它进仓库/日志）生成 mp3。
+  音色池：普通话女声 20 个 / 男声 10 个（`bl speech synthesize --list-voices --model cosyvoice-v3-flash`）。
+- **选角（12 个真实不同的"人"，用户需求"每人不同声线、全普通话、mon=本人、旁白独立"）**：
+  徐夏=龙婉(细腻柔声女)｜林溪=龙颜(温暖春风女)｜陆宣雨=龙安莉(利落从容女)｜李老师=龙应聆(温和共情女)｜
+  王含=龙安柔(温柔娴静女)｜舍友A=龙安欢(欢脱元气女)｜舍友B=龙仙(豪放可爱女)｜李同学(微信)=龙小淳(知性积极女)｜
+  学姐(微信)=龙应桃(温柔淡定女)｜组长=龙泽(温暖元气男)｜张同学=龙应询(年轻青涩男)｜**旁白=龙天(磁性理智男)**。
+  mon（内心独白）沿用徐夏声线；**班群（通知）不配音**（系统通知）；纯标点台词（「…………」）生成期跳过=静默。
+- **情绪层（2026-09-29 尝试后当晚全面退役）**：曾给台词按剧情内容加 prosody（音高/音量/SSML 停顿）表达
+  焦虑/安慰/开心，用户试听连续否决——**神经 TTS 压音高会连音色质感一起偏移**（徐夏句"变粗/像男生"）、
+  SSML 停顿拖时长（"语速不对"）。**终版定稿：全部 466 句一律纯默认 prosody（语速1.0/音高1.0/音量50），
+  唯一保留的是按音色的响度归一化**。管线里 `emotion_for/OVERRIDES/SSML_CUSTOM` 保留代码但不再被调用
+  （build_tasks 里 `e = None`）；要复活情绪层先读这段教训。管线合成完**自动套用归一化增益**
+  （读 norm_state.json 的 gains）。
+- **生成管线**：`额外文件/工具脚本/voice_batch_generate.py <章号1..5>`（幂等，只补缺；贴纸 `[比心]` 剔除、
+  断点续跑、限流重试）→ 中转 `额外文件/语音生成/output/ch{N}/*.mp3` + `manifest.json` →
+  拷进 `Assets/Resources/语音/ch{N}/` + `manifest.txt`（**键 = `ch{N}:{步号}`（台词）/ `md5:{正文哈希}`（选择题解释）**，
+  归一化规则两边必须一致：去 `[..]` 贴纸 → 换行并空格 → trim）。
+  ⚠ CosyVoice 免费额度约 1 万字符（全剧本 9.6k 字会耗尽）→ 余额不足报 `HTTP 400 Arrearage`
+  （充值后重跑管线补缺；2026-09-29 已充值并全量生成 466/466 ✓）。
+- **运行时** `Assets/Scripts/Story/DialogueVoicePlayer.cs`：懒创建（`Ensure()` 自建 GameObject+AudioSource，
+  **不改场景不接线**）；`Resources/语音/manifest.txt` 查键 → `Resources.Load<AudioClip>` 播放；
+  **缺片静默**（清单没有/mp3 缺 = 不发声，绝不报错）；自检（`StorySmokeDriver.Requested`）与
+  续播快进（`StoryResumeDriver.Active`）不发声；音量 = `GameSettings.Voice`（Master 由 AudioListener 全局管）。
+- **挂接点**（都在 `StoryRunner`/`ChoicePanel`，一处一处列清楚防误动）：
+  · `PlayText()` 开头 `PlayStep(chapterIndex, StepIndex-1)` —— 一句开始就播（微信台词也播=发送方"语音消息"感）；
+  · `Next()` 开头 `Stop()` —— 推进即切上一句（打字中点击补全**不切**，再点推进才切）；
+  · `NarFree`（开场旁白）**纯点击推进**（2026-09-29 用户定稿：去掉定时自动播，自由移动保留）；
+    `AutoPlay` 的定时推进加 `!DialogueVoicePlayer.IsPlaying` 门 —— 等语音播完再走；
+  · `ChoicePanel.EnterExplain` 播解释（`PlayTextHash(opt.body)`，md5 键）、`ExitExplain` 停。
+- **响度归一化（2026-09-29，用户反馈"各人音量忽大忽小"后加）**：各 CosyVoice 音色基准响度差最大
+  **13.4dB**（学姐龙应桃 -33.8 vs 舍友B龙仙 -20.4）→ `额外文件/工具脚本/voice_normalize.py` 按音色
+  校准到 -22dB（基准只测无情绪参数的句子，情绪相对轻重保留；增益范围钳 ±6/+12dB、alimiter 防切顶、
+  libmp3lame -q:a 2 重编码；幂等状态记 `norm_state.json`）。⚠ **每次重新生成台词后要重跑归一化+重部署**
+  （删 norm_state.json 或换目标值）。修完后各音色实测收敛到 -20~-23dB。
+- **剧本改动后**：改了 `第N章.json` → 重跑 `voice_batch_generate.py N` → 跑 `voice_normalize.py` → 把 `output/ch{N}` 拷进
+  `Resources/语音/ch{N}` + 覆盖 `manifest.txt`（清单每次全量重写，键跟着新步号走）→
+  Unity 里跑 `Tools/干预项目/台词语音/诊断（清单↔mp3↔剧本覆盖）`（`Editor/VoiceLineDiag.cs`）对账 →
+  报告 `assets/_报告/_台词语音.txt`。
+  ⚠ **只插入非语音步骤（walk/leave/interact/fade）时不用重新合成**：后续台词步号整体后移，
+  跑 `额外文件/工具脚本/voice_shift_steps.py`（按"插入位置+条数"改顶部常量）把步号键与 mp3 文件名
+  （连 .meta）在 Resources 与 output 两处同步位移，再跑上面诊断对账即可（2026-09-30 第5章 +3 实测）。
+  ⚠ 该脚本改键在前、改名在后，失败重跑前先看输出——半途状态用 `voice_shift_steps_fix.py` 补完。
+- 试音档案：`额外文件/声线试音_v3/`（选角依据）；edge-tts 免费池（仅 3 普通话女声）已被否，弃用。
+
 ---
 
 ## 六、常用操作速查
@@ -788,6 +855,8 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 | 第一章剧情运行自检 | `Tools/干预项目/第一章剧情运行自检`（PhoneChatSmoke.cs，独立入口）→ `assets/_报告/_第一章剧情运行自检.txt` |
 | 搭建第2-5章剧情（runner/锚点/接线） | `Tools/干预项目/多章剧情/一键搭建第2-5章（幂等）`（ChapterStoriesSetup.cs）→ 报告 `assets/_报告/_多章剧情搭建.txt`；摆位默认值可随后在 Scene 里手调（重跑不覆盖） |
 | 第N章剧情运行自检（N=1..5） | `Tools/干预项目/第N章剧情运行自检`（或丢 `Assets/_storyNsmoke_trigger.txt`）→ `assets/_报告/_第N章剧情运行自检.txt`；⚠ 自检前场景要先保存（会重开场景） |
+| 调试：回退到上一句（仅编辑器） | Play 中按 **`Backspace`** 逐句回退并重播（含语音）；只在正停在一句话上时生效，不跨交互/走位/转场，也不跨手机聊天换段（实现见 `.trellis/spec/guides/unity-story-step-conventions.md` §三） |
+| 台词语音：生成/补缺（改了第N章 json 后） | `python 额外文件/工具脚本/voice_batch_generate.py N`（幂等）→ 把 `额外文件/语音生成/output/ch{N}` 拷进 `Assets/Resources/语音/ch{N}`、`manifest.json` 拷成 `manifest.txt` → Unity 菜单 `Tools/干预项目/台词语音/诊断` 对账（报告 `assets/_报告/_台词语音.txt`）；选角/管线细节见 §五「台词语音」节 |
 | 生成/修复选择题选项行 | `Tools/干预项目/生成选择题按钮行`（预置3行 = 补缺接线 / 强制重建 = 弃手调重建 / 选择题行去掉解释块）→ `assets/_报告/_选择题按钮行.txt`；选项行样式直接在 Scene 里改 |
 | 搭/看手机聊天 UI（微信段） | `Tools/干预项目/搭建手机聊天UI`（或丢 `_phonechat_trigger.txt`，自动搭+出预览）→ 报告 `assets/_报告/_手机聊天UI.txt`、预览 `预览/场景/手机聊天UI_预览.png` |
 | 改走动段任务栏样式（左上角目标卡） | `Tools/干预项目/任务栏样式/改为左上角目标卡`（幂等，只写 WalkHint 子树，覆盖其手调值）→ 报告 `assets/_报告/_任务栏改造.txt`、预览 `预览/任务栏_目标卡.png` |
@@ -871,6 +940,12 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
     `_resumeChat` 队列）→ 黑幕淡入后从 step 步正常播。⚠ 续播前要先把「对话」节点激活（微信台词的
     隐形打字机在禁用节点上起不了协程，踩过）；⚠ `SelectChapter` 会顺带 `ClearResume`——读档路径
     是先 SelectChapter 再 SetResume，其它入口天然"从头播本章"。
+  · **通关档（`SaveData.chapterDone`，2026-09-30）**：章末存档带标记；主菜单读到它**弹确认框
+    "重玩本章"**（从头播，不续播——续播只剩一张结束卡，"一进去就跳游戏结束"的根源，踩过）；
+    旧档没标记的兜底：Begin 里 `step>=总步数 → resume=0`（整章从头重播，不放空壳结局）。
+  · ⚠ **自检驱动绝不能存进场景**：`ResumeDriverTemp` 曾被连着 Game.unity 存过盘 → 一次自检两个驱动
+    并跑、报告全部双份。`StoryResumeSmoke` 现在 Run 前清场、Finish 后重开场景丢弃临时对象
+    （★退 Play 后 DestroyImmediate 删的是 Play 实例，编辑态实例会活到下次保存——别改回去）。
   · **防污染**：`StorySmokeDriver.Requested` 或 `StoryResumeDriver.Active` 为真时 AutoSave 直接返回
     （★别写成 `FindObjectOfType<StorySmokeDriver>()`——那个组件常驻场景，会把真实游玩的存档全挡掉，踩过）。
   · **自检**：`Tools/干预项目/存档续播运行自检`（`StoryResumeSmoke.cs`，或丢 `_resumesmoke_trigger.txt`）

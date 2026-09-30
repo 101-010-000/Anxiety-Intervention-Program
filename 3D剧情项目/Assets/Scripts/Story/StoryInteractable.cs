@@ -30,6 +30,10 @@ public class StoryInteractable : MonoBehaviour
     [Tooltip("任意座位模式：玩家【碰到】本地点（Loc_*）里任意一把凳子/椅子就算到位" +
              "（第5章「找个凳子坐下」；radius = 允许离凳子表面的间隙，0.4 ≈ 贴着凳子；判定只看本地点内）")]
     public bool anySeat;
+    [Tooltip("任意座位模式的限定（可空）：只认名字等于它的那一把凳子（如「凳子2 (24)」）——" +
+             "剧情角色坐在固定桌旁，要在【那把】凳子边才触发（第5章食堂）。留空 = 本地点内任意凳子。" +
+             "判定仍按凳子表面距离算，与节点原点无关（这批凳子节点原点能偏 3m）。")]
+    public string seatObjectName = "";
 
     /// 是否允许触发/显示（StoryRunner 只在进入对应的等待步骤时置 true）。
     /// ★ 不加这个开关：开场旁白段（自由走动）路过组长时按一下 F 就会把交互点消费掉，
@@ -142,13 +146,21 @@ public class StoryInteractable : MonoBehaviour
         {
             var s = seats[i];
             if (s == null || !s.gameObject.activeInHierarchy) continue;
+            if (!string.IsNullOrEmpty(seatObjectName) && s.name != seatObjectName) continue;
             Vector3 q = SurfacePoint(s, playerPos);
             float d = new Vector2(q.x - playerPos.x, q.z - playerPos.z).magnitude;
             if (d <= bestD) { bestD = d; best = s; bestPoint = q; }
         }
+        if (best == null && !string.IsNullOrEmpty(seatObjectName) && !_seatWarned)
+        {
+            _seatWarned = true;              // 限定凳子不存在（改过名/删了）→ 提示一次，之后按旧逻辑回退（不会触发）
+            Debug.LogWarning("[StoryInteractable] 限定的凳子「" + seatObjectName + "」在本地点里没找到，交互永远到不了位", this);
+        }
         // 身边没碰到凳子 → 回退到本节点自身位置（radius 很小，基本等于不触发）
         return best != null ? bestPoint : transform.position;
     }
+
+    bool _seatWarned;
 
     /// 凳子上离 point 最近的一点（优先碰撞体，其次渲染包围盒，都没有才回退节点原点）
     static Vector3 SurfacePoint(Transform seat, Vector3 point)

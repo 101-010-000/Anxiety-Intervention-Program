@@ -60,9 +60,14 @@ public class PhoneChatUI : MonoBehaviour
     CanvasGroup _group;
     float _homeX;                            // 滑入/滑出的基准位（首次接线时记录，防多次开关漂移）
     readonly List<Coroutine> _pops = new List<Coroutine>();
+    readonly List<float> _msgHeights = new List<float>();   // 每条消息占的高度（含 MSG_GAP），RemoveLast 精确回收用
+    readonly List<RectTransform> _msgs = new List<RectTransform>();   // 消息节点引用（Destroy 是帧末生效的，不能靠 childCount 取最后一条）
 
     public bool IsShown { get { return gameObject.activeSelf; } }
     public string CurrentContact { get { return headerName; } }
+    /// 聊天流被清空时触发（Show 重新亮屏 / SetContact 换联系人都走 Clear）——
+    /// StoryRunner 调试回退用它同步「哪一句之后不能退」（正式运行时不订阅，无开销）。
+    public System.Action onCleared;
 
     void EnsureRefs()
     {
@@ -170,6 +175,28 @@ public class PhoneChatUI : MonoBehaviour
             else DestroyImmediate(go);
         }
         _content.sizeDelta = new Vector2(_content.sizeDelta.x, 0f);
+        _msgHeights.Clear();
+        _msgs.Clear();
+        if (onCleared != null) onCleared.Invoke();
+    }
+
+    /// 调试用：摘掉聊天流最后一条（回退到上一句台词时让手机气泡跟着回退）。
+    /// 高度按 Append 时的记录精确回收，不重排前面的消息。
+    public void RemoveLast()
+    {
+        EnsureRefs();
+        if (_content == null || _msgs.Count == 0) return;
+        var msg = _msgs[_msgs.Count - 1];
+        _msgs.RemoveAt(_msgs.Count - 1);
+        float h = _msgHeights.Count > 0 ? _msgHeights[_msgHeights.Count - 1] : 0f;
+        if (_msgHeights.Count > 0) _msgHeights.RemoveAt(_msgHeights.Count - 1);
+        if (msg != null)                                   // 已 Destroy 的对象在 Unity 里 == null，跳过
+        {
+            if (Application.isPlaying) Destroy(msg.gameObject); else DestroyImmediate(msg.gameObject);
+        }
+        _content.sizeDelta = new Vector2(_content.sizeDelta.x,
+            Mathf.Max(0f, _content.sizeDelta.y - (h + MSG_GAP)));
+        ScrollToLatest();
     }
 
     /// 追加一条消息。speaker 带「徐夏」走右侧蓝泡，「林溪」走左侧白泡；
@@ -194,6 +221,8 @@ public class PhoneChatUI : MonoBehaviour
         else h = LayoutBubble(msg, mine, y, text);
 
         _content.sizeDelta = new Vector2(_content.sizeDelta.x, _content.sizeDelta.y + h + MSG_GAP);
+        _msgHeights.Add(h);
+        _msgs.Add(msg);
         ScrollToLatest();
 
         if (Application.isPlaying)                        // 气泡弹出感（编辑器预览不做动画）

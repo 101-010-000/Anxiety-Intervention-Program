@@ -31,6 +31,7 @@ public static class NpcWalkSetup
     const string REPORT = "Assets/assets/_报告/_NPC走路接入.txt";
     const float WALK_THRESHOLD = 0.5f;   // 与 NpcEntrance.SetWalk 写的 0.65/0 配套
     const float TRANSITION = 0.15f;
+    const string BORROW_CH = "陆宣雨";   // 无自身 Walk.fbx 的角色向它借（同源骨架，见 Run 内注释）
 
     [MenuItem("Tools/干预项目/NPC走路动画/接入（扫描带Walk.fbx的角色）", false, 130)]
     public static void Run()
@@ -49,7 +50,17 @@ public static class NpcWalkSetup
             string ch = Path.GetFileName(dir);
             string walkFbx = Path.Combine(dir, "Walk.fbx").Replace('\\', '/');
             string ctrlPath = ANIM_DIR + "/" + ch + "_Idle.controller";
-            if (!File.Exists(walkFbx)) { continue; }                    // 没有 Walk 素材的角色不碰
+            string borrowNote = null;
+            if (!File.Exists(walkFbx))
+            {
+                // 没有自身 Walk 素材：借用 陆宣雨 的 Walk.fbx 生成自己的循环副本——
+                // 角色全部同源骨架（Mixamo 往返），Humanoid 挂各自 Avatar 自动重定向，动作一致。
+                // 不借就保持旧行为（不碰该角色，走位滑步）。2026-09-30 第5章舍友A/B 走向食堂门口需要。
+                string bf = Path.Combine(NEW_ROOT, BORROW_CH, "Walk.fbx").Replace('\\', '/');
+                if (ch == BORROW_CH || !File.Exists(bf)) continue;
+                walkFbx = bf;
+                borrowNote = "（无自身 Walk.fbx，借 " + BORROW_CH + " 的同骨架走路剪辑，Humanoid 重定向）";
+            }
             if (!File.Exists(ctrlPath))
             {
                 log.Add("★ " + ch + "：没有 " + Path.GetFileName(ctrlPath) + "（先跑 Game角色替换 生成）——跳过");
@@ -57,7 +68,7 @@ public static class NpcWalkSetup
                 continue;
             }
 
-            log.Add("════ " + ch);
+            log.Add("════ " + ch + (borrowNote ?? ""));
             var loop = EnsureLoopCopy(ch, walkFbx, log);
             if (loop == null) { skipped++; continue; }
             WireController(ch, ctrlPath, loop, log);
@@ -182,7 +193,10 @@ public static class NpcWalkSetup
         {
             string ch = Path.GetFileName(dir);
             string ctrlPath = ANIM_DIR + "/" + ch + "_Idle.controller";
-            if (!File.Exists(Path.Combine(dir, "Walk.fbx").Replace('\\', '/')) || !File.Exists(ctrlPath)) continue;
+            // 借用的角色（无自身 Walk.fbx）也要复核：有 <角色>_Walk.anim 副本即视为接入对象
+            bool hasOwnWalk = File.Exists(Path.Combine(dir, "Walk.fbx").Replace('\\', '/'));
+            bool borrowed = !hasOwnWalk && File.Exists(ANIM_DIR + "/" + ch + "_Walk.anim");
+            if ((!hasOwnWalk && !borrowed) || !File.Exists(ctrlPath)) continue;
 
             var loop = AssetDatabase.LoadAssetAtPath<AnimationClip>(ANIM_DIR + "/" + ch + "_Walk.anim");
             bool isLoop = loop != null && AnimationUtility.GetAnimationClipSettings(loop).loopTime;

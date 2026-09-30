@@ -130,6 +130,13 @@ public class NpcEntrance : MonoBehaviour
     void SetWalk(bool on)
     {
         if (_anim == null) return;
+        // 起步先站起来：坐姿 NPC（SitHere 在 Start 置了 Sitting=true）不清这个参数，
+        // AnyState→Sit 会一直压着，Speed 写了也不切换 → 坐着滑走（第5章陆宣雨从座位起身去食堂）
+        if (on)
+        {
+            for (int i = 0; i < _anim.parameterCount; i++)
+                if (_anim.GetParameter(i).name == "Sitting") { _anim.SetBool("Sitting", false); break; }
+        }
         // PC_徐夏_Walk.controller：Speed 混合树（0 待机 / 0.5+ 行走）
         // 0.8：起步姿态更明确（0.65 贴着阈值，Idle↔Walk 混合过渡期姿态发飘——用户录屏反馈的斜走感之一）
         for (int i = 0; i < _anim.parameterCount; i++)

@@ -13,6 +13,7 @@ public class SaveData
     public string chapterTitle = "";     // 章节标题（存档列表上显示）
     public string nodeId       = "";     // 剧情节点 id（剧情系统接入后写）
     public int    step         = 0;      // 节点内第几句
+    public bool   chapterDone  = false;  // 章末通关档标记（ToMainMenu 时写）：读档走"重玩本章"确认，不续播
     public string timeTag      = "";     // 存档时间文本 "2026-09-13 03:10"
     public int    unlockedChapter  = 1;  // 存档时已解锁到第几章
     public int    completedChapter = 0;  // 存档时已通关到第几章

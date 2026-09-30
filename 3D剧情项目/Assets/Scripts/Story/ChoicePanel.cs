@@ -174,6 +174,8 @@ public class ChoicePanel : MonoBehaviour
         {
             d.ShowNode();
             d.PlayLine(new StoryStep { t = "mon", x = opt.body });
+            // 解释=徐夏内心独白，配音同 mon：按正文哈希查语音片（缺片静默，2026-09-29）
+            DialogueVoicePlayer.Ensure().PlayTextHash(opt.body);
         }
     }
 
@@ -186,6 +188,7 @@ public class ChoicePanel : MonoBehaviour
 
         var d = Box();
         if (d != null) d.SkipTyping();   // 防后台还在打字（Choice 态 onLineTyped 不会推进剧情，安全）
+        if (DialogueVoicePlayer.Instance != null) DialogueVoicePlayer.Instance.Stop();   // 解释语音一并停
         // 框只在真显示过时才收（「对话」节点默认禁用，对禁用节点 HideNode 会起协程 → 异常）
         if (d != null && d.gameObject.activeSelf) d.HideNode();
 

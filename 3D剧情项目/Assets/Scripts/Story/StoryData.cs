@@ -36,6 +36,9 @@ public class StoryStep
     public string x = "";
     public string to = "";                   // fade：目标锚点名（runner.fadeAnchors 里同名元素）
                                              // door：要去的 locationId（门外那片地点的 id，如 Loc_图书馆）
+    public bool showChars = false;           // fade：落地时点亮【落点所在 Loc】下的本章角色容器
+                                             // （第5章食堂第五章角色：Begin 全地点显示满足不了"剧中才出现"，
+                                             //   先预藏、黑屏期间点亮 → 淡出时人已在座，不穿帮）
     public string anchor = "";               // door：到达后的落点锚点名（缺省 = 用门自己的 arrivePoint）
     public string who = "";                  // enter：角色实例名（Begin 时预禁用，enter 时启用入场）
     public string from = "";                 // enter：门口起点锚点名

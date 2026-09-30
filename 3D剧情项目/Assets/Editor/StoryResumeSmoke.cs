@@ -25,6 +25,13 @@ public static class StoryResumeSmoke
 
         EditorSceneManager.OpenScene(GAME_SCENE, OpenSceneMode.Single);
 
+        // 清场：场景里可能残留历史自检的临时驱动（★ResumeDriverTemp 曾被连着场景存过盘，
+        // 造成一次自检两个驱动并跑、报告全部双份——找不到不报错，幂等）
+        int purged = 0;
+        foreach (var t in Object.FindObjectsOfType<Transform>(true))
+            if (t.name == "ResumeDriverTemp") { Object.DestroyImmediate(t.gameObject); purged++; }
+        if (purged > 0) Debug.Log("[StoryResumeSmoke] 清掉残留临时驱动 " + purged + " 个");
+
         // 复刻读档路径：SelectChapter（清旧续播标记）→ SetResume（带步号）→ 进游戏场景
         GameProgress.SelectChapter(CH);
         GameProgress.SetResume(CH, STEP);
@@ -85,9 +92,10 @@ public static class StoryResumeSmoke
         File.WriteAllText(REPORT, string.Join("\n", lines.ToArray()));
 
         EditorApplication.isPlaying = false;
-        // 清理留在（未保存的）Game 场景里的临时驱动对象
-        var temp = GameObject.Find("ResumeDriverTemp");
-        if (temp != null) Object.DestroyImmediate(temp);
+        // 临时驱动是在编辑态场景里建的，退 Play 后它还留在（未保存的）编辑态场景里——
+        // 直接重开一遍磁盘场景把未保存改动连同它一起丢掉。★别学 DestroyImmediate-after-isPlaying=false：
+        // 那一刻其实还在 Play 里，删的是 Play 实例，编辑态实例会活到下次保存（被存过盘一次，踩过）
+        EditorSceneManager.OpenScene(GAME_SCENE, OpenSceneMode.Single);
         Debug.Log("[StoryResumeSmoke] 存档续播自检完成，报告：" + REPORT);
     }
 }

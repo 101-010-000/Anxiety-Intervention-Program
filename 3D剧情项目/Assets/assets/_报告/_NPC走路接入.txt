@@ -1,23 +1,53 @@
-NPC 走路动画接入  2026-09-29 07:31
+NPC 走路动画接入  2026-09-30 01:58
 规则：Idle↔Walk，Speed 0.5 切换（NpcEntrance 写 0.65/0），过渡 0.15s
 
+════ 张知远（无自身 Walk.fbx，借 陆宣雨 的同骨架走路剪辑，Humanoid 重定向）
+   + 张知远_Walk.anim（源 Walk.fbx 的“mixamo.com” 1.23s，GUID 新建）
+   根位移体检：水平约 0.06m/圈 ✓（原地走）
+   + 控制器：状态 Idle / 张知远_Walk，过渡 I→W（Speed>0.5）、W→I（Speed<0.5），默认=Idle
 ════ 徐夏
    = 徐夏_Walk.anim 已存在，原地刷新（源“mixamo.com” 1.00s）
    根位移体检：水平约 0.04m/圈 ✓（原地走）
    = 控制器：状态 Idle / 徐夏_Walk，过渡 I→W（Speed>0.5）、W→I（Speed<0.5），默认=Idle
+════ 李老师（无自身 Walk.fbx，借 陆宣雨 的同骨架走路剪辑，Humanoid 重定向）
+   + 李老师_Walk.anim（源 Walk.fbx 的“mixamo.com” 1.23s，GUID 新建）
+   根位移体检：水平约 0.06m/圈 ✓（原地走）
+   + 控制器：状态 Idle / 李老师_Walk，过渡 I→W（Speed>0.5）、W→I（Speed<0.5），默认=Idle
 ════ 林溪
-   + 林溪_Walk.anim（源 Walk.fbx 的“mixamo.com” 1.00s，GUID 新建）
+   = 林溪_Walk.anim 已存在，原地刷新（源“mixamo.com” 1.00s）
    根位移体检：水平约 0.04m/圈 ✓（原地走）
-   + 控制器：状态 Idle / 林溪_Walk，过渡 I→W（Speed>0.5）、W→I（Speed<0.5），默认=Idle
+   = 控制器：状态 Idle / 林溪_Walk，过渡 I→W（Speed>0.5）、W→I（Speed<0.5），默认=Idle
+════ 王含（无自身 Walk.fbx，借 陆宣雨 的同骨架走路剪辑，Humanoid 重定向）
+   + 王含_Walk.anim（源 Walk.fbx 的“mixamo.com” 1.23s，GUID 新建）
+   根位移体检：水平约 0.06m/圈 ✓（原地走）
+   + 控制器：状态 Idle / 王含_Walk，过渡 I→W（Speed>0.5）、W→I（Speed<0.5），默认=Idle
+════ 组长（无自身 Walk.fbx，借 陆宣雨 的同骨架走路剪辑，Humanoid 重定向）
+   + 组长_Walk.anim（源 Walk.fbx 的“mixamo.com” 1.23s，GUID 新建）
+   根位移体检：水平约 0.06m/圈 ✓（原地走）
+   + 控制器：状态 Idle / 组长_Walk，过渡 I→W（Speed>0.5）、W→I（Speed<0.5），默认=Idle
+════ 舍友A（无自身 Walk.fbx，借 陆宣雨 的同骨架走路剪辑，Humanoid 重定向）
+   + 舍友A_Walk.anim（源 Walk.fbx 的“mixamo.com” 1.23s，GUID 新建）
+   根位移体检：水平约 0.06m/圈 ✓（原地走）
+   + 控制器：状态 Idle / 舍友A_Walk，过渡 I→W（Speed>0.5）、W→I（Speed<0.5），默认=Idle
+════ 舍友B（无自身 Walk.fbx，借 陆宣雨 的同骨架走路剪辑，Humanoid 重定向）
+   + 舍友B_Walk.anim（源 Walk.fbx 的“mixamo.com” 1.23s，GUID 新建）
+   根位移体检：水平约 0.06m/圈 ✓（原地走）
+   + 控制器：状态 Idle / 舍友B_Walk，过渡 I→W（Speed>0.5）、W→I（Speed<0.5），默认=Idle
 ════ 陆宣雨
    = 陆宣雨_Walk.anim 已存在，原地刷新（源“mixamo.com” 1.23s）
    根位移体检：水平约 0.06m/圈 ✓（原地走）
    = 控制器：状态 Idle / 陆宣雨_Walk，过渡 I→W（Speed>0.5）、W→I（Speed<0.5），默认=Idle
 
-合计：接入 3 个角色，跳过 0 个
+合计：接入 9 个角色，跳过 0 个
 注：场景实例 Animator 指向的就是 <角色>_Idle.controller，无需改场景；编辑模式下角色显示 rest T-pose 正常。
 
 ── 复核（重新从磁盘读）
+  张知远：Walk.anim 循环=✓；控制器 Walk 状态=✓（Motion=张知远_Walk，过渡条件 1 条）
   徐夏：Walk.anim 循环=✓；控制器 Walk 状态=✓（Motion=徐夏_Walk，过渡条件 1 条）
+  李老师：Walk.anim 循环=✓；控制器 Walk 状态=✓（Motion=李老师_Walk，过渡条件 1 条）
   林溪：Walk.anim 循环=✓；控制器 Walk 状态=✓（Motion=林溪_Walk，过渡条件 1 条）
+  王含：Walk.anim 循环=✓；控制器 Walk 状态=✓（Motion=王含_Walk，过渡条件 1 条）
+  组长：Walk.anim 循环=✓；控制器 Walk 状态=✓（Motion=组长_Walk，过渡条件 1 条）
+  舍友A：Walk.anim 循环=✓；控制器 Walk 状态=✓（Motion=舍友A_Walk，过渡条件 1 条）
+  舍友B：Walk.anim 循环=✓；控制器 Walk 状态=✓（Motion=舍友B_Walk，过渡条件 1 条）
   陆宣雨：Walk.anim 循环=✓；控制器 Walk 状态=✓（Motion=陆宣雨_Walk，过渡条件 1 条）

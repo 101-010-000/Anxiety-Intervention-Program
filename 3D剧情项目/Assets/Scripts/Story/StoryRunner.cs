@@ -78,6 +78,11 @@ public class StoryRunner : MonoBehaviour
     int _choiceCounter;
     string _pendingThumb;   // 选择题全选时的抓屏文件名（存档缩略图；章末存档复用最后一张）
     readonly List<StoryStep> _resumeChat = new List<StoryStep>();   // 续播快进时收集的微信台词（FlushResumeChat 回放）
+#if UNITY_EDITOR
+    // ---- 调试「回退到上一句」（仅编辑器，正式构建不编译进来）----
+    readonly List<int> _chatLog = new List<int>();   // 手机上每个聊天气泡对应的步骤索引（与屏幕内容同步）
+    int _chatClearStep = -1;                          // 最近一次聊天流被清空（换段/重新亮屏）时的步骤索引 = 回退下限
+#endif
     int _lastLineLen;
     Coroutine _cardRt;
     Coroutine _fadeRt;
@@ -112,7 +117,13 @@ public class StoryRunner : MonoBehaviour
         }
     }
 
-    void OnDestroy() { if (Instance == this) Instance = null; }
+    void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
+#if UNITY_EDITOR
+        if (phoneChat != null) phoneChat.onCleared -= OnChatCleared;
+#endif
+    }
 
     // ------------------------------------------------------------------ 开始
     public void Begin()
@@ -175,16 +186,23 @@ public class StoryRunner : MonoBehaviour
         StepIndex = 0;
         _choiceCounter = 0;
         ApplyChapterNpcVisibility();        // 角色容器按章显隐（第2章时宿舍里不该有第五章的舍友）
+        PreHideDeferredChars();             // fade(showChars) 要用的容器先藏起来，黑屏落地时才点亮（第5章食堂）
         CollectAndHideEntranceNpcs();   // enter 步骤的角色开场先禁用（第2章陆宣雨：她不在宿舍）
         if (phoneChat != null) phoneChat.HideImmediate();   // 万一上次没收干净
+#if UNITY_EDITOR
+        _chatLog.Clear();               // 调试回退：聊天日志按屏幕内容重置
+        _chatClearStep = -1;
+        if (phoneChat != null) { phoneChat.onCleared -= OnChatCleared; phoneChat.onCleared += OnChatCleared; }
+#endif
 
         // 章内续播（2026-09-28）：读档写入的 ResumeChapter/Step 在这里一次性消费——
         // 静默快进 0..resume-1（复刻世界副作用：传送/入场退场/交互消费/微信记录），再从 resume 步正常播。
         int resume = GameProgress.ResumeChapter == chapterIndex ? GameProgress.ResumeStep : 0;
         GameProgress.ClearResume();         // 无论是否命中都清掉，防残留泄漏到重开/别的章
+        if (resume >= _ch.steps.Count) resume = 0;   // 章末档（step=总步数）：整章已通关 → 从头重播本章，
+                                                      // 不钳到 end 步放"空壳结局"（用户反馈"一进去就跳游戏结束"，踩过）
         if (resume > 0)
         {
-            if (resume >= _ch.steps.Count) resume = _ch.steps.Count - 1;   // 章末档：step=总数 → 回到 end 步重播结尾
             Debug.Log("[StoryRunner] 续播第" + chapterIndex + "章：静默快进 0.." + (resume - 1) + "，从第 " + resume + " 步继续");
             for (int i = 0; i < resume; i++) SilentApply(_ch.steps[i]);
             StepIndex = resume;
@@ -238,6 +256,7 @@ public class StoryRunner : MonoBehaviour
             {
                 var target = FindFadeAnchor(step.to);
                 if (target != null && _player != null) TeleportPlayer(target.position, target.eulerAngles.y);
+                if (step.showChars) SetCharContainersAt(LocOf(target), true);   // 续播跨过这一幕时同样点亮（世界状态一致）
                 break;
             }
 
@@ -372,6 +391,45 @@ public class StoryRunner : MonoBehaviour
                   "（其余容器状态本就正确）");
     }
 
+    // fade 步骤的 "showChars": true —— 落地时点亮【落点所在 Loc】下的本章角色容器。
+    // 场景：Loc_食堂/第五章角色（陆宣雨+舍友A/B 坐着）只在第5章到食堂那幕出现；
+    // ApplyChapterNpcVisibility 是"全地点显示本章"，覆盖不了"剧中才出现" → Begin 先预藏、
+    // 黑屏期间点亮（FadeRoutine 里已在全黑状态），淡出时人已在座，不穿帮。
+    // 续播快进（SilentApply）走同一个点亮口；宿舍/图书馆的第五章容器不带此标记，不受影响。
+    void PreHideDeferredChars()
+    {
+        foreach (var step in _ch.steps)
+        {
+            if (step.t != "fade" || !step.showChars) continue;
+            var target = FindFadeAnchor(step.to);
+            var loc = LocOf(target);
+            if (loc != null) SetCharContainersAt(loc, false);
+            else Debug.LogWarning("[StoryRunner] showChars fade 找不到锚点「" + step.to + "」，其角色容器不预藏（剧情落地时也点不亮）");
+        }
+    }
+
+    static Transform LocOf(Transform t)
+    {
+        for (var p = t; p != null; p = p.parent)
+            if (p.name.StartsWith("Loc_")) return p;
+        return null;
+    }
+
+    void SetCharContainersAt(Transform loc, bool on)
+    {
+        if (loc == null) return;
+        int n = 0;
+        foreach (var t in loc.GetComponentsInChildren<Transform>(true))    // true：容器可能是隐藏的
+        {
+            var m = ChapterContainerRx.Match(t.name);
+            if (!m.Success || ParseChapterNum(m.Groups[1].Value) != chapterIndex) continue;
+            if (t.gameObject.activeSelf == on) continue;
+            t.gameObject.SetActive(on);
+            n++;
+        }
+        Debug.Log("[StoryRunner] " + (on ? "点亮" : "预藏") + " " + loc.name + " 下本章角色容器 ×" + n);
+    }
+
     // json 是唯一事实源：Begin 时扫本章所有 enter/leave 步骤的 who → 记引用（FindObjectsOfType
     // 找不到禁用对象，所以必须先存）+ 快照【开场原位】（leave 退场走回这里）。enter 的 who 预禁用
     // （开场不在场）；leave-only 的角色开场在场，只快照不禁用（2026-09-28）。
@@ -428,6 +486,7 @@ public class StoryRunner : MonoBehaviour
     public void Next()
     {
         _pendingNextAt = -1f;
+        if (DialogueVoicePlayer.Instance != null) DialogueVoicePlayer.Instance.Stop();   // 推进即切上一句语音（补全不切）
         if (_ch == null || StepIndex >= _ch.steps.Count) { ToDone(); return; }
         var step = _ch.steps[StepIndex++];
         bool isText = step.t == "nar" || step.t == "dlg" || step.t == "mon";
@@ -471,6 +530,10 @@ public class StoryRunner : MonoBehaviour
 
     void PlayText(StoryStep step)
     {
+        // 台词语音（2026-09-29）：一句开始就播（缺片/自检/快进时内部静默跳过）；
+        // 微信台词也播（发送方声线念出来，像语音消息）；班群（通知）生成期就没做片 = 静默。
+        DialogueVoicePlayer.Ensure().PlayStep(chapterIndex, StepIndex - 1);
+
         // （微信）/（通知）台词 = 手机聊天段（第2-5章扩展：班群通知也走手机 UI）
         bool wechat = step.t == "dlg" && !string.IsNullOrEmpty(step.s)
                       && (step.s.Contains("（微信）") || step.s.Contains("（通知）"));
@@ -512,6 +575,9 @@ public class StoryRunner : MonoBehaviour
                 dialogue.HideNode();         // 框与压暗层都不出现（PlayLine 会按 dlg 开遮罩，这里立刻关掉）
             }
             if (phoneChat != null) phoneChat.Append(step.s, step.x);   // 气泡立即落进聊天流
+#if UNITY_EDITOR
+            if (phoneChat != null) _chatLog.Add(StepIndex - 1);         // 调试回退：记录这条气泡对应的步骤
+#endif
             return;
         }
 
@@ -668,6 +734,8 @@ public class StoryRunner : MonoBehaviour
         }
         else if (!string.IsNullOrEmpty(step.to))
             Debug.LogWarning("[StoryRunner] fade 找不到锚点「" + step.to + "」——检查 fadeAnchors 接线 / 锚点命名");
+
+        if (step.showChars) SetCharContainersAt(LocOf(target), true);   // 黑屏期间点亮本幕角色（PreHideDeferredChars 预藏的）
 
         yield return null;                             // 让传送落地一帧再开淡出
 
@@ -896,7 +964,7 @@ public class StoryRunner : MonoBehaviour
     void ToMainMenu()
     {
         GameProgress.MarkCompleted(chapterIndex);
-        AutoSave("章节通关", force: true);   // 章末兜底存档不受"选择后自动存档"开关控制
+        AutoSave("章节通关", force: true, done: true);   // 章末兜底存档不受"选择后自动存档"开关控制；chapterDone=通关档标记
         ToDone();
         if (debugStayInScene) return;
         SceneManager.LoadScene("MainMenu");
@@ -909,7 +977,7 @@ public class StoryRunner : MonoBehaviour
     // 读档时经 GameProgress.SetResume 带进 Game 场景 → Begin 静默快进到该步 = 章内续播。
     // 缩略图：选择题全选完毕、面板完整显示的那一刻抓屏；本章没抓到新图时保留槽里旧图。
     // 自检（StorySmokeDriver.Requested / StoryResumeDriver.Active）不写档，防污染真实存档。
-    void AutoSave(string reason, bool force = false)
+    void AutoSave(string reason, bool force = false, bool done = false)
     {
         if (!force && !GameSettings.AutoSave) return;
         if (StorySmokeDriver.Requested || StoryResumeDriver.Active) return;   // ★只看"自检真的在跑"标志；场景里常驻的驱动组件不代表在自检（FindObjectOfType 会把真实游玩的存档也挡掉，踩过）
@@ -925,10 +993,11 @@ public class StoryRunner : MonoBehaviour
 
         var d = new SaveData
         {
-            chapter   = chapterIndex,
-            step      = StepIndex,
-            nodeId    = "step" + StepIndex,
-            thumbnail = newThumb,
+            chapter     = chapterIndex,
+            step        = StepIndex,
+            nodeId      = "step" + StepIndex,
+            thumbnail   = newThumb,
+            chapterDone = done,
         };
         SaveSystem.Write(slot, d);
         Debug.Log("[StoryRunner] 自动存档（" + reason + "）→ 槽 " + (slot + 1) + " · 第" + chapterIndex + "章 step " + StepIndex +
@@ -1031,16 +1100,17 @@ public class StoryRunner : MonoBehaviour
     // ------------------------------------------------------------------ 每帧
     void Update()
     {
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(debugBackKey)) { DebugBack(); return; }   // 调试：回退到上一句
+#endif
         switch (CurrState)
         {
             case State.EndCard:
                 if (AdvancePressed()) ToMainMenu();
                 break;
 
-            case State.NarFree:      // 开场旁白：自由走动，定时/点击都能进下一句
+            case State.NarFree:      // 开场旁白：自由走动，纯点击推进（2026-09-29 用户定稿：去掉定时自动播，移动保留）
                 if (AdvancePressed()) { Next(); break; }
-                _gapTimer += Time.deltaTime;
-                if (_gapTimer >= 1.2f + _lastLineLen * 0.055f) Next();
                 break;
 
             case State.Typing:
@@ -1053,7 +1123,8 @@ public class StoryRunner : MonoBehaviour
                 if (GameSettings.AutoPlay)
                 {
                     _gapTimer += Time.deltaTime;
-                    if (_gapTimer >= GameSettings.AutoDelaySeconds + _lastLineLen * 0.02f + 0.6f) Next();
+                    if (_gapTimer >= GameSettings.AutoDelaySeconds + _lastLineLen * 0.02f + 0.6f
+                        && !DialogueVoicePlayer.IsPlaying) Next();   // 自动播放同样等语音播完
                 }
                 break;
 
@@ -1203,6 +1274,62 @@ public class StoryRunner : MonoBehaviour
 
     // ------------------------------------------------------------------ 自检接口
     /// 自检/调试用：替玩家做当前状态该做的事
+#if UNITY_EDITOR
+    // ------------------------------------------------------------------ 调试：回退到上一句
+    [Header("调试（仅编辑器）")]
+    [Tooltip("回退到上一句台词的按键；只在正停在一句话上时生效")]
+    public KeyCode debugBackKey = KeyCode.Backspace;
+
+    void OnChatCleared()
+    {
+        _chatLog.Clear();
+        _chatClearStep = StepIndex - 1;      // 聊天流被清空（换段/重新亮屏）：回退不能跨过这里
+    }
+
+    /// 调试：回退到当前【连续文本段】内的上一句台词（nar/dlg/mon）并重播（含语音）。
+    /// 只在 Typing/Gap/NarFree（正停在一句话上）生效；不跨 interact/walk/fade/enter/choice/card，
+    /// 也不跨手机聊天流的清空点（换联系人/重新亮屏），避免与「正常玩到该句」的状态不一致。
+    public void DebugBack()
+    {
+        if (CurrState != State.Typing && CurrState != State.Gap && CurrState != State.NarFree) return;
+        if (_ch == null) return;
+        int cur = StepIndex - 1;                                  // 当前正停的这句（Next 已自增过）
+        if (cur < 0 || cur >= _ch.steps.Count) return;
+        int target = cur - 1;
+        if (target < 0 || !IsTextStep(_ch.steps[target]))
+        {
+            Debug.Log("[StoryRunner] 调试回退：已到本段第一句（上一句不是台词）");
+            return;
+        }
+        if (target < _chatClearStep)
+        {
+            Debug.Log("[StoryRunner] 调试回退：上一句在手机聊天换段/重新亮屏之前，不能退（防聊天气泡对不上）");
+            return;
+        }
+        TrimChatTo(target);
+        _pendingNextAt = -1f;
+        StepIndex = target;
+        Debug.Log("[StoryRunner] 调试回退 → 第 " + target + " 步（" + _ch.steps[target].t + "）");
+        Next();
+    }
+
+    static bool IsTextStep(StoryStep st)
+    {
+        return st != null && (st.t == "nar" || st.t == "dlg" || st.t == "mon");
+    }
+
+    /// 把手机上「步骤索引 >= target」的气泡摘掉（target 会被 Next 重播重新加回，避免重复一条）
+    void TrimChatTo(int target)
+    {
+        if (phoneChat == null) return;
+        while (_chatLog.Count > 0 && _chatLog[_chatLog.Count - 1] >= target)
+        {
+            _chatLog.RemoveAt(_chatLog.Count - 1);
+            phoneChat.RemoveLast();
+        }
+    }
+#endif
+
     public void DebugAdvance()
     {
         switch (CurrState)
