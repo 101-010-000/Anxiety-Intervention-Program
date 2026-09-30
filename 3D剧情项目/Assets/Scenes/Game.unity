@@ -4880,7 +4880,7 @@ Transform:
   m_GameObject: {fileID: 27552252}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.9761643, z: -0, w: 0.21703304}
-  m_LocalPosition: {x: 7.5, y: 0, z: -6}
+  m_LocalPosition: {x: 0.9799957, y: 0, z: -0.039000034}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4900,13 +4900,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mode: 0
   displayName: 
-  radius: 0.4
+  radius: 2.2
   key: 102
   oneShot: 1
   chapterTag: 5
   promptText: "\u5750\u4E0B\uFF0C\u5B89\u9759\u4E00\u4F1A\u513F"
   propObjectName: 
-  anySeat: 1
+  anySeat: 0
   seatObjectName: 
   armed: 1
 --- !u!114 &27552255
@@ -4922,7 +4922,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mode: 1
-  radius: 0.4
+  radius: 2.2
   key: 102
   seat: {fileID: 0}
   snapToGround: 1
@@ -4932,9 +4932,9 @@ MonoBehaviour:
   showPrompt: 0
   seatedModel: {fileID: 853474411}
   hideStandingModel: 1
-  useSeatedModelPose: 0
-  anySeat: 1
-  sitAtPlayer: 1
+  useSeatedModelPose: 1
+  anySeat: 0
+  sitAtPlayer: 0
 --- !u!1001 &27823853
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -154914,7 +154914,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b5301ef2aefa7848857a58e98a3552d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.065
+      value: 0.298
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b5301ef2aefa7848857a58e98a3552d, type: 3}
       propertyPath: m_LocalPosition.z

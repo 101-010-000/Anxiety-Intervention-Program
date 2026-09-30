@@ -276,25 +276,47 @@ public static class SitSwapSetup
             else _log.AppendLine("  · 第4章_图书馆座位：本来就没有 SitSpot，不动");
         }
 
+        // ★ 用户 2026-10-01：「坐的位置就按我摆的模型」——所以这里是【固定座位】：
+        //   把剧情 F 点（本节点）挪到坐姿模型摆的位置，坐姿跟着模型走（useSeatedModelPose）。
+        //   ⚠ 原来那个点用的是 anySeat（贴着图书馆任意一把凳子），跟「按模型坐」冲突（玩家站哪就坐哪，
+        //     模型摆位白摆）→ 改成普通半径判定（交互点自身 2.2m）。
         var libSeat = GameObject.Find("第5章_图书馆躲避");
         if (libSeat == null) _log.AppendLine("  − 场景里没有 第5章_图书馆躲避，跳过");
         else
         {
+            var libModel2 = primary.ContainsKey("Loc_图书馆") ? primary["Loc_图书馆"] : null;
+            if (libModel2 != null)
+            {
+                var m = libModel2.transform.position;
+                var before = libSeat.transform.position;
+                libSeat.transform.position = new Vector3(m.x, before.y, m.z);   // F 点挪到模型那把椅子上
+                _log.AppendLine("  → 第5章_图书馆躲避（剧情 F 点）从 " + before.ToString("F2") + " 挪到坐姿模型处 " +
+                                libSeat.transform.position.ToString("F2"));
+            }
             var sit0 = libSeat.GetComponent<SitSpot>();
             if (sit0 == null) { sit0 = libSeat.AddComponent<SitSpot>(); _log.AppendLine("  + 第5章_图书馆躲避 没有 SitSpot，已补一个"); }
             sit0.mode = SitMode.剧情锁住自动坐下;
-            sit0.anySeat = true;              // 判定 = 玩家贴着图书馆里任意一把凳子（同剧情交互点）
-            sit0.sitAtPlayer = true;          // 坐姿 = 玩家此刻站的位置（他正贴着自己挑的那把凳子）
-            sit0.radius = 0.4f;               // 允许离凳子表面的间隙（0.4 ≈ 贴着凳子）
-            sit0.seatedModel = primary.ContainsKey("Loc_图书馆") ? primary["Loc_图书馆"] : null;
+            sit0.anySeat = false;             // 固定座位：判定 = 离本节点（= 模型那把椅子）radius 内
+            sit0.sitAtPlayer = false;
+            sit0.radius = 2.2f;
+            sit0.seatedModel = libModel2;
             sit0.hideStandingModel = true;
-            sit0.useSeatedModelPose = false;  // 坐玩家挑的凳子，不坐模型摆的那点（模型摆在过道里）
+            sit0.useSeatedModelPose = true;   // ★ 坐姿 = 用户摆的模型的位置/朝向
             sit0.showPrompt = false;
             sit0.onlyChapters = new int[0];
             sit0.enabled = true;
             EditorUtility.SetDirty(sit0);
+            // 剧情交互点（同一个物体上）也要从「任意凳子」改成普通半径判定，否则玩家到不了那把椅子边就触发不了
+            var si = libSeat.GetComponent<StoryInteractable>();
+            if (si != null && si.anySeat)
+            {
+                si.anySeat = false;
+                si.radius = 2.2f;
+                EditorUtility.SetDirty(si);
+                _log.AppendLine("  → 同一点的 StoryInteractable：anySeat → 普通半径（radius 2.2，F 点就在模型椅子上）");
+            }
             wired++;
-            _log.AppendLine("  = 第5章_图书馆躲避  mode=剧情锁住自动坐下  anySeat=true  sitAtPlayer=true  radius=" +
+            _log.AppendLine("  = 第5章_图书馆躲避  mode=剧情锁住自动坐下  useSeatedModelPose=true  radius=" +
                             sit0.radius.ToString("F1") + "  → 坐姿模型 " +
                             (sit0.seatedModel != null ? PathOf(sit0.seatedModel.transform) : "★空"));
         }
@@ -473,3 +495,5 @@ public static class SitSwapSetupTrigger
 // nudge 024123
 
 // nudge 024431
+
+// nudge 025307
