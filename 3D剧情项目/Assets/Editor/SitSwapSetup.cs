@@ -106,76 +106,56 @@ public static class SitSwapSetup
         }
 
         _log.AppendLine();
-        _log.AppendLine("【② 坐姿模型（默认隐藏）】");
-        GameObject sit = null;
-        // 优先用【场景里已经有的】坐姿徐夏（用户自己拖进来的 Sitting Idle.fbx 实例，名字叫「徐夏」），
-        // 其次才是工具自己建的「徐夏_坐姿」；都没有才新建。这样不会出现两个坐姿模型。
-        sit = FindSceneSitModel();
-        if (sit != null) _log.AppendLine("  = 用场景里已有的坐姿模型：" + PathOf(sit.transform) +
-                                         "（源 " + (PrefabUtility.GetCorrespondingObjectFromSource(sit) != null ? "prefab/fbx 实例" : "普通物体") + "）");
-        else
+        _log.AppendLine("【② 坐姿变体（默认隐藏；一个地点一份）】");
+        var variants = FindSitVariants();
+        if (variants.Count == 0)
         {
             var fbx = AssetDatabase.LoadAssetAtPath<GameObject>(SEAT_FBX);
-            if (fbx == null) { _log.AppendLine("  ★ 找不到 " + SEAT_FBX); Flush(); return; }
-            sit = (GameObject)PrefabUtility.InstantiatePrefab(fbx, fpc.transform);
-            sit.name = SIT_MODEL_NAME;
-            _log.AppendLine("  + 新建 " + SIT_MODEL_NAME + "（实例化 " + SEAT_FBX + "）");
+            if (fbx == null) { _log.AppendLine("  ★ 场景里没有坐姿变体，也找不到 " + SEAT_FBX); Flush(); return; }
+            var g = (GameObject)PrefabUtility.InstantiatePrefab(fbx, fpc.transform);
+            g.name = SIT_MODEL_NAME;
+            variants.Add(g);
+            _log.AppendLine("  + 场景里没有坐姿变体 → 新建 " + SIT_MODEL_NAME);
         }
-
-        // 清掉工具早先建的多余副本（只删自己建的那个名字）
-        foreach (var dup in Object.FindObjectsOfType<Transform>(true))
+        foreach (var v in variants)
         {
-            if (dup.name != SIT_MODEL_NAME || dup.gameObject == sit) continue;
-            _log.AppendLine("  − 删掉多余的坐姿副本（工具早先建的）" + PathOf(dup));
-            Object.DestroyImmediate(dup.gameObject);
-        }
+            // 挪出「第N章角色」容器：容器按章隐藏时它跟着没 → 那个地点的座位就换不了模型
+            var holder = HolderFor(v);
+            if (holder != null && v.transform.parent != holder)
+            {
+                _log.AppendLine("  从 " + PathOf(v.transform) + " 挪到 " + PathOf(holder) + "（不然容器按章隐藏时它就没了）");
+                v.transform.SetParent(holder, true);
+            }
+            if (v.transform.parent == fpc.transform) v.transform.localPosition = Vector3.zero;
+            if (standing != null) { v.transform.localScale = standing.transform.localScale; SetLayerRecursively(v, standing.layer); }
 
-        // 层跟站立模型一致（描边层）；位置不动（坐下时 SitSpot 会把它摆到座位上）
-        if (sit.transform.parent == fpc.transform) sit.transform.localPosition = Vector3.zero;
-        if (standing != null) sit.transform.localScale = standing.transform.localScale;
+            // 清掉上一次跑歪时加在【骨头】上的 Animator / SitHere（加到 mixamorig:* 上会毁姿势）
+            int cleaned = 0;
+            foreach (var tt in v.GetComponentsInChildren<Transform>(true))
+            {
+                if (tt.gameObject == v) continue;
+                var sh0 = tt.GetComponent<SitHere>();
+                if (sh0 != null) { Object.DestroyImmediate(sh0); cleaned++; }
+                var an0 = tt.GetComponent<Animator>();
+                if (an0 != null) { Object.DestroyImmediate(an0); cleaned++; }
+            }
+            if (cleaned > 0) _log.AppendLine("  − 清掉 " + v.name + " 骨头上多余的组件 " + cleaned + " 个");
 
-        // ★ 挪到玩家根下：坐姿模型常常被摆在「第N章角色」容器里（用户手摆），
-        //   容器一按章隐藏，它跟着就没了 —— 换模型那套需要它随时能被 SetActive(true) 看见
-        if (sit.transform.parent != fpc.transform)
-        {
-            _log.AppendLine("  从 " + PathOf(sit.transform) + " 挪到 Player_徐夏 下（容器按章隐藏时它还能用）");
-            sit.transform.SetParent(fpc.transform, true);
-            sit.transform.localPosition = Vector3.zero;
-        }
-
-        // ★ 清掉上一次跑歪时加在【骨头】上的 Animator / SitHere
-        //   （把 Animator 加到 mixamorig:* 骨头上会毁姿势）
-        int cleaned = 0;
-        foreach (var tt in sit.GetComponentsInChildren<Transform>(true))
-        {
-            if (tt.gameObject == sit) continue;
-            var sh0 = tt.GetComponent<SitHere>();
-            if (sh0 != null) { Object.DestroyImmediate(sh0); cleaned++; }
-            var an0 = tt.GetComponent<Animator>();
-            if (an0 != null) { Object.DestroyImmediate(an0); cleaned++; }
-        }
-        if (cleaned > 0) _log.AppendLine("  − 清掉上次加在骨头上的组件 " + cleaned + " 个");
-        if (standing != null) SetLayerRecursively(sit, standing.layer);
-
-        var an = sit.GetComponentInChildren<Animator>(true);
-        if (an == null)
-        {
-            // ★ Mixamo 导回的 FBX 本身不带 Animator（同 GameCharSwap 的坑）→ 自己加在模型根上
-            an = sit.GetComponent<Animator>();
-            if (an == null) an = sit.AddComponent<Animator>();
-            _log.AppendLine("  + 模型上没有 Animator，已补一个（模型根上）");
-        }
-        {
+            // 坐姿要真坐着：Mixamo 的 FBX 不带 Animator → 补一个 + 徐夏_第三人称（Sit 状态）+ SitHere
+            var an = v.GetComponent<Animator>();
+            if (an == null) { an = v.AddComponent<Animator>(); _log.AppendLine("  + " + v.name + " 没有 Animator，已补一个"); }
             var ctrl = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(SIT_CTRL);
             if (ctrl != null && an.runtimeAnimatorController != ctrl) an.runtimeAnimatorController = ctrl;
             an.applyRootMotion = false;
             an.cullingMode = AnimatorCullingMode.AlwaysAnimate;
             an.updateMode = AnimatorUpdateMode.Normal;
-            _log.AppendLine("  Animator 控制器 = " + (an.runtimeAnimatorController != null ? an.runtimeAnimatorController.name : "★空") +
-                            "（Sit 状态由 Sitting 参数进入）");
+            if (v.GetComponent<SitHere>() == null) v.AddComponent<SitHere>();
+
+            if (v.activeSelf) { v.SetActive(false); _log.AppendLine("  已设隐藏：" + PathOf(v.transform)); }
+            EditorUtility.SetDirty(v);
+            _log.AppendLine("  = 坐姿变体 " + PathOf(v.transform) + "  控制器 " +
+                            (an.runtimeAnimatorController != null ? an.runtimeAnimatorController.name : "★空") + "  （Sit 状态由 Sitting 参数进入）");
         }
-        if (sit.GetComponent<SitHere>() == null) { sit.AddComponent<SitHere>(); _log.AppendLine("  + 挂 SitHere（Start 置 Sitting=true）"); }
-        if (sit.activeSelf) { sit.SetActive(false); _log.AppendLine("  已设为隐藏（默认不显示）"); }
 
         // ③ 第一人称：两个模型都列进「只投影」名单
         _log.AppendLine();
@@ -183,7 +163,10 @@ public static class SitSwapSetup
         var list = new List<string>(fpc.firstPersonShadowsOnlyParts ?? new string[0]);
         int dropped = list.RemoveAll(x => !string.IsNullOrEmpty(x) && x.Contains(":"));
         if (dropped > 0) _log.AppendLine("  − 清掉名单里误加的骨头名 " + dropped + " 条");
-        foreach (var nm in new[] { standing != null ? standing.name : null, sit.name })
+        var names = new List<string>();
+        if (standing != null) names.Add(standing.name);
+        foreach (var v in variants) names.Add(v.name);
+        foreach (var nm in names)
         {
             if (string.IsNullOrEmpty(nm)) continue;
             if (list.Any(x => x == nm)) { _log.AppendLine("  = 已有 " + nm); continue; }
@@ -203,6 +186,13 @@ public static class SitSwapSetup
             if (loc == null) { _log.AppendLine("  ★ 场景里没有 " + locName); continue; }
             var spots = loc.GetComponentsInChildren<SitSpot>(true);
             _log.AppendLine("  " + locName + "：" + spots.Length + " 个 SitSpot");
+            // 这个地点用哪个坐姿变体：优先“本来就在这个地点里的那个”（宿舍一个、食堂一个）
+            GameObject sit = null;
+            foreach (var v in variants)
+                if (v.transform.IsChildOf(loc.transform) || PathOf(v.transform).Contains(locName)) { sit = v; break; }
+            if (sit == null) sit = NearestVariant(variants, loc.transform.position);
+            if (sit == null) sit = variants[0];
+            _log.AppendLine("    地点用的坐姿变体 = " + PathOf(sit.transform));
             foreach (var s in spots)
             {
                 // ★ 用户 2026-09-30 定稿：**只有剧情里要坐的才坐** ——
@@ -217,7 +207,7 @@ public static class SitSwapSetup
                 if (storySeat) wired++;
                 _log.AppendLine("    " + (storySeat ? "= 剧情座位 " : "− 关掉自由坐下 ") + PathOf(s.transform) +
                                 "  mode=" + s.mode + "  radius=" + s.radius +
-                                (storySeat ? "  → 坐姿模型 " + sit.name : "（要开把 SitSpot 勾上）"));
+                                (storySeat ? "  → 坐姿模型 " + PathOf(sit.transform) : "（要开把 SitSpot 勾上）"));
             }
         }
         _log.AppendLine("  共接线 " + wired + " 个座位点");
@@ -238,24 +228,48 @@ public static class SitSwapSetup
         Debug.Log("[SitSwapSetup] 完成，报告：" + REPORT);
     }
 
-    /// <summary>场景里已有的坐姿徐夏：优先名字带「坐姿」的，其次源 prefab 是 Sitting Idle.fbx 的实例</summary>
-    static GameObject FindSceneSitModel()
+    /// <summary>
+    /// 场景里的「玩家坐姿变体」：名字带「切换 / 坐姿」的、源是 带动画模型/徐夏/Sitting Idle.fbx 的实例
+    /// （用户按地点各摆一份，例：Loc_宿舍/第五章角色/玩家切换、Loc_食堂/第五章角色/玩家切换）。
+    /// ★ 只取 prefab/FBX 实例的【根】：FindObjectsOfType 会把 mixamorig:* 骨头也列出来（踩过）。
+    /// </summary>
+    static List<GameObject> FindSitVariants()
     {
-        GameObject byName = null, bySource = null;
+        var res = new List<GameObject>();
         foreach (var go in Object.FindObjectsOfType<GameObject>(true))
         {
-            if (go.name == SIT_MODEL_NAME) { byName = go; continue; }
-            if (bySource != null) continue;
-            // ★ 只取【prefab/FBX 实例的根】：FindObjectsOfType 会把骨头（mixamorig:*）也列出来，
-            //   光看“源资产路径”会把骨头当成坐姿模型（踩过：选到了 mixamorig:RightHandThumb4）
             if (PrefabUtility.GetOutermostPrefabInstanceRoot(go) != go) continue;
             var src = PrefabUtility.GetCorrespondingObjectFromSource(go);
             if (src == null) continue;
             string path = AssetDatabase.GetAssetPath(src);
-            if (path.Contains("带动画模型/徐夏") && path.Contains("Sitting")) bySource = go;   // 用户自己摆的坐姿徐夏
+            if (!path.Contains("带动画模型/徐夏") || !path.Contains("Sitting")) continue;
+            if (!(go.name.Contains("切换") || go.name.Contains("坐姿") || go.name == "徐夏")) continue;
+            res.Add(go);
         }
-        // ★ 用户自己拖进来的那个优先 —— 工具自己建的副本（徐夏_坐姿）会被下面当重复删掉
-        return bySource != null ? bySource : byName;
+        return res;
+    }
+
+    /// <summary>坐姿变体该挂哪儿：挪出「第N章角色」容器 → 挂在最近的 Loc 的「多章锚点」下（永远激活）</summary>
+    static Transform HolderFor(GameObject v)
+    {
+        Transform loc = null;
+        for (var t = v.transform.parent; t != null; t = t.parent)
+            if (t.name.StartsWith("Loc_")) { loc = t; break; }
+        if (loc == null) return v.transform.parent;                 // 不在任何 Loc 里：不动
+        foreach (Transform c in loc)
+            if (c.name == "多章锚点") return c;
+        return loc;
+    }
+
+    static GameObject NearestVariant(List<GameObject> list, Vector3 p)
+    {
+        GameObject best = null; float bestD = float.MaxValue;
+        foreach (var v in list)
+        {
+            float d = (v.transform.position - p).sqrMagnitude;
+            if (d < bestD) { bestD = d; best = v; }
+        }
+        return best;
     }
 
     static void SetLayerRecursively(GameObject go, int layer)

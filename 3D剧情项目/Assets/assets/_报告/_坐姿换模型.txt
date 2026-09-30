@@ -1,30 +1,35 @@
-坐姿换模型接线  2026-09-30 23:21
+坐姿换模型接线  2026-10-01 00:04
 （坐下 = 藏站立模型 + 显示坐姿模型；起身 = 换回来）
 
 【① 站立模型】
-  玩家 = Player_徐夏，模型子物体 = FP_相机、徐夏_已绑定
+  玩家 = Player_徐夏，模型子物体 = FP_相机、徐夏_已绑定、徐夏
   standingModel = 徐夏_已绑定
 
-【② 坐姿模型（默认隐藏）】
-  = 用场景里已有的坐姿模型：GameRoot/Locations/Loc_宿舍/第五章角色/徐夏（源 prefab/fbx 实例）
-  从 GameRoot/Locations/Loc_宿舍/第五章角色/徐夏 挪到 Player_徐夏 下（容器按章隐藏时它还能用）
-  − 清掉上次加在骨头上的组件 2 个
-  + 模型上没有 Animator，已补一个（模型根上）
-  Animator 控制器 = 徐夏_第三人称（Sit 状态由 Sitting 参数进入）
-  + 挂 SitHere（Start 置 Sitting=true）
-  已设为隐藏（默认不显示）
+【② 坐姿变体（默认隐藏；一个地点一份）】
+  从 GameRoot/Locations/Loc_食堂/第五章角色/玩家切换 挪到 GameRoot/Locations/Loc_食堂/多章锚点（不然容器按章隐藏时它就没了）
+  + 玩家切换 没有 Animator，已补一个
+  已设隐藏：GameRoot/Locations/Loc_食堂/多章锚点/玩家切换
+  = 坐姿变体 GameRoot/Locations/Loc_食堂/多章锚点/玩家切换  控制器 徐夏_第三人称  （Sit 状态由 Sitting 参数进入）
+  从 GameRoot/Locations/Loc_宿舍/第五章角色/玩家切换 挪到 GameRoot/Locations/Loc_宿舍/多章锚点（不然容器按章隐藏时它就没了）
+  + 玩家切换 没有 Animator，已补一个
+  已设隐藏：GameRoot/Locations/Loc_宿舍/多章锚点/玩家切换
+  = 坐姿变体 GameRoot/Locations/Loc_宿舍/多章锚点/玩家切换  控制器 徐夏_第三人称  （Sit 状态由 Sitting 参数进入）
+  = 坐姿变体 Player_徐夏/徐夏  控制器 徐夏_第三人称  （Sit 状态由 Sitting 参数进入）
 
 【③ 第一人称隐藏名单】
-  − 清掉名单里误加的骨头名 1 条
   = 已有 徐夏_已绑定
-  + 徐夏
+  + 玩家切换
+  = 已有 玩家切换
+  = 已有 徐夏
 
 【④ 宿舍 / 食堂的座位点】
   Loc_宿舍：2 个 SitSpot
-    = 剧情座位 GameRoot/Locations/Loc_宿舍/多章锚点/第4章_坐下看资料  mode=剧情锁住自动坐下  radius=1.3  → 坐姿模型 徐夏
-    = 剧情座位 GameRoot/Locations/Loc_宿舍/多章锚点/第5章_回座位  mode=剧情锁住自动坐下  radius=1.3  → 坐姿模型 徐夏
+    地点用的坐姿变体 = GameRoot/Locations/Loc_宿舍/多章锚点/玩家切换
+    = 剧情座位 GameRoot/Locations/Loc_宿舍/多章锚点/第4章_坐下看资料  mode=剧情锁住自动坐下  radius=1.3  → 坐姿模型 GameRoot/Locations/Loc_宿舍/多章锚点/玩家切换
+    = 剧情座位 GameRoot/Locations/Loc_宿舍/多章锚点/第5章_回座位  mode=剧情锁住自动坐下  radius=1.3  → 坐姿模型 GameRoot/Locations/Loc_宿舍/多章锚点/玩家切换
   Loc_食堂：1 个 SitSpot
-    = 剧情座位 GameRoot/Locations/Loc_食堂/多章锚点/第3章_落座  mode=剧情锁住自动坐下  radius=1.3  → 坐姿模型 徐夏
+    地点用的坐姿变体 = GameRoot/Locations/Loc_食堂/多章锚点/玩家切换
+    = 剧情座位 GameRoot/Locations/Loc_食堂/多章锚点/第3章_落座  mode=剧情锁住自动坐下  radius=1.3  → 坐姿模型 GameRoot/Locations/Loc_食堂/多章锚点/玩家切换
   共接线 3 个座位点
 
 保存场景 Assets/Scenes/Game.unity：成功 ✓
