@@ -1,35 +1,38 @@
-坐姿换模型接线  2026-09-30 22:58
+坐姿换模型接线  2026-09-30 23:21
 （坐下 = 藏站立模型 + 显示坐姿模型；起身 = 换回来）
 
 【① 站立模型】
-  玩家 = Player_徐夏，模型子物体 = FP_相机、徐夏_已绑定、徐夏_坐姿
+  玩家 = Player_徐夏，模型子物体 = FP_相机、徐夏_已绑定
   standingModel = 徐夏_已绑定
 
 【② 坐姿模型（默认隐藏）】
-  = 已有 徐夏_坐姿，复用
+  = 用场景里已有的坐姿模型：GameRoot/Locations/Loc_宿舍/第五章角色/徐夏（源 prefab/fbx 实例）
+  从 GameRoot/Locations/Loc_宿舍/第五章角色/徐夏 挪到 Player_徐夏 下（容器按章隐藏时它还能用）
+  − 清掉上次加在骨头上的组件 2 个
   + 模型上没有 Animator，已补一个（模型根上）
   Animator 控制器 = 徐夏_第三人称（Sit 状态由 Sitting 参数进入）
+  + 挂 SitHere（Start 置 Sitting=true）
+  已设为隐藏（默认不显示）
 
 【③ 第一人称隐藏名单】
+  − 清掉名单里误加的骨头名 1 条
   = 已有 徐夏_已绑定
-  = 已有 徐夏_坐姿
+  + 徐夏
 
 【④ 宿舍 / 食堂的座位点】
-  Loc_宿舍：3 个 SitSpot
-    = GameRoot/Locations/Loc_宿舍/Content/凳子2 (45)/可坐点  mode=按F坐下  radius=1.5  → 坐姿模型 徐夏_坐姿
-    = GameRoot/Locations/Loc_宿舍/多章锚点/第4章_坐下看资料  mode=剧情锁住自动坐下  radius=1.3  → 坐姿模型 徐夏_坐姿
-    = GameRoot/Locations/Loc_宿舍/多章锚点/第5章_回座位  mode=剧情锁住自动坐下  radius=1.3  → 坐姿模型 徐夏_坐姿
-  Loc_食堂：3 个 SitSpot
-    = GameRoot/Locations/Loc_食堂/Content/凳子2 (8)/可坐点  mode=按F坐下  radius=1.5  → 坐姿模型 徐夏_坐姿
-    = GameRoot/Locations/Loc_食堂/Content/凳子2 (11)/可坐点  mode=按F坐下  radius=1.5  → 坐姿模型 徐夏_坐姿
-    = GameRoot/Locations/Loc_食堂/多章锚点/第3章_落座  mode=剧情锁住自动坐下  radius=1.3  → 坐姿模型 徐夏_坐姿
-  共接线 6 个座位点
+  Loc_宿舍：2 个 SitSpot
+    = 剧情座位 GameRoot/Locations/Loc_宿舍/多章锚点/第4章_坐下看资料  mode=剧情锁住自动坐下  radius=1.3  → 坐姿模型 徐夏
+    = 剧情座位 GameRoot/Locations/Loc_宿舍/多章锚点/第5章_回座位  mode=剧情锁住自动坐下  radius=1.3  → 坐姿模型 徐夏
+  Loc_食堂：1 个 SitSpot
+    = 剧情座位 GameRoot/Locations/Loc_食堂/多章锚点/第3章_落座  mode=剧情锁住自动坐下  radius=1.3  → 坐姿模型 徐夏
+  共接线 3 个座位点
 
 保存场景 Assets/Scenes/Game.unity：成功 ✓
 
 【怎么验】
-  · 进 Play → 走到宿舍书桌旁 / 食堂座位旁 → 屏幕上出现「按 F 坐下」→ 按 F：
-    站立模型消失、坐姿徐夏出现（第三人称看得最清楚）；按 WASD 或再按 F 起身换回来
+  · 只有【剧情要坐】的座位才坐（自由「按 F 坐下」的点已关掉）：
+    走到座位旁 → 剧情把玩家锁住（对话）→ 站立模型消失、坐姿徐夏出现；
+    剧情放开/走开 → 换回站立模型
   · 剧情锚点那三个（第3章_落座 / 第4章_坐下看资料 / 第5章_回座位）是「剧情锁住自动坐」模式：
     玩家被剧情锁在该点 1.3m 内就会自动换模型
   · 位置/朝向不满意：直接改那些 SitSpot 的 radius / seat（坐姿模型的朝向跟凳子一致）

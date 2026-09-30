@@ -1,17 +1,5 @@
-坐姿换模型探针  2026-09-30 23:11
+坐姿换模型探针  2026-09-30 23:27
 站立模型 = 徐夏_已绑定，渲染器 1 个 enabled
-
-【可坐点】@ (119.99, 0.00, 3.96)  朝向 209°
-  坐下后：Seated=True ✓；坐姿模型 active=True ✓；站立模型 enabled 渲染器=0 ✓；坐姿 Animator 在 Sit=True ✓；Hips 高度 1.09m（+30 帧后 1.09m，坐姿根 0.53m，站姿模型 Hips 1.43m）
-  走开后：Seated=False ✓；坐姿模型 active=False ✓；站立模型 enabled 渲染器=1 ✓
-
-【可坐点】@ (120.03, 0.00, 6.36)  朝向 29°
-  坐下后：Seated=True ✓；坐姿模型 active=True ✓；站立模型 enabled 渲染器=0 ✓；坐姿 Animator 在 Sit=True ✓；Hips 高度 0.55m（+30 帧后 0.55m，坐姿根 0.00m，站姿模型 Hips 0.90m）
-  走开后：Seated=False ✓；坐姿模型 active=False ✓；站立模型 enabled 渲染器=1 ✓
-
-【可坐点】@ (78.35, 0.00, 1.01)  朝向 266°
-  坐下后：Seated=True ✓；坐姿模型 active=True ✓；站立模型 enabled 渲染器=0 ✓；坐姿 Animator 在 Sit=True ✓；Hips 高度 0.55m（+30 帧后 0.55m，坐姿根 0.00m，站姿模型 Hips 0.90m）
-  走开后：Seated=False ✓；坐姿模型 active=False ✓；站立模型 enabled 渲染器=1 ✓
 
 【第3章_落座】@ (120.55, 0.00, 4.04)  朝向 29°
   坐下后：Seated=True ✓；坐姿模型 active=True ✓；站立模型 enabled 渲染器=0 ✓；坐姿 Animator 在 Sit=True ✓；Hips 高度 0.55m（+30 帧后 0.55m，坐姿根 0.00m，站姿模型 Hips 0.90m）

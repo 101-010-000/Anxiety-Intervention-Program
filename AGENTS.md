@@ -168,9 +168,17 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   · 藏站立模型 = 把它的渲染器 `enabled=false`（描边外壳一起没，比换透明材质干净）——
     `FirstPersonController.SetStandingModelVisible(bool)`。
   · ⚠ **两个模型名都要列进 `firstPersonShadowsOnlyParts`**，否则第一人称坐姿模型的头会怼进相机。
+  · ★ **只有剧情要坐的才坐**（用户 2026-09-30 定稿）：自由「按 F 坐下」的点**一律关掉**（`SitSpot.enabled=false`），
+    只留三个剧情座位：`Loc_食堂/多章锚点/第3章_落座`、`Loc_宿舍/多章锚点/第4章_坐下看资料`、
+    `Loc_宿舍/多章锚点/第5章_回座位`（都是 `剧情锁住自动坐下` 模式 —— 玩家被剧情锁在该点 1.3m 内就自动换模型）。
+  · 坐姿模型就用**场景里已有的那个坐姿徐夏**（`带动画模型/徐夏/Sitting Idle.fbx` 的实例，原本手摆在
+    `Loc_宿舍/第五章角色` 下）—— 工具会把它挪到 `Player_徐夏` 下并默认隐藏（不然「第五章角色」容器一按章隐藏，
+    它跟着就没了）；工具自己建的 `徐夏_坐姿` 副本会自动删掉，别留两个。
   · 接线工具：`Tools/干预项目/坐姿换模型：接线（宿舍 + 食堂）`（`Assets/Editor/SitSwapSetup.cs`，幂等，
     报告 `assets/_报告/_坐姿换模型.txt`）；自检 `assets/_报告/_坐姿换模型自检.txt`（逐座位查：坐姿模型亮、
     站立模型藏、Animator 在 `Sit`、Hips 0.55m / 站姿 0.90m、走开能换回来）。
+  · ⚠ 找坐姿模型时**只认 prefab/FBX 实例的根**（`GetOutermostPrefabInstanceRoot(go)==go`）——
+    `FindObjectsOfType<GameObject>` 会把 `mixamorig:*` 骨头也列出来，光看“源资产路径”会选到骨头上（踩过）。
 - ⚠ 坐姿剪辑的基准是**脚在地面、屁股在椅面** → 实测 Hips Y ≈ **0.55m**（站姿 Idle ≈ 0.93m），
   所以**座位点的 Y 必须是地面（0）**、朝向 = 面向桌子（现有三个锚点正好都在 Y=0）。
   · `SitSpot.SeatPos()` 取地面：**玩家脚底 Y 与“向下打到的所有面里最低的那个”取小**。
