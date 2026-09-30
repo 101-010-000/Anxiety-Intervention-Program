@@ -35,7 +35,8 @@ public static class SitSwapSetup
     const string REPORT = "Assets/assets/_报告/_坐姿换模型.txt";
     const string SEAT_FBX = "Assets/assets/03_动作_Animation/带动画模型/徐夏/已绑定.fbx";
     const string SIT_CTRL = "Assets/assets/03_动作_Animation/Animators/带动画模型/徐夏_第三人称.controller";
-    static readonly string[] LOCS = { "Loc_宿舍", "Loc_食堂" };
+    static readonly string[] LOCS = { "Loc_宿舍", "Loc_食堂", "Loc_图书馆" };
+
 
     // 剧情座位的判定半径：**必须 >= 剧情 F 交互点（StoryInteractable.radius = 2.2）**，
     // 否则玩家站在「按 F」提示范围内按下 F、却因为离座位点超过坐姿半径而不会坐下（站着对话）。
@@ -203,6 +204,9 @@ public static class SitSwapSetup
         {
             var loc = GameObject.Find(locName);
             if (loc == null) continue;
+            // ★ 图书馆的两个座位由 ④′ 专门处理：它们【不能】被“对齐到模型”挪走
+            //   （模型摆在过道里；而且第4章那个点是剧情 F 交互点，挪了玩家就跑错地方）
+            if (locName == "Loc_图书馆") { _log.AppendLine("  " + locName + "：交给 ④′ 处理（不按模型对齐）"); continue; }
             var sit = primary.ContainsKey(locName) ? primary[locName] : null;
             var spots = loc.GetComponentsInChildren<SitSpot>(true);
             _log.AppendLine("  " + locName + "：" + spots.Length + " 个 SitSpot" +
@@ -244,6 +248,56 @@ public static class SitSwapSetup
             }
         }
         _log.AppendLine("  共接线 " + wired + " 个座位点");
+
+        // ★ 图书馆「在图书馆找个凳子坐下」（第5章 step 29）：这个点原本只有 StoryInteractable（任意凳子），
+        //   没有 SitSpot → 现场补一个：任意凳子判定 + 坐玩家自己挑的那把凳子（用户 2026-10-01）
+        _log.AppendLine();
+        _log.AppendLine("【④′ 图书馆（任意凳子）】");
+        // ⚠ 上一版工具 ④ 的“对齐到模型”会把这两个点挪到模型位置（模型在过道里）——
+        //   发现被挪走（离模型 < 0.7m）就挪回设计位：第4章 林溪旁边 (200.23,-6.56)、第5章 (207.5,-6.0)
+        var libModel = primary.ContainsKey("Loc_图书馆") ? primary["Loc_图书馆"] : null;
+        RestoreAnchor(GameObject.Find("第4章_图书馆座位"), new Vector3(200.23f, 0f, -6.56f), libModel);
+        RestoreAnchor(GameObject.Find("第5章_图书馆躲避"), new Vector3(207.5f, 0f, -6.0f), libModel);
+
+        // ★ 第4章「走到林溪旁边的位置」【不接换模型】（用户 2026-10-01 待确认）：
+        //   那个点在书架边的过道里（坐下去是"贴着书架坐"，第三人称镜头还会插进书架里），
+        //   而用户摆的坐姿模型在一张阅览桌的椅子上、离林溪 (201.1,-6.2) 有 ~6m。
+        //   跟着模型坐会把玩家瞬移过去、离林溪太远；就地坐又难看 → 先撤掉（要接的话说一声：
+        //   要么把 F 点也挪到那张椅子，要么把林溪也挪过去）。
+        var libSeat4 = GameObject.Find("第4章_图书馆座位");
+        if (libSeat4 != null)
+        {
+            var sit4 = libSeat4.GetComponent<SitSpot>();
+            if (sit4 != null)
+            {
+                Object.DestroyImmediate(sit4);
+                _log.AppendLine("  − 第4章_图书馆座位：撤掉 SitSpot（书架边坐相不好；要接先跟用户确认位置）");
+            }
+            else _log.AppendLine("  · 第4章_图书馆座位：本来就没有 SitSpot，不动");
+        }
+
+        var libSeat = GameObject.Find("第5章_图书馆躲避");
+        if (libSeat == null) _log.AppendLine("  − 场景里没有 第5章_图书馆躲避，跳过");
+        else
+        {
+            var sit0 = libSeat.GetComponent<SitSpot>();
+            if (sit0 == null) { sit0 = libSeat.AddComponent<SitSpot>(); _log.AppendLine("  + 第5章_图书馆躲避 没有 SitSpot，已补一个"); }
+            sit0.mode = SitMode.剧情锁住自动坐下;
+            sit0.anySeat = true;              // 判定 = 玩家贴着图书馆里任意一把凳子（同剧情交互点）
+            sit0.sitAtPlayer = true;          // 坐姿 = 玩家此刻站的位置（他正贴着自己挑的那把凳子）
+            sit0.radius = 0.4f;               // 允许离凳子表面的间隙（0.4 ≈ 贴着凳子）
+            sit0.seatedModel = primary.ContainsKey("Loc_图书馆") ? primary["Loc_图书馆"] : null;
+            sit0.hideStandingModel = true;
+            sit0.useSeatedModelPose = false;  // 坐玩家挑的凳子，不坐模型摆的那点（模型摆在过道里）
+            sit0.showPrompt = false;
+            sit0.onlyChapters = new int[0];
+            sit0.enabled = true;
+            EditorUtility.SetDirty(sit0);
+            wired++;
+            _log.AppendLine("  = 第5章_图书馆躲避  mode=剧情锁住自动坐下  anySeat=true  sitAtPlayer=true  radius=" +
+                            sit0.radius.ToString("F1") + "  → 坐姿模型 " +
+                            (sit0.seatedModel != null ? PathOf(sit0.seatedModel.transform) : "★空"));
+        }
 
         // ⑤ 第一人称：站立 + 所有坐姿模型都列进「只投影」名单
         _log.AppendLine();
@@ -296,7 +350,8 @@ public static class SitSwapSetup
             if (src == null) continue;
             string path = AssetDatabase.GetAssetPath(src);
             if (!path.Contains("带动画模型/徐夏") || !path.Contains("Sitting")) continue;
-            if (!(go.name.Contains("切换") || go.name.Contains("坐姿") || go.name == "徐夏")) continue;
+            // ★ 也认用户直接拖进来的 FBX 本名「Sitting Idle」（图书馆那个就是没改名的，2026-10-01）
+            if (!(go.name.Contains("切换") || go.name.Contains("坐姿") || go.name.Contains("Sitting") || go.name == "徐夏")) continue;
             res.Add(go);
         }
         return res;
@@ -305,7 +360,7 @@ public static class SitSwapSetup
     /// <summary>这个地点用哪份坐姿模型：优先用户最新手摆的（名字带「任务视角」）→「玩家切换」→ 离地点最近</summary>
     static GameObject PickSitForLoc(List<GameObject> variants, Transform loc)
     {
-        var pool = variants.Where(v => v.transform.IsChildOf(loc)).ToList();
+        var pool = variants.Where(v => LocOfVariant(v) == loc).ToList();
         if (pool.Count == 0) pool = variants;                      // 兜底：全场景里找
         var pick = pool.FirstOrDefault(v => v.name.Contains("任务视角"));
         if (pick != null) return pick;
@@ -314,13 +369,42 @@ public static class SitSwapSetup
         return Nearest(pool, loc.position);
     }
 
-    /// <summary>坐姿变体该挂哪儿：挪出「第N章角色」容器 → 挂在最近的 Loc 的「多章锚点」下（永远激活）</summary>
+    /// <summary>被“对齐到模型”挪走的图书馆锚点：离模型很近（<0.7m）说明是挪错了 → 挪回设计位</summary>
+    static void RestoreAnchor(GameObject anchor, Vector3 design, GameObject model)
+    {
+        if (anchor == null) return;
+        if (model != null)
+        {
+            var p = anchor.transform.position;
+            float d = new Vector2(p.x - model.transform.position.x, p.z - model.transform.position.z).magnitude;
+            if (d > 0.7f) return;                 // 不在模型那儿 = 没被挪过（或用户自己挪过）→ 不动
+        }
+        var now = anchor.transform.position;
+        anchor.transform.position = new Vector3(design.x, now.y, design.z);
+        _log.AppendLine("  ↩ " + anchor.name + " 从 " + now.ToString("F2") + " 挪回设计位 " + design.ToString("F2"));
+    }
+
+    /// <summary>坐姿变体属于哪个地点：优先看父级链；摆在场景根上的（用户直接拖进场景）按位置就近归。</summary>
+    static Transform LocOfVariant(GameObject v)
+    {
+        for (var t = v.transform.parent; t != null; t = t.parent)
+            if (t.name.StartsWith("Loc_")) return t;
+        Transform best = null; float bestD = float.MaxValue;
+        foreach (var locName in LOCS)
+        {
+            var loc = GameObject.Find(locName);
+            if (loc == null) continue;
+            float d = (loc.transform.position - v.transform.position).sqrMagnitude;
+            if (d < bestD) { bestD = d; best = loc.transform; }
+        }
+        return best;
+    }
+
+    /// <summary>坐姿变体该挂哪儿：挪出「第N章角色」容器 → 挂在所属 Loc 的「多章锚点」下（永远激活）</summary>
     static Transform HolderFor(GameObject v)
     {
-        Transform loc = null;
-        for (var t = v.transform.parent; t != null; t = t.parent)
-            if (t.name.StartsWith("Loc_")) { loc = t; break; }
-        if (loc == null) return v.transform.parent;                 // 不在任何 Loc 里：不动
+        var loc = LocOfVariant(v);
+        if (loc == null) return v.transform.parent;                 // 找不到地点：不动
         foreach (Transform c in loc)
             if (c.name == "多章锚点") return c;
         return loc;
@@ -383,3 +467,9 @@ public static class SitSwapSetupTrigger
         };
     }
 }
+
+// nudge 023858
+
+// nudge 024123
+
+// nudge 024431

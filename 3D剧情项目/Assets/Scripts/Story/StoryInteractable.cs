@@ -112,7 +112,11 @@ public class StoryInteractable : MonoBehaviour
 
     // ------------------------------------------------------------------ 任意座位模式
     // 场景里的凳子/椅子（名字含 凳/椅/chair/stool/bench/沙发）——按地点缓存，避免每帧扫全场景
-    static readonly Dictionary<Transform, List<Transform>> _seatCache = new Dictionary<Transform, List<Transform>>();
+    // ★ 缓存放实例上（别用 static：编辑器「关闭域重载」时静态缓存会残留到下一次 Play，
+    //   Unity 复用 instanceID 时会拿着旧场景的凳子判定 —— SitSpot 那边踩过同样的问题）
+    Transform _seatCacheLoc;
+    List<Transform> _seatCacheList;
+    float _seatCacheAt = -99f;
 
     Transform MyLoc()
     {
@@ -124,12 +128,11 @@ public class StoryInteractable : MonoBehaviour
     List<Transform> SeatsHere()
     {
         var loc = MyLoc();
-        List<Transform> list;
-        if (_seatCache.TryGetValue(loc, out list) && list != null) return list;
-        list = new List<Transform>();
+        if (_seatCacheList != null && _seatCacheLoc == loc && Time.unscaledTime - _seatCacheAt < 1f) return _seatCacheList;
+        var list = new List<Transform>();
         foreach (var t in loc.GetComponentsInChildren<Transform>(true))
             if (SitSpot.IsSeatName(t.name)) list.Add(t);
-        _seatCache[loc] = list;
+        _seatCacheLoc = loc; _seatCacheList = list; _seatCacheAt = Time.unscaledTime;
         return list;
     }
 
@@ -165,9 +168,14 @@ public class StoryInteractable : MonoBehaviour
     /// 凳子上离 point 最近的一点（优先碰撞体，其次渲染包围盒，都没有才回退节点原点）
     static Vector3 SurfacePoint(Transform seat, Vector3 point)
     {
+        // ⚠ 非凸 MeshCollider 的 ClosestPoint 会把入参原地返回（场景设施碰撞体全是非凸的）
+        //   → 用它会让「任意凳子」到处都算贴身；跳过它，用渲染包围盒兜底
         var col = seat.GetComponentInChildren<Collider>();
         if (col != null && col.enabled && col.gameObject.activeInHierarchy)
-            return col.ClosestPoint(point);
+        {
+            var mc = col as MeshCollider;
+            if (mc == null || mc.convex) return col.ClosestPoint(point);
+        }
         var r = seat.GetComponentInChildren<Renderer>();
         if (r != null && r.enabled && r.gameObject.activeInHierarchy)
             return r.bounds.ClosestPoint(point);

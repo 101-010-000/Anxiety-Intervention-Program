@@ -1,4 +1,4 @@
-坐姿换模型截图  2026-10-01 01:16
+坐姿换模型截图  2026-10-01 02:45
 【第3章_落座】座位 (119.99, 0.00, 3.95)  朝向 1°
   坐下前：站立模型 enabled 渲染器=0；坐姿模型 active=True
   坐下后：Seated=True；站立模型 enabled 渲染器=0；坐姿模型 active=True
@@ -14,5 +14,13 @@
   截图 02_第5章_回座位_侧面 → D:\workspace\unity project\干预\3D剧情项目\Assets\assets\_报告\预览\坐姿换模型\02_第5章_回座位_侧面.png
   起身后：Seated=False；站立模型 enabled 渲染器=1；坐姿模型 active=False
   截图 02_第5章_回座位_起身后 → D:\workspace\unity project\干预\3D剧情项目\Assets\assets\_报告\预览\坐姿换模型\02_第5章_回座位_起身后.png
+
+【第5章_图书馆躲避】座位 (209.50, 0.03, -2.83)  朝向 118°
+  坐下前：站立模型 enabled 渲染器=1；坐姿模型 active=False
+  坐下后：Seated=True；站立模型 enabled 渲染器=0；坐姿模型 active=True
+  截图 03_第5章_图书馆躲避_坐下 → D:\workspace\unity project\干预\3D剧情项目\Assets\assets\_报告\预览\坐姿换模型\03_第5章_图书馆躲避_坐下.png
+  截图 03_第5章_图书馆躲避_侧面 → D:\workspace\unity project\干预\3D剧情项目\Assets\assets\_报告\预览\坐姿换模型\03_第5章_图书馆躲避_侧面.png
+  起身后：Seated=False；站立模型 enabled 渲染器=1；坐姿模型 active=False
+  截图 03_第5章_图书馆躲避_起身后 → D:\workspace\unity project\干预\3D剧情项目\Assets\assets\_报告\预览\坐姿换模型\03_第5章_图书馆躲避_起身后.png
 
 （完）

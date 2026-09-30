@@ -80,7 +80,7 @@ Editor/                        agent 工具（菜单 Tools/干预项目/…）�
   ScenePostFx.cs               剧情场景后期：辉光/模糊/抬黑/雾 + 6 个地点各自的氛围 Volume（见第五节）
   GameDoorBuilder.cs           门口传送：给场景里已有的门触发盒挂交互 + 「按 F 开门」+ 地点选择面板（见第五节）
   Chapter4DoorTrip.cs          第4/5章门口引导：门口 UI 在且提示统一（缺了就重建）+ 第4/5章任务触发点摆位 + 清场景残留（见第五节）
-  SitSetup.cs / SitSwapSetup.cs  坐姿：生成 Sit 剪辑 + 控制器 Sit 状态 / 坐下换模型接线（宿舍×2 + 食堂×1 剧情座位，见第三节）
+  SitSetup.cs / SitSwapSetup.cs  坐姿：生成 Sit 剪辑 + 控制器 Sit 状态 / 坐下换模型接线（宿舍×2 + 食堂×1 + 图书馆×2，见第三节）
   ChoiceTitleColor.cs          选择题题干标题配色（改蓝白色 #CCE3FF，用户 2026-10-01）
   AnimPreviewSetup.cs          角色预览场景：每个角色挂一个不一样的动画 + 运行自检（见第五节）
   MainMenuAssets.cs            主界面 UI 贴图：程序化生成 57 张 + 中文字体 + 20 张收录图导入
@@ -199,8 +199,27 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
     站立模型藏、Animator 在 `Sit`、Hips 0.55m / 站姿 0.90m、坐姿与用户摆位偏差 0.00m、
     取消坐下回到原站位偏差 ~0.00m、走开/被传走能换回来且不回传）；
     截图存档 `assets/_报告/预览/坐姿换模型/`（临时截图驱动用完归档在 `额外文件/历史脚本_运行时/`）。
-  · ⚠ 还没接的「坐下」点：第5章 `第5章_食堂座位` / `第5章_图书馆躲避`（都是 `anySeat` 任意凳子模式，
-    没有固定座位 → 没有换模型；用户要的话得在那把凳子旁各摆一份坐姿模型再挂 SitSpot）。
+  · ★ **图书馆两个坐下点（用户 2026-10-01 加的模型）**：
+    · `第4章_图书馆座位`（"走到林溪旁边的位置"）→ **暂不接换模型**（待用户确认位置）：那个点在书架边的过道里，
+      就地坐像"贴着书架坐"、第三人称镜头还会插进书架；而用户摆的坐姿模型在一张阅览桌的椅子上、离林溪 (201.1,-6.2) 有 ~6m，
+      跟着模型坐会把玩家瞬移过去。要接的话：把 F 点也挪到那张椅子，或把林溪也挪过去（先问用户）。
+    · `第5章_图书馆躲避`（"在图书馆找个凳子坐下"）→ 补了 SitSpot：`anySeat=true`（判定 = 玩家贴着图书馆里任意一把凳子，
+      同 StoryInteractable 的任意凳子模式）+ `sitAtPlayer=true`（坐自己挑的那把凳子）+ radius 0.4（离凳子表面的间隙）。
+    · 图书馆那份坐姿模型 = 用户拖进来的 `Sitting Idle`（没改名）→ `FindSitVariants` 也认名字带 `Sitting` 的；
+      它当时挂在 `Loc_图书馆/第四章角色` 下，工具按「最近 Loc」归到 `Loc_图书馆/多章锚点` 并隐藏。
+  · ⚠ **SitSpot 的判定半径一律从本节点（剧情 F 交互点）算**：`anySeat` / `sitAtPlayer` 时 `SeatPos()` 会跟着玩家跑，
+    用 `SeatPos()` 判距离会永远 0 → 满场景乱坐（踩过：在宿舍出生就触发图书馆的座位）。
+  · ⚠ **凳子/家具的「节点原点 vs 可见网格」能差 ~3m**（这批 `凳子2` 全是固定 2.98m 偏移，方向随实例 yaw）：
+    任何「按坐标摆的点」都别信节点 —— 判距离用 `Collider/bounds` 的表面点，`SitSpot.DebugSeats()` 可直接打印对照。
+  · ⚠ **非凸 MeshCollider 的 `ClosestPoint` 会把入参原地返回**（场景设施碰撞体全是非凸的！）——
+    用它当"凳子表面距离"会让任意位置都算贴身（`SitSpot` / `StoryInteractable` 的 `SurfacePoint` 都已跳过非凸 MeshCollider，
+    改用渲染包围盒）。排查这类问题看 `SitSpot.DebugSeats()`。
+  · ⚠ **别用 static 字典缓存凳子名单**：编辑器「关闭域重载」时静态缓存会跨 Play 会话残留（Unity 复用 instanceID），
+    会拿着上一次场景的凳子判定 —— 现在 `SitSpot`/`StoryInteractable` 都改成实例缓存 + 1s TTL。
+  · ⚠ **重建场景锚点时别把图书馆这两个点也对齐到模型**（工具 ④ 已跳过 `Loc_图书馆`，由 ④′ 处理）：
+    第4章那两个 F 点被挪走的话，剧情里玩家就跑错地方；`SitSwapSetup.RestoreAnchor()` 会把挪走的挪回设计位。
+  · ⚠ 还没接的「坐下」点：第5章 `第5章_食堂座位`（任意凳子模式，凳子名单里只认 `凳子2 (24)`）——
+    要换模型的话在 `SitSwapSetup` 的 ④′ 里照图书馆那样补一个 SitSpot 即可。
   · ⚠ 找坐姿模型时**只认 prefab/FBX 实例的根**（`GetOutermostPrefabInstanceRoot(go)==go`）——
     `FindObjectsOfType<GameObject>` 会把 `mixamorig:*` 骨头也列出来，光看“源资产路径”会选到骨头上（踩过）。
 - ⚠ 坐姿剪辑的基准是**脚在地面、屁股在椅面** → 实测 Hips Y ≈ **0.55m**（站姿 Idle ≈ 0.93m），
@@ -915,7 +934,7 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 | 第N章剧情运行自检（N=1..5） | `Tools/干预项目/第N章剧情运行自检`（或丢 `Assets/_storyNsmoke_trigger.txt`）→ `assets/_报告/_第N章剧情运行自检.txt`；⚠ 自检前场景要先保存（会重开场景） |
 | 调试：回退到上一句（仅编辑器） | Play 中按 **`Backspace`** 逐句回退并重播（含语音）；只在正停在一句话上时生效，不跨交互/走位/转场，也不跨手机聊天换段（实现见 `.trellis/spec/guides/unity-story-step-conventions.md` §三） |
 | 台词语音：生成/补缺（改了第N章 json 后） | `python 额外文件/工具脚本/voice_batch_generate.py N`（幂等）→ 把 `额外文件/语音生成/output/ch{N}` 拷进 `Assets/Resources/语音/ch{N}`、`manifest.json` 拷成 `manifest.txt` → Unity 菜单 `Tools/干预项目/台词语音/诊断` 对账（报告 `assets/_报告/_台词语音.txt`）；选角/管线细节见 §五「台词语音」节 |
-| 坐下换模型（宿舍×2 + 食堂×1 剧情座位；用用户手摆的坐姿模型） | `Tools/干预项目/坐姿换模型：接线（宿舍 + 食堂）`（`Assets/Editor/SitSwapSetup.cs`，或丢 `_sitswap_trigger.txt`）→ `assets/_报告/_坐姿换模型.txt`；自检 `_坐姿换模型自检.txt` |
+| 坐下换模型（宿舍×2 + 食堂×1 + 图书馆×2 剧情座位；用用户手摆的坐姿模型） | `Tools/干预项目/坐姿换模型：接线（宿舍 + 食堂）`（`Assets/Editor/SitSwapSetup.cs`，或丢 `_sitswap_trigger.txt`）→ `assets/_报告/_坐姿换模型.txt`；自检 `_坐姿换模型自检.txt` |
 | 换人后坐姿位置不对（坐在桌边悬空） | 把坐姿模型（场景里 `徐夏任务视角切换`）拖到椅子上/转个方向 → 重跑上面那个工具（会把座位标记点也对齐到模型） |
 | 生成/修复选择题选项行 | `Tools/干预项目/生成选择题按钮行`（预置3行 = 补缺接线 / 强制重建 = 弃手调重建 / 选择题行去掉解释块）→ `assets/_报告/_选择题按钮行.txt`；选项行样式直接在 Scene 里改 |
 | 选择题题干看不清（深色 Dim 上压深字） | `Tools/干预项目/选择题：题干标题改蓝白色`（`Assets/Editor/ChoiceTitleColor.cs`，或丢 `_choicetitle_trigger.txt`）→ `#CCE3FF`、报告 `assets/_报告/_选择题标题配色.txt` |

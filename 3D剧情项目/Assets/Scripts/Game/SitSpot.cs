@@ -65,6 +65,12 @@ public class SitSpot : MonoBehaviour
              "关掉 = 老行为「坐到座位标记点 / 最近凳子的朝向」")]
     public bool useSeatedModelPose = true;
 
+    [Header("任意凳子模式（第5章图书馆「找个凳子坐下」）")]
+    [Tooltip("判定不看本节点位置：玩家【贴着本地点里任意一把凳子】就算到位（同 StoryInteractable.anySeat）")]
+    public bool anySeat = false;
+    [Tooltip("坐下位置 = 玩家此刻站的位置（朝向 = 最近凳子的朝向）；任意凳子模式用。默认关 = 坐本节点位置")]
+    public bool sitAtPlayer = false;
+
     static readonly int SittingHash = Animator.StringToHash("Sitting");
     static readonly int SitStateHash = Animator.StringToHash("Sit");   // SitSetup 生成的状态名
 
@@ -78,6 +84,11 @@ public class SitSpot : MonoBehaviour
     static Vector3 _standPos;
     static Quaternion _standRot;
     static bool _hasStandPos;
+    // ★ 坐下那一刻定下来的坐姿（位置/朝向）：坐着期间用它，避免「坐姿跟着玩家跑」
+    //   （任意凳子模式坐下点=玩家位置，每帧重算的话剧情把人传走都测不出来）
+    Vector3 _sitPos;
+    float _sitYaw;
+    bool _hasSit;
 
     public bool Seated { get { return _seated; } }
 
@@ -94,10 +105,13 @@ public class SitSpot : MonoBehaviour
             return;                                    // 这一章不允许坐
         }
 
-        Vector3 a = SeatPos();
+        // ★ 判定半径一律从【本节点（剧情 F 交互点）】算，不用 SeatPos()：
+        //   任意凳子/坐玩家位置这些模式下 SeatPos() 会跟着玩家跑，用它判距离会永远为 0（到处都触发，踩过）
         Vector3 p = _fpc.transform.position;
-        float d = new Vector2(p.x - a.x, p.z - a.z).magnitude;
-        bool inRange = d <= radius;
+        Vector3 anchor = transform.position;
+        float dAnchor = new Vector2(p.x - anchor.x, p.z - anchor.z).magnitude;
+        float d = (_seated && _hasSit) ? new Vector2(p.x - _sitPos.x, p.z - _sitPos.z).magnitude : dAnchor;
+        bool inRange = anySeat ? PlayerAtAnySeat() : dAnchor <= radius;
         if (!_fpc.locked) _suppressSit = false;            // 对话结束 → 恢复正常自动坐
 
         if (!_seated)
@@ -123,6 +137,14 @@ public class SitSpot : MonoBehaviour
         else SitPrompt.Hide(this);
     }
 
+    // 进场（加载场景/组件启用）时清掉上次会话残留的压制标记：
+    // 编辑器「关闭域重载」时 static 字段会跨 Play 会话保留，不干净的话下一次 Play 的第一个座位坐不下（踩过）
+    void OnEnable()
+    {
+        _suppressSit = false;
+        _seatCacheList = null;
+    }
+
     void OnDisable()
     {
         if (_seated) Stand(false);
@@ -134,7 +156,11 @@ public class SitSpot : MonoBehaviour
     {
         // ★ 有坐姿模型时以【模型摆好的位置】为准（用户 2026-10-01）：座位标记点常常在书桌边，
         //   而用户把坐姿模型摆在了椅子上/想要的座位上——坐姿要跟模型走，不然人会坐在桌子边悬空。
-        Vector3 p = (useSeatedModelPose && seatedModel != null) ? seatedModel.transform.position : transform.position;
+        // ★ 任意凳子模式（sitAtPlayer）：坐玩家此刻站的位置（他正贴着自己挑的那把凳子）。
+        Vector3 p;
+        if (sitAtPlayer && _fpc != null) p = _fpc.transform.position;
+        else if (useSeatedModelPose && seatedModel != null) p = seatedModel.transform.position;
+        else p = transform.position;
         if (snapToGround)
         {
             // ★ 用【玩家此刻的脚底高度】当地面（用户 2026-09-30 实测踩到）：
@@ -155,9 +181,108 @@ public class SitSpot : MonoBehaviour
     /// <summary>坐姿朝向：跟板凳一致（没有板凳则用座位点自身朝向）</summary>
     public float SeatYaw()
     {
+        if (sitAtPlayer && _fpc != null)
+        {
+            var near = seat != null ? seat : NearestSeatTo(_fpc.transform.position);
+            return near != null ? near.eulerAngles.y : _fpc.transform.eulerAngles.y;
+        }
         if (useSeatedModelPose && seatedModel != null) return seatedModel.transform.eulerAngles.y;   // 用户摆好的朝向优先
         var s = seat != null ? seat : FindNearestSeat();
         return s != null ? s.eulerAngles.y : transform.eulerAngles.y;
+    }
+
+    /// <summary>任意凳子判定：玩家是否贴着【本地点】里的任意一把凳子（同 StoryInteractable.anySeat；
+    /// radius = 允许离凳子表面的间隙）</summary>
+    bool PlayerAtAnySeat()
+    {
+        var fpc = _fpc != null ? _fpc : FirstPersonController.Instance;
+        if (fpc == null) return false;
+        var loc = MyLoc();
+        if (loc == null) return false;
+        foreach (var t in SeatsIn(loc))
+        {
+            if (t == null || !t.gameObject.activeInHierarchy) continue;
+            Vector3 q = SurfacePoint(t, fpc.transform.position);
+            float d = new Vector2(q.x - fpc.transform.position.x, q.z - fpc.transform.position.z).magnitude;
+            if (d <= radius) return true;
+        }
+        return false;
+    }
+
+    Transform MyLoc()
+    {
+        for (var t = transform; t != null; t = t.parent)
+            if (t.name.StartsWith("Loc_")) return t;
+        return null;
+    }
+
+    // 凳子名单缓存：★【实例字段】（不要用 static 字典——编辑器「关闭域重载」时静态缓存会跨 Play
+    // 会话残留，Unity 复用 instanceID 时按旧场景的凳子判定 → 在宿舍也会「图书馆任意凳子」成立，踩过）
+    Transform _seatCacheLoc;
+    System.Collections.Generic.List<Transform> _seatCacheList;
+    float _seatCacheAt = -99f;
+
+    System.Collections.Generic.List<Transform> SeatsIn(Transform loc)
+    {
+        if (_seatCacheList != null && _seatCacheLoc == loc && Time.unscaledTime - _seatCacheAt < 1f) return _seatCacheList;
+        var list = new System.Collections.Generic.List<Transform>();
+        foreach (var t in loc.GetComponentsInChildren<Transform>(true))
+            if (IsSeatName(t.name)) list.Add(t);
+        _seatCacheLoc = loc; _seatCacheList = list; _seatCacheAt = Time.unscaledTime;
+        return list;
+    }
+
+    static Vector3 SurfacePoint(Transform seat, Vector3 point)
+    {
+        // ⚠ 非凸 MeshCollider 的 ClosestPoint【不可靠：会把入参原地返回】——场景设施碰撞体全是非凸
+        //   MeshCollider，直接用会让「任意凳子」到处都算贴身（在宿舍出生就触发图书馆的座位，踩过）
+        var col = seat.GetComponentInChildren<Collider>();
+        if (col != null && col.enabled && col.gameObject.activeInHierarchy)
+        {
+            var mc = col as MeshCollider;
+            if (mc == null || mc.convex) return col.ClosestPoint(point);
+        }
+        var r = seat.GetComponentInChildren<Renderer>();
+        if (r != null && r.enabled && r.gameObject.activeInHierarchy) return r.bounds.ClosestPoint(point);
+        return seat.position;
+    }
+
+    /// <summary>诊断用：打印「任意凳子」判定里本地点找到的凳子（名字/位置/判定点/距离/包围盒）</summary>
+    public string DebugSeats(Vector3 playerPos)
+    {
+        var sb = new System.Text.StringBuilder();
+        var loc = MyLoc();
+        if (loc == null) return "（不在任何 Loc_ 下）";
+        var seats = SeatsIn(loc);
+        sb.Append("loc=" + loc.name + "，本地点凳子 " + seats.Count + " 把，radius=" + radius.ToString("F2") + "\n");
+        int i = 0;
+        foreach (var t in seats)
+        {
+            if (t == null) continue;
+            Vector3 q = SurfacePoint(t, playerPos);
+            float d = new Vector2(q.x - playerPos.x, q.z - playerPos.z).magnitude;
+            var col = t.GetComponentInChildren<Collider>();
+            string ci = col != null ? col.GetType().Name + "(" + (col is MeshCollider && !((MeshCollider)col).convex ? "非凸" : "可用") + ")" : "无碰撞体";
+            var r = t.GetComponentInChildren<Renderer>();
+            string ri = r != null ? "renderBounds " + r.bounds.size.ToString("F1") + " @" + r.bounds.center.ToString("F1") : "无渲染器";
+            if (d <= radius || i < 6)
+                sb.Append("  " + t.name + " pos=" + t.position.ToString("F1") + " 判定点=" + q.ToString("F1") +
+                          " 距离=" + d.ToString("F2") + (d <= radius ? " ★贴身" : "") + "  " + ci + "  " + ri + "\n");
+            i++;
+        }
+        return sb.ToString();
+    }
+
+    static Transform NearestSeatTo(Vector3 pos)
+    {
+        Transform best = null; float bestD = 4f;
+        foreach (var t in FindObjectsOfType<Transform>())
+        {
+            if (t == null || !IsSeatName(t.name)) continue;
+            float d = Vector3.Distance(t.position, pos);
+            if (d < bestD) { bestD = d; best = t; }
+        }
+        return best;
     }
 
     public Transform FindNearestSeatPublic() { return FindNearestSeat(); }
@@ -199,17 +324,20 @@ public class SitSpot : MonoBehaviour
             _hasStandPos = true;
         }
 
+        _sitPos = SeatPos();                                 // ★ 这一刻定下来的坐姿（坐着期间不再变）
+        _sitYaw = SeatYaw();
+        _hasSit = true;
         var cc = _fpc.GetComponent<CharacterController>();
         if (cc != null) cc.enabled = false;                  // 挪人必须关 CC（门口传送同款坑）
-        _fpc.transform.position = SeatPos();
-        _fpc.transform.rotation = Quaternion.Euler(0f, SeatYaw(), 0f);
+        _fpc.transform.position = _sitPos;
+        _fpc.transform.rotation = Quaternion.Euler(0f, _sitYaw, 0f);
         // ★ 坐着期间【保持关闭】：座位点大多在凳子/桌子正中间，胶囊插在家具里会被顶到凳面上去
         //   （实测人浮在凳子上 0.5m）。起身时（Stand）再打开，顺便让 collide-and-slide 把人挪出家具。
 
         // ★ 换模型：藏站立模型 + 亮出坐姿模型（坐姿模型跟人站同一个位置/朝向）
         if (seatedModel != null)
         {
-            seatedModel.transform.SetPositionAndRotation(SeatPos(), Quaternion.Euler(0f, SeatYaw(), 0f));
+            seatedModel.transform.SetPositionAndRotation(_sitPos, Quaternion.Euler(0f, _sitYaw, 0f));
             seatedModel.SetActive(true);
             if (hideStandingModel) _fpc.SetStandingModelVisible(false);
             // 坐姿模型自己的 Animator 要【立刻】在 Sit 状态：置参数 + 直接 Play("Sit") + Update(0)
@@ -228,7 +356,7 @@ public class SitSpot : MonoBehaviour
         }
         _fpc.SetSitting(true);                                // 镜头切坐姿档（支点压低）
         _seated = true;
-        Debug.Log("[SitSpot] 坐下：" + name + "  朝向=" + SeatYaw().ToString("0.0") + "°" +
+        Debug.Log("[SitSpot] 坐下：" + name + "  朝向=" + _sitYaw.ToString("0.0") + "°" +
                   (seatedModel != null ? "（换坐姿模型「" + seatedModel.name + "」）" : "（动画器 Sitting）") +
                   "  原站位记录 " + _standPos.ToString("F2") + "（坐下前玩家在 " + posBefore + "）");
     }
@@ -264,6 +392,7 @@ public class SitSpot : MonoBehaviour
             if (cc != null) cc.enabled = true;               // 起身：CC 回来
         }
         _hasStandPos = false;                // 起身收工（含走开/被传走的路径）：这次坐下的记录作废
+        _hasSit = false;
         _seated = false;
         SitPrompt.Hide(this);
         Debug.Log("[SitSpot] 起身：" + name);
