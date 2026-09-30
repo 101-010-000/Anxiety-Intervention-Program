@@ -1,0 +1,8 @@
+坐姿换模型截图  23:34
+站立模型 enabled 渲染器 = 1；坐姿模型 active = False
+  截图 01_坐下前_站着 → D:\workspace\unity project\干预\额外文件\坐姿截图\01_坐下前_站着.png
+坐下后 Seated=True；站立模型 enabled 渲染器 = 0；坐姿模型 active = True
+  截图 02_坐下后_坐姿徐夏 → D:\workspace\unity project\干预\额外文件\坐姿截图\02_坐下后_坐姿徐夏.png
+走开后 Seated=True；站立模型 enabled 渲染器 = 1；坐姿模型 active = False
+  截图 03_起身后_站着 → D:\workspace\unity project\干预\额外文件\坐姿截图\03_起身后_站着.png
+（完）
