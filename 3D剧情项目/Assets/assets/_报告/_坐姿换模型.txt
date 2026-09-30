@@ -1,4 +1,4 @@
-坐姿换模型接线  2026-10-01 01:08
+坐姿换模型接线  2026-10-01 02:01
 （坐下 = 藏站立模型 + 显示坐姿模型；起身 = 换回来）
 
 【① 站立模型】
@@ -6,47 +6,43 @@
   standingModel = 徐夏_已绑定
 
 【② 场景里的徐夏坐姿变体（Sitting Idle.fbx 的实例）】
-  · GameRoot/Locations/Loc_食堂/第3章角色/徐夏任务视角切换  位置 (119.99, 0.07, 3.95)  朝向 1°  active=True
-  · GameRoot/Locations/Loc_宿舍/第五章角色/徐夏任务视角切换  位置 (79.23, 0.07, 3.58)  朝向 253°  active=True
   · Player_徐夏/徐夏  位置 (0.00, 0.00, -5.18)  朝向 263°  active=False
   · GameRoot/Locations/Loc_食堂/多章锚点/玩家切换  位置 (120.01, 0.06, 3.92)  朝向 0°  active=False
   · GameRoot/Locations/Loc_宿舍/多章锚点/玩家切换  位置 (79.25, 0.07, 3.50)  朝向 264°  active=False
+  · GameRoot/Locations/Loc_宿舍/多章锚点/徐夏任务视角切换  位置 (79.23, 0.07, 3.58)  朝向 253°  active=False
+  · GameRoot/Locations/Loc_食堂/多章锚点/徐夏任务视角切换  位置 (119.99, 0.07, 3.95)  朝向 1°  active=False
 
 【②′ 坐姿变体整理】
-  → 徐夏任务视角切换：从 GameRoot/Locations/Loc_食堂/第3章角色/徐夏任务视角切换 挪到 GameRoot/Locations/Loc_食堂/多章锚点（不然容器按章隐藏时它就没了；世界位置保持不变）
-  · 已设隐藏：GameRoot/Locations/Loc_食堂/多章锚点/徐夏任务视角切换
-  → 徐夏任务视角切换：从 GameRoot/Locations/Loc_宿舍/第五章角色/徐夏任务视角切换 挪到 GameRoot/Locations/Loc_宿舍/多章锚点（不然容器按章隐藏时它就没了；世界位置保持不变）
-  · 已设隐藏：GameRoot/Locations/Loc_宿舍/多章锚点/徐夏任务视角切换
 
 【③ 每个地点用哪份坐姿模型】
   Loc_宿舍 → GameRoot/Locations/Loc_宿舍/多章锚点/徐夏任务视角切换（位置 (79.23, 0.07, 3.58) 朝向 253°）
   Loc_食堂 → GameRoot/Locations/Loc_食堂/多章锚点/徐夏任务视角切换（位置 (119.99, 0.07, 3.95) 朝向 1°）
-  + 徐夏任务视角切换 没有 Animator，已补一个
   = 坐姿模型 GameRoot/Locations/Loc_宿舍/多章锚点/徐夏任务视角切换  控制器 徐夏_第三人称  （Sit 状态由 Sitting 参数进入）
-  + 徐夏任务视角切换 没有 Animator，已补一个
   = 坐姿模型 GameRoot/Locations/Loc_食堂/多章锚点/徐夏任务视角切换  控制器 徐夏_第三人称  （Sit 状态由 Sitting 参数进入）
 
 【④ 宿舍 / 食堂的座位点】
   Loc_宿舍：2 个 SitSpot，用 GameRoot/Locations/Loc_宿舍/多章锚点/徐夏任务视角切换
-    = 剧情座位 GameRoot/Locations/Loc_宿舍/多章锚点/第4章_坐下看资料  mode=剧情锁住自动坐下  radius=2.2  → 坐姿模型 GameRoot/Locations/Loc_宿舍/多章锚点/徐夏任务视角切换  标记点从 (79.23, 0.00, 3.58) 前挪 1.68m，朝向 253°，半径 2.2m
-    = 剧情座位 GameRoot/Locations/Loc_宿舍/多章锚点/第5章_回座位  mode=剧情锁住自动坐下  radius=2.2  → 坐姿模型 GameRoot/Locations/Loc_宿舍/多章锚点/徐夏任务视角切换  标记点从 (79.23, 0.00, 3.58) 前挪 1.68m，朝向 253°，半径 2.2m
+    = 剧情座位 GameRoot/Locations/Loc_宿舍/多章锚点/第4章_坐下看资料  mode=剧情锁住自动坐下  radius=2.2  → 坐姿模型 GameRoot/Locations/Loc_宿舍/多章锚点/徐夏任务视角切换  标记点已在模型处（差 0.00m），朝向 253°，半径 2.2m
+    = 剧情座位 GameRoot/Locations/Loc_宿舍/多章锚点/第5章_回座位  mode=剧情锁住自动坐下  radius=2.2  → 坐姿模型 GameRoot/Locations/Loc_宿舍/多章锚点/徐夏任务视角切换  标记点已在模型处（差 0.00m），朝向 253°，半径 2.2m
   Loc_食堂：1 个 SitSpot，用 GameRoot/Locations/Loc_食堂/多章锚点/徐夏任务视角切换
-    = 剧情座位 GameRoot/Locations/Loc_食堂/多章锚点/第3章_落座  mode=剧情锁住自动坐下  radius=2.2  → 坐姿模型 GameRoot/Locations/Loc_食堂/多章锚点/徐夏任务视角切换  标记点从 (119.99, 0.00, 3.95) 前挪 0.57m，朝向 1°，半径 2.2m
+    = 剧情座位 GameRoot/Locations/Loc_食堂/多章锚点/第3章_落座  mode=剧情锁住自动坐下  radius=2.2  → 坐姿模型 GameRoot/Locations/Loc_食堂/多章锚点/徐夏任务视角切换  标记点已在模型处（差 0.00m），朝向 1°，半径 2.2m
   共接线 3 个座位点
 
 【⑤ 第一人称隐藏名单】
   = 已有 徐夏_已绑定
-  + 徐夏任务视角切换
-  = 已有 徐夏任务视角切换
   = 已有 徐夏
   = 已有 玩家切换
   = 已有 玩家切换
+  = 已有 徐夏任务视角切换
+  = 已有 徐夏任务视角切换
 
 保存场景 Assets/Scenes/Game.unity：成功 ✓
 
 【怎么验】
-  · 只有【剧情要坐】的座位才坐（自由「按 F 坐下」的点已关掉）：
+  · 只有【剧情要坐】的座位才坐（自由「按 F 坐下」的点已关掉，黑底 F 提示也全关）：
     走到座位旁 → 剧情把玩家锁住（对话）→ 站立模型消失、坐姿徐夏出现；
     对话结束（解锁）后按 WASD / 走开 → 换回站立模型（坐姿期间 WASD 不会动）
   · 坐姿位置/朝向 = 用户在场景里摆的坐姿模型的位置/朝向；座位标记点已对齐到模型
+  · 取消坐下（起身）= 回到【坐下前站的位置】（不是站在椅子/桌子里）；
+    被剧情传走 / 自己走开的那条路径不往回传（会跟剧情传送打架）
   · 位置/朝向不满意：直接把坐姿模型拖到想要的地方/转个方向，重跑本工具或直接 Play 生效

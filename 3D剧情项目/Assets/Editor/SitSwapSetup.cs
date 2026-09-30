@@ -215,7 +215,9 @@ public static class SitSwapSetup
                 s.enabled = storySeat;
                 s.seatedModel = sit;
                 s.hideStandingModel = true;
-                s.showPrompt = storySeat;
+                // ★ 黑底「按 F 坐下/起身」小提示一律不要（用户 2026-10-01）：
+                //   交互提示用游戏原有的蓝色那套（UI交互/交互提示，剧情点自己给提示）
+                s.showPrompt = false;
                 s.useSeatedModelPose = true;                  // 坐姿跟模型（用户摆哪儿坐哪儿）
                 s.onlyChapters = new int[0];                  // 不限章节（要限就自己填）
                 if (storySeat) wired++;
@@ -268,10 +270,12 @@ public static class SitSwapSetup
         _log.AppendLine("保存场景 " + GAME_SCENE + "：" + (ok ? "成功 ✓" : "★失败"));
         _log.AppendLine();
         _log.AppendLine("【怎么验】");
-        _log.AppendLine("  · 只有【剧情要坐】的座位才坐（自由「按 F 坐下」的点已关掉）：");
+        _log.AppendLine("  · 只有【剧情要坐】的座位才坐（自由「按 F 坐下」的点已关掉，黑底 F 提示也全关）：");
         _log.AppendLine("    走到座位旁 → 剧情把玩家锁住（对话）→ 站立模型消失、坐姿徐夏出现；");
         _log.AppendLine("    对话结束（解锁）后按 WASD / 走开 → 换回站立模型（坐姿期间 WASD 不会动）");
         _log.AppendLine("  · 坐姿位置/朝向 = 用户在场景里摆的坐姿模型的位置/朝向；座位标记点已对齐到模型");
+        _log.AppendLine("  · 取消坐下（起身）= 回到【坐下前站的位置】（不是站在椅子/桌子里）；");
+        _log.AppendLine("    被剧情传走 / 自己走开的那条路径不往回传（会跟剧情传送打架）");
         _log.AppendLine("  · 位置/朝向不满意：直接把坐姿模型拖到想要的地方/转个方向，重跑本工具或直接 Play 生效");
         Flush();
         Debug.Log("[SitSwapSetup] 完成，报告：" + REPORT);

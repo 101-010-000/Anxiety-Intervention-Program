@@ -9698,7 +9698,7 @@ MonoBehaviour:
   groundOffset: 0
   standDistance: 1.8
   onlyChapters: 
-  showPrompt: 1
+  showPrompt: 0
   seatedModel: {fileID: 1732591927}
   hideStandingModel: 1
   useSeatedModelPose: 1
@@ -49612,7 +49612,7 @@ MonoBehaviour:
   groundOffset: 0
   standDistance: 1.8
   onlyChapters: 
-  showPrompt: 1
+  showPrompt: 0
   seatedModel: {fileID: 1372641370}
   hideStandingModel: 1
   useSeatedModelPose: 1
@@ -211630,7 +211630,7 @@ MonoBehaviour:
   groundOffset: 0
   standDistance: 1.8
   onlyChapters: 
-  showPrompt: 1
+  showPrompt: 0
   seatedModel: {fileID: 1372641370}
   hideStandingModel: 1
   useSeatedModelPose: 1

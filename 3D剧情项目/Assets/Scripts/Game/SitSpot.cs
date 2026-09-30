@@ -2,6 +2,7 @@
 //
 // 两种模式（SitSpot.mode）：
 //   · 按F坐下      —— 玩家靠近（radius 内）按 F 坐下，再按 F / 按 WASD / 走开 起身（用户 2026-09-29 定稿）
+//                     （现在没启用这种点：剧情只用「锁住自动坐」，黑底提示也关了）
 //   · 剧情锁住自动坐 —— 站到座位上 + 剧情开始对话（locked=true）自动坐下（给 第3章_落座 等剧情锚点用）
 //
 // ★ 坐下的表现（2026-09-30 用户定稿）：【换模型】，不是给玩家动画器切坐姿状态 ——
@@ -11,6 +12,10 @@
 //   `seatedModel` 留空时才是老路子（给玩家的 Animator 置 Sitting 布尔）。
 //   ★ 坐姿的位置/朝向默认按【坐姿模型在场景里摆好的位置/朝向】来（useSeatedModelPose，2026-10-01）：
 //     用户把坐姿模型摆到椅子上，坐姿就坐那儿；座位标记点只当 F 交互点用。
+//   ★ 取消坐下（起身）时**回到坐下前站的位置**（用户 2026-10-01）——不是原地站在椅子/桌子里；
+//     被剧情传走 / 自己走开起身时不往回传（会跟剧情传送打架）。
+//   ★ 黑底「按 F 坐下/起身」小提示默认关（`showPrompt=false`，用户 2026-10-01）：
+//     交互提示用游戏原有的蓝色那套（UI交互/交互提示）。
 //
 // 朝向：**跟板凳一样** —— `seat` 指到板凳/椅子（留空则自动找最近的），坐下时角色朝向 = 板凳的朝向。
 // 高度：坐姿剪辑是「脚在地面、屁股在椅面」的基准（Hips≈0.55m），所以角色根必须在【地面】：
@@ -47,8 +52,9 @@ public class SitSpot : MonoBehaviour
     public int[] onlyChapters = new int[0];
 
     [Header("提示")]
-    [Tooltip("靠近时显示「按 F 坐下」提示（运行时自建小画布，不影响剧情/门口那两套 UI）")]
-    public bool showPrompt = true;
+    [Tooltip("靠近时显示【黑底小提示「按 F 坐下/起身」】（运行时自建小画布）。★默认关（用户 2026-10-01）：" +
+             "不要这个黑底提示，交互提示用游戏原有的蓝色那套（UI交互/交互提示）；只有以后真要自由坐下的点再开")]
+    public bool showPrompt = false;
 
     [Header("坐姿模型（换模型，用户 2026-09-30）")]
     [Tooltip("坐下时显示的【坐姿模型】（场景里预先摆好、默认隐藏）。留空 = 老路子：给玩家动画器置 Sitting")]
@@ -64,6 +70,14 @@ public class SitSpot : MonoBehaviour
 
     FirstPersonController _fpc;
     bool _seated;
+    static bool _suppressSit;          // 明确起身过（对话还锁着）→ 解锁前【所有座位】都别再自动坐回来
+                                       //   （★ 同一地点有好几个重叠座位时，只压自己那个会被隔壁座位重新坐下——探针踩过）
+    // ★ 坐下前站的位置（用户 2026-10-01：起身要回到这儿）——【所有座位共享】：
+    //   宿舍第4/5章两个座位点重叠，坐下时两个组件会接连 Seat()，共享记录才不会把
+    //   「已经被隔壁座位挪到椅子上」的位置当成原站位（探针踩过）；同一次坐下只记一次。
+    static Vector3 _standPos;
+    static Quaternion _standRot;
+    static bool _hasStandPos;
 
     public bool Seated { get { return _seated; } }
 
@@ -75,7 +89,7 @@ public class SitSpot : MonoBehaviour
         if (onlyChapters != null && onlyChapters.Length > 0 &&
             System.Array.IndexOf(onlyChapters, GameProgress.SelectedChapter) < 0)
         {
-            if (_seated) Stand();
+            if (_seated) Stand(false);                     // 本章不让坐了：就地起身，不往回传送
             if (showPrompt) SitPrompt.Hide(this);
             return;                                    // 这一章不允许坐
         }
@@ -84,13 +98,14 @@ public class SitSpot : MonoBehaviour
         Vector3 p = _fpc.transform.position;
         float d = new Vector2(p.x - a.x, p.z - a.z).magnitude;
         bool inRange = d <= radius;
+        if (!_fpc.locked) _suppressSit = false;            // 对话结束 → 恢复正常自动坐
 
         if (!_seated)
         {
             bool wantSit = (mode == SitMode.按F坐下)
                 ? (inRange && !_fpc.locked && Input.GetKeyDown(key))
                 : (inRange && _fpc.locked);
-            if (wantSit) Seat();
+            if (wantSit && !_suppressSit) Seat();
         }
         else
         {
@@ -99,7 +114,8 @@ public class SitSpot : MonoBehaviour
             //   走开/被传走（d > standDistance）不受锁影响，转场照样会起身。
             bool wantMove = !_fpc.locked && (Input.GetAxisRaw("Horizontal") != 0f || Input.GetAxisRaw("Vertical") != 0f);
             bool wantUp = !_fpc.locked && Input.GetKeyDown(key);
-            if (wantUp || wantMove || d > standDistance) Stand();
+            bool movedAway = d > standDistance;           // 被剧情传走 / 自己走开：不能往回传送
+            if (wantUp || wantMove || movedAway) Stand(!movedAway);
         }
 
         // 提示：剧情锁住（对话中）时 F 不起身，就别显示「按 F 起身」（用户 2026-10-01）
@@ -109,7 +125,7 @@ public class SitSpot : MonoBehaviour
 
     void OnDisable()
     {
-        if (_seated) Stand();
+        if (_seated) Stand(false);
         SitPrompt.Hide(this);
     }
 
@@ -172,6 +188,17 @@ public class SitSpot : MonoBehaviour
 
     void Seat()
     {
+        // ★ 记住【坐下前站的位置】（用户 2026-10-01）：取消坐下（起身）时人要回到这儿，
+        //   而不是站在椅子/桌子中间（座位点就在家具上，起身原地会卡在家具里）。
+        //   同一次坐下（重叠座位接连 Seat）只记第一次，谁先坐记谁。
+        string posBefore = _fpc.transform.position.ToString("F2");
+        if (!_hasStandPos)
+        {
+            _standPos = _fpc.transform.position;
+            _standRot = _fpc.transform.rotation;
+            _hasStandPos = true;
+        }
+
         var cc = _fpc.GetComponent<CharacterController>();
         if (cc != null) cc.enabled = false;                  // 挪人必须关 CC（门口传送同款坑）
         _fpc.transform.position = SeatPos();
@@ -202,11 +229,17 @@ public class SitSpot : MonoBehaviour
         _fpc.SetSitting(true);                                // 镜头切坐姿档（支点压低）
         _seated = true;
         Debug.Log("[SitSpot] 坐下：" + name + "  朝向=" + SeatYaw().ToString("0.0") + "°" +
-                  (seatedModel != null ? "（换坐姿模型「" + seatedModel.name + "」）" : "（动画器 Sitting）"));
+                  (seatedModel != null ? "（换坐姿模型「" + seatedModel.name + "」）" : "（动画器 Sitting）") +
+                  "  原站位记录 " + _standPos.ToString("F2") + "（坐下前玩家在 " + posBefore + "）");
     }
 
-    void Stand()
+    /// <summary>起身（剧情/演出可以直接调）：默认回到【坐下前站的位置】</summary>
+    public void StandUp() { if (_seated) Stand(true); }
+
+    void Stand(bool restoreToStandPos = true)
     {
+        // ★ 对话还锁着时被叫起身（剧情调 StandUp / 被传走）：别再自动坐回来（用户 2026-10-01，探针踩过）
+        if (_fpc != null && _fpc.locked) _suppressSit = true;
         if (seatedModel != null)
         {
             seatedModel.SetActive(false);                    // 收起坐姿模型
@@ -220,8 +253,17 @@ public class SitSpot : MonoBehaviour
         {
             _fpc.SetSitting(false);
             var cc = _fpc.GetComponent<CharacterController>();
-            if (cc != null) cc.enabled = true;               // 起身：CC 回来（顺手把插在家具里的胶囊顶出来）
+            if (restoreToStandPos && _hasStandPos)
+            {
+                // ★ 回到坐下前站的位置（用户 2026-10-01）：走开/被剧情传走时不回传（会打架）
+                if (cc != null) cc.enabled = false;
+                _fpc.transform.position = _standPos;
+                _fpc.transform.rotation = _standRot;
+                _hasStandPos = false;            // 同帧里另一个重叠座位再 Stand 就不重复传送了
+            }
+            if (cc != null) cc.enabled = true;               // 起身：CC 回来
         }
+        _hasStandPos = false;                // 起身收工（含走开/被传走的路径）：这次坐下的记录作废
         _seated = false;
         SitPrompt.Hide(this);
         Debug.Log("[SitSpot] 起身：" + name);
