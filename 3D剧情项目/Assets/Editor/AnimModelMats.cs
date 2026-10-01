@@ -99,7 +99,14 @@ public static class AnimModelMats
                 {
                     nSlot++;
                     string target, how;
-                    Resolve(ch, raw, idx, out target, out how);
+                    // ★ 已经「去掉部件」过的角色（陆宣雨的眼镜）：这个槽保持【隐形材质】，
+                    //   别再贴回真眼镜材质 —— 否则眼镜又冒出来（踩过：HidePart 先跑、本工具后跑）
+                    if (HidePart.IsHiddenPart(ch, raw))
+                    {
+                        target = HidePart.HIDE_MAT;
+                        how = "隐藏";
+                    }
+                    else Resolve(ch, raw, idx, out target, out how);
                     if (target == null)
                     {
                         nUnresolved++;
