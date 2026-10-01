@@ -81,7 +81,7 @@ Editor/                        agent 工具（菜单 Tools/干预项目/…）�
   GameDoorBuilder.cs           门口传送：给场景里已有的门触发盒挂交互 + 「按 F 开门」+ 地点选择面板（见第五节）
   Chapter4DoorTrip.cs          第4/5章门口引导：门口 UI 在且提示统一（缺了就重建）+ 第4/5章任务触发点摆位 + 清场景残留（见第五节）
   SitSetup.cs / SitSwapSetup.cs  坐姿：生成 Sit 剪辑 + 控制器 Sit 状态 / 坐下换模型接线（宿舍×2 + 食堂×1 + 图书馆×2，见第三节）
-  ChoiceTitleColor.cs          选择题题干标题配色（改蓝白色 #CCE3FF，用户 2026-10-01）
+  ChoiceTitlePlate.cs          选择题题干加底板（清晰化：题干带容器+标题条底板+40号墨蓝字，用户 2026-10-01；旧 ChoiceTitleColor 已归档）
   AnimPreviewSetup.cs          角色预览场景：每个角色挂一个不一样的动画 + 运行自检（见第五节）
   MainMenuAssets.cs            主界面 UI 贴图：程序化生成 57 张 + 中文字体 + 20 张收录图导入
   MainMenuSlices.cs            切《ui素材》设计稿：圆角抠图 + 内部压平 + 九宫格 border（稿_*.png）
@@ -368,7 +368,9 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
      （工具 `Assets/Editor/OfficeDoorFlowSetup.cs`，报告 `assets/_报告/_办公室进出流程.txt`、预览 `预览/场景/办公室门_外|内.png`）
    - `_npcwalk_trigger.txt` → NPC 走路动画接入（扫描带 Walk.fbx 的角色：生成 `<角色>_Walk.anim` 循环副本 + Idle↔Walk 过渡，幂等，跑完自删）
    - `_sitswap_trigger.txt` → 坐姿换模型接线（宿舍/食堂剧情座位；用用户摆好的坐姿模型，幂等）→ 报告 `assets/_报告/_坐姿换模型.txt`
-   - `_choicetitle_trigger.txt` → 选择题题干标题改蓝白色 `#CCE3FF`（幂等）→ 报告 `assets/_报告/_选择题标题配色.txt`
+   - `_choicetitleplate_trigger.txt` → 选择题题干加底板（清晰化，幂等）→ 报告 `assets/_报告/_选择题题干清晰化.txt` + 预览 `预览/场景/选择题题干_修后*.png`
+     （旧 `_choicetitle_trigger.txt`/ChoiceTitleColor 改蓝白色已被它取代，工具已归档 `历史Editor脚本/`——
+     ⚠ 别再跑：蓝白字压浅蓝底板会看不清）
    > 触发器依赖"域重载"生效：改一下任意脚本文件、或让 Unity 窗口获得焦点/按 Ctrl+R 即可。
    > ⚠ 编辑器在**后台未聚焦**时不会自动刷新：要么手动 `资产 → 刷新`，要么让窗口获得焦点（2026-10-01 实测：
    >   鼠标点菜单栏（`资产`）→ 点`刷新` 这条路是可靠的；直接向窗口发合成 Ctrl+R 不一定送达）。
@@ -639,10 +641,20 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   · `BlackFade` = 章节转场黑幕（不透明，**最上层**，开场淡出 / 章末淡入，`StoryRunner` 驱动）；
   · `遮罩` = 对话压暗层（半透明 68%，**最底层**，按语态开关）。
 - **干预选择题（ChoicePanel，2026-09-27 定稿「按钮⇄解释」互斥）**：
-  · ★ **题干标题 = 蓝白色 #CCE3FF**（用户 2026-10-01）：面板背景透明、题干直接压在深色 Dim 上，
-    原来的深蓝灰 `#293342` 几乎看不见 → 改成蓝白。改色工具 `Tools/干预项目/选择题：题干标题改蓝白色`
-    （`Assets/Editor/ChoiceTitleColor.cs`，幂等；触发器 `_choicetitle_trigger.txt`）→ 报告 `assets/_报告/_选择题标题配色.txt`。
-    只改 `ChoicePanel.titleLabel`（选项行/确认按钮配色不动）。
+  · ★ **题干标题 = 墨蓝字压「标题条」底板（2026-10-01 定稿，取代同日早些的"改蓝白色"方案）**：
+    题干不是短标题，是 15~91 字的说明段（20 道题最长 91 字 ≈4 行），面板背景透明、
+    无底板直接压在深色 Dim+场景上就会糊（用户反馈"所有选择题的标题都不清晰"）。
+    现结构 = `Panel/题干带`（VerticalLayoutGroup 内边距 左右30/上下16 + ContentSizeFitter 垂直=PreferredSize，
+    **高度随行数自适应**）下挂 `题干底板`（`面板_标题条.png` Sliced，sibling 0 垫底，stretch+外扩一圈，
+    raycastTarget=false）+ `Title`（**原节点原样挪进容器**，Text 40 号墨蓝 `#1B2C42`，`titleLabel` 接线不变）。
+    工具 `Tools/干预项目/选择题：题干标题加底板（清晰化）`（`Assets/Editor/ChoiceTitlePlate.cs`，幂等，
+    触发器 `_choicetitleplate_trigger.txt`，含"渲染预览"菜单）→ 报告 `assets/_报告/_选择题题干清晰化.txt` +
+    预览 `预览/场景/选择题题干_修后.png`、`_修后_亮背景.png`（照 MainMenuBuilder 套路临时切 ScreenSpaceCamera 渲染）。
+    ⚠ **两个坑（都踩过）**：① 底板千万别做成 Title 的**子节点**——uGUI 父 Graphic 先画、子后画，底板会把字盖住
+    （选项行"行根挂图+文字做子节点"是同构，兄弟节点+顺序才是对的）；② **Title 节点上 `AddComponent<Image>()`
+    恒返回 null**（组件健康也返回，怪癖）——要在这节点加东西就用构造器建新节点。
+    旧工具 ChoiceTitleColor（改蓝白 #CCE3FF）已归档 `历史Editor脚本/`，**别再跑**（蓝白压浅蓝底板看不清）。
+    验题干清不清晰看预览亮背景那张；选项行/确认按钮/对话框一律不碰。
   · 全选流程：一题内所有选项各选一遍才能交卷；选择顺序存 `story.choice.<题号>`（第1章 4 题 = 0~3）。
   · 交互闭环：点选项 → 该行**只变灰**（Button ColorTint 的 disabled 态，★不换贴图，`rowSelected` 字段已删）
     → 进解释态：选项行 + Confirm + **面板自己的 Dim** 全部临时隐藏，解释借**底部对话框**播 mon 独白
@@ -709,6 +721,10 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   （`Begin` 时 `PreHideDeferredChars` 先预藏，黑屏期间 `SetCharContainersAt` 点亮 → 淡出时人已在座不穿帮；
   `SilentApply` 续播同路径）。用于「剧中才出现」的角色：`Loc_食堂/第五章角色`（陆宣雨+舍友A/B 坐着）
   只在第5章到食堂那幕出现——宿舍/图书馆的第五章容器不带此标记，`Begin` 全地点显示不受影响。
+  ★ **`fade` 不带 `to` = 原地"时间流逝"黑屏**（2026-09-30 第5章图书馆）：黑幕淡入淡出但**不传送**
+  （`FindFadeAnchor("")` 返回 null 自动跳过传送），用于"在原地坐了很久"的叙事拍——
+  图书馆思考题后 `"时间飞快。" → 纯黑屏 → 亮起`，然后才弹"走到图书馆门口，回宿舍"提示
+  （用户反馈：此处黑屏代表图书馆里时间的流逝，不是来图书馆走了个过场；黑屏时长定稿不加长）。
 - **cut（切视角，2026-09-30 第3章）**：`{ "t": "cut", "who": "李老师_可动" }` = 镜头切成该角色的
   **第三人称跟拍视角**（`CutawayCamera`：角色身后 2.6m/高 1.55 LookAt 头部，持续跟随，开 URP 后期与主相机同质感）；
   `{"t":"cut"}`（who 空）= 切回主角相机。**主角原地不动、不传送**——cutaway 期间 FPC 整个停用（对话本就锁行走），
@@ -945,7 +961,7 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 | 坐下换模型（宿舍×2 + 食堂×1 + 图书馆×2 剧情座位；用用户手摆的坐姿模型） | `Tools/干预项目/坐姿换模型：接线（宿舍 + 食堂）`（`Assets/Editor/SitSwapSetup.cs`，或丢 `_sitswap_trigger.txt`）→ `assets/_报告/_坐姿换模型.txt`；自检 `_坐姿换模型自检.txt` |
 | 换人后坐姿位置不对（坐在桌边悬空） | 把坐姿模型（场景里 `徐夏任务视角切换`）拖到椅子上/转个方向 → 重跑上面那个工具（会把座位标记点也对齐到模型） |
 | 生成/修复选择题选项行 | `Tools/干预项目/生成选择题按钮行`（预置3行 = 补缺接线 / 强制重建 = 弃手调重建 / 选择题行去掉解释块）→ `assets/_报告/_选择题按钮行.txt`；选项行样式直接在 Scene 里改 |
-| 选择题题干看不清（深色 Dim 上压深字） | `Tools/干预项目/选择题：题干标题改蓝白色`（`Assets/Editor/ChoiceTitleColor.cs`，或丢 `_choicetitle_trigger.txt`）→ `#CCE3FF`、报告 `assets/_报告/_选择题标题配色.txt` |
+| 选择题题干看不清 | `Tools/干预项目/选择题：题干标题加底板（清晰化）`（`Assets/Editor/ChoiceTitlePlate.cs`，幂等，或丢 `_choicetitleplate_trigger.txt`）→ 报告 `assets/_报告/_选择题题干清晰化.txt`、预览 `预览/场景/选择题题干_修后*.png`（旧"改蓝白色"工具已归档，别再跑） |
 | 搭/看手机聊天 UI（微信段） | `Tools/干预项目/搭建手机聊天UI`（或丢 `_phonechat_trigger.txt`，自动搭+出预览）→ 报告 `assets/_报告/_手机聊天UI.txt`、预览 `预览/场景/手机聊天UI_预览.png` |
 | 改走动段任务栏样式（左上角目标卡） | `Tools/干预项目/任务栏样式/改为左上角目标卡`（幂等，只写 WalkHint 子树，覆盖其手调值）→ 报告 `assets/_报告/_任务栏改造.txt`、预览 `预览/任务栏_目标卡.png` |
 | 主界面工具报了什么 | `assets/_报告/_主界面搭建.txt`（层级树 + 越界/贴图/字体自检 + 按钮对照表） |

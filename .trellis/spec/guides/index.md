@@ -26,6 +26,7 @@ These guides help you **ask the right questions before coding**.
 | [Unity MainMenu 场景手术约定](./unity-mainmenu-scene-surgery.md) | MainMenu.unity 增量修改的硬性约定与几何基线 | 任何对主菜单场景的程序化修改 |
 | [Unity 剧情 NPC 走位约定](./unity-story-npc-walk-via.md) | enter/leave/via 数据契约、穿模根因口径与路线点管理 | 任何剧情 NPC 走位/路径改动 |
 | [Unity 剧情步骤扩展与道具联动约定](./unity-story-step-conventions.md) | StoryStep 新字段的三条消费路径、propObjectName 道具联动契约 | 给剧情步骤加字段 / 改 StoryInteractable 交互行为 |
+| [Unity uGUI 场景 UI 改动约定](./unity-ugui-scene-ui-tweaks.md) | uGUI 父先子后渲染契约、底板结构、AddComponent 怪癖、场景 YAML 转义名验证 | 给场景 UI 加底板/加图/调层级 |
 
 ---
 
