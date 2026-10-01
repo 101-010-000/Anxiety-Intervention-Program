@@ -81,6 +81,7 @@ Editor/                        agent 工具（菜单 Tools/干预项目/…）�
   GameDoorBuilder.cs           门口传送：给场景里已有的门触发盒挂交互 + 「按 F 开门」+ 地点选择面板（见第五节）
   Chapter4DoorTrip.cs          第4/5章门口引导：门口 UI 在且提示统一（缺了就重建）+ 第4/5章任务触发点摆位 + 清场景残留（见第五节）
   SitSetup.cs / SitSwapSetup.cs  坐姿：生成 Sit 剪辑 + 控制器 Sit 状态 / 坐下换模型接线（宿舍×2 + 食堂×1 + 图书馆×2，见第三节）
+  WangHanEnterSetup.cs         第三章王含入场：站立模型 + 门口/路线/落座锚点 + 路线净空自检（幂等；enter 的 seat 到位换坐姿）
   ChoiceTitlePlate.cs          选择题题干加底板（清晰化：题干带容器+标题条底板+40号墨蓝字，用户 2026-10-01；旧 ChoiceTitleColor 已归档）
   AnimPreviewSetup.cs          角色预览场景：每个角色挂一个不一样的动画 + 运行自检（见第五节）
   MainMenuAssets.cs            主界面 UI 贴图：程序化生成 57 张 + 中文字体 + 20 张收录图导入
@@ -758,6 +759,15 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 - **NPC 入场（enter 步骤，第2章陆宣雨）**：`{ "t": "enter", "who": "角色实例名", "from": "门口锚点名" }`。
   Begin 时按 json 预禁用 who（开场不在场）；enter 时启用并从 from 锚点走到玩家面前
   （缺省落点=玩家面前 1.3m，`to` 显式锚点可覆盖），播行走动画、到位面向玩家接对话。
+  ★ **`seat` = 到位换坐姿模型（2026-09-30 第3章王含）**：`"seat": "坐姿实例名"`——走位模型到位后
+  整棵隐藏、亮出用户摆好的坐姿实例（王含切换 = Sitting Idle.fbx 静态坐姿雕像，无需 Animator；
+  rest pose 即坐姿）。seat 实例 Begin 时随 enter 一起预藏，续播快进（SilentApply）按终态同步；
+  Skip 自检路径不走 NpcEntrance——换装在 EnterRoutine 协程收尾里，Skip 后下一帧照常执行。
+  场景侧用 `Tools/干预项目/第三章王含入场（幂等）`（`Assets/Editor/WangHanEnterSetup.cs`）摆
+  站立实例 `王含_站立`（已绑定.fbx + 王含_Idle 控制器）+ 门口/路线_1..4/落座锚点，报告
+  `assets/_报告/_第三章王含入场.txt`——★ 路线对食堂【全部】碰撞体（含路人/垃圾桶）做 ≥0.45m
+  净空自检（用户 2026-09-30 明确要求不许穿模；路线 = 东侧大动脉 x≈123 北上 → 凳子2(8) 与
+  垃圾桶(9) 间缺口 → 凳子2(9) 后方入座；西侧过道被立柱 Cube(4) 封死、正面直穿会撞两个路人）。
   ★ **enter 落点尽量给显式 `to`（站位锚点）**：缺省「玩家面前1.3m」是按门→玩家方向硬算的、
   不看碰撞，会落进家具（2026-09-29 第4章林溪落进书桌边椅子里穿模，试玩截图实锤）。
   现有：`第4章_林溪站位` / `第2章_陆宣雨站位`——由「第4-5章跳转改造」工具在「路线拐点→书桌」

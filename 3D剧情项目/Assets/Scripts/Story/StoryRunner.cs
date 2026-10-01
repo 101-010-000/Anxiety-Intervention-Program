@@ -67,6 +67,7 @@ public class StoryRunner : MonoBehaviour
 
     StoryChapter _ch;
     FirstPersonController _player;
+    readonly List<GameObject> _stageShown = new List<GameObject>();   // stage 亮出的舞台道具（章末兜底收回）
     DoorTravelSystem _doors;
     bool _savedEsc;
     bool _nodeOpen;
@@ -187,6 +188,7 @@ public class StoryRunner : MonoBehaviour
         _choiceCounter = 0;
         ApplyChapterNpcVisibility();        // 角色容器按章显隐（第2章时宿舍里不该有第五章的舍友）
         PreHideDeferredChars();             // fade(showChars) 要用的容器先藏起来，黑屏落地时才点亮（第5章食堂）
+        PreHideStageProps();                // stage 要亮出的道具也先藏（第3章办公室坐姿徐夏：老师跟拍那一刻才亮出）
         CollectAndHideEntranceNpcs();   // enter 步骤的角色开场先禁用（第2章陆宣雨：她不在宿舍）
         if (phoneChat != null) phoneChat.HideImmediate();   // 万一上次没收干净
 #if UNITY_EDITOR
@@ -252,6 +254,10 @@ public class StoryRunner : MonoBehaviour
                 CutawayCamera.Restore();                    // 快进不演切视角；兜底收掉（正常配对时本来就空）
                 break;
 
+            case "stage":
+                ApplyStage(step);                           // 世界副作用照常复刻（道具显隐/玩家模型/起身点）
+                break;
+
             case "fade":
             {
                 var target = FindFadeAnchor(step.to);
@@ -285,6 +291,12 @@ public class StoryRunner : MonoBehaviour
                 {
                     Vector3 f = _player.transform.position - target; f.y = 0f;
                     if (f.sqrMagnitude > 0.001f) go.transform.rotation = Quaternion.LookRotation(f.normalized);
+                }
+                // seat 终态：坐姿模型在场、走位模型隐藏（与 EnterRoutine 的到位收尾一致）
+                if (!string.IsNullOrEmpty(step.seat))
+                {
+                    var st = FindCharacterTransform(step.seat);
+                    if (st != null) { if (!st.gameObject.activeSelf) st.gameObject.SetActive(true); go.SetActive(false); }
                 }
                 break;
             }
@@ -448,6 +460,18 @@ public class StoryRunner : MonoBehaviour
             _npcHomePos[step.who] = t.position;                 // 此刻必是场景手摆原位（enter 还没挪过她）
             _npcHomeYaw[step.who] = t.eulerAngles.y;
             if (step.t == "enter" && t.gameObject.activeSelf) t.gameObject.SetActive(false);
+
+            // enter 的 seat（第3章王含）：坐姿模型实例开场同样要藏，走位到位才亮出（「走到凳子边坐下」）
+            if (step.t == "enter" && !string.IsNullOrEmpty(step.seat) && !_entranceNpcs.ContainsKey(step.seat))
+            {
+                var s = FindCharacterTransform(step.seat);
+                if (s != null)
+                {
+                    _entranceNpcs[step.seat] = s.gameObject;
+                    if (s.gameObject.activeSelf) s.gameObject.SetActive(false);
+                }
+                else Debug.LogWarning("[StoryRunner] enter 的坐姿模型没找到：" + step.seat + "（到位时会再找一次）");
+            }
         }
     }
 
@@ -506,6 +530,7 @@ public class StoryRunner : MonoBehaviour
             case "enter": DoEnter(step); break;
             case "leave": DoLeave(step); break;
             case "cut": DoCut(step); break;
+            case "stage": DoStage(step); break;
 
             case "walk":
                 _currentTouch = FindFree(StoryInteractable.Mode.Touch);
@@ -674,6 +699,7 @@ public class StoryRunner : MonoBehaviour
     // ------------------------------------------------------------------ 切视角（cut 步骤，2026-09-29）
     // {"t":"cut","who":"李老师_可动"} = 镜头切成 TA 的第三人称跟拍视角（CutawayCamera），
     // 主角原地不动、输入暂停（对话本就锁行走）；{"t":"cut"}（who 空）= 切回主角相机。
+    // 可选 camH/lookH 覆盖机位/视线高度（缺省 -1 = CutawayCamera 内置 1.55/1.35；第1章林溪坐姿 1.15/0.95）。
     // cut 是瞬时状态翻转，紧跟的 dlg/nar 承担时长；进出场都靠台词节奏，无需黑幕。
     void DoCut(StoryStep step)
     {
@@ -687,14 +713,74 @@ public class StoryRunner : MonoBehaviour
         var t = FindCharacterTransform(step.who);
         if (t == null) { Debug.LogWarning("[StoryRunner] cut 找不到角色「" + step.who + "」，跳过切视角"); Next(); return; }
         if (_player != null) _player.enabled = false;    // 停输入 + 停相机控制（组件停用，方法调用不受影响）
-        CutawayCamera.Show(t);
+        CutawayCamera.Show(t, step.camH, step.lookH);
         Next();
+    }
+
+    // ------------------------------------------------------------------ 舞台道具（stage 步骤，2026-10-01 第3章老师视角）
+    // 老师跟拍段：玩家自身模型只是被隐藏（人还在原地、输入本就锁着），沙发上的坐姿徐夏是舞台道具；
+    // 切回玩家时反向 + 玩家在起身点原地站起来。刻意不走 SitSpot：剧情落座没有"原站位"，
+    // 走 SitSpot.Seat() 会记下食堂的原站位、起身被传回去（AGENTS 已记的坑）。
+    void DoStage(StoryStep step)
+    {
+        ApplyStage(step);
+        Next();
+    }
+
+    void ApplyStage(StoryStep step)
+    {
+        if (step.showNames != null)
+            foreach (var n in step.showNames)
+            {
+                var t = FindCharacterTransform(n);
+                if (t == null) { Debug.LogWarning("[StoryRunner] stage 找不到要亮出的物体「" + n + "」"); continue; }
+                if (!t.gameObject.activeSelf) t.gameObject.SetActive(true);
+                if (!_stageShown.Contains(t.gameObject)) _stageShown.Add(t.gameObject);
+            }
+        if (step.hideNames != null)
+            foreach (var n in step.hideNames)
+            {
+                var t = FindCharacterTransform(n);
+                if (t == null) { Debug.LogWarning("[StoryRunner] stage 找不到要隐藏的物体「" + n + "」"); continue; }
+                if (t.gameObject.activeSelf) t.gameObject.SetActive(false);
+                _stageShown.Remove(t.gameObject);
+            }
+        if (_player != null)
+        {
+            if (step.hidePlayer) _player.SetStandingModelVisible(false);
+            if (step.showPlayer) _player.SetStandingModelVisible(true);
+            if (!string.IsNullOrEmpty(step.standAt))
+            {
+                var a = FindFadeAnchor(step.standAt);
+                if (a != null) TeleportPlayer(a.position, a.eulerAngles.y);
+                else Debug.LogWarning("[StoryRunner] stage 找不到起身锚点「" + step.standAt + "」——玩家留在原地");
+            }
+        }
+    }
+
+    // stage 要亮出的道具开场先藏（同 enter 的 seat 惯例：Begin 预藏，走到那一步才亮出）
+    void PreHideStageProps()
+    {
+        if (_ch == null) return;
+        foreach (var step in _ch.steps)
+        {
+            if (step.t != "stage" || step.showNames == null) continue;
+            foreach (var n in step.showNames)
+            {
+                var t = FindCharacterTransform(n);
+                if (t != null) { if (t.gameObject.activeSelf) t.gameObject.SetActive(false); }
+                else Debug.LogWarning("[StoryRunner] stage 预藏找不到物体「" + n + "」（亮出时会再找一次）");
+            }
+        }
     }
 
     void ToDone()
     {
         CurrState = State.Done;
         CutawayCamera.Restore();                          // 章末兜底：万一 cut 没配对收掉
+        foreach (var g in _stageShown) if (g != null && g.activeSelf) g.SetActive(false);   // 舞台道具兜底收回（中途结束剧情不剩重影）
+        _stageShown.Clear();
+        if (_player != null) _player.SetStandingModelVisible(true);   // 兜底：防 stage 藏完模型后剧情中断
         if (_player != null) { _player.enabled = true; _player.allowEscToUnlock = _savedEsc; _player.SetLocked(false); _player.moveLocked = false; }
         // 剧情跑完 → 把门口传送还给玩家（Begin 里整体关掉了，不恢复的话出了剧情也开不了门）
         if (_doors != null) { _doors.ExitStoryMode(); _doors.enabled = true; }
@@ -867,6 +953,19 @@ public class StoryRunner : MonoBehaviour
         // via 途经点：每项按 fade 锚点同名解析，缺锚点只警告并跳过该点；via 为空/全缺 = 原两点直线
         var pts = BuildPath(from.position, step.via, target);
         yield return _entrance.RunPath(pts, _player != null ? _player.transform : null);
+
+        // seat（第3章王含）：走位模型到位 → 亮出用户摆好的坐姿模型、整棵藏掉走位模型（「坐下了」）
+        if (!string.IsNullOrEmpty(step.seat))
+        {
+            var st = FindCharacterTransform(step.seat);
+            if (st != null)
+            {
+                if (!st.gameObject.activeSelf) st.gameObject.SetActive(true);
+                go.SetActive(false);
+            }
+            else
+                Debug.LogWarning("[StoryRunner] enter seat 找不到坐姿模型「" + step.seat + "」——走位模型保持在场");
+        }
 
         _entrance = null;
         _enterRt = null;
