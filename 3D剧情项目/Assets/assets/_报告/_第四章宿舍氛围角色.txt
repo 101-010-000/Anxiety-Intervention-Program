@@ -1,0 +1,28 @@
+第四章宿舍氛围角色：接线  2026-10-01 04:35
+容器：GameRoot/Locations/Loc_宿舍/第四章角色  activeSelf=True（运行时 Begin 还会按章强制显隐，这里只是编辑器现场）
+
+── 林溪_宿舍
+  层 → Outline：子树 68 个节点，本次改 0（其余本就是）
+  碰撞体：已有 CapsuleCollider，不动
+  Animator：已有（林溪_Idle @林溪_已绑定），不动
+
+── 舍友A
+  层 → Outline：子树 67 个节点，本次改 67（其余本就是）
+  + CapsuleCollider（高 1.75m / 半径 0.29m，包围盒高 1.82m）
+  + Animator（加在实例根上；Generic 按节点路径回放）
+  + controller = 舍友A_Idle
+
+── 王含坐着
+  层 → Outline：子树 67 个节点，本次改 67（其余本就是）
+  + CapsuleCollider（高 1.28m / 半径 0.21m，包围盒高 1.33m）
+  + Animator（加在实例根上；Generic 按节点路径回放）
+  + controller = 王含_Idle
+  + SitHere（Start 置 Sitting=true → AnyState→Sit 播坐姿循环）
+
+── 舍友B
+  层 → Outline：子树 67 个节点，本次改 67（其余本就是）
+  + CapsuleCollider（高 1.68m / 半径 0.28m，包围盒高 1.75m）
+  + Animator（加在实例根上；Generic 按节点路径回放）
+  + controller = 舍友B_Idle
+
+已保存场景：Assets/Scenes/Game.unity

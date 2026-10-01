@@ -370,6 +370,7 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
    - `_npcwalk_trigger.txt` → NPC 走路动画接入（扫描带 Walk.fbx 的角色：生成 `<角色>_Walk.anim` 循环副本 + Idle↔Walk 过渡，幂等，跑完自删）
    - `_sitswap_trigger.txt` → 坐姿换模型接线（宿舍/食堂剧情座位；用用户摆好的坐姿模型，幂等）→ 报告 `assets/_报告/_坐姿换模型.txt`
    - `_choicetitleplate_trigger.txt` → 选择题题干加底板（清晰化，幂等）→ 报告 `assets/_报告/_选择题题干清晰化.txt` + 预览 `预览/场景/选择题题干_修后*.png`
+   - `_dormambient_trigger.txt` → 第四章宿舍氛围角色接线（描边层/碰撞体/Animator，幂等）→ 报告 `assets/_报告/_第四章宿舍氛围角色.txt`
      （旧 `_choicetitle_trigger.txt`/ChoiceTitleColor 改蓝白色已被它取代，工具已归档 `历史Editor脚本/`——
      ⚠ 别再跑：蓝白字压浅蓝底板会看不清）
    > 触发器依赖"域重载"生效：改一下任意脚本文件、或让 Unity 窗口获得焦点/按 Ctrl+R 即可。
@@ -715,6 +716,16 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   「第3章角色」两种写法），其它章的容器整棵隐藏——同一 Loc 摆了多章容器（宿舍有第二/五章
   两套），不过滤会互相穿帮。`enter` 的 `who` 查找同样限定本章容器（同名实例多章都有，
   如宿舍有两个 陆宣雨_可动）。
+  ★ **第四章宿舍氛围角色（2026-10-01）**：`Loc_宿舍/第四章角色` 里除剧情角色 林溪_宿舍
+  （enter 预藏、按剧本点亮）外，用户另摆 舍友A/王含坐着/舍友B 三个氛围角色丰富第4章——
+  显隐引擎本来就管（`ApplyChapterNpcVisibility` 第4章亮/其它章整棵藏，**Begin 强制设置，
+  场景里容器激活态只是编辑器现场，运行时会被覆盖**）。裸拖的 FBX 实例缺惯例三件套
+  （Outline 层/根胶囊碰撞体/Animator），由 `Tools/干预项目/第四章宿舍氛围角色/接线（幂等）`
+  （`Assets/Editor/DormAmbientSetup.cs`，只动该容器子树，重跑零改动）补齐：名字带
+  「坐着/Sitting」的加 SitHere 播坐姿循环，其余接 `<名>_Idle.controller`；找不到同名控制器
+  就保持静态姿势不瞎接。报告 `assets/_报告/_第四章宿舍氛围角色.txt`。以后往该容器里加新
+  氛围角色，拖完跑一次即可。⚠ 已接好线的实例（如 林溪_宿舍）按「已有可用 Animator」放行，
+  不会被覆盖。
 - **fade（黑屏转场）**：黑幕淡入 → 传送玩家到 `fadeAnchors` 里与 `to` 同名的锚点 → 淡出。
   用于更新版剧本的「黑屏/刷新」跳转（第3章进办公室、第5章宿舍↔图书馆等）。
   ⚠ BlackFade 在 UI 最上层，黑屏期间对话框不可见 → 时间流逝旁白用独立 nar 步骤（放 fade 前后）。
