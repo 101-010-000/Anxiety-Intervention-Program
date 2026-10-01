@@ -25,8 +25,10 @@
 //            可带 via=途经锚点名列表分段走（绕开桌椅等家具；解析同 to，缺锚点只警告跳过）。
 //            hide=true = 到位直接隐藏（不转身不待机，"走出门了"；第4章林溪与玩家一起去图书馆）
 //   stage    舞台道具（2026-10-01，第3章老师视角）：showNames=亮出的物体名列表、hideNames=隐藏的物体名
-//            （按 fade 锚点同名解析）；hidePlayer/showPlayer=藏/恢复玩家自身模型；standAt=玩家传到该锚点
-//            原地站好（同 fade 传送）。老师跟拍段玩家模型只是被隐藏，沙发上的坐姿徐夏是舞台道具；
+//            （按 fade 锚点同名解析）；hidePlayer/showPlayer=藏/恢复玩家自身模型——注意是玩家根下
+//            【全部】渲染器（HideWholePlayer，光藏 standingModel 挡不住 徐夏_坐姿 等历史模型子物体），
+//            顺带挂起/恢复 SitSpot；standAt=玩家传到该锚点原地站好（同 fade 传送）。
+//            老师跟拍段玩家模型只是被隐藏，沙发上的坐姿徐夏是舞台道具；
 //            showNames 里的物体 Begin 时预藏（同 enter 的 seat 惯例），续播快进按步骤终态同步。
 //   card     入场淡入（黑幕淡出，不显示标题卡——用户反馈定稿：不要开场黑屏）
 //   end      章节结束卡（返回主界面 + 固定提示句）
@@ -61,6 +63,10 @@ public class StoryStep
     public bool hidePlayer = false;          // stage：藏玩家自身模型（老师跟拍段第一人称模型只投影，镜头里不能没徐夏）
     public bool showPlayer = false;          // stage：恢复玩家自身模型
     public string standAt = "";              // stage：把玩家传到该锚点原地站好（第3章「第3章_办公室起身」）
+    public bool auto = false;                // nar：语音播完自动推进不等点击（第3章老师走廊边走边播的旁白，
+                                             // 复用 State.Gap 的 AutoPlay 通道：定时 + !DialogueVoicePlayer.IsPlaying 门）
+    public bool bg = false;                  // leave：走位放后台，立即推进下一步（台词/旁白在走位期间继续播；
+                                             // 后续 cut 会等 _leaveRt 走完再切镜头）
     public string at = "";                   // interact：目标交互点 GameObject 名（缺省=旧逻辑取第一个可用点；
                                              // 第3章起一章多个 F 点，不点名会武装错点——2026-09-28）
     public float camH = -1f;                 // cut：机位高度（≤0 = 用 CutawayCamera 内置默认 1.55）。

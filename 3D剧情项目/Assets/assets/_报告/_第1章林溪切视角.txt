@@ -1,0 +1,23 @@
+第1章林溪切视角：场景接线  2026-10-01 00:06
+目标：Loc_宿舍/第一章角色 下的坐姿实例「林溪」（Sitting Idle.fbx）播林溪_Sit
+
+候选 1 个（取容器下最浅 = 实例根）：
+  ★ GameRoot/Locations/Loc_宿舍/第一章角色/林溪
+── 实例
+  路径：GameRoot/Locations/Loc_宿舍/第一章角色/林溪
+  摆位：pos=(78.315, 0.073, 1.009)  yaw=68.6°  active=True
+  源资产：Assets/assets/03_动作_Animation/带动画模型/林溪/Sitting Idle.fbx
+
+── 接线
+  + Animator（加在模型根上；Generic 按节点路径回放）
+  + controller = Assets/assets/03_动作_Animation/Animators/带动画模型/林溪_Idle.controller
+  + SitHere（Start 把 Sitting 置 true，进场景即坐）
+
+── 自检
+  控制器参数含 Sitting：✓
+  Sit 状态：✓ Motion=林溪_Sit
+  AnyState→Sit 过渡：1 条（If Sitting）
+  渲染包围盒：中心离地 0.65m，总高 1.37m（坐姿应明显低于站姿 ~1.7m）
+  说明：编辑模式下该实例可能仍显示绑定/T-pose，Play 里 SitHere 才会置 Sitting——不是坏了。
+
+已保存场景：Assets/Scenes/Game.unity

@@ -68,12 +68,16 @@ public class StoryRunner : MonoBehaviour
     StoryChapter _ch;
     FirstPersonController _player;
     readonly List<GameObject> _stageShown = new List<GameObject>();   // stage 亮出的舞台道具（章末兜底收回）
+    readonly List<Behaviour> _suspendedSeats = new List<Behaviour>(); // stage 藏玩家模型期间挂起的 SitSpot（切回时恢复）
+    readonly List<Renderer> _hiddenPlayerRenderers = new List<Renderer>(); // stage 藏掉的玩家渲染器（原态恢复）
+    Coroutine _stageWatchdog;                                              // stage 藏模型期间的看门狗（抓"谁又打开了"）
     DoorTravelSystem _doors;
     bool _savedEsc;
     bool _nodeOpen;
     bool _openingNar;        // 开场旁白段：不锁移动，边走边听（第一次遇到非旁白步骤即结束）
     float _gapTimer;
     float _pendingNextAt = -1f;
+    bool _autoLine;                     // 本句 nar 带 auto：在 Gap 态走 AutoPlay 通道（定时+等语音），不等点击
     StoryInteractable _currentF;
     StoryInteractable _currentTouch;
     int _choiceCounter;
@@ -189,6 +193,10 @@ public class StoryRunner : MonoBehaviour
         ApplyChapterNpcVisibility();        // 角色容器按章显隐（第2章时宿舍里不该有第五章的舍友）
         PreHideDeferredChars();             // fade(showChars) 要用的容器先藏起来，黑屏落地时才点亮（第5章食堂）
         PreHideStageProps();                // stage 要亮出的道具也先藏（第3章办公室坐姿徐夏：老师跟拍那一刻才亮出）
+        SitSpot.Suppressed = false;         // 静态总闸不跨 Play 会话（关闭域重载时 static 会残留）
+#if UNITY_EDITOR
+        StageDiag.Reset(); StageDiag.Log("Begin 第" + chapterIndex + "章");
+#endif
         CollectAndHideEntranceNpcs();   // enter 步骤的角色开场先禁用（第2章陆宣雨：她不在宿舍）
         if (phoneChat != null) phoneChat.HideImmediate();   // 万一上次没收干净
 #if UNITY_EDITOR
@@ -510,6 +518,7 @@ public class StoryRunner : MonoBehaviour
     public void Next()
     {
         _pendingNextAt = -1f;
+        _autoLine = false;
         if (DialogueVoicePlayer.Instance != null) DialogueVoicePlayer.Instance.Stop();   // 推进即切上一句语音（补全不切）
         if (_ch == null || StepIndex >= _ch.steps.Count) { ToDone(); return; }
         var step = _ch.steps[StepIndex++];
@@ -620,6 +629,7 @@ public class StoryRunner : MonoBehaviour
         }
 
         if (!_nodeOpen && dialogue != null) { dialogue.ShowNode(); _nodeOpen = true; }
+        _autoLine = step.t == "nar" && step.auto;   // auto 旁白：播完自动推进（Gap 态里走 AutoPlay 同款定时+语音门）
         SetPerms(State.Typing);
         _lastLineLen = step.x != null ? step.x.Length : 0;
         dialogue.PlayLine(step);
@@ -703,6 +713,19 @@ public class StoryRunner : MonoBehaviour
     // cut 是瞬时状态翻转，紧跟的 dlg/nar 承担时长；进出场都靠台词节奏，无需黑幕。
     void DoCut(StoryStep step)
     {
+        if (_leaveRt != null) { StartCoroutine(CutAfterWalk(step)); return; }   // 后台走位没走完（旁白先讲完的场合）：等老师走到门口再切
+        DoCutNow(step);
+    }
+
+    IEnumerator CutAfterWalk(StoryStep step)
+    {
+        CurrState = State.Enter; SetPerms(State.Enter);     // 等待期间不响应点击
+        yield return new WaitWhile(() => _leaveRt != null);
+        DoCutNow(step);
+    }
+
+    void DoCutNow(StoryStep step)
+    {
         if (string.IsNullOrEmpty(step.who))
         {
             CutawayCamera.Restore();
@@ -723,6 +746,11 @@ public class StoryRunner : MonoBehaviour
     // 走 SitSpot.Seat() 会记下食堂的原站位、起身被传回去（AGENTS 已记的坑）。
     void DoStage(StoryStep step)
     {
+#if UNITY_EDITOR
+        StageDiag.Log("DoStage show=[" + string.Join(",", step.showNames ?? new List<string>()) + "] hide=["
+            + string.Join(",", step.hideNames ?? new List<string>()) + "] hidePlayer=" + step.hidePlayer
+            + " showPlayer=" + step.showPlayer + " standAt=" + step.standAt);
+#endif
         ApplyStage(step);
         Next();
     }
@@ -747,8 +775,8 @@ public class StoryRunner : MonoBehaviour
             }
         if (_player != null)
         {
-            if (step.hidePlayer) _player.SetStandingModelVisible(false);
-            if (step.showPlayer) _player.SetStandingModelVisible(true);
+            if (step.hidePlayer) { HideWholePlayer(); SuspendSeats(); }
+            if (step.showPlayer) { ShowWholePlayer(); ResumeSeats(); }
             if (!string.IsNullOrEmpty(step.standAt))
             {
                 var a = FindFadeAnchor(step.standAt);
@@ -756,6 +784,87 @@ public class StoryRunner : MonoBehaviour
                 else Debug.LogWarning("[StoryRunner] stage 找不到起身锚点「" + step.standAt + "」——玩家留在原地");
             }
         }
+    }
+
+    // 藏玩家＝根下【所有】渲染器全关（只关 standingModel 不够：玩家身上还挂着 徐夏_坐姿/玩家切换/
+    // 徐夏任务视角切换 等历史模型子物体，名字不在 firstPersonShadowsOnlyParts 名单里的渲染器
+    // 在任何镜头里都是全亮的——老师跟拍一拍到玩家位置就是一个站着的徐夏，2026-10-01 用户实测）。
+    // 记住各自 enabled 原态，切回时逐个原样恢复 + ApplyFirstPersonParts 重套投影规则。
+    void HideWholePlayer()
+    {
+#if UNITY_EDITOR
+        StageDiag.Log("HideWholePlayer @step" + (StepIndex - 1) + " 玩家pos=" + _player.transform.position.ToString("F2"));
+        foreach (var r in _player.GetComponentsInChildren<Renderer>(true))
+        {
+            if (_player.cameraPivot != null && r.transform.IsChildOf(_player.cameraPivot)) continue;
+            StageDiag.Log("  藏 " + DiagPath(r.transform) + " en=" + r.enabled + " shadow=" + r.shadowCastingMode
+                + " goAct=" + r.gameObject.activeInHierarchy + " 层=" + LayerMask.LayerToName(r.gameObject.layer));
+        }
+        if (_stageWatchdog != null) StopCoroutine(_stageWatchdog);
+        _stageWatchdog = StartCoroutine(StageWatchdog());
+#endif
+        _hiddenPlayerRenderers.Clear();
+        foreach (var r in _player.GetComponentsInChildren<Renderer>(true))
+        {
+            if (_player.cameraPivot != null && r.transform.IsChildOf(_player.cameraPivot)) continue;
+            if (!r.enabled) continue;
+            r.enabled = false;
+            _hiddenPlayerRenderers.Add(r);
+        }
+#if UNITY_EDITOR
+        StageDiag.Log("  → 实际关闭 " + _hiddenPlayerRenderers.Count + " 个渲染器");
+#endif
+    }
+
+    void ShowWholePlayer()
+    {
+#if UNITY_EDITOR
+        if (_stageWatchdog != null) { StopCoroutine(_stageWatchdog); _stageWatchdog = null; }
+        StageDiag.Log("ShowWholePlayer @step" + (StepIndex - 1));
+#endif
+        foreach (var r in _hiddenPlayerRenderers) if (r != null) r.enabled = true;
+        _hiddenPlayerRenderers.Clear();
+        _player.ApplyFirstPersonParts();
+    }
+
+#if UNITY_EDITOR
+    // 藏模型期间每 0.5s 查一次：谁把渲染器又打开了（抓现行）
+    IEnumerator StageWatchdog()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(0.5f);
+            foreach (var r in _hiddenPlayerRenderers)
+            {
+                if (r != null && r.enabled)
+                    StageDiag.Log("!! 被重新打开: " + DiagPath(r.transform) + " @step" + (StepIndex - 1) + " state=" + CurrState);
+            }
+        }
+    }
+
+    string DiagPath(Transform t)
+    {
+        var sb = new System.Text.StringBuilder();
+        while (t != null && sb.Length < 120) { sb.Insert(0, t.name + "/"); t = t.parent; }
+        return sb.ToString();
+    }
+#endif
+
+    // 座位系统挂起/恢复（stage 藏玩家模型期间）：黑屏传送把玩家挪离食堂座位后，SitSpot 的
+    // 「被传走→起身」会把站立模型重新亮回来——老师跟拍镜头里就出现两个徐夏（2026-10-01 实测）。
+    // 演出期间整段挂起，切回玩家/章末兜底时恢复。
+    void SuspendSeats()
+    {
+        if (_suspendedSeats.Count > 0) return;
+        SitSpot.Suppressed = true;                       // 静态总闸：组件被漏找/漏启用也拦得住
+        foreach (var s in FindObjectsOfType<SitSpot>(true)) { s.enabled = false; _suspendedSeats.Add(s); }
+    }
+
+    void ResumeSeats()
+    {
+        SitSpot.Suppressed = false;
+        foreach (var s in _suspendedSeats) if (s != null) s.enabled = true;
+        _suspendedSeats.Clear();
     }
 
     // stage 要亮出的道具开场先藏（同 enter 的 seat 惯例：Begin 预藏，走到那一步才亮出）
@@ -780,7 +889,8 @@ public class StoryRunner : MonoBehaviour
         CutawayCamera.Restore();                          // 章末兜底：万一 cut 没配对收掉
         foreach (var g in _stageShown) if (g != null && g.activeSelf) g.SetActive(false);   // 舞台道具兜底收回（中途结束剧情不剩重影）
         _stageShown.Clear();
-        if (_player != null) _player.SetStandingModelVisible(true);   // 兜底：防 stage 藏完模型后剧情中断
+        ResumeSeats();
+        if (_hiddenPlayerRenderers.Count > 0) ShowWholePlayer();      // 兜底：防 stage 藏完模型后剧情中断
         if (_player != null) { _player.enabled = true; _player.allowEscToUnlock = _savedEsc; _player.SetLocked(false); _player.moveLocked = false; }
         // 剧情跑完 → 把门口传送还给玩家（Begin 里整体关掉了，不恢复的话出了剧情也开不了门）
         if (_doors != null) { _doors.ExitStoryMode(); _doors.enabled = true; }
@@ -980,12 +1090,16 @@ public class StoryRunner : MonoBehaviour
     {
         if (_leaveRt != null) StopCoroutine(_leaveRt);
         _leaveRt = StartCoroutine(LeaveRoutine(step));
+        if (step.bg) Next();                // bg：走位放后台，立即推进（台词/旁白在走位期间继续播，第3章老师走廊）
     }
 
     IEnumerator LeaveRoutine(StoryStep step)
     {
-        CurrState = State.Enter;
-        SetPerms(State.Enter);                          // 同入场演出：能转不能走
+        if (!step.bg)
+        {
+            CurrState = State.Enter;
+            SetPerms(State.Enter);                      // 同入场演出：能转不能走（bg 不动状态——旁白要在走位期间照常播）
+        }
 
         GameObject go = null;
         _entranceNpcs.TryGetValue(step.who, out go);
@@ -1028,13 +1142,13 @@ public class StoryRunner : MonoBehaviour
             go.SetActive(false);
             _entrance = null;
             _leaveRt = null;
-            Next();
+            if (!step.bg) Next();          // bg：不推进（后台走位，下一步早就在播了；cut 在等这个协程结束切镜头）
             yield break;
         }
         go.transform.rotation = Quaternion.Euler(0f, yaw, 0f);   // 到位回原朝向（如面朝书桌）
         _entrance = null;
         _leaveRt = null;
-        Next();
+        if (!step.bg) Next();
     }
 
     /// 组装 enter/leave 的途经点列：起点 + 各 via 锚点（同名解析同 fade 锚点，缺锚点只警告跳过）+ 终点；
@@ -1219,7 +1333,7 @@ public class StoryRunner : MonoBehaviour
             case State.Gap:
                 if (_pendingNextAt > 0f && Time.time >= _pendingNextAt) { Next(); break; }
                 if (AdvancePressed()) { Next(); break; }
-                if (GameSettings.AutoPlay)
+                if (GameSettings.AutoPlay || _autoLine)
                 {
                     _gapTimer += Time.deltaTime;
                     if (_gapTimer >= GameSettings.AutoDelaySeconds + _lastLineLen * 0.02f + 0.6f

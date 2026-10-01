@@ -732,6 +732,26 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   Show 会关 `FP_相机` 防双渲染/双 AudioListener。cut 是瞬时状态翻转，紧跟的 dlg/nar 承担时长；
   `SilentApply` 快进直接 Restore；`ToDone` 兜底恢复。第3章用法：食堂听完干预题后切到李老师办公室
   看她说"到时间了……"那段，说完切回，主角还在座位上。
+  · ★ **角色站定时鼠标可环绕/俯仰看**（用户 2026-10-01：「老师站好以后视角可以转动」）：CutawayCamera
+    检测目标移动（>0.15m/s）就自动回正环绕角（走位跟拍稳定），站定后 Mouse X/Y 累积 yaw（无限）/pitch
+    （−25°~+42°，机位最低 0.3m 防钻地）。0° 时与旧机位逐帧一致，第1章林溪坐姿那段不受影响。
+- ★ **stage（舞台道具，2026-10-01 第3章办公室老师视角）**：`{"t":"stage","showNames":["徐夏_办公室坐姿"],
+  "hidePlayer":true}` = 亮出场景道具 + 藏玩家自身模型；`{"t":"stage","hideNames":[…],"showPlayer":true,
+  "standAt":"第3章_办公室起身"}` = 反向 + 玩家传到锚点原地站好。老师跟拍段玩家模型只是被隐藏（渲染器关），
+  沙发上的坐姿徐夏是舞台道具——**刻意不走 SitSpot**：剧情落座没有"原站位"，SitSpot.Seat() 会记下食堂
+  原站位、起身传回去。⚠ **hidePlayer 必须藏玩家根下【全部】渲染器**（`HideWholePlayer`/`ShowWholePlayer`，
+  逐个记原态恢复 + ApplyFirstPersonParts 重套规则）：`SetStandingModelVisible` 只藏 徐夏_已绑定，而玩家身上
+  还挂着 徐夏_坐姿/玩家切换/徐夏任务视角切换 等历史模型子物体，名字不在 firstPersonShadowsOnlyParts
+  名单里的渲染器在任何镜头里都是全亮（`ApplyFirstPersonParts` 对未命中名字的直接 ShadowCastingMode.On）
+  ——老师跟拍一拍到玩家位置就是"两个徐夏"（用户两次实测踩过；挂起 SitSpot 只是附带保险，不是根因）。
+  showNames 里的物体 Begin 时预藏（同 enter 的 seat 惯例），SilentApply 同步，ToDone 兜底
+  收道具+恢复座位+还原玩家渲染器。
+- ★ **bg（后台走位）+ auto（自动旁白），2026-10-01 第3章老师走廊"边走边说"**：
+  `{"t":"leave",…,"bg":true}` = 走位放后台、立即推进下一步（台词/旁白在走位期间继续播；LeaveRoutine 不动
+  CurrState、完成时不 Next）；`{"t":"nar","auto":true,…}` = 这句播完自动推进不等点击（在 State.Gap 里走
+  GameSettings.AutoPlay 同款通道：定时 + `!DialogueVoicePlayer.IsPlaying` 门，点击仍可手动跳）。走位后台化后
+  **后续 cut 会先等 `_leaveRt` 走完再切镜头**（`CutAfterWalk`：旁白先讲完时，老师走到门口隐藏的同一帧才切
+  到办公室实例，不露空门框）。第3章走廊段顺序 = dlg×2 → leave(bg) → nar(auto)×3 → cut 等 → fade。
 - **door（门口传送导流，2026-09-29 第4/5章）**：`{ "t":"door", "to":"Loc_图书馆",
   "x":"走到门口，按 F 前往图书馆" }` —— 不再由剧情自己瞬移，而是亮目标卡把玩家引到门口、
   让他自己按 F 选地点（面板里只有 `to` 可点），**落点就是那个地点的门口**，

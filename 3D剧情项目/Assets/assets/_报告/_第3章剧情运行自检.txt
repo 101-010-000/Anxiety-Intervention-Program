@@ -1,10 +1,10 @@
-第3章剧情运行自检（真进 Play 模式走一遍）  2026-09-30 03:36
+第3章剧情运行自检（真进 Play 模式走一遍）  2026-10-01 03:31
 
 —— 第3章剧情运行自检 ——
-StoryRunner 就绪，总步骤 108
-走完全部 108/108 步 ✓
+StoryRunner 就绪，总步骤 112
+走完全部 112/112 步 ✓
 玩家位置取证：起点=(122.6,0.3,-1.5)  最低Y=0.0  终点=(29.3,0.0,-0.9)
-状态计数：Typing 1744 / Gap 93 / 开场旁白 3 / Choice 13 / Walk 0 / Interact 5 / Fade 538 / Enter 0 / 门口导流 0
+状态计数：Typing 2842 / Gap 94 / 开场旁白 3 / Choice 13 / Walk 0 / Interact 3 / Fade 521 / Enter 3 / 门口导流 0
 运行期报错：无 ✓
 
 注：编辑器伪造不了 Input.GetKeyDown，交互/推进走的是 DebugAdvance()/Fire()，

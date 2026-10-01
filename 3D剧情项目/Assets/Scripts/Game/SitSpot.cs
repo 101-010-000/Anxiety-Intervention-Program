@@ -77,6 +77,8 @@ public class SitSpot : MonoBehaviour
     FirstPersonController _fpc;
     bool _seated;
     static bool _suppressSit;          // 明确起身过（对话还锁着）→ 解锁前【所有座位】都别再自动坐回来
+    public static bool Suppressed;     // 剧情演出总闸（stage 藏玩家模型期间）：Seat/Stand 一律不跑，
+                                       // 防"被传走→起身"把站立模型亮回来（第3章老师视角段，2026-10-01）
                                        //   （★ 同一地点有好几个重叠座位时，只压自己那个会被隔壁座位重新坐下——探针踩过）
     // ★ 坐下前站的位置（用户 2026-10-01：起身要回到这儿）——【所有座位共享】：
     //   宿舍第4/5章两个座位点重叠，坐下时两个组件会接连 Seat()，共享记录才不会把
@@ -313,6 +315,10 @@ public class SitSpot : MonoBehaviour
 
     void Seat()
     {
+        if (Suppressed) return;                        // 剧情演出总闸（老师视角段玩家不可见，不需要坐）
+#if UNITY_EDITOR
+        StageDiag.Log("Seat 放行 " + name);
+#endif
         // ★ 记住【坐下前站的位置】（用户 2026-10-01）：取消坐下（起身）时人要回到这儿，
         //   而不是站在椅子/桌子中间（座位点就在家具上，起身原地会卡在家具里）。
         //   同一次坐下（重叠座位接连 Seat）只记第一次，谁先坐记谁。
@@ -366,6 +372,10 @@ public class SitSpot : MonoBehaviour
 
     void Stand(bool restoreToStandPos = true)
     {
+        if (Suppressed) return;                        // 剧情演出总闸：演出期间谁都不许把站立模型亮回来
+#if UNITY_EDITOR
+        StageDiag.Log("SitSpot.Stand 放行 " + name + "\n" + System.Environment.StackTrace);
+#endif
         // ★ 对话还锁着时被叫起身（剧情调 StandUp / 被传走）：别再自动坐回来（用户 2026-10-01，探针踩过）
         if (_fpc != null && _fpc.locked) _suppressSit = true;
         if (seatedModel != null)
