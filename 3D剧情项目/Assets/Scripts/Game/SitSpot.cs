@@ -23,6 +23,7 @@
 //
 // NPC：坐在位置上的实例挂 SitHere（Start 把 Animator 的 Sitting 置 true）即可。
 
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -417,9 +418,12 @@ public class SitHere : MonoBehaviour
 
     void Start()
     {
-        var a = GetComponentInChildren<Animator>();
+        // 挑"活着的"那个：prefab 实例根上可能有 GameCharSwap 停用的旧 Animator（controller=null），
+        // 盲取第一个会写到死组件上 → Sitting 永远到不了真控制器，Play 里人站着不坐（NpcEntrance v6 同款坑）
+        var a = GetComponentsInChildren<Animator>(true)
+            .FirstOrDefault(x => x.enabled && x.runtimeAnimatorController != null);
         if (a != null) a.SetBool(SittingHash, true);
-        else Debug.LogWarning("[SitHere] " + name + " 下没有 Animator");
+        else Debug.LogWarning("[SitHere] " + name + " 下没有带控制器的活 Animator");
     }
 }
 

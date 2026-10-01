@@ -68,9 +68,15 @@ public class FirstPersonController : MonoBehaviour
     public float tpHeight = 1.45f;
     [Tooltip("相机看向的高度（米，一般到胸口，别盯着后脑勺）")]
     public float tpLookHeight = 1.20f;
-    [Tooltip("俯仰范围（第三人称别让人把镜头插地/翻天）。正值 = 镜头抬到角色头上往下看，负值 = 镜头压低往上看")]
+    [Tooltip("俯仰范围（第三人称别让人把镜头插地/翻天）。正值 = 镜头抬到角色头上往下看，负值 = 镜头压低往上看。\n★ 上抬定稿 +15°（2026-10-01）：支点 1.45m + 距离 3.4m 时 +40° 会把镜头举到 ~3.6m——越过墙顶/楼板，看到场景外和房顶内部")]
     public float tpPitchMin = -45f;
-    public float tpPitchMax = 40f;
+    public float tpPitchMax = 15f;
+    [Tooltip("★ 水平旋转限位（2026-10-01）：第三人称镜头水平角被夹在「参考朝向 + tpYawMin~tpYawMax」内，防止贴墙一甩看到场景外。\n参考朝向在 开局/瞬移/剧情摆镜头 后自动重开窗（ReanchorYawWindow），玩家无感")]
+    public bool tpYawClamp = true;
+    [Tooltip("水平角相对参考朝向往左最多多少度")]
+    public float tpYawMin = -135f;
+    [Tooltip("水平角相对参考朝向往右最多多少度")]
+    public float tpYawMax = 135f;
     [Tooltip("贴地保护：镜头压低到快进地面时，自动把「吊臂」缩短，而不是钻到地下")]
     public bool tpKeepAboveGround = true;
     [Tooltip("贴地保护：镜头最低离脚底平面多少米")]
@@ -173,6 +179,8 @@ public class FirstPersonController : MonoBehaviour
         ApplyFirstPersonParts();
         ApplyCameraNear();
         if (fixSkinnedCulling) FixSkinnedCulling();
+        ReanchorYawWindow();                          // 水平限位窗以开局朝向为中心
+        _lastPos = transform.position; _lastPosInit = true;
     }
 
     void Start()
@@ -190,6 +198,11 @@ public class FirstPersonController : MonoBehaviour
 
     void Update()
     {
+        // 瞬移检测：门口/剧情传送把玩家整段挪走后，水平限位窗以当前镜头角为中心重开。
+        // 正常走路一帧位移远小于 1m（walkSpeed 1.6）；低帧率误触发也无感——只是把窗平移到当前视角。
+        if (_lastPosInit && (transform.position - _lastPos).sqrMagnitude > 1f) ReanchorYawWindow();
+        _lastPos = transform.position; _lastPosInit = true;
+
         if (allowEscToUnlock)
         {
             if (Input.GetKeyDown(KeyCode.Escape)) SetCursorLocked(false);
@@ -229,6 +242,7 @@ public class FirstPersonController : MonoBehaviour
     {
         _camDist = -1f;                               // 距离重新解算，别带上一处的
         camYaw = transform.eulerAngles.y;             // 镜头先摆到角色背后
+        ReanchorYawWindow();                          // 限位窗以新朝向为中心重开（剧情瞬移后旧窗作废）
         PlaceThirdPersonCamera();
     }
 
@@ -272,6 +286,9 @@ public class FirstPersonController : MonoBehaviour
 
     static readonly RaycastHit[] _camHits = new RaycastHit[16];
     float _camDist = -1f;
+    float _yawRef;          // 水平限位窗的中心（世界角）。开局/瞬移/剧情摆镜头后重定
+    Vector3 _lastPos;       // 瞬移检测：上一帧玩家位置
+    bool _lastPosInit;
 
     /// <summary>从支点往后探，返回“能拉到多远”（撞到东西就比 tpDistance 小）</summary>
     float CastForCamera(Vector3 origin, Vector3 dir)
@@ -291,6 +308,20 @@ public class FirstPersonController : MonoBehaviour
         }
         return best;
     }
+
+    // ------------------------------------------------------------------ 水平旋转限位（2026-10-01）
+    /// <summary>把水平角夹回「参考朝向 + tpYawMin~tpYawMax」窗内（DeltaAngle 处理 ±180° 环绕）。
+    /// 只约束玩家鼠标（Look()）；剧情/自检直接写 camYaw 的路径不受限。</summary>
+    float ClampYawToRef(float yaw)
+    {
+        if (!tpYawClamp || !thirdPerson) return yaw;
+        float d = Mathf.DeltaAngle(_yawRef, yaw);
+        d = Mathf.Clamp(d, Mathf.Min(tpYawMin, tpYawMax), Mathf.Max(tpYawMin, tpYawMax));
+        return Mathf.Repeat(_yawRef + d + 180f, 360f) - 180f;
+    }
+
+    /// <summary>重定水平限位窗的中心 = 当前镜头角。开局/瞬移/剧情摆镜头后调，免得被瞬移前的旧窗卡住</summary>
+    public void ReanchorYawWindow() { _yawRef = Mathf.Repeat(camYaw + 180f, 360f) - 180f; }
 
     // ------------------------------------------------------------------ 身高等尺寸
     void ResolveRefs()
@@ -418,7 +449,7 @@ public class FirstPersonController : MonoBehaviour
         float mx = Input.GetAxisRaw("Mouse X") * mouseSensitivity;
         float my = Input.GetAxisRaw("Mouse Y") * mouseSensitivity * (invertY ? 1f : -1f);
 
-        if (thirdPerson) camYaw += mx;                  // ★ 第三人称：只转相机，角色不跟
+        if (thirdPerson) camYaw = ClampYawToRef(camYaw + mx);   // ★ 第三人称：只转相机，角色不跟；水平角限位（防甩出墙外看到场景外）
         else transform.Rotate(0f, mx, 0f, Space.Self);   // 第一人称：左右转身体
 
         float lo = thirdPerson ? tpPitchMin : pitchMin;
@@ -435,7 +466,7 @@ public class FirstPersonController : MonoBehaviour
     {
         thirdPerson = v;
         _camDist = -1f;
-        if (v) camYaw = transform.eulerAngles.y;        // 切过去时先摆到角色背后
+        if (v) { camYaw = transform.eulerAngles.y; ReanchorYawWindow(); }   // 切过去时先摆到角色背后，限位窗重开
         if (!v && cameraPivot != null && cameraPivot.parent == transform)
         {
             cameraPivot.localRotation = Quaternion.identity;
@@ -516,6 +547,7 @@ public class FirstPersonController : MonoBehaviour
             }
             yield return null;
         }
+        if (thirdPerson) ReanchorYawWindow();   // 剧情摆完镜头：限位窗以新视角为中心重开，后续鼠标左右转不受旧窗限制
     }
 
     /// <summary>输入 → 世界方向（水平）。第三人称相对相机，第一人称相对角色</summary>
@@ -617,6 +649,7 @@ public class FirstPersonController : MonoBehaviour
         if (cameraPivot.parent != transform) cameraPivot.SetParent(transform, false);
         cameraPivot.localRotation = Quaternion.identity;
         ApplyBody();
+        ReanchorYawWindow();                          // 镜头回到玩家身上：限位窗以当前视角为中心重开
     }
 
     static float NormalizePitch(float e)

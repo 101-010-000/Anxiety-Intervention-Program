@@ -1,0 +1,14 @@
+第5章宿舍三人组接线  2026-10-01 08:53
+════ 舍友A
+   = 活动画机已在（舍友A_Idle）
+   = Sit 状态已在
+   = SitHere 已在
+════ 舍友B
+   = 活动画机已在（舍友B_Idle）
+   = Sit 状态已在
+   = SitHere 已在
+════ 陆宣雨_可动_坐着
+   = 活动画机已在（陆宣雨_Idle）
+   = Sit 状态已在
+   = SitHere 已在
+场景已保存: Assets/Scenes/Game.unity

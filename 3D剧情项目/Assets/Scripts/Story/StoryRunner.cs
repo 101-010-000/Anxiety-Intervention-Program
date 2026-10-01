@@ -92,7 +92,8 @@ public class StoryRunner : MonoBehaviour
     Coroutine _cardRt;
     Coroutine _fadeRt;
     Coroutine _enterRt;
-    Coroutine _leaveRt;
+    readonly List<Coroutine> _leaveRts = new List<Coroutine>();   // 走位协程登记（并发后台离场——第5章三人错峰出门；
+                                                                  // 旧的单槽位会被第二个 DoLeave StopCoroutine 掐掉第一个）
     Coroutine _walkHintRt;
     NpcEntrance _entrance;                                  // 当前入场演出（DebugAdvance 快进用）
     readonly Dictionary<string, GameObject> _entranceNpcs = new Dictionary<string, GameObject>();
@@ -467,7 +468,19 @@ public class StoryRunner : MonoBehaviour
             _entranceNpcs[step.who] = t.gameObject;
             _npcHomePos[step.who] = t.position;                 // 此刻必是场景手摆原位（enter 还没挪过她）
             _npcHomeYaw[step.who] = t.eulerAngles.y;
-            if (step.t == "enter" && t.gameObject.activeSelf) t.gameObject.SetActive(false);
+            if (step.t == "enter" && !step.alreadyIn && t.gameObject.activeSelf) t.gameObject.SetActive(false);
+            // alreadyIn：who 开场已在场（第5章陆宣雨坐在三人组里），只快照不禁用——到她的对话节点再起身入场
+            // seated：开场就是坐姿（Begin 置 Sitting=true，代码驱动——场景 SitHere 组件被并发覆写也不影响）
+            if (step.t == "enter" && step.alreadyIn && step.seated)
+            {
+                foreach (var a in t.GetComponentsInChildren<Animator>(true))
+                {
+                    if (!(a.enabled && a.runtimeAnimatorController != null)) continue;
+                    bool has = false;
+                    foreach (var p in a.parameters) if (p.name == "Sitting") has = true;
+                    if (has) { a.SetBool("Sitting", true); break; }
+                }
+            }
 
             // enter 的 seat（第3章王含）：坐姿模型实例开场同样要藏，走位到位才亮出（「走到凳子边坐下」）
             if (step.t == "enter" && !string.IsNullOrEmpty(step.seat) && !_entranceNpcs.ContainsKey(step.seat))
@@ -713,14 +726,14 @@ public class StoryRunner : MonoBehaviour
     // cut 是瞬时状态翻转，紧跟的 dlg/nar 承担时长；进出场都靠台词节奏，无需黑幕。
     void DoCut(StoryStep step)
     {
-        if (_leaveRt != null) { StartCoroutine(CutAfterWalk(step)); return; }   // 后台走位没走完（旁白先讲完的场合）：等老师走到门口再切
+        if (_leaveRts.Count > 0) { StartCoroutine(CutAfterWalk(step)); return; }   // 后台走位没走完（旁白先讲完的场合）：等老师走到门口再切
         DoCutNow(step);
     }
 
     IEnumerator CutAfterWalk(StoryStep step)
     {
         CurrState = State.Enter; SetPerms(State.Enter);     // 等待期间不响应点击
-        yield return new WaitWhile(() => _leaveRt != null);
+        yield return new WaitWhile(() => _leaveRts.Count > 0);
         DoCutNow(step);
     }
 
@@ -1031,7 +1044,10 @@ public class StoryRunner : MonoBehaviour
         }
 
         Transform from = FindFadeAnchor(step.from);
-        if (from == null)
+        Vector3 startPt;
+        if (from != null) startPt = from.position;
+        else if (step.alreadyIn) startPt = go.transform.position;   // 已在场（第5章陆宣雨从座位起身）：起点=当前位置
+        else
         {
             Debug.LogWarning("[StoryRunner] enter 找不到起点锚点「" + step.from + "」——检查锚点接线/命名");
             if (!go.activeSelf) go.SetActive(true);
@@ -1046,22 +1062,22 @@ public class StoryRunner : MonoBehaviour
         else if (_player != null)
         {
             Vector3 p = _player.transform.position;
-            Vector3 dir = p - from.position; dir.y = 0f;
+            Vector3 dir = p - startPt; dir.y = 0f;
             target = dir.sqrMagnitude > 0.01f ? p - dir.normalized * 1.3f : p;
         }
-        else target = from.position;
+        else target = startPt;
 
         if (!go.activeSelf) go.SetActive(true);
 
         // ★ 镜头平滑转向门口（v4）： yaw+pitch 一起动 0.3s（此前硬切且不管 pitch，
         //   玩家低头看桌面时进场会盯着自己的脚——视频评审 2026-09-28）。与她淡入同步。
         if (_player != null)
-            StartCoroutine(_player.LookTowardRoutine(from.position));
+            StartCoroutine(_player.LookTowardRoutine(startPt));
 
         _entrance = go.GetComponent<NpcEntrance>();
         if (_entrance == null) _entrance = go.AddComponent<NpcEntrance>();
         // via 途经点：每项按 fade 锚点同名解析，缺锚点只警告并跳过该点；via 为空/全缺 = 原两点直线
-        var pts = BuildPath(from.position, step.via, target);
+        var pts = BuildPath(startPt, step.via, target);
         yield return _entrance.RunPath(pts, _player != null ? _player.transform : null);
 
         // seat（第3章王含）：走位模型到位 → 亮出用户摆好的坐姿模型、整棵藏掉走位模型（「坐下了」）
@@ -1088,18 +1104,30 @@ public class StoryRunner : MonoBehaviour
     // 状态复用 State.Enter（演出语义一致：能转不能走）；_entrance 字段同步指向退场演出，自检快进可用。
     void DoLeave(StoryStep step)
     {
-        if (_leaveRt != null) StopCoroutine(_leaveRt);
-        _leaveRt = StartCoroutine(LeaveRoutine(step));
+        StartCoroutine(LeaveLife(step));
         if (step.bg) Next();                // bg：走位放后台，立即推进（台词/旁白在走位期间继续播，第3章老师走廊）
+    }
+
+    // 包装：登记/注销走位协程。⭐ 不再 StopCoroutine 前一个——多人并发离场（第5章三人竖排错峰）
+    // 要各自走各自的，单槽位互相掐会让人走着走着定住
+    IEnumerator LeaveLife(StoryStep step)
+    {
+        var rt = StartCoroutine(LeaveRoutine(step));
+        _leaveRts.Add(rt);
+        yield return rt;
+        _leaveRts.Remove(rt);
     }
 
     IEnumerator LeaveRoutine(StoryStep step)
     {
+        // ⭐ 先进 Enter 态再等延迟：Enter 不响应点击/快进推进——阻塞型 leave 的延迟里玩家一点击
+        //   就会把整个退场跳过去（人留在原地，Next 已经走到下一步了）
         if (!step.bg)
         {
             CurrState = State.Enter;
             SetPerms(State.Enter);                      // 同入场演出：能转不能走（bg 不动状态——旁白要在走位期间照常播）
         }
+        if (step.delay > 0f) yield return new WaitForSeconds(step.delay);   // 错峰：晚几秒再起步（第5章三人竖排离场）
 
         GameObject go = null;
         _entranceNpcs.TryGetValue(step.who, out go);
@@ -1128,26 +1156,25 @@ public class StoryRunner : MonoBehaviour
             Next(); yield break;
         }
 
-        _entrance = go.GetComponent<NpcEntrance>();
-        if (_entrance == null) _entrance = go.AddComponent<NpcEntrance>();
+        var entrance = go.GetComponent<NpcEntrance>();
+        if (entrance == null) entrance = go.AddComponent<NpcEntrance>();
+        if (!step.bg) _entrance = entrance;   // 后台走位不占快进槽（并发时后启动的会把先前的顶掉，Skip 就指错人了）
         Vector3 from = go.transform.position;
         // via 途经点（绕开桌椅）：每项按 fade 锚点同名解析，缺锚点只警告并跳过该点；
         // via 为空/全缺时 pts 就两点 = 原直线，行为不变
         var pts = BuildPath(from, step.via, target);
-        yield return _entrance.RunPath(pts, null); // faceTarget=null：保持走向（面朝座位方向走回去）
+        yield return entrance.RunPath(pts, null); // faceTarget=null：保持走向（面朝座位方向走回去）
 
         if (step.hide)
         {
             // 「走出门」：到位直接整棵隐藏——不转身、不在门口待机（用户 2026-09-29：第4章林溪与玩家一起去图书馆）
             go.SetActive(false);
-            _entrance = null;
-            _leaveRt = null;
+            if (!step.bg) _entrance = null;
             if (!step.bg) Next();          // bg：不推进（后台走位，下一步早就在播了；cut 在等这个协程结束切镜头）
             yield break;
         }
         go.transform.rotation = Quaternion.Euler(0f, yaw, 0f);   // 到位回原朝向（如面朝书桌）
-        _entrance = null;
-        _leaveRt = null;
+        if (!step.bg) _entrance = null;
         if (!step.bg) Next();
     }
 

@@ -1,0 +1,14 @@
+== 摄像机旋转限制：应用到玩家 ==
+时间：2026-10-01 08:53:16
+
+玩家：Player_徐夏（场景 Game）
+改前：俯仰 -45~40°，水平限位 True（-135~135°）
+改后：俯仰 -45~15°，水平限位 True（-135~135°）
+存场景：成功 ✓
+
+说明：
+  · 运行时逻辑在 FirstPersonController：Look() 里把 camYaw 夹在「参考朝向 ± 范围」内（DeltaAngle 处理 ±180° 环绕）；
+    参考朝向在 开局 / 瞬移（Update 位移 >1m 检测）/ 剧情摆镜头（ResetCameraNow、LookTowardRoutine 结束、ReleaseCamera）自动重开窗。
+  · 上抬 +15° 的根据：支点 1.45m + 距离 3.4m 时，+40° 会把镜头举到 ~3.6m——越过 ~3m 墙顶 / 3.3m 楼板，看到场景外与房顶内部。
+  · 只约束玩家鼠标：剧情/自检直接写 camYaw 的路径（LookTowardRoutine、自检驱动）不受限，不会打架。
+  · 想调：Inspector 改 tpYawMin/tpYawMax/tpPitchMax 即可（序列化在场景里）；重跑本工具写回定稿值。

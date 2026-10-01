@@ -67,6 +67,12 @@ public class StoryStep
                                              // 复用 State.Gap 的 AutoPlay 通道：定时 + !DialogueVoicePlayer.IsPlaying 门）
     public bool bg = false;                  // leave：走位放后台，立即推进下一步（台词/旁白在走位期间继续播；
                                              // 后续 cut 会等 _leaveRt 走完再切镜头）
+    public bool alreadyIn = false;           // enter：who 开场已在场（不预禁用）——从座位起身走到玩家面前的
+                                             // 入场（第5章陆宣雨：三人组开场就坐在宿舍，到她的对话节点才起身）
+    public bool seated = false;              // enter(alreadyIn)：开场就是坐姿（Begin 置 Sitting=true）。
+                                             // ⭐ 代码驱动，场景 SitHere 组件被并发会话 stomping 也不影响
+    public float delay = 0f;                 // leave：起步延迟秒——多人错峰竖排离场（第5章三人去食堂：
+                                             // 前一个走出几秒后下一个才动，避免挤在一起；SilentApply/快进不复刻）
     public string at = "";                   // interact：目标交互点 GameObject 名（缺省=旧逻辑取第一个可用点；
                                              // 第3章起一章多个 F 点，不点名会武装错点——2026-09-28）
     public float camH = -1f;                 // cut：机位高度（≤0 = 用 CutawayCamera 内置默认 1.55）。
