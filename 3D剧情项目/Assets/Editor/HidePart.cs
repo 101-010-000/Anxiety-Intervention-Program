@@ -33,8 +33,20 @@ public static class HidePart
     const string KEYWORD = "glasses";                       // 材质名里含这个就当眼镜
     const string MODEL_DIR = "Assets/assets/03_动作_Animation/带动画模型";
     const string OUT_DIR = "Assets/assets/02_角色_Character/角色_URP/去部件";
-    const string HIDE_MAT = OUT_DIR + "/隐藏部件_不渲染.mat";
+    public const string HIDE_MAT = OUT_DIR + "/隐藏部件_不渲染.mat";
     const string REPORT = "Assets/assets/_报告/_去掉部件.txt";
+
+    /// <summary>该角色的这个材质是不是「已经去掉、要一直隐形」的部件
+    /// （给 AnimModelMats 用：贴角色材质时别把眼镜槽又贴回真眼镜材质——踩过）</summary>
+    public static bool IsHiddenPart(string character, string materialName)
+    {
+        if (string.IsNullOrEmpty(character) || string.IsNullOrEmpty(materialName)) return false;
+        if (System.Array.IndexOf(TARGETS, character) < 0) return false;
+        if (!materialName.ToLower().Contains(KEYWORD)) return false;
+        // 只有真做过「清空子网格」的角色才认（避免误伤没处理过的角色）
+        return Directory.Exists(OUT_DIR) &&
+               Directory.GetFiles(OUT_DIR, character + "_*_无" + KEYWORD + ".asset").Length > 0;
+    }
 
     [MenuItem("Tools/干预项目/角色：去掉部件（眼镜）", false, 150)]
     public static void Run()
