@@ -895,8 +895,13 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   Unity 里跑 `Tools/干预项目/台词语音/诊断（清单↔mp3↔剧本覆盖）`（`Editor/VoiceLineDiag.cs`）对账 →
   报告 `assets/_报告/_台词语音.txt`。
   ⚠ **只插入非语音步骤（walk/leave/interact/fade）时不用重新合成**：后续台词步号整体后移，
-  跑 `额外文件/工具脚本/voice_shift_steps.py`（按"插入位置+条数"改顶部常量）把步号键与 mp3 文件名
-  （连 .meta）在 Resources 与 output 两处同步位移，再跑上面诊断对账即可（2026-09-30 第5章 +3 实测）。
+  跑 `额外文件/工具脚本/voice_shift_steps.py`（顶部常量 SHIFT/THRESHOLD/CHAPTER 按本次情况改）把步号键与 mp3 文件名
+  （连 .meta）在 Resources 与 output 两处同步位移，再跑上面诊断对账即可（2026-09-30 第5章 +3、第3章 +1 实测）。
+  · 2026-09-30 通用化重写：文件按 manifest 条目的 `path`（含 `ch{N}/` 子目录）定位——旧版拼 manifest
+    同目录根本找不到文件；**选择题解释的 c 文件（md5 键、文件名带步号 `ch3_c052_*`）也要跟着改名**
+    （键不动只改 path+文件名）——第5章 +3 那次漏了这步，留下 2 条解释音频 404（c092→c095，已修）。
+  ⚠ **插入/拆分的是语音步骤（nar/dlg/mon）时要重新合成**：先把该步旧 mp3（两处）删掉——
+  `synth()` 按文件存在跳过，不删就永远不会重录新文本；再跑 batch 生成 → 部署 → 诊断。
   ⚠ 该脚本改键在前、改名在后，失败重跑前先看输出——半途状态用 `voice_shift_steps_fix.py` 补完。
 - 试音档案：`额外文件/声线试音_v3/`（选角依据）；edge-tts 免费池（仅 3 普通话女声）已被否，弃用。
 
