@@ -80,7 +80,7 @@ Editor/                        agent 工具（菜单 Tools/干预项目/…）�
   ScenePostFx.cs               剧情场景后期：辉光/模糊/抬黑/雾 + 6 个地点各自的氛围 Volume（见第五节）
   GameDoorBuilder.cs           门口传送：给场景里已有的门触发盒挂交互 + 「按 F 开门」+ 地点选择面板（见第五节）
   Chapter4DoorTrip.cs          第4/5章门口引导：门口 UI 在且提示统一（缺了就重建）+ 第4/5章任务触发点摆位 + 清场景残留（见第五节）
-  SitSetup.cs / SitSwapSetup.cs  坐姿：生成 Sit 剪辑 + 控制器 Sit 状态 / 坐下换模型接线（宿舍×2 + 食堂×1 + 图书馆×2，见第三节）
+  SitSetup.cs / SitSwapSetup.cs  坐姿：生成 Sit 剪辑 + 控制器 Sit 状态 / 坐下换模型接线（宿舍×2 + 食堂×2 + 图书馆×1，见第三节）
   ChoiceTitleColor.cs          选择题题干标题配色（改蓝白色 #CCE3FF，用户 2026-10-01）
   AnimPreviewSetup.cs          角色预览场景：每个角色挂一个不一样的动画 + 运行自检（见第五节）
   MainMenuAssets.cs            主界面 UI 贴图：程序化生成 57 张 + 中文字体 + 20 张收录图导入
@@ -221,8 +221,15 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
     会拿着上一次场景的凳子判定 —— 现在 `SitSpot`/`StoryInteractable` 都改成实例缓存 + 1s TTL。
   · ⚠ **重建场景锚点时别把图书馆这两个点也对齐到模型**（工具 ④ 已跳过 `Loc_图书馆`，由 ④′ 处理）：
     第4章那两个 F 点被挪走的话，剧情里玩家就跑错地方；`SitSwapSetup.RestoreAnchor()` 会把挪走的挪回设计位。
-  · ⚠ 还没接的「坐下」点：第5章 `第5章_食堂座位`（任意凳子模式，凳子名单里只认 `凳子2 (24)`）——
-    要换模型的话在 `SitSwapSetup` 的 ④′ 里照图书馆那样补一个 SitSpot 即可。
+  · ★ **第5章食堂（剧情最后"坐下，和舍友们一起吃饭"）**（用户 2026-10-01 摆的 `徐夏任务视角切换第五章`）：
+    `第5章_食堂座位` 补了 SitSpot（`useSeatedModelPose=true`，坐姿 = 用户摆的模型）+
+    把剧情 F 点也挪到模型那把椅子上 + 同一点 StoryInteractable 从 `anySeat`（只认 `凳子2 (24)`、0.3m）
+    换成普通半径 2.2（否则玩家到不了那把椅子边就触发不了）。工具里这段是 ④″，模型按
+    「名字里的章号」（`徐夏任务视角切换第五章` ↔ `第5章_食堂座位`）匹配，匹配不到就近取。
+  · ⚠ **同一地点可能有多份坐姿模型**（食堂：第3章_落座那份 + 第5章食堂这份）→ ④ 里改成
+    **每个座位各自就近取模型**（别按地点只挑一份，也别按名字挑——"任务视角"有好几个会挑错）；
+    由 ④′/④″ 专门处理的座位在 `SPECIAL_SEATS` 里登记，不参与自动对齐。
+  · 尚未接的「坐下」点：第4章 `第4章_图书馆座位`（等用户确认位置，见上）。
   · ⚠ 找坐姿模型时**只认 prefab/FBX 实例的根**（`GetOutermostPrefabInstanceRoot(go)==go`）——
     `FindObjectsOfType<GameObject>` 会把 `mixamorig:*` 骨头也列出来，光看“源资产路径”会选到骨头上（踩过）。
 - ⚠ 坐姿剪辑的基准是**脚在地面、屁股在椅面** → 实测 Hips Y ≈ **0.55m**（站姿 Idle ≈ 0.93m），
@@ -943,7 +950,7 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 | 第N章剧情运行自检（N=1..5） | `Tools/干预项目/第N章剧情运行自检`（或丢 `Assets/_storyNsmoke_trigger.txt`）→ `assets/_报告/_第N章剧情运行自检.txt`；⚠ 自检前场景要先保存（会重开场景） |
 | 调试：回退到上一句（仅编辑器） | Play 中按 **`Backspace`** 逐句回退并重播（含语音）；只在正停在一句话上时生效，不跨交互/走位/转场，也不跨手机聊天换段（实现见 `.trellis/spec/guides/unity-story-step-conventions.md` §三） |
 | 台词语音：生成/补缺（改了第N章 json 后） | `python 额外文件/工具脚本/voice_batch_generate.py N`（幂等）→ 把 `额外文件/语音生成/output/ch{N}` 拷进 `Assets/Resources/语音/ch{N}`、`manifest.json` 拷成 `manifest.txt` → Unity 菜单 `Tools/干预项目/台词语音/诊断` 对账（报告 `assets/_报告/_台词语音.txt`）；选角/管线细节见 §五「台词语音」节 |
-| 坐下换模型（宿舍×2 + 食堂×1 + 图书馆×2 剧情座位；用用户手摆的坐姿模型） | `Tools/干预项目/坐姿换模型：接线（宿舍 + 食堂）`（`Assets/Editor/SitSwapSetup.cs`，或丢 `_sitswap_trigger.txt`）→ `assets/_报告/_坐姿换模型.txt`；自检 `_坐姿换模型自检.txt` |
+| 坐下换模型（宿舍×2 + 食堂×2 + 图书馆×1 剧情座位；用用户手摆的坐姿模型） | `Tools/干预项目/坐姿换模型：接线（宿舍 + 食堂）`（`Assets/Editor/SitSwapSetup.cs`，或丢 `_sitswap_trigger.txt`）→ `assets/_报告/_坐姿换模型.txt`；自检 `_坐姿换模型自检.txt` |
 | 换人后坐姿位置不对（坐在桌边悬空） | 把坐姿模型（场景里 `徐夏任务视角切换`）拖到椅子上/转个方向 → 重跑上面那个工具（会把座位标记点也对齐到模型） |
 | 生成/修复选择题选项行 | `Tools/干预项目/生成选择题按钮行`（预置3行 = 补缺接线 / 强制重建 = 弃手调重建 / 选择题行去掉解释块）→ `assets/_报告/_选择题按钮行.txt`；选项行样式直接在 Scene 里改 |
 | 选择题题干看不清（深色 Dim 上压深字） | `Tools/干预项目/选择题：题干标题改蓝白色`（`Assets/Editor/ChoiceTitleColor.cs`，或丢 `_choicetitle_trigger.txt`）→ `#CCE3FF`、报告 `assets/_报告/_选择题标题配色.txt` |

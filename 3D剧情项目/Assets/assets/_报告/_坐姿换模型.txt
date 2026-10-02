@@ -1,47 +1,54 @@
-坐姿换模型接线  2026-10-01 02:53
+坐姿换模型接线  2026-10-02 10:04
 （坐下 = 藏站立模型 + 显示坐姿模型；起身 = 换回来）
 
-（先把当前场景的未保存改动存了）
 【① 站立模型】
   玩家 = Player_徐夏，模型子物体 = FP_相机、徐夏_已绑定
   standingModel = 徐夏_已绑定
 
 【② 场景里的徐夏坐姿变体（Sitting Idle.fbx 的实例）】
+  · GameRoot/Locations/Loc_食堂/多章锚点/徐夏任务视角切换第五章  位置 (115.57, 0.06, -0.46)  朝向 183°  active=False
   · GameRoot/Locations/Loc_宿舍/多章锚点/徐夏  位置 (0.00, 0.00, -5.18)  朝向 263°  active=False
-  · GameRoot/Locations/Loc_图书馆/多章锚点/徐夏任务视角切换  位置 (200.98, 0.05, -0.04)  朝向 155°  active=True
+  · GameRoot/Locations/Loc_图书馆/多章锚点/徐夏任务视角切换  位置 (200.98, 0.05, -0.04)  朝向 155°  active=False
   · GameRoot/Locations/Loc_食堂/多章锚点/玩家切换  位置 (120.01, 0.06, 3.92)  朝向 0°  active=False
   · GameRoot/Locations/Loc_宿舍/多章锚点/玩家切换  位置 (79.25, 0.07, 3.50)  朝向 264°  active=False
   · GameRoot/Locations/Loc_宿舍/多章锚点/徐夏任务视角切换  位置 (79.23, 0.30, 3.58)  朝向 253°  active=False
   · GameRoot/Locations/Loc_食堂/多章锚点/徐夏任务视角切换  位置 (119.99, 0.07, 3.95)  朝向 1°  active=False
 
 【②′ 坐姿变体整理】
-  · 已设隐藏：GameRoot/Locations/Loc_图书馆/多章锚点/徐夏任务视角切换
 
 【③ 每个地点用哪份坐姿模型】
-  Loc_宿舍 → GameRoot/Locations/Loc_宿舍/多章锚点/徐夏任务视角切换（位置 (79.23, 0.30, 3.58) 朝向 253°）
-  Loc_食堂 → GameRoot/Locations/Loc_食堂/多章锚点/徐夏任务视角切换（位置 (119.99, 0.07, 3.95) 朝向 1°）
+  Loc_宿舍 → GameRoot/Locations/Loc_宿舍/多章锚点/玩家切换（位置 (79.25, 0.07, 3.50) 朝向 264°）
+  Loc_食堂 → GameRoot/Locations/Loc_食堂/多章锚点/玩家切换（位置 (120.01, 0.06, 3.92) 朝向 0°）
   Loc_图书馆 → GameRoot/Locations/Loc_图书馆/多章锚点/徐夏任务视角切换（位置 (200.98, 0.05, -0.04) 朝向 155°）
-  = 坐姿模型 GameRoot/Locations/Loc_宿舍/多章锚点/徐夏任务视角切换  控制器 徐夏_第三人称  （Sit 状态由 Sitting 参数进入）
-  = 坐姿模型 GameRoot/Locations/Loc_食堂/多章锚点/徐夏任务视角切换  控制器 徐夏_第三人称  （Sit 状态由 Sitting 参数进入）
+  = 坐姿模型 GameRoot/Locations/Loc_宿舍/多章锚点/玩家切换  控制器 徐夏_第三人称  （Sit 状态由 Sitting 参数进入）
+  = 坐姿模型 GameRoot/Locations/Loc_食堂/多章锚点/玩家切换  控制器 徐夏_第三人称  （Sit 状态由 Sitting 参数进入）
   = 坐姿模型 GameRoot/Locations/Loc_图书馆/多章锚点/徐夏任务视角切换  控制器 徐夏_第三人称  （Sit 状态由 Sitting 参数进入）
 
 【④ 宿舍 / 食堂的座位点】
-  Loc_宿舍：2 个 SitSpot，用 GameRoot/Locations/Loc_宿舍/多章锚点/徐夏任务视角切换
+  Loc_宿舍：2 个 SitSpot
+    用 GameRoot/Locations/Loc_宿舍/多章锚点/徐夏任务视角切换
     = 剧情座位 GameRoot/Locations/Loc_宿舍/多章锚点/第4章_坐下看资料  mode=剧情锁住自动坐下  radius=2.2  → 坐姿模型 GameRoot/Locations/Loc_宿舍/多章锚点/徐夏任务视角切换  标记点已在模型处（差 0.00m），朝向 253°，半径 2.2m
+    用 GameRoot/Locations/Loc_宿舍/多章锚点/徐夏任务视角切换
     = 剧情座位 GameRoot/Locations/Loc_宿舍/多章锚点/第5章_回座位  mode=剧情锁住自动坐下  radius=2.2  → 坐姿模型 GameRoot/Locations/Loc_宿舍/多章锚点/徐夏任务视角切换  标记点已在模型处（差 0.00m），朝向 253°，半径 2.2m
-  Loc_食堂：1 个 SitSpot，用 GameRoot/Locations/Loc_食堂/多章锚点/徐夏任务视角切换
+  Loc_食堂：2 个 SitSpot
+    用 GameRoot/Locations/Loc_食堂/多章锚点/徐夏任务视角切换
     = 剧情座位 GameRoot/Locations/Loc_食堂/多章锚点/第3章_落座  mode=剧情锁住自动坐下  radius=2.2  → 坐姿模型 GameRoot/Locations/Loc_食堂/多章锚点/徐夏任务视角切换  标记点已在模型处（差 0.00m），朝向 1°，半径 2.2m
+    （第5章_食堂座位 交给后面对应小节处理）
   Loc_图书馆：交给 ④′ 处理（不按模型对齐）
   共接线 3 个座位点
 
 【④′ 图书馆（任意凳子）】
   · 第4章_图书馆座位：本来就没有 SitSpot，不动
-  → 第5章_图书馆躲避（剧情 F 点）从 (207.50, 0.00, -6.00) 挪到坐姿模型处 (200.98, 0.00, -0.04)
-  → 同一点的 StoryInteractable：anySeat → 普通半径（radius 2.2，F 点就在模型椅子上）
+  → 第5章_图书馆躲避（剧情 F 点）从 (200.98, 0.00, -0.04) 挪到坐姿模型处 (200.98, 0.00, -0.04)
   = 第5章_图书馆躲避  mode=剧情锁住自动坐下  useSeatedModelPose=true  radius=2.2  → 坐姿模型 GameRoot/Locations/Loc_图书馆/多章锚点/徐夏任务视角切换
+
+【④″ 食堂 第5章（坐下和舍友吃饭）】
+  → 第5章_食堂座位（剧情 F 点）从 (115.57, 0.00, -0.46) 挪到坐姿模型处 (115.57, 0.00, -0.46)，朝向 183°
+  = 第5章_食堂座位  mode=剧情锁住自动坐下  useSeatedModelPose=true  radius=2.2  → 坐姿模型 GameRoot/Locations/Loc_食堂/多章锚点/徐夏任务视角切换第五章
 
 【⑤ 第一人称隐藏名单】
   = 已有 徐夏_已绑定
+  = 已有 徐夏任务视角切换第五章
   = 已有 徐夏
   = 已有 徐夏任务视角切换
   = 已有 玩家切换
