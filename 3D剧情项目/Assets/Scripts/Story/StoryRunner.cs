@@ -498,19 +498,23 @@ public class StoryRunner : MonoBehaviour
                     if (has) { a.SetBool("Sitting", true); break; }
                 }
             }
+        }
 
-            // enter/leave 的 seat：坐姿模型实例开场同样要藏，走位到位才亮出
-            // （enter=第3章王含「走到凳子边坐下」；leave=第3章办公室老师「走到凳子旁坐下」）
-            if ((step.t == "enter" || step.t == "leave") && !string.IsNullOrEmpty(step.seat) && !_entranceNpcs.ContainsKey(step.seat))
+        // enter/leave 的 seat：坐姿模型实例开场同样要藏，走位到位才亮出
+        // （enter=第3章王含「走到凳子边坐下」；leave=第3章办公室老师「走到凳子旁坐下」）。
+        // ★ 独立成一遍扫：同一 who 可能有多段 enter/leave（第3章李老师先走到对话位、再走到凳子坐下），
+        //   who 去重的 continue 会把后一段带 seat 的步骤整步跳过——坐姿实例就忘藏了（双李老师同屏，踩过）
+        foreach (var step in _ch.steps)
+        {
+            if ((step.t != "enter" && step.t != "leave") || string.IsNullOrEmpty(step.seat)
+                || _entranceNpcs.ContainsKey(step.seat)) continue;
+            var s = FindCharacterTransform(step.seat);
+            if (s != null)
             {
-                var s = FindCharacterTransform(step.seat);
-                if (s != null)
-                {
-                    _entranceNpcs[step.seat] = s.gameObject;
-                    if (s.gameObject.activeSelf) s.gameObject.SetActive(false);
-                }
-                else Debug.LogWarning("[StoryRunner] " + step.t + " 的坐姿模型没找到：" + step.seat + "（到位时会再找一次）");
+                _entranceNpcs[step.seat] = s.gameObject;
+                if (s.gameObject.activeSelf) s.gameObject.SetActive(false);
             }
+            else Debug.LogWarning("[StoryRunner] " + step.t + " 的坐姿模型没找到：" + step.seat + "（到位时会再找一次）");
         }
     }
 
