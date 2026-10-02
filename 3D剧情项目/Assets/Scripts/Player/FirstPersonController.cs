@@ -68,15 +68,17 @@ public class FirstPersonController : MonoBehaviour
     public float tpHeight = 1.45f;
     [Tooltip("相机看向的高度（米，一般到胸口，别盯着后脑勺）")]
     public float tpLookHeight = 1.20f;
-    [Tooltip("俯仰范围（第三人称别让人把镜头插地/翻天）。正值 = 镜头抬到角色头上往下看，负值 = 镜头压低往上看。\n★ 上抬定稿 +15°（2026-10-01）：支点 1.45m + 距离 3.4m 时 +40° 会把镜头举到 ~3.6m——越过墙顶/楼板，看到场景外和房顶内部")]
-    public float tpPitchMin = -45f;
+    [Tooltip("俯仰范围（第三人称别让人把镜头插地/翻天）。正值 = 镜头抬到角色头上往下看，负值 = 镜头压低往上看。\n★ 定稿 -25°~+15°（2026-10-01）：原 -45° 会把镜头压到离地 0.35m 仰 ~36° 盯天花板（「看到房顶内部」其实是这一端）；+40° 会举到墙顶上方看场景外")]
+    public float tpPitchMin = -25f;
     public float tpPitchMax = 15f;
-    [Tooltip("★ 水平旋转限位（2026-10-01）：第三人称镜头水平角被夹在「参考朝向 + tpYawMin~tpYawMax」内，防止贴墙一甩看到场景外。\n参考朝向在 开局/瞬移/剧情摆镜头 后自动重开窗（ReanchorYawWindow），玩家无感")]
+    [Tooltip("★ 水平旋转限位（2026-10-01）：第三人称镜头水平角被夹在「参考朝向 + tpYawMin~tpYawMax」内，防止贴墙一甩看到场景外。\n窗口中心：瞬移/剧情摆镜头后立即重定（ReanchorYawWindow），平时以 tpYawSlideSpeed 向当前视角缓慢滑移——被挡的死角永远跟在你背后")]
     public bool tpYawClamp = true;
     [Tooltip("水平角相对参考朝向往左最多多少度")]
     public float tpYawMin = -135f;
     [Tooltip("水平角相对参考朝向往右最多多少度")]
     public float tpYawMax = 135f;
+    [Tooltip("★ 窗口中心向当前视角滑移的速度（度/秒，0=关）。顶在限位边上时暂停滑移（保住硬限位）；\n剧情瞬移/坐下起身/门口传送等任何「人物自带转身」之后 ~2 秒内限位自动归位")]
+    public float tpYawSlideSpeed = 60f;
     [Tooltip("贴地保护：镜头压低到快进地面时，自动把「吊臂」缩短，而不是钻到地下")]
     public bool tpKeepAboveGround = true;
     [Tooltip("贴地保护：镜头最低离脚底平面多少米")]
@@ -232,7 +234,7 @@ public class FirstPersonController : MonoBehaviour
     //
     // ★ 关键原则：位置和朝向【都只由 camYaw / pitch / 距离 决定】，不从“角色位置-LookRotation”反推。
     //   否则相机位置一滞后（tpFollowSmooth），“看向角色”的朝向就会跟着转 → 左右横移/转身时镜头会跟着叟。
-    void LateUpdate() { PlaceThirdPersonCamera(); }
+    void LateUpdate() { PlaceThirdPersonCamera(); SlideYawAnchor(); }
 
     /// <summary>
     /// 立刻把第三人称相机摆到位：瞬移/开场直接调，避免"第一帧镜头还在老位置"甩一下。
@@ -322,6 +324,20 @@ public class FirstPersonController : MonoBehaviour
 
     /// <summary>重定水平限位窗的中心 = 当前镜头角。开局/瞬移/剧情摆镜头后调，免得被瞬移前的旧窗卡住</summary>
     public void ReanchorYawWindow() { _yawRef = Mathf.Repeat(camYaw + 180f, 360f) - 180f; }
+
+    /// <summary>窗口中心向当前镜头角缓慢滑移（tpYawSlideSpeed 度/秒；顶在限位边上时暂停——保住硬限位）。
+    /// 剧情/坐姿/传送的任何「人物自带转身」之后 ~2 秒内，被挡的死角自动回到你背后；
+    /// 自由走远也不再出现「以出生点方向为中心、某个方向转不到位」。</summary>
+    void SlideYawAnchor()
+    {
+        if (!thirdPerson || !tpYawClamp || tpYawSlideSpeed <= 0f) return;
+        float d = Mathf.DeltaAngle(_yawRef, camYaw);
+        float edge = Mathf.Max(Mathf.Abs(tpYawMin), Mathf.Abs(tpYawMax));
+        if (Mathf.Abs(d) >= edge - 0.5f) return;               // 顶死在边上：别滑，不然限位就被磨没了
+        float step = Mathf.Min(Mathf.Abs(d), tpYawSlideSpeed * Time.deltaTime);
+        if (step <= 0f) return;
+        _yawRef = Mathf.Repeat(_yawRef + Mathf.Sign(d) * step + 180f, 360f) - 180f;
+    }
 
     // ------------------------------------------------------------------ 身高等尺寸
     void ResolveRefs()

@@ -54,6 +54,25 @@
    → `assets/_报告/_第1章剧情运行自检.txt`。
 3. 用户真机 Play 到微信段目检（坐姿 + 切入切回 + 气泡正常）→ trellis-check → 提交。
 
+## 6. 手机视角联动（第二轮迭代，2026-10-01 用户试玩反馈）
+
+试玩发现：切到林溪视角后，手机 UI 仍按徐夏的手机渲染（徐夏的消息在右蓝泡、标题显示「林溪」）。
+需求定稿：**手机 = 当前视角角色的手机**——
+
+- `PhoneChatUI` 新增 `phoneOwner`（缺省「徐夏」）+ `SetOwner()`：`IsMine()` 按主人判（不再写死
+  `Contains("徐夏")`）；头像按【发送者身份】取（`AvatarOf`：徐夏→avatarRight 槽那张脸、其余→avatarLeft），
+  不再按左右槽位取——气泡换边时头像必须跟着人走。精灵序列化引用不变，场景零改动。
+- `StoryStep` 新增可选 `contact`：cut 步骤带 `"contact":"徐夏"` → `DoCutNow` 里 `SetOwner(who)` +
+  `SetContact(contact)`（标题换人）。切回（who 空）与 `ToDone` 兜底都把 owner 复位「徐夏」。
+- `SilentApply` 的 cut 分支同样复刻 owner/contact——续播点落在切视角区间里时，`FlushResumeChat`
+  的微信回放才按对面的手机渲染。
+- 回归面：第2章微信段、第4章班群/学姐不经过 cut → owner 恒为徐夏，行为零变化；第3章李老师
+  cut 无微信台词，联动无害。
+- ★ check 补抓的 P1（已修）：`PlayText`/`FlushResumeChat` 的「对方开口=换聊天对象」判定原来写死
+  `!s.Contains("徐夏")`——林溪视角下林溪开口会被错判成换段、标题错回「林溪」，续播路径还会清掉
+  已回放记录。已改为 `!s.Contains(phoneChat.CurrentOwner)`（新增只读属性），徐夏视角行为逐一等价；
+  `SetContact` 的「同段不重置」短路保留（第2/4章换段清流依赖它）。
+
 ## 回滚
 
 - json：git 还原 `第1章.json`；语音键：`voice_shift_steps.py` 无自动回滚——回滚 json 前先确认是否需要逆位移

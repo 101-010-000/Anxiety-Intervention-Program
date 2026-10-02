@@ -33,7 +33,9 @@ public static class Ch5DormTrioSetup
         foreach (Transform t in cont)
         {
             if (t.name != "陆宣雨_可动_坐着" && t.name != "舍友A" && t.name != "舍友B") continue;
-            log.Add("════ " + t.name);
+            // ★ 陆宣雨 2026-10-01 用户定稿：第5章全程站着，不接 SitHere（舍友A/B 照旧坐姿）
+            bool wantsSit = t.name != "陆宣雨_可动_坐着";
+            log.Add("════ " + t.name + (wantsSit ? "" : "（站着，不接坐姿）"));
 
             // ① 根 Animator（活着的那个即可）
             Animator live = t.GetComponentsInChildren<Animator>(true)
@@ -87,6 +89,13 @@ public static class Ch5DormTrioSetup
             // ③ SitHere（Start 置 Sitting=true）。
             //   ⚠ 先清 missing-script 占位：并发会话覆写场景后 SitHere 会变坏引用（GetComponent<SitHere>=null），
             //   直接 AddComponent 会在坏引用旁边再挂一个，越积越多
+            if (!wantsSit)
+            {
+                var old = t.GetComponent<SitHere>();
+                if (old != null) { Object.DestroyImmediate(old); log.Add("   - 移除 SitHere（站着）"); }
+                else log.Add("   = 无 SitHere（站着，符合定稿）");
+                continue;
+            }
             int broken = 0;
             var comps = t.GetComponents<Component>();
             for (int i = comps.Length - 1; i >= 0; i--)

@@ -29,8 +29,8 @@ public class PhoneChatUI : MonoBehaviour
     public Sprite frameSprite;      // 图层 2 机身 576×1145
     public Sprite bubbleLeft;       // 图层 5 白气泡（收到的，尾巴朝左）274×83
     public Sprite bubbleRight;      // 图层 7 蓝气泡（发出的，尾巴朝右）319×87
-    public Sprite avatarLeft;       // 图层 6 头像（林溪侧）90×88
-    public Sprite avatarRight;      // 图层 8 头像（徐夏侧）89×88
+    public Sprite avatarLeft;       // 图层 6 头像 = 林溪的脸 90×88（★按发送者身份取，不按左右槽位——见 AvatarOf）
+    public Sprite avatarRight;      // 图层 8 头像 = 徐夏的脸 89×88
     public Font chatFont;           // 中文_Deng
 
     [Header("贴纸（台词整句等于标签时转贴图，1:1 显示）")]
@@ -39,6 +39,10 @@ public class PhoneChatUI : MonoBehaviour
 
     [Header("标题（聊天对象）")]
     public string headerName = "林溪";
+
+    [Header("手机主人（=当前视角角色）")]
+    public string phoneOwner = "徐夏";     // cut 切到谁手机就是谁的：林溪视角下她的回复走右蓝泡、
+                                           // 徐夏来消息走左白泡、头像跟着人走（StoryRunner.DoCut 联动 SetOwner）
 
     // ---- 布局常量：全部是素材原生像素（根节点统一等比缩放，这里不做第二次缩放） ----
     const float FRAME_W = 576f, FRAME_H = 1145f;
@@ -65,6 +69,7 @@ public class PhoneChatUI : MonoBehaviour
 
     public bool IsShown { get { return gameObject.activeSelf; } }
     public string CurrentContact { get { return headerName; } }
+    public string CurrentOwner { get { return phoneOwner; } }   // 手机主人（视角角色）——StoryRunner 的换段判定跟它走
     /// 聊天流被清空时触发（Show 重新亮屏 / SetContact 换联系人都走 Clear）——
     /// StoryRunner 调试回退用它同步「哪一句之后不能退」（正式运行时不订阅，无开销）。
     public System.Action onCleared;
@@ -94,6 +99,28 @@ public class PhoneChatUI : MonoBehaviour
         if (headerName != name) headerName = name;
         if (_title != null) _title.text = name;
         Clear();
+    }
+
+    /// 切手机主人（=当前视角角色，StoryRunner 的 cut 联动）：缺省徐夏。
+    /// 只换"自己发的"的判定基准；标题联系人另走 SetContact（谁在跟主人聊天，谁上标题）。
+    public void SetOwner(string owner)
+    {
+        if (string.IsNullOrEmpty(owner)) owner = "徐夏";
+        if (phoneOwner == owner) return;
+        phoneOwner = owner;
+    }
+
+    // 「这条消息是主人发的吗」——按手机主人判，不写死徐夏（林溪视角下她的回复才算"自己发的"）
+    bool IsMine(string speaker)
+    {
+        return !string.IsNullOrEmpty(speaker) && speaker.Contains(phoneOwner);
+    }
+
+    // 头像按【发送者身份】取：徐夏→avatarRight（徐夏脸）、其余→avatarLeft（林溪脸），序列化引用不变。
+    // 视角切换时气泡会换边，头像必须跟着人走而不是跟着槽位走（林溪视角：收到的徐夏消息 = 徐夏脸在左）。
+    Sprite AvatarOf(string speaker)
+    {
+        return !string.IsNullOrEmpty(speaker) && speaker.Contains("徐夏") ? avatarRight : avatarLeft;
     }
 
     // -------------------------------------------------------------- 开合
@@ -199,13 +226,13 @@ public class PhoneChatUI : MonoBehaviour
         ScrollToLatest();
     }
 
-    /// 追加一条消息。speaker 带「徐夏」走右侧蓝泡，「林溪」走左侧白泡；
-    /// 台词整句等于贴纸标签（如 [比心]）时按贴纸显示。
+    /// 追加一条消息。手机主人（phoneOwner）发的走右侧蓝泡，对方走左侧白泡
+    /// （徐夏视角 = 徐夏右/林溪左；cut 切到林溪视角后反过来）；台词整句等于贴纸标签（如 [比心]）时按贴纸显示。
     public void Append(string speaker, string text)
     {
         EnsureRefs();
         if (_content == null || string.IsNullOrEmpty(text)) return;
-        bool mine = !string.IsNullOrEmpty(speaker) && speaker.Contains("徐夏");
+        bool mine = IsMine(speaker);
 
         int sticker = -1;
         string trimmed = text.Trim();
@@ -217,8 +244,9 @@ public class PhoneChatUI : MonoBehaviour
         RectTransform msg = NewRect("消息", _content);
         float y = -_content.sizeDelta.y;                 // 追加到当前流末尾
         float h;
-        if (sticker >= 0) h = LayoutSticker(msg, mine, y, stickerSprites[sticker]);
-        else h = LayoutBubble(msg, mine, y, text);
+        Sprite avatar = AvatarOf(speaker);               // 头像跟着人走：视角切换气泡换边，头像不换人
+        if (sticker >= 0) h = LayoutSticker(msg, mine, y, stickerSprites[sticker], avatar);
+        else h = LayoutBubble(msg, mine, y, text, avatar);
 
         _content.sizeDelta = new Vector2(_content.sizeDelta.x, _content.sizeDelta.y + h + MSG_GAP);
         _msgHeights.Add(h);
@@ -232,7 +260,7 @@ public class PhoneChatUI : MonoBehaviour
         }
     }
 
-    float LayoutBubble(RectTransform msg, bool mine, float y, string text)
+    float LayoutBubble(RectTransform msg, bool mine, float y, string text, Sprite avatar)
     {
         float insetL = mine ? INSET_FAR : INSET_TAIL;
         float insetR = mine ? INSET_TAIL : INSET_FAR;
@@ -277,7 +305,7 @@ public class PhoneChatUI : MonoBehaviour
         //   气泡自身的左右位置不变（mine 靠右、对方靠左），只改气泡【内部】的行对齐。
         t.alignment = TextAnchor.MiddleLeft;
 
-        Image av = NewImage("头像", msg, mine ? avatarRight : avatarLeft);
+        Image av = NewImage("头像", msg, avatar);
         var art = (RectTransform)av.transform;
         art.anchorMin = art.anchorMax = new Vector2(mine ? 1f : 0f, 1f);
         art.pivot = new Vector2(mine ? 1f : 0f, 1f);
@@ -286,7 +314,7 @@ public class PhoneChatUI : MonoBehaviour
         return bubbleH;
     }
 
-    float LayoutSticker(RectTransform msg, bool mine, float y, Sprite sticker)
+    float LayoutSticker(RectTransform msg, bool mine, float y, Sprite sticker, Sprite avatar)
     {
         float sw = sticker.rect.width, sh = sticker.rect.height;    // 1:1 原尺寸
         float w = AVATAR_W + AVATAR_GAP + sw;
@@ -300,7 +328,7 @@ public class PhoneChatUI : MonoBehaviour
         irt.anchoredPosition = new Vector2(mine ? -AVATAR_W - AVATAR_GAP : AVATAR_W + AVATAR_GAP, 0f);
         irt.sizeDelta = new Vector2(sw, sh);
 
-        Image av = NewImage("头像", msg, mine ? avatarRight : avatarLeft);
+        Image av = NewImage("头像", msg, avatar);
         var art = (RectTransform)av.transform;
         art.anchorMin = art.anchorMax = new Vector2(mine ? 1f : 0f, 1f);
         art.pivot = new Vector2(mine ? 1f : 0f, 1f);

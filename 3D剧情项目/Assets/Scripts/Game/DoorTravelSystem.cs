@@ -365,6 +365,10 @@ public class DoorTravelSystem : MonoBehaviour
 
         if (cc != null) cc.enabled = true;
 
+        // ★ 镜头摆到落点朝向背后（2026-10-01）：此前传送不摆镜头，镜头还朝上一个房间的方向，
+        //   水平限位窗跟着旧朝向重定 → 每个房间「能转的范围」死角落哪全看运气（与 StoryRunner.TeleportPlayer 对齐）
+        player.ResetCameraNow();
+
         ClosePanel();
 
         // 到了剧情要的地方 → 回调 StoryRunner（先清导流状态，回调里再关系统/继续剧情）

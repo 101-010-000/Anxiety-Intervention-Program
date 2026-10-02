@@ -1,0 +1,3282 @@
+{
+ "model": "cosyvoice-v3-flash",
+ "generated": "2026-10-01 20:30:00",
+ "entries": [
+  {
+   "key": "ch1:1",
+   "path": "ch1/ch1_s001_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "c49e22c2b67a498aebec96bdd0ea440e"
+  },
+  {
+   "key": "ch1:2",
+   "path": "ch1/ch1_s002_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "4d041ba4af3d0ee23852c6f145412538"
+  },
+  {
+   "key": "ch1:3",
+   "path": "ch1/ch1_s003_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "8aed72b49714a1ce211822c80a3377e8"
+  },
+  {
+   "key": "ch1:4",
+   "path": "ch1/ch1_s004_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "5c148e8b64489a64548d1dcc76b546d1"
+  },
+  {
+   "key": "ch1:5",
+   "path": "ch1/ch1_s005_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "19811ca95fd4e1431cba32844250e97e"
+  },
+  {
+   "key": "ch1:6",
+   "path": "ch1/ch1_s006_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "d7433464ebd64ef4cb9a0b6fe2071afd"
+  },
+  {
+   "key": "ch1:7",
+   "path": "ch1/ch1_s007_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "03eb182c61dd4bb51c7d84d006edb3d5"
+  },
+  {
+   "key": "ch1:8",
+   "path": "ch1/ch1_s008_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "fa36603fa0b6cb2777c3d1b38fb487fa"
+  },
+  {
+   "key": "ch1:10",
+   "path": "ch1/ch1_s010_组长",
+   "speaker": "组长",
+   "voice": "longze_v3",
+   "md5": "b6974b9e4d9886ea125574a897ead722"
+  },
+  {
+   "key": "ch1:11",
+   "path": "ch1/ch1_s011_组长",
+   "speaker": "组长",
+   "voice": "longze_v3",
+   "md5": "ae4d1c33e4074787e69d9f213f32d793"
+  },
+  {
+   "key": "ch1:12",
+   "path": "ch1/ch1_s012_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "6f0129716894a26c84228b68e1b41529"
+  },
+  {
+   "key": "ch1:13",
+   "path": "ch1/ch1_s013_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "d6928e2dce2ee7fdb4745d6c88aac849"
+  },
+  {
+   "key": "ch1:14",
+   "path": "ch1/ch1_s014_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "4bca176cc2c4eba407f36376e1122da6"
+  },
+  {
+   "key": "ch1:15",
+   "path": "ch1/ch1_s015_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "2afd8dfa4c3609886fcc96d88b55c88e"
+  },
+  {
+   "key": "ch1:16",
+   "path": "ch1/ch1_s016_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "e4edf098b459583b36623402268f8c79"
+  },
+  {
+   "key": "ch1:17",
+   "path": "ch1/ch1_s017_组长",
+   "speaker": "组长",
+   "voice": "longze_v3",
+   "md5": "49ae9bbc84124d5f0962693e52db2388"
+  },
+  {
+   "key": "ch1:18",
+   "path": "ch1/ch1_s018_组长",
+   "speaker": "组长",
+   "voice": "longze_v3",
+   "md5": "d224216c26bd8c2a284551593a813014"
+  },
+  {
+   "key": "ch1:19",
+   "path": "ch1/ch1_s019_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "07f7786151f4b23f63dab4ed5d1b3289"
+  },
+  {
+   "key": "ch1:20",
+   "path": "ch1/ch1_s020_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "928ba0cf150e79ae618e06fb2b9e19c5"
+  },
+  {
+   "key": "ch1:21",
+   "path": "ch1/ch1_s021_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "c62d4cc34267da54d735a4d161cf6f4c"
+  },
+  {
+   "key": "ch1:22",
+   "path": "ch1/ch1_s022_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "ed9ffb136ce2953d0ca898cd9be25d43"
+  },
+  {
+   "key": "ch1:23",
+   "path": "ch1/ch1_s023_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "6a385597df328bb05e98b572d81df9fa"
+  },
+  {
+   "key": "ch1:24",
+   "path": "ch1/ch1_s024_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "670cb27f0e3ff3ce501381ef136f04fa"
+  },
+  {
+   "key": "ch1:25",
+   "path": "ch1/ch1_s025_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "ad5b72122541c409df561cbccd0ade05"
+  },
+  {
+   "key": "ch1:26",
+   "path": "ch1/ch1_s026_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "eba8d39f6dd48b53bcb2591783c56bab"
+  },
+  {
+   "key": "ch1:27",
+   "path": "ch1/ch1_s027_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "6e50d2598c1b6e18447718ca112048c0"
+  },
+  {
+   "key": "ch1:28",
+   "path": "ch1/ch1_s028_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "d7a8568d2b1c8ec9d103bef7f9499ee1"
+  },
+  {
+   "key": "ch1:29",
+   "path": "ch1/ch1_s029_组长",
+   "speaker": "组长",
+   "voice": "longze_v3",
+   "md5": "168c6c18efd3541e8500f5144078eb3d"
+  },
+  {
+   "key": "ch1:30",
+   "path": "ch1/ch1_s030_组长",
+   "speaker": "组长",
+   "voice": "longze_v3",
+   "md5": "efff4faceefca822e09f6866ad898e9c"
+  },
+  {
+   "key": "ch1:31",
+   "path": "ch1/ch1_s031_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "89ed7f2a1b118b0606726367f6291987"
+  },
+  {
+   "key": "ch1:32",
+   "path": "ch1/ch1_s032_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "54fe3f0cd75db15b43260ee510b3aec6"
+  },
+  {
+   "key": "ch1:33",
+   "path": "ch1/ch1_s033_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "0328d40998ef34ab6295e6274432bf7e"
+  },
+  {
+   "key": "ch1:34",
+   "path": "ch1/ch1_s034_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "01ac4eb6866c26edad83c540c795dea9"
+  },
+  {
+   "key": "ch1:35",
+   "path": "ch1/ch1_s035_组长",
+   "speaker": "组长",
+   "voice": "longze_v3",
+   "md5": "751076cf5188ab29aff7aa9b99d43f05"
+  },
+  {
+   "key": "ch1:36",
+   "path": "ch1/ch1_s036_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "8245597f7471f795f12a55c66af47d81"
+  },
+  {
+   "key": "ch1:37",
+   "path": "ch1/ch1_s037_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "816d6021e3113cade428840ab8e6c189"
+  },
+  {
+   "key": "ch1:38",
+   "path": "ch1/ch1_s038_组长",
+   "speaker": "组长",
+   "voice": "longze_v3",
+   "md5": "28ce3324d3e8a2007ad29276d067724b"
+  },
+  {
+   "key": "ch1:39",
+   "path": "ch1/ch1_s039_组长",
+   "speaker": "组长",
+   "voice": "longze_v3",
+   "md5": "ae049b23de657108993d97b4e9281d53"
+  },
+  {
+   "key": "ch1:40",
+   "path": "ch1/ch1_s040_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "653b4a0ff0e6fdeebeac334b39faa637"
+  },
+  {
+   "key": "ch1:41",
+   "path": "ch1/ch1_s041_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "d102ca0355e5a08ef2f97571f73c1db2"
+  },
+  {
+   "key": "ch1:42",
+   "path": "ch1/ch1_s042_组长",
+   "speaker": "组长",
+   "voice": "longze_v3",
+   "md5": "fb57771fadf95efaeba0cb6d87e62f8c"
+  },
+  {
+   "key": "ch1:43",
+   "path": "ch1/ch1_s043_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "54fe0f93db4756bc6eb14e17907d6dce"
+  },
+  {
+   "key": "ch1:44",
+   "path": "ch1/ch1_s044_组长",
+   "speaker": "组长",
+   "voice": "longze_v3",
+   "md5": "b654bc3b301c42137c0f6cc576ab6835"
+  },
+  {
+   "key": "ch1:45",
+   "path": "ch1/ch1_s045_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "87bf7dc48ef359d9d2a082ea0d491132"
+  },
+  {
+   "key": "ch1:46",
+   "path": "ch1/ch1_s046_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "caacf543bac44b764110332e35ad8905"
+  },
+  {
+   "key": "ch1:47",
+   "path": "ch1/ch1_s047_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "9a31c6eb5ee59585c2c52895e18ee1d5"
+  },
+  {
+   "key": "ch1:48",
+   "path": "ch1/ch1_s048_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "a4bd59ecee8b02d234063e91559ec62a"
+  },
+  {
+   "key": "ch1:49",
+   "path": "ch1/ch1_s049_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "19ab65df7a9ef08918fafb12330e35eb"
+  },
+  {
+   "key": "ch1:50",
+   "path": "ch1/ch1_s050_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "a8a222684c9e99c70ec119e2629a9046"
+  },
+  {
+   "key": "ch1:51",
+   "path": "ch1/ch1_s051_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "eb6ce689a04d4c8951c12f5b7a82d0cf"
+  },
+  {
+   "key": "ch1:52",
+   "path": "ch1/ch1_s052_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "2e20b584c456b98e63df1582f2dedf73"
+  },
+  {
+   "key": "md5:9079ce8a9f755c713406627432d8769b",
+   "path": "ch1/ch1_c053_o0_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "9079ce8a9f755c713406627432d8769b"
+  },
+  {
+   "key": "md5:68fa009758ca73ae4055f1bd73f8e511",
+   "path": "ch1/ch1_c053_o1_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "68fa009758ca73ae4055f1bd73f8e511"
+  },
+  {
+   "key": "ch1:54",
+   "path": "ch1/ch1_s054_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "e9b8bca1e28362ba68b48d7a448ea1ef"
+  },
+  {
+   "key": "ch1:56",
+   "path": "ch1/ch1_s056_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "06919e1c2b90a81a955ae033bf192333"
+  },
+  {
+   "key": "ch1:57",
+   "path": "ch1/ch1_s057_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "762d10ccbff3ce52d86283969c2a5624"
+  },
+  {
+   "key": "ch1:58",
+   "path": "ch1/ch1_s058_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "f56ae5b27a00d2f204666e3aca450726"
+  },
+  {
+   "key": "ch1:59",
+   "path": "ch1/ch1_s059_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "42c28ba4f586bb0bc88b078966df76cb"
+  },
+  {
+   "key": "ch1:60",
+   "path": "ch1/ch1_s060_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "d4081a4d76b7e629fab79e2d83d2a435"
+  },
+  {
+   "key": "ch1:61",
+   "path": "ch1/ch1_s061_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "f06a425d057c19a91117de7cebb33dc1"
+  },
+  {
+   "key": "ch1:62",
+   "path": "ch1/ch1_s062_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "0d6ae6582eb28d390076aa787ed04922"
+  },
+  {
+   "key": "ch1:63",
+   "path": "ch1/ch1_s063_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "adb06a5e9a3255aa9476166b030639d6"
+  },
+  {
+   "key": "ch1:64",
+   "path": "ch1/ch1_s064_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "1b4f742b36bd806643faa96a65fa321a"
+  },
+  {
+   "key": "ch1:65",
+   "path": "ch1/ch1_s065_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "eabc1ad2a6e6f3a351409c1ce2c59c63"
+  },
+  {
+   "key": "ch1:66",
+   "path": "ch1/ch1_s066_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "a904055e4285f77c1274182e1bf5d5ad"
+  },
+  {
+   "key": "ch1:67",
+   "path": "ch1/ch1_s067_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "cfd9825b8c583af643d710acbe12fd7c"
+  },
+  {
+   "key": "ch1:68",
+   "path": "ch1/ch1_s068_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "2b377b3f407b17cfd6380474eefff651"
+  },
+  {
+   "key": "ch1:69",
+   "path": "ch1/ch1_s069_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "f684b375d9b7b7e4fd2eabfa5978e335"
+  },
+  {
+   "key": "ch1:70",
+   "path": "ch1/ch1_s070_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "d6730efcd62952ebc73b92dfcbe3410f"
+  },
+  {
+   "key": "ch1:71",
+   "path": "ch1/ch1_s071_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "b01fc0efeece3c8c1da0230ad4276b50"
+  },
+  {
+   "key": "ch1:72",
+   "path": "ch1/ch1_s072_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "b77e8082829ce8688ef17eb1d45f2617"
+  },
+  {
+   "key": "ch1:73",
+   "path": "ch1/ch1_s073_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "6379a59ac3a4e4e1d50a2cf5acb61d9e"
+  },
+  {
+   "key": "ch1:74",
+   "path": "ch1/ch1_s074_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "1b86b2ba053956bcb471e46a85aa8202"
+  },
+  {
+   "key": "ch1:75",
+   "path": "ch1/ch1_s075_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "6ca6bcfbba900fc161372d993bd2f3de"
+  },
+  {
+   "key": "ch1:76",
+   "path": "ch1/ch1_s076_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "3886155a3eabdba1eb0b5217742ef172"
+  },
+  {
+   "key": "ch1:77",
+   "path": "ch1/ch1_s077_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "141076bf0e9f63359f4396754acbbbdb"
+  },
+  {
+   "key": "ch1:79",
+   "path": "ch1/ch1_s079_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "7c2e6873904a444de48e662401f2d790"
+  },
+  {
+   "key": "ch1:80",
+   "path": "ch1/ch1_s080_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "be8d21b74ac27bedc61b027b2b27b059"
+  },
+  {
+   "key": "md5:6a6027864cf535956abb6d50793bec36",
+   "path": "ch1/ch1_c081_o0_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "6a6027864cf535956abb6d50793bec36"
+  },
+  {
+   "key": "md5:012a05a00cac701d84426d25c3431c91",
+   "path": "ch1/ch1_c081_o1_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "012a05a00cac701d84426d25c3431c91"
+  },
+  {
+   "key": "md5:a43f8dd18fa4061b3a62f925a775fb77",
+   "path": "ch1/ch1_c081_o2_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "a43f8dd18fa4061b3a62f925a775fb77"
+  },
+  {
+   "key": "ch1:83",
+   "path": "ch1/ch1_s083_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "2884e3c8b19033667fca72de73758384"
+  },
+  {
+   "key": "ch1:84",
+   "path": "ch1/ch1_s084_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "fc8621ed783e60f8823cbb88532e52c8"
+  },
+  {
+   "key": "ch1:85",
+   "path": "ch1/ch1_s085_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "b9e34d856835eaa9121024d8f98b93b3"
+  },
+  {
+   "key": "ch1:87",
+   "path": "ch1/ch1_s087_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "a05c22fda004fbbb975dcb4a4f8f16ad"
+  },
+  {
+   "key": "ch1:88",
+   "path": "ch1/ch1_s088_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "6707c9a6c25ee2238e8293edbb786c20"
+  },
+  {
+   "key": "ch1:89",
+   "path": "ch1/ch1_s089_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "eb9899c5c615aea4b0121ffa466ace4d"
+  },
+  {
+   "key": "ch1:90",
+   "path": "ch1/ch1_s090_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "a82587abf5c500b357fcf98b6b36cff9"
+  },
+  {
+   "key": "ch1:91",
+   "path": "ch1/ch1_s091_张同学",
+   "speaker": "张同学",
+   "voice": "longyingxun_v3",
+   "md5": "a1c63fa0eb34c98badcb2a4c1f050d7e"
+  },
+  {
+   "key": "ch1:92",
+   "path": "ch1/ch1_s092_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "19bbeb2a299ba96a136aa8e89b692c88"
+  },
+  {
+   "key": "ch1:93",
+   "path": "ch1/ch1_s093_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "2b95406aaa5155194b333e71681fa9c0"
+  },
+  {
+   "key": "ch1:94",
+   "path": "ch1/ch1_s094_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "a003b5978ff31e32926ede8e66fe8cb4"
+  },
+  {
+   "key": "ch1:95",
+   "path": "ch1/ch1_s095_张同学",
+   "speaker": "张同学",
+   "voice": "longyingxun_v3",
+   "md5": "dbd5cf38cfeb2f66889833d9e16b41ff"
+  },
+  {
+   "key": "ch1:96",
+   "path": "ch1/ch1_s096_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "577d0bf92c1e4427cfe81b7bef1175e3"
+  },
+  {
+   "key": "ch1:97",
+   "path": "ch1/ch1_s097_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "2e742a64fe0bae0fac8ceb0cdba7f41f"
+  },
+  {
+   "key": "ch1:98",
+   "path": "ch1/ch1_s098_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "049249b780eb4a772be6dc5b5b570b7a"
+  },
+  {
+   "key": "ch1:99",
+   "path": "ch1/ch1_s099_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "c4acff033eb4cb49b9656147b8ecbc3f"
+  },
+  {
+   "key": "ch1:100",
+   "path": "ch1/ch1_s100_张同学",
+   "speaker": "张同学",
+   "voice": "longyingxun_v3",
+   "md5": "ad131f0bc0679ca3d722efc990ab1a82"
+  },
+  {
+   "key": "ch1:101",
+   "path": "ch1/ch1_s101_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "06b2788f2a4d4859b214f41082a46e54"
+  },
+  {
+   "key": "ch1:102",
+   "path": "ch1/ch1_s102_张同学",
+   "speaker": "张同学",
+   "voice": "longyingxun_v3",
+   "md5": "a0706bc087d90c7213a9b5d09f58d019"
+  },
+  {
+   "key": "ch1:103",
+   "path": "ch1/ch1_s103_张同学",
+   "speaker": "张同学",
+   "voice": "longyingxun_v3",
+   "md5": "df66bb7f535f3d56cd49743513dcf567"
+  },
+  {
+   "key": "ch1:104",
+   "path": "ch1/ch1_s104_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "925ded8a4b211bf00f9101d5b4bf6e1e"
+  },
+  {
+   "key": "ch1:105",
+   "path": "ch1/ch1_s105_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "faa4390ae7242e51c2d10557b2761923"
+  },
+  {
+   "key": "ch1:106",
+   "path": "ch1/ch1_s106_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "46019a96a576e316169d675611821aa0"
+  },
+  {
+   "key": "ch1:107",
+   "path": "ch1/ch1_s107_张同学",
+   "speaker": "张同学",
+   "voice": "longyingxun_v3",
+   "md5": "e9b24b806ef88f19aa4b78d5e187f14a"
+  },
+  {
+   "key": "ch1:108",
+   "path": "ch1/ch1_s108_张同学",
+   "speaker": "张同学",
+   "voice": "longyingxun_v3",
+   "md5": "2dac8ac969174310fd497699ff8ba6e1"
+  },
+  {
+   "key": "md5:14fad2248a82ce6d4765a7c06cc578dc",
+   "path": "ch1/ch1_c109_o0_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "14fad2248a82ce6d4765a7c06cc578dc"
+  },
+  {
+   "key": "md5:5632e8a651534b2e5a75cde2ccd36796",
+   "path": "ch1/ch1_c109_o1_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "5632e8a651534b2e5a75cde2ccd36796"
+  },
+  {
+   "key": "ch1:110",
+   "path": "ch1/ch1_s110_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "8005de862f406951d2a5138a67008eed"
+  },
+  {
+   "key": "ch1:111",
+   "path": "ch1/ch1_s111_张同学",
+   "speaker": "张同学",
+   "voice": "longyingxun_v3",
+   "md5": "a0a35b15bc2c9a2c88424f177684952b"
+  },
+  {
+   "key": "ch1:112",
+   "path": "ch1/ch1_s112_张同学",
+   "speaker": "张同学",
+   "voice": "longyingxun_v3",
+   "md5": "ef0e6b48bf8c790ad54de1d0eb8c4719"
+  },
+  {
+   "key": "ch1:113",
+   "path": "ch1/ch1_s113_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "6093d74cafd353ef12a0edcc62c03dde"
+  },
+  {
+   "key": "ch1:114",
+   "path": "ch1/ch1_s114_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "7993c5d9dd88ae4b090c02bcc8153542"
+  },
+  {
+   "key": "ch1:115",
+   "path": "ch1/ch1_s115_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "5ba13120d8ab41e0d5fed8598c187d41"
+  },
+  {
+   "key": "ch1:116",
+   "path": "ch1/ch1_s116_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "5fdee3f08a6a2e36164488c9cccd4693"
+  },
+  {
+   "key": "ch1:117",
+   "path": "ch1/ch1_s117_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "45cae94ccd5b1e709e69c9a4edfeae89"
+  },
+  {
+   "key": "md5:48be21d84210598edce0a8af238f0b8d",
+   "path": "ch1/ch1_c118_o0_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "48be21d84210598edce0a8af238f0b8d"
+  },
+  {
+   "key": "md5:a41521f4275900ef5182bd5c2518c16d",
+   "path": "ch1/ch1_c118_o1_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "a41521f4275900ef5182bd5c2518c16d"
+  },
+  {
+   "key": "ch1:119",
+   "path": "ch1/ch1_s119_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "f48636586808b68f8ea5da0cbc26fe5a"
+  },
+  {
+   "key": "ch1:120",
+   "path": "ch1/ch1_s120_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "16ad1261cbb6019f331c2e73070064d2"
+  },
+  {
+   "key": "ch1:121",
+   "path": "ch1/ch1_s121_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "4614ce43e4068733b6c38db3cd6c05a0"
+  },
+  {
+   "key": "ch2:1",
+   "path": "ch2/ch2_s001_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "149382c2dfe05a01796b4b3039daf7ab"
+  },
+  {
+   "key": "ch2:2",
+   "path": "ch2/ch2_s002_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "b74d0aebae8ad70cf8eefa7dd0ad28a4"
+  },
+  {
+   "key": "ch2:3",
+   "path": "ch2/ch2_s003_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "5feb161384bd17f07a448042bfadf5c8"
+  },
+  {
+   "key": "ch2:4",
+   "path": "ch2/ch2_s004_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "71ed0f59465375d30afb5d418b3ccfea"
+  },
+  {
+   "key": "ch2:5",
+   "path": "ch2/ch2_s005_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "aec0b90480bd8fa31b4e9ba063a0d60f"
+  },
+  {
+   "key": "ch2:7",
+   "path": "ch2/ch2_s007_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "01ebfa8937bc53707bc1182bf4ccade7"
+  },
+  {
+   "key": "ch2:8",
+   "path": "ch2/ch2_s008_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "2a248b8cd97a0f6aafe06d52b4a36271"
+  },
+  {
+   "key": "ch2:9",
+   "path": "ch2/ch2_s009_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "b6bf640180b75446553acbf7707adcaa"
+  },
+  {
+   "key": "ch2:10",
+   "path": "ch2/ch2_s010_李同学",
+   "speaker": "李同学",
+   "voice": "longxiaochun_v3",
+   "md5": "6c71718201f0d4a6d15a05ece5850e53"
+  },
+  {
+   "key": "ch2:11",
+   "path": "ch2/ch2_s011_李同学",
+   "speaker": "李同学",
+   "voice": "longxiaochun_v3",
+   "md5": "992235e7477aa397d5a0192c9b64c490"
+  },
+  {
+   "key": "ch2:12",
+   "path": "ch2/ch2_s012_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "bd0e8771fff385707f23ef984de85983"
+  },
+  {
+   "key": "ch2:13",
+   "path": "ch2/ch2_s013_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "5b6dd21101b87b3a7e0d6e9bfffffe46"
+  },
+  {
+   "key": "ch2:14",
+   "path": "ch2/ch2_s014_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "b407f273672df07bb9272e8e396d7994"
+  },
+  {
+   "key": "ch2:15",
+   "path": "ch2/ch2_s015_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "5c458f1b4397799142285104f607e55e"
+  },
+  {
+   "key": "ch2:16",
+   "path": "ch2/ch2_s016_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "ca547a7fea5da1862a70b7eb8315fb9d"
+  },
+  {
+   "key": "ch2:17",
+   "path": "ch2/ch2_s017_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "f3f8168ba44f3e3d4233824cb871a69d"
+  },
+  {
+   "key": "ch2:18",
+   "path": "ch2/ch2_s018_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "114122f65a04bcd5814ea85fa1c89e48"
+  },
+  {
+   "key": "ch2:19",
+   "path": "ch2/ch2_s019_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "aac985f95bb68b907a9cf2a8bf8f1188"
+  },
+  {
+   "key": "ch2:20",
+   "path": "ch2/ch2_s020_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "e6ce34081488d406786a2fcd5a273073"
+  },
+  {
+   "key": "ch2:21",
+   "path": "ch2/ch2_s021_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "ba407bebc893faf422867cf5499872a9"
+  },
+  {
+   "key": "ch2:22",
+   "path": "ch2/ch2_s022_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "a76dc1fe36d1b211ae50f0edfdabb855"
+  },
+  {
+   "key": "ch2:23",
+   "path": "ch2/ch2_s023_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "2e853dab0acd31700bc6ecd2ddbf7577"
+  },
+  {
+   "key": "ch2:24",
+   "path": "ch2/ch2_s024_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "d07ac8599fb2597ac9efb42f9af863db"
+  },
+  {
+   "key": "ch2:26",
+   "path": "ch2/ch2_s026_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "a21207d58e9b045d7e2d11e86163c60a"
+  },
+  {
+   "key": "md5:8b6f198ff6271183b4186dc0a1aa5c24",
+   "path": "ch2/ch2_c027_o0_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "8b6f198ff6271183b4186dc0a1aa5c24"
+  },
+  {
+   "key": "md5:acb693e366b9bcff15ee0654524045ab",
+   "path": "ch2/ch2_c027_o1_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "acb693e366b9bcff15ee0654524045ab"
+  },
+  {
+   "key": "ch2:28",
+   "path": "ch2/ch2_s028_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "d5aa4d46ef33664fd7dfde3f85508fa2"
+  },
+  {
+   "key": "ch2:29",
+   "path": "ch2/ch2_s029_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "4b6b04f538db02fd97ea0ff736bc450b"
+  },
+  {
+   "key": "ch2:30",
+   "path": "ch2/ch2_s030_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "74971fac930a9852f8e3efc9157a1a5d"
+  },
+  {
+   "key": "ch2:31",
+   "path": "ch2/ch2_s031_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "34e8fd7b7097e9bbce636c0ac62fd1d0"
+  },
+  {
+   "key": "ch2:32",
+   "path": "ch2/ch2_s032_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "06723e7659c94d62fe8664abaac76a2b"
+  },
+  {
+   "key": "ch2:33",
+   "path": "ch2/ch2_s033_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "ebef217f8ee0de542f00f5e3471c657e"
+  },
+  {
+   "key": "ch2:34",
+   "path": "ch2/ch2_s034_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "ce7e84f06a09e4576c9a6dc090b87d1a"
+  },
+  {
+   "key": "ch2:35",
+   "path": "ch2/ch2_s035_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "9105223a1c3a8883dd2ba48bfda854df"
+  },
+  {
+   "key": "ch2:36",
+   "path": "ch2/ch2_s036_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "154cf232b0f6e2ae5f1994093c059d1f"
+  },
+  {
+   "key": "ch2:37",
+   "path": "ch2/ch2_s037_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "9babaa3221bdc3655981cb2445764ca3"
+  },
+  {
+   "key": "ch2:38",
+   "path": "ch2/ch2_s038_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "35982817bc4787f4360ad3a418301928"
+  },
+  {
+   "key": "ch2:39",
+   "path": "ch2/ch2_s039_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "c67a292f28305620349c5ae8c13f8cb0"
+  },
+  {
+   "key": "ch2:40",
+   "path": "ch2/ch2_s040_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "d34bd0c7458bf9acf58239b8e0234a78"
+  },
+  {
+   "key": "ch2:41",
+   "path": "ch2/ch2_s041_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "e46a278ec45c1d9f7729979db06def4e"
+  },
+  {
+   "key": "md5:d76b4e7965c71d9b4439579cf9a7a8f6",
+   "path": "ch2/ch2_c042_o0_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "d76b4e7965c71d9b4439579cf9a7a8f6"
+  },
+  {
+   "key": "md5:7ce9073f0447819c674c76dc170366de",
+   "path": "ch2/ch2_c042_o1_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "7ce9073f0447819c674c76dc170366de"
+  },
+  {
+   "key": "md5:447b9acf8c7999c3dab1a8898191c7c8",
+   "path": "ch2/ch2_c042_o2_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "447b9acf8c7999c3dab1a8898191c7c8"
+  },
+  {
+   "key": "ch2:44",
+   "path": "ch2/ch2_s044_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "d84faf5e3e47b2a15aed31420582311f"
+  },
+  {
+   "key": "ch2:45",
+   "path": "ch2/ch2_s045_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "601813ad5c919fbcd4a4341af9373ba5"
+  },
+  {
+   "key": "ch2:47",
+   "path": "ch2/ch2_s047_陆宣雨",
+   "speaker": "陆宣雨",
+   "voice": "longanli_v3",
+   "md5": "4e961dbb3d7600454c480afbaa9549fb"
+  },
+  {
+   "key": "ch2:48",
+   "path": "ch2/ch2_s048_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "002cb24c635233ae0033a56dfe734522"
+  },
+  {
+   "key": "ch2:49",
+   "path": "ch2/ch2_s049_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "ec8ddc439916047f39babc7989668802"
+  },
+  {
+   "key": "ch2:50",
+   "path": "ch2/ch2_s050_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "cc20b26dc2601e787a704c2d00bf79c6"
+  },
+  {
+   "key": "ch2:51",
+   "path": "ch2/ch2_s051_陆宣雨",
+   "speaker": "陆宣雨",
+   "voice": "longanli_v3",
+   "md5": "a96f37142b7c3082d25aae0975fb25bd"
+  },
+  {
+   "key": "ch2:52",
+   "path": "ch2/ch2_s052_陆宣雨",
+   "speaker": "陆宣雨",
+   "voice": "longanli_v3",
+   "md5": "535b048ce135cfc72f74adde2aacf65a"
+  },
+  {
+   "key": "ch2:53",
+   "path": "ch2/ch2_s053_陆宣雨",
+   "speaker": "陆宣雨",
+   "voice": "longanli_v3",
+   "md5": "9b967054540fe0b2b1aeba5e3d4cce07"
+  },
+  {
+   "key": "ch2:54",
+   "path": "ch2/ch2_s054_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "3adc6e7c463b3899044f01eb66f26d7d"
+  },
+  {
+   "key": "ch2:55",
+   "path": "ch2/ch2_s055_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "786ce4528407300545412e0f7e18c6a8"
+  },
+  {
+   "key": "ch2:56",
+   "path": "ch2/ch2_s056_陆宣雨",
+   "speaker": "陆宣雨",
+   "voice": "longanli_v3",
+   "md5": "433b80693b3c7a7dbab2d4aaff1f9511"
+  },
+  {
+   "key": "ch2:57",
+   "path": "ch2/ch2_s057_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "76cfa75624f5994bda36c9991a2e545d"
+  },
+  {
+   "key": "md5:dee60579cf3657fb4df5861e1c816353",
+   "path": "ch2/ch2_c059_o0_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "dee60579cf3657fb4df5861e1c816353"
+  },
+  {
+   "key": "md5:a3c51295ee44c5452037635008212810",
+   "path": "ch2/ch2_c059_o1_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "a3c51295ee44c5452037635008212810"
+  },
+  {
+   "key": "ch2:60",
+   "path": "ch2/ch2_s060_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "accc32dbbcb50b6cab9ca24cbacc799d"
+  },
+  {
+   "key": "ch2:61",
+   "path": "ch2/ch2_s061_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "5d85b7c116a457521d4e36f2d5161444"
+  },
+  {
+   "key": "ch2:62",
+   "path": "ch2/ch2_s062_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "87c3cda73d0bd230fd6b143c46ea984b"
+  },
+  {
+   "key": "md5:31d2621496b328a19b8239d7e20b2ea2",
+   "path": "ch2/ch2_c063_o0_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "31d2621496b328a19b8239d7e20b2ea2"
+  },
+  {
+   "key": "md5:f92c6acce0567b0922e42549198e60ae",
+   "path": "ch2/ch2_c063_o1_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "f92c6acce0567b0922e42549198e60ae"
+  },
+  {
+   "key": "ch2:64",
+   "path": "ch2/ch2_s064_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "a9e85f288bd9ad0c79ed584e24359164"
+  },
+  {
+   "key": "ch2:65",
+   "path": "ch2/ch2_s065_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "261b2ee633ac5a6755e4b995ab028b21"
+  },
+  {
+   "key": "ch2:67",
+   "path": "ch2/ch2_s067_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "68794ced1039d6d595c53a8f90c62ea0"
+  },
+  {
+   "key": "ch2:68",
+   "path": "ch2/ch2_s068_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "54f6eaf1334323227222285ad351d427"
+  },
+  {
+   "key": "ch2:69",
+   "path": "ch2/ch2_s069_李同学",
+   "speaker": "李同学",
+   "voice": "longxiaochun_v3",
+   "md5": "afea775be95346e6f9dddfd2ff18ec1e"
+  },
+  {
+   "key": "ch2:70",
+   "path": "ch2/ch2_s070_李同学",
+   "speaker": "李同学",
+   "voice": "longxiaochun_v3",
+   "md5": "71ad0e6a344811a2e67ff043a3e7e164"
+  },
+  {
+   "key": "ch2:71",
+   "path": "ch2/ch2_s071_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "5f814795b731c118851d30e7810ba647"
+  },
+  {
+   "key": "ch2:72",
+   "path": "ch2/ch2_s072_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "5dde05332fd6ea584f3e843c5b74b786"
+  },
+  {
+   "key": "ch2:73",
+   "path": "ch2/ch2_s073_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "edc2787b5d40249616deaf59380ee3aa"
+  },
+  {
+   "key": "ch2:74",
+   "path": "ch2/ch2_s074_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "d034d5e80fce0352853856b3b1ecefe0"
+  },
+  {
+   "key": "ch2:75",
+   "path": "ch2/ch2_s075_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "a1578779bea78195ac1e6b1902090391"
+  },
+  {
+   "key": "ch2:76",
+   "path": "ch2/ch2_s076_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "e2a1073d365a5185bbbfa9bbf073ec8c"
+  },
+  {
+   "key": "ch2:77",
+   "path": "ch2/ch2_s077_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "dc19c46edbf677be5317bc9d3f06393d"
+  },
+  {
+   "key": "ch2:78",
+   "path": "ch2/ch2_s078_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "0f5b4f137936b83e900410e77783bb79"
+  },
+  {
+   "key": "ch3:1",
+   "path": "ch3/ch3_s001_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "48f6031376d6ced00f334d30e0455aaf"
+  },
+  {
+   "key": "ch3:2",
+   "path": "ch3/ch3_s002_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "d4b202b7d11062127d2128a5f24d85af"
+  },
+  {
+   "key": "ch3:3",
+   "path": "ch3/ch3_s003_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "f221251347e62af07797b22ca415779e"
+  },
+  {
+   "key": "ch3:4",
+   "path": "ch3/ch3_s004_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "cfe25c98d0fd7884be463947c60fcb47"
+  },
+  {
+   "key": "ch3:5",
+   "path": "ch3/ch3_s005_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "ac2c8f13c6e60810197b19d683f5f184"
+  },
+  {
+   "key": "ch3:6",
+   "path": "ch3/ch3_s006_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "99e19417078f200121ddf29ee8c9a411"
+  },
+  {
+   "key": "ch3:8",
+   "path": "ch3/ch3_s008_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "8c5cae4dfa34687e28c86aa63e644bca"
+  },
+  {
+   "key": "ch3:9",
+   "path": "ch3/ch3_s009_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "8b6763411e0bad639704519605e2aa28"
+  },
+  {
+   "key": "ch3:11",
+   "path": "ch3/ch3_s011_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "21f634cd92c44dad592bb1a2b3cb1a7f"
+  },
+  {
+   "key": "ch3:12",
+   "path": "ch3/ch3_s012_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "e6a72ff44183ae9eb5b5070a9f2ccd97"
+  },
+  {
+   "key": "ch3:13",
+   "path": "ch3/ch3_s013_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "dfda331caeb36139d2940fb4f0c536b7"
+  },
+  {
+   "key": "ch3:14",
+   "path": "ch3/ch3_s014_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "9037f3bb8eccde397bb5a4bc61d91280"
+  },
+  {
+   "key": "ch3:15",
+   "path": "ch3/ch3_s015_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "523bb7ba8a1f084c56ff2aa4fd92610a"
+  },
+  {
+   "key": "ch3:16",
+   "path": "ch3/ch3_s016_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "af9214bec6a9113ed57b2b3bb49942db"
+  },
+  {
+   "key": "ch3:17",
+   "path": "ch3/ch3_s017_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "8f0359033e19de451873999601035472"
+  },
+  {
+   "key": "ch3:18",
+   "path": "ch3/ch3_s018_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "23f5354ea3132aba8c04f9adc32a8717"
+  },
+  {
+   "key": "ch3:19",
+   "path": "ch3/ch3_s019_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "da8fda270e10739912b0cc434a7d51ba"
+  },
+  {
+   "key": "ch3:20",
+   "path": "ch3/ch3_s020_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "66cb05b5f76965f4c805d4e15720e85d"
+  },
+  {
+   "key": "ch3:21",
+   "path": "ch3/ch3_s021_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "7f43b19dd5b58283ce4b5e9be0e546f1"
+  },
+  {
+   "key": "ch3:22",
+   "path": "ch3/ch3_s022_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "8da7bf664c13c9e48b0ec58cdd3c7b7d"
+  },
+  {
+   "key": "ch3:24",
+   "path": "ch3/ch3_s024_王含",
+   "speaker": "王含",
+   "voice": "longanrou_v3",
+   "md5": "656984e958b36662e85d4db1df1062c5"
+  },
+  {
+   "key": "ch3:25",
+   "path": "ch3/ch3_s025_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "609023c7b09b9859ed21cbed753a9e33"
+  },
+  {
+   "key": "ch3:26",
+   "path": "ch3/ch3_s026_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "dab8bcf69b8e05e400f7bebef52f8b0f"
+  },
+  {
+   "key": "ch3:27",
+   "path": "ch3/ch3_s027_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "1106f9d8e0f725c6951c65fa8a82e162"
+  },
+  {
+   "key": "ch3:28",
+   "path": "ch3/ch3_s028_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "d4b97b41182af22c15b70cda3220a626"
+  },
+  {
+   "key": "ch3:29",
+   "path": "ch3/ch3_s029_王含",
+   "speaker": "王含",
+   "voice": "longanrou_v3",
+   "md5": "19978829d7bfc154a236b355a1f08b30"
+  },
+  {
+   "key": "ch3:30",
+   "path": "ch3/ch3_s030_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "24173706a8760cee50f506d0c28ad3f0"
+  },
+  {
+   "key": "ch3:31",
+   "path": "ch3/ch3_s031_王含",
+   "speaker": "王含",
+   "voice": "longanrou_v3",
+   "md5": "af60eb7f0ec5db49241e25b5edc02dc4"
+  },
+  {
+   "key": "ch3:32",
+   "path": "ch3/ch3_s032_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "a455104530e71e0454f56254da86e27a"
+  },
+  {
+   "key": "ch3:33",
+   "path": "ch3/ch3_s033_王含",
+   "speaker": "王含",
+   "voice": "longanrou_v3",
+   "md5": "4dcbf171fe6b97b585ce7cb2da935b1c"
+  },
+  {
+   "key": "ch3:34",
+   "path": "ch3/ch3_s034_王含",
+   "speaker": "王含",
+   "voice": "longanrou_v3",
+   "md5": "03d794d4616d60a4cbde3cf0ef68fff0"
+  },
+  {
+   "key": "ch3:35",
+   "path": "ch3/ch3_s035_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "c8e71a1d0d97c01fc8c71d62cf7f97f4"
+  },
+  {
+   "key": "ch3:36",
+   "path": "ch3/ch3_s036_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "8be6c69516cb0a39fafbbefa344a1a90"
+  },
+  {
+   "key": "ch3:37",
+   "path": "ch3/ch3_s037_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "d79490047b0fb185388f800574f9d60f"
+  },
+  {
+   "key": "ch3:38",
+   "path": "ch3/ch3_s038_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "f8c318d73674b277718529c26c5dadaf"
+  },
+  {
+   "key": "ch3:39",
+   "path": "ch3/ch3_s039_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "0ebc2ba639a946bf94fdfc5c4cb29f2b"
+  },
+  {
+   "key": "ch3:40",
+   "path": "ch3/ch3_s040_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "232ce27582c7ec18a2462c69937f167c"
+  },
+  {
+   "key": "ch3:41",
+   "path": "ch3/ch3_s041_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "e5f90df7002893687a2046044e6f6e4b"
+  },
+  {
+   "key": "ch3:42",
+   "path": "ch3/ch3_s042_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "50e5a4f217d17fa47c9ef2222e431619"
+  },
+  {
+   "key": "ch3:43",
+   "path": "ch3/ch3_s043_王含",
+   "speaker": "王含",
+   "voice": "longanrou_v3",
+   "md5": "631e92cfba5a74d000b5373e2180fe52"
+  },
+  {
+   "key": "ch3:44",
+   "path": "ch3/ch3_s044_王含",
+   "speaker": "王含",
+   "voice": "longanrou_v3",
+   "md5": "3542afa9fce37bf6522d9bb4cbf04f37"
+  },
+  {
+   "key": "ch3:45",
+   "path": "ch3/ch3_s045_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "bc8b1d1fc509400d608e979a9918ffdb"
+  },
+  {
+   "key": "ch3:46",
+   "path": "ch3/ch3_s046_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "70c375b073d5c0ba1fba4d1e943f61d3"
+  },
+  {
+   "key": "ch3:47",
+   "path": "ch3/ch3_s047_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "305aebcce4c441a892eedd8d0f298e26"
+  },
+  {
+   "key": "ch3:48",
+   "path": "ch3/ch3_s048_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "7580475f3252b4359af4f6e1fecc5692"
+  },
+  {
+   "key": "ch3:49",
+   "path": "ch3/ch3_s049_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "269005b1970cb9146aa9664ecdc9c07a"
+  },
+  {
+   "key": "ch3:50",
+   "path": "ch3/ch3_s050_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "022b3a311dfc1cf7f60542b1fe27db46"
+  },
+  {
+   "key": "ch3:51",
+   "path": "ch3/ch3_s051_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "fa89a3c04fdf39d96bcab74d7d1c66b5"
+  },
+  {
+   "key": "ch3:52",
+   "path": "ch3/ch3_s052_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "646517a4e4783fb9a68978e27d768065"
+  },
+  {
+   "key": "ch3:53",
+   "path": "ch3/ch3_s053_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "7dc9bbc2cd12ec47f3ee3357db6dfb92"
+  },
+  {
+   "key": "md5:88c70d1daddf963947ab29ff3e279e24",
+   "path": "ch3/ch3_c054_o0_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "88c70d1daddf963947ab29ff3e279e24"
+  },
+  {
+   "key": "md5:1d378972f361088b83d548992c209b17",
+   "path": "ch3/ch3_c054_o1_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "1d378972f361088b83d548992c209b17"
+  },
+  {
+   "key": "ch3:56",
+   "path": "ch3/ch3_s056_李老师",
+   "speaker": "李老师",
+   "voice": "longyingling_v3",
+   "md5": "e570d6a66c0ee4313ce6f77283107cfa"
+  },
+  {
+   "key": "ch3:57",
+   "path": "ch3/ch3_s057_李老师",
+   "speaker": "李老师",
+   "voice": "longyingling_v3",
+   "md5": "8fe059ed199ee8e204b29c03448e3952"
+  },
+  {
+   "key": "ch3:59",
+   "path": "ch3/ch3_s059_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "e04d19191a2123f507362c2548a9ce22"
+  },
+  {
+   "key": "ch3:60",
+   "path": "ch3/ch3_s060_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "a10a8147bd0c02d35ca270b7478e23e6"
+  },
+  {
+   "key": "ch3:61",
+   "path": "ch3/ch3_s061_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "e2ac80b683aac70ba9424ca8d7cc46ce"
+  },
+  {
+   "key": "ch3:66",
+   "path": "ch3/ch3_s066_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "58f218756e09540e0c96747dfa134052"
+  },
+  {
+   "key": "ch3:67",
+   "path": "ch3/ch3_s067_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "d4c3b64e4fca5ddd2ed10ea623662c74"
+  },
+  {
+   "key": "ch3:68",
+   "path": "ch3/ch3_s068_李老师",
+   "speaker": "李老师",
+   "voice": "longyingling_v3",
+   "md5": "625eaf7b64793986f524d2bed6dda406"
+  },
+  {
+   "key": "ch3:69",
+   "path": "ch3/ch3_s069_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "422fc4839190b71876ba9d51d480ba27"
+  },
+  {
+   "key": "ch3:70",
+   "path": "ch3/ch3_s070_李老师",
+   "speaker": "李老师",
+   "voice": "longyingling_v3",
+   "md5": "21d4c94c4aff4861c21229b693b431a6"
+  },
+  {
+   "key": "ch3:71",
+   "path": "ch3/ch3_s071_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "1820faf4e8a454a58831b8da53997998"
+  },
+  {
+   "key": "ch3:72",
+   "path": "ch3/ch3_s072_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "9cbbda4d2cb15dcfd4d4592d02cc96cb"
+  },
+  {
+   "key": "ch3:73",
+   "path": "ch3/ch3_s073_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "8627da94d5d16ef9c420c7eb3f359c8c"
+  },
+  {
+   "key": "ch3:74",
+   "path": "ch3/ch3_s074_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "539a3811c9440e4b5fca607d3d5761fb"
+  },
+  {
+   "key": "ch3:75",
+   "path": "ch3/ch3_s075_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "415f405be4f1adcc8f778ff8a2661727"
+  },
+  {
+   "key": "ch3:76",
+   "path": "ch3/ch3_s076_李老师",
+   "speaker": "李老师",
+   "voice": "longyingling_v3",
+   "md5": "2544a36155e0f3ec5c98855bd6433959"
+  },
+  {
+   "key": "ch3:77",
+   "path": "ch3/ch3_s077_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "c21abb27adbb83ba1f07f8e7615c27de"
+  },
+  {
+   "key": "ch3:78",
+   "path": "ch3/ch3_s078_李老师",
+   "speaker": "李老师",
+   "voice": "longyingling_v3",
+   "md5": "56ef55d4c77927741ceadb2fef96d300"
+  },
+  {
+   "key": "ch3:79",
+   "path": "ch3/ch3_s079_李老师",
+   "speaker": "李老师",
+   "voice": "longyingling_v3",
+   "md5": "fe83c8625c07def4fbfbc661da28d816"
+  },
+  {
+   "key": "ch3:80",
+   "path": "ch3/ch3_s080_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "a1449e52b1ad16a4b6ed228ab9574ef7"
+  },
+  {
+   "key": "ch3:81",
+   "path": "ch3/ch3_s081_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "40adf3aef409cb8a565329ef408f4165"
+  },
+  {
+   "key": "ch3:82",
+   "path": "ch3/ch3_s082_李老师",
+   "speaker": "李老师",
+   "voice": "longyingling_v3",
+   "md5": "e55e2811b5d03660e4211d2fa9e13714"
+  },
+  {
+   "key": "ch3:83",
+   "path": "ch3/ch3_s083_李老师",
+   "speaker": "李老师",
+   "voice": "longyingling_v3",
+   "md5": "9987802ebeca769f9172f321dbbaf64d"
+  },
+  {
+   "key": "ch3:84",
+   "path": "ch3/ch3_s084_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "3fdbd7eb9954ef6fd4fd68e2a38c4fb0"
+  },
+  {
+   "key": "ch3:85",
+   "path": "ch3/ch3_s085_李老师",
+   "speaker": "李老师",
+   "voice": "longyingling_v3",
+   "md5": "c0d6af5fbde6b363adb39b36d55fc491"
+  },
+  {
+   "key": "md5:ab0921f9a8a09686e26605c8803ffac7",
+   "path": "ch3/ch3_c086_o0_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "ab0921f9a8a09686e26605c8803ffac7"
+  },
+  {
+   "key": "md5:847a2f01b0eb6d3794549514bdcd3f6e",
+   "path": "ch3/ch3_c086_o1_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "847a2f01b0eb6d3794549514bdcd3f6e"
+  },
+  {
+   "key": "md5:99fce6a8f99e145f66c330ce776933b1",
+   "path": "ch3/ch3_c086_o2_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "99fce6a8f99e145f66c330ce776933b1"
+  },
+  {
+   "key": "ch3:87",
+   "path": "ch3/ch3_s087_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "9b044fc93f19ec6d317398dfd5a16e31"
+  },
+  {
+   "key": "ch3:88",
+   "path": "ch3/ch3_s088_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "cff241d1262574d4b096615ba228ef15"
+  },
+  {
+   "key": "ch3:89",
+   "path": "ch3/ch3_s089_李老师",
+   "speaker": "李老师",
+   "voice": "longyingling_v3",
+   "md5": "0fbbf1f321ef20efa244007ad1d121ab"
+  },
+  {
+   "key": "ch3:90",
+   "path": "ch3/ch3_s090_李老师",
+   "speaker": "李老师",
+   "voice": "longyingling_v3",
+   "md5": "764149494049e7fbba6ad43509560daa"
+  },
+  {
+   "key": "ch3:91",
+   "path": "ch3/ch3_s091_李老师",
+   "speaker": "李老师",
+   "voice": "longyingling_v3",
+   "md5": "9a4cc4ccdd0e164b1a911b08c0932366"
+  },
+  {
+   "key": "ch3:92",
+   "path": "ch3/ch3_s092_李老师",
+   "speaker": "李老师",
+   "voice": "longyingling_v3",
+   "md5": "b78e7e411d2b5941ed3df81566c16ece"
+  },
+  {
+   "key": "md5:77ae729ca854e83b6acbab9b7a26de9a",
+   "path": "ch3/ch3_c093_o0_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "77ae729ca854e83b6acbab9b7a26de9a"
+  },
+  {
+   "key": "md5:de4cb59ba89bdf231417a77959a26778",
+   "path": "ch3/ch3_c093_o1_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "de4cb59ba89bdf231417a77959a26778"
+  },
+  {
+   "key": "ch3:94",
+   "path": "ch3/ch3_s094_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "653b4a0ff0e6fdeebeac334b39faa637"
+  },
+  {
+   "key": "ch3:99",
+   "path": "ch3/ch3_s099_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "90ff86bbfd75bc2843eb8f7efed7e09d"
+  },
+  {
+   "key": "ch3:100",
+   "path": "ch3/ch3_s100_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "6c8ffaaf560d6c36b4bb5deff843bca9"
+  },
+  {
+   "key": "ch3:101",
+   "path": "ch3/ch3_s101_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "090461fffafd2cb72b7b25194878d13b"
+  },
+  {
+   "key": "ch3:102",
+   "path": "ch3/ch3_s102_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "f3d4dc1d71fd7638bcdb0968bc66577b"
+  },
+  {
+   "key": "ch3:103",
+   "path": "ch3/ch3_s103_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "b15d1a1f831c1a2b19bcb4a026c92b75"
+  },
+  {
+   "key": "md5:2337322ccf65ffa945c437772101cda4",
+   "path": "ch3/ch3_c104_o0_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "2337322ccf65ffa945c437772101cda4"
+  },
+  {
+   "key": "md5:ba3dc44556c432697f550fe972ab2384",
+   "path": "ch3/ch3_c104_o1_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "ba3dc44556c432697f550fe972ab2384"
+  },
+  {
+   "key": "ch3:105",
+   "path": "ch3/ch3_s105_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "491d4b6d3a83f6022217db5a26341230"
+  },
+  {
+   "key": "ch3:106",
+   "path": "ch3/ch3_s106_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "55719d519206e1059acc23ba7259e1b1"
+  },
+  {
+   "key": "ch3:107",
+   "path": "ch3/ch3_s107_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "6b64658c40b29b8c13465f51e059ee90"
+  },
+  {
+   "key": "ch3:108",
+   "path": "ch3/ch3_s108_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "ad5ec429c24cb94a701f5b969b009e49"
+  },
+  {
+   "key": "ch3:109",
+   "path": "ch3/ch3_s109_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "0774edf2d0c641b7c6ff88c9b64850d6"
+  },
+  {
+   "key": "ch3:110",
+   "path": "ch3/ch3_s110_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "63be80d93f8cc834927781ff9aec8b18"
+  },
+  {
+   "key": "ch4:1",
+   "path": "ch4/ch4_s001_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "c9fc8bfbc0532b4250279f8bf03e697e"
+  },
+  {
+   "key": "ch4:2",
+   "path": "ch4/ch4_s002_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "ff293e1a64746d5338ebd8d5284cd4bc"
+  },
+  {
+   "key": "ch4:3",
+   "path": "ch4/ch4_s003_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "88b873b518c77f28d8fa7fc43e49c7f8"
+  },
+  {
+   "key": "ch4:4",
+   "path": "ch4/ch4_s004_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "15c5334666461470b67e72423b2d16d9"
+  },
+  {
+   "key": "ch4:5",
+   "path": "ch4/ch4_s005_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "b2e0fbaa9e904fe044996e075c25ab90"
+  },
+  {
+   "key": "ch4:7",
+   "path": "ch4/ch4_s007_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "d6b7cfb5322d3423a1d421bde6ea152e"
+  },
+  {
+   "key": "ch4:9",
+   "path": "ch4/ch4_s009_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "3b235404cb1df6e6382062c6c6f3ddab"
+  },
+  {
+   "key": "ch4:10",
+   "path": "ch4/ch4_s010_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "361d0fac34cedb0711b2e6a111ec7e9d"
+  },
+  {
+   "key": "ch4:11",
+   "path": "ch4/ch4_s011_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "ab3f02c2cc8d0422d00419d106bb1e58"
+  },
+  {
+   "key": "ch4:12",
+   "path": "ch4/ch4_s012_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "32a7ca0f11d2ac7dcbaffbdfe10244bc"
+  },
+  {
+   "key": "ch4:14",
+   "path": "ch4/ch4_s014_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "d7aca0a33acbac930a81f1396bf40589"
+  },
+  {
+   "key": "ch4:15",
+   "path": "ch4/ch4_s015_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "d9c11d40e09a631cce2133f886c69ffa"
+  },
+  {
+   "key": "ch4:16",
+   "path": "ch4/ch4_s016_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "b16844e0b1beb8381e9c64091e1ac3da"
+  },
+  {
+   "key": "ch4:17",
+   "path": "ch4/ch4_s017_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "bc0fd8e7a806e1f44bba698e101313ad"
+  },
+  {
+   "key": "ch4:18",
+   "path": "ch4/ch4_s018_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "1e264c2e239a94bd1820ba390482e2de"
+  },
+  {
+   "key": "ch4:19",
+   "path": "ch4/ch4_s019_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "e2e56de44299ba6fe7ce37eb80d9d6d1"
+  },
+  {
+   "key": "ch4:20",
+   "path": "ch4/ch4_s020_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "4519aa2792c2a43a7f7ffb99ccf3d4ce"
+  },
+  {
+   "key": "md5:b82dc60fdff4d1d26294a15ba7b324d4",
+   "path": "ch4/ch4_c021_o0_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "b82dc60fdff4d1d26294a15ba7b324d4"
+  },
+  {
+   "key": "md5:d7ceb1fbb8e5b83b7f4647ff68b1ca27",
+   "path": "ch4/ch4_c021_o1_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "d7ceb1fbb8e5b83b7f4647ff68b1ca27"
+  },
+  {
+   "key": "ch4:22",
+   "path": "ch4/ch4_s022_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "25580ca9c0d242157be9b7d3234c2375"
+  },
+  {
+   "key": "ch4:23",
+   "path": "ch4/ch4_s023_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "36a2e39bd2a0b67d3ff714620c3ce8b2"
+  },
+  {
+   "key": "ch4:24",
+   "path": "ch4/ch4_s024_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "32d337821f5a905e475063f289dca368"
+  },
+  {
+   "key": "ch4:25",
+   "path": "ch4/ch4_s025_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "bbfe2d8d811ea1668f91022a0063fb4a"
+  },
+  {
+   "key": "ch4:26",
+   "path": "ch4/ch4_s026_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "a6e2c93675ff7d579f34a3f1899ff5da"
+  },
+  {
+   "key": "ch4:27",
+   "path": "ch4/ch4_s027_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "5a586e6ea714a4dffe908ad816cee023"
+  },
+  {
+   "key": "ch4:28",
+   "path": "ch4/ch4_s028_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "a59aac4696b56a9d2fdce5f4a283d42d"
+  },
+  {
+   "key": "ch4:29",
+   "path": "ch4/ch4_s029_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "9bf5598823dc348c9c30dc9b6d8367de"
+  },
+  {
+   "key": "ch4:30",
+   "path": "ch4/ch4_s030_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "44d95e341835afc711f822c26cd63ead"
+  },
+  {
+   "key": "ch4:31",
+   "path": "ch4/ch4_s031_学姐",
+   "speaker": "学姐",
+   "voice": "longyingtao_v3",
+   "md5": "06eb63b29666a6e594fbbfdb1dbeaedc"
+  },
+  {
+   "key": "ch4:32",
+   "path": "ch4/ch4_s032_学姐",
+   "speaker": "学姐",
+   "voice": "longyingtao_v3",
+   "md5": "16502faecac99ebab3e66670a67bf6a1"
+  },
+  {
+   "key": "ch4:33",
+   "path": "ch4/ch4_s033_学姐",
+   "speaker": "学姐",
+   "voice": "longyingtao_v3",
+   "md5": "6748ad948384510d8f2e1616a3148a18"
+  },
+  {
+   "key": "ch4:34",
+   "path": "ch4/ch4_s034_学姐",
+   "speaker": "学姐",
+   "voice": "longyingtao_v3",
+   "md5": "259047d227d6afdecaa9ff9dee07c264"
+  },
+  {
+   "key": "ch4:35",
+   "path": "ch4/ch4_s035_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "454375caf8fbc99018dc16be7fab2fb9"
+  },
+  {
+   "key": "ch4:36",
+   "path": "ch4/ch4_s036_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "566765a79f2f6b0db687e08ec3f61118"
+  },
+  {
+   "key": "ch4:37",
+   "path": "ch4/ch4_s037_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "3fef60b26cc8fb1ed73dd8788a8069fb"
+  },
+  {
+   "key": "ch4:38",
+   "path": "ch4/ch4_s038_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "51e1849e94e1fcb1e7886132157ede75"
+  },
+  {
+   "key": "ch4:39",
+   "path": "ch4/ch4_s039_学姐",
+   "speaker": "学姐",
+   "voice": "longyingtao_v3",
+   "md5": "dee0f6d7c8e1a87e2ef503a051bd92e9"
+  },
+  {
+   "key": "ch4:40",
+   "path": "ch4/ch4_s040_学姐",
+   "speaker": "学姐",
+   "voice": "longyingtao_v3",
+   "md5": "93210b9372e63ac74e77357eaf4a0eed"
+  },
+  {
+   "key": "ch4:41",
+   "path": "ch4/ch4_s041_学姐",
+   "speaker": "学姐",
+   "voice": "longyingtao_v3",
+   "md5": "5c51f007021f576ca3540298da6fba3d"
+  },
+  {
+   "key": "ch4:42",
+   "path": "ch4/ch4_s042_学姐",
+   "speaker": "学姐",
+   "voice": "longyingtao_v3",
+   "md5": "062899d42e779229bcf33920d928df5c"
+  },
+  {
+   "key": "ch4:44",
+   "path": "ch4/ch4_s044_学姐",
+   "speaker": "学姐",
+   "voice": "longyingtao_v3",
+   "md5": "9b6e2329c94209ec140bd07b3db2c2d1"
+  },
+  {
+   "key": "ch4:45",
+   "path": "ch4/ch4_s045_学姐",
+   "speaker": "学姐",
+   "voice": "longyingtao_v3",
+   "md5": "01bef44b18bdf4c3262b37c6e3815d14"
+  },
+  {
+   "key": "md5:4cee74aab7792efa66a129b876c06958",
+   "path": "ch4/ch4_c046_o0_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "4cee74aab7792efa66a129b876c06958"
+  },
+  {
+   "key": "md5:388a321df40e1449e781cd0fbc0b034a",
+   "path": "ch4/ch4_c046_o1_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "388a321df40e1449e781cd0fbc0b034a"
+  },
+  {
+   "key": "md5:72f471f78d36c534dfc206309e777984",
+   "path": "ch4/ch4_c046_o2_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "72f471f78d36c534dfc206309e777984"
+  },
+  {
+   "key": "ch4:47",
+   "path": "ch4/ch4_s047_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "2e8d9dd5ea4ce95860d516fc25ce15fe"
+  },
+  {
+   "key": "ch4:48",
+   "path": "ch4/ch4_s048_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "26a24444dddb1994f0471469b18b3db1"
+  },
+  {
+   "key": "ch4:50",
+   "path": "ch4/ch4_s050_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "03e0341ae8420870c3391e9f15dce03c"
+  },
+  {
+   "key": "ch4:51",
+   "path": "ch4/ch4_s051_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "20011373446f0b68215dd36490939a8d"
+  },
+  {
+   "key": "ch4:52",
+   "path": "ch4/ch4_s052_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "f00c51bba217b0756a62394ac6a5b7eb"
+  },
+  {
+   "key": "ch4:53",
+   "path": "ch4/ch4_s053_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "d77660fba6448d36e1f58568e4976773"
+  },
+  {
+   "key": "ch4:54",
+   "path": "ch4/ch4_s054_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "9b6c9dd3229b8ad89339a379fd84679e"
+  },
+  {
+   "key": "ch4:55",
+   "path": "ch4/ch4_s055_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "bd16db06ba40e4c92ac2ec2ab8d44480"
+  },
+  {
+   "key": "ch4:59",
+   "path": "ch4/ch4_s059_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "2158c91ef524369495df2bf425cfb62e"
+  },
+  {
+   "key": "ch4:60",
+   "path": "ch4/ch4_s060_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "bfdd394e1545ac72bc6550966b289af7"
+  },
+  {
+   "key": "ch4:61",
+   "path": "ch4/ch4_s061_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "3051ec397c4cdeb71df79a1bc7d84137"
+  },
+  {
+   "key": "ch4:63",
+   "path": "ch4/ch4_s063_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "d3fae136cd6cfde15ec83f30281082bc"
+  },
+  {
+   "key": "ch4:64",
+   "path": "ch4/ch4_s064_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "30c94b9f7913d54b1f432dd1924b4f79"
+  },
+  {
+   "key": "ch4:65",
+   "path": "ch4/ch4_s065_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "95c6adca387f49d8598620bcc153cfff"
+  },
+  {
+   "key": "ch4:66",
+   "path": "ch4/ch4_s066_林溪",
+   "speaker": "林溪",
+   "voice": "longyan_v3",
+   "md5": "0a01f1689331ebafe9bb0a2e780dee97"
+  },
+  {
+   "key": "ch4:67",
+   "path": "ch4/ch4_s067_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "bc77215b03cb68f55e21524f4463eda5"
+  },
+  {
+   "key": "ch4:68",
+   "path": "ch4/ch4_s068_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "3f2047e9c88cca4707bfb49e6509dec6"
+  },
+  {
+   "key": "md5:674ded04bd8b8f4d93c4b9455a9001f6",
+   "path": "ch4/ch4_c069_o0_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "674ded04bd8b8f4d93c4b9455a9001f6"
+  },
+  {
+   "key": "md5:84f63a96952c0d70a021e339acd884d7",
+   "path": "ch4/ch4_c069_o1_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "84f63a96952c0d70a021e339acd884d7"
+  },
+  {
+   "key": "ch4:70",
+   "path": "ch4/ch4_s070_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "d4459719c6d0e98878d142821e06767c"
+  },
+  {
+   "key": "ch4:71",
+   "path": "ch4/ch4_s071_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "3aae1af4e170af190c3e1b53870722f3"
+  },
+  {
+   "key": "ch4:72",
+   "path": "ch4/ch4_s072_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "3650c631a39e52f397a0308d15729697"
+  },
+  {
+   "key": "ch4:73",
+   "path": "ch4/ch4_s073_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "4de2cd1a41f2db316ee1a2725d161c8a"
+  },
+  {
+   "key": "ch4:74",
+   "path": "ch4/ch4_s074_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "3cddd9d74c6a54b1b302d268459762e8"
+  },
+  {
+   "key": "ch4:75",
+   "path": "ch4/ch4_s075_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "d827dcfa771865bdd6a69f9b028fbacb"
+  },
+  {
+   "key": "md5:25feb72c1ae37d34d96f785bd4c5df42",
+   "path": "ch4/ch4_c076_o0_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "25feb72c1ae37d34d96f785bd4c5df42"
+  },
+  {
+   "key": "md5:175a71098e7a5df9f457d93735e8d24b",
+   "path": "ch4/ch4_c076_o1_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "175a71098e7a5df9f457d93735e8d24b"
+  },
+  {
+   "key": "ch4:77",
+   "path": "ch4/ch4_s077_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "d6e4a0f7f1df7780d52e957bf7f66e5f"
+  },
+  {
+   "key": "ch4:78",
+   "path": "ch4/ch4_s078_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "d9aa73e007ff50b6be16fc28173f7b2e"
+  },
+  {
+   "key": "ch4:79",
+   "path": "ch4/ch4_s079_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "33afef9d9699faccd62478d5ffc5b814"
+  },
+  {
+   "key": "ch4:80",
+   "path": "ch4/ch4_s080_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "b8feb25861c780fb8e953e6e2d52240a"
+  },
+  {
+   "key": "ch4:81",
+   "path": "ch4/ch4_s081_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "82f9eb580ed6ee0ba76a710274801fcc"
+  },
+  {
+   "key": "ch5:1",
+   "path": "ch5/ch5_s001_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "a4d42a3b73a922244a5e8710f52483a2"
+  },
+  {
+   "key": "ch5:2",
+   "path": "ch5/ch5_s002_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "0424eab66631b69710385d4d50bfef34"
+  },
+  {
+   "key": "ch5:3",
+   "path": "ch5/ch5_s003_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "be90a9898c7be43ea8cd7c81226cdb41"
+  },
+  {
+   "key": "ch5:4",
+   "path": "ch5/ch5_s004_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "e8d1d1abf62964015f0e740fd2edc7cc"
+  },
+  {
+   "key": "ch5:5",
+   "path": "ch5/ch5_s005_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "09a0278acf3be24619d3e3221a47b0eb"
+  },
+  {
+   "key": "ch5:6",
+   "path": "ch5/ch5_s006_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "04f16f361f64c504cb539b87da5bac92"
+  },
+  {
+   "key": "ch5:7",
+   "path": "ch5/ch5_s007_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "2482f52e559c49eb4100a042721ba8f0"
+  },
+  {
+   "key": "ch5:8",
+   "path": "ch5/ch5_s008_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "889e6b6a92999a56f60264dd32da76a1"
+  },
+  {
+   "key": "ch5:9",
+   "path": "ch5/ch5_s009_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "983198181438eeb53ec0b7ce884d2932"
+  },
+  {
+   "key": "ch5:10",
+   "path": "ch5/ch5_s010_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "8a201510551211e37766a8772ce8c52d"
+  },
+  {
+   "key": "ch5:11",
+   "path": "ch5/ch5_s011_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "db5433694409a7bc6610a6d3092b4dc0"
+  },
+  {
+   "key": "ch5:12",
+   "path": "ch5/ch5_s012_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "8259e2435bbc0eeab3b8c1ebe6754029"
+  },
+  {
+   "key": "ch5:13",
+   "path": "ch5/ch5_s013_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "93ad454f3021e4966d84f832adccf5ad"
+  },
+  {
+   "key": "ch5:14",
+   "path": "ch5/ch5_s014_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "e55fb4a4a2a28e77033ab8aaf6de3f04"
+  },
+  {
+   "key": "ch5:15",
+   "path": "ch5/ch5_s015_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "638a3b6fd17b5c27a3d397b963999cf7"
+  },
+  {
+   "key": "ch5:16",
+   "path": "ch5/ch5_s016_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "0f9cb656f8cd90b67197ec2d64a4b8c3"
+  },
+  {
+   "key": "ch5:17",
+   "path": "ch5/ch5_s017_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "7e135b67bd294a836ad1cf3d309b359c"
+  },
+  {
+   "key": "ch5:19",
+   "path": "ch5/ch5_s019_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "9578aac2e7a66ea780811bf3e67a614f"
+  },
+  {
+   "key": "ch5:20",
+   "path": "ch5/ch5_s020_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "37fdba4bcee89a201bf013e39577c61f"
+  },
+  {
+   "key": "ch5:21",
+   "path": "ch5/ch5_s021_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "8a5a74d1b7256bfab63c1f66e79a78c2"
+  },
+  {
+   "key": "ch5:22",
+   "path": "ch5/ch5_s022_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "8734d9cfa36e3c62371c90958860797f"
+  },
+  {
+   "key": "ch5:23",
+   "path": "ch5/ch5_s023_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "f0db929d2fcf941a18fce4e69077e30a"
+  },
+  {
+   "key": "ch5:24",
+   "path": "ch5/ch5_s024_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "1f0a1310fb0b4da92140152ef3e6baae"
+  },
+  {
+   "key": "ch5:25",
+   "path": "ch5/ch5_s025_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "296550bb8dffe3f9ac7d7258692df35e"
+  },
+  {
+   "key": "ch5:26",
+   "path": "ch5/ch5_s026_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "e8292a1980615b9bd58a328970a64ea2"
+  },
+  {
+   "key": "md5:afc428eabdd488e931c3e21a42493363",
+   "path": "ch5/ch5_c030_o0_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "afc428eabdd488e931c3e21a42493363"
+  },
+  {
+   "key": "md5:9c4db95c2c42e94409fbfd1597055d41",
+   "path": "ch5/ch5_c030_o1_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "9c4db95c2c42e94409fbfd1597055d41"
+  },
+  {
+   "key": "ch5:31",
+   "path": "ch5/ch5_s031_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "3650c631a39e52f397a0308d15729697"
+  },
+  {
+   "key": "ch5:35",
+   "path": "ch5/ch5_s035_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "ae2b6093ac12931bebbde371f2a319f3"
+  },
+  {
+   "key": "ch5:36",
+   "path": "ch5/ch5_s036_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "3b84c4520923d560e10a679e5101e517"
+  },
+  {
+   "key": "ch5:37",
+   "path": "ch5/ch5_s037_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "2a5a4ae6493a9f5511c89715f4dc316e"
+  },
+  {
+   "key": "ch5:38",
+   "path": "ch5/ch5_s038_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "ae2705b9b75786bcb724d88f1b99a644"
+  },
+  {
+   "key": "ch5:40",
+   "path": "ch5/ch5_s040_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "d879a11cf50d3da01177807e056bf043"
+  },
+  {
+   "key": "ch5:42",
+   "path": "ch5/ch5_s042_陆宣雨",
+   "speaker": "陆宣雨",
+   "voice": "longanli_v3",
+   "md5": "b7254a738e8d4a56706556eaa2940c3f"
+  },
+  {
+   "key": "ch5:43",
+   "path": "ch5/ch5_s043_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "ba91e98f0915964b05412dcc5e9e3b82"
+  },
+  {
+   "key": "ch5:44",
+   "path": "ch5/ch5_s044_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "8f85c17a13d957d4119af8b5f29ee5c9"
+  },
+  {
+   "key": "ch5:45",
+   "path": "ch5/ch5_s045_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "e70937185065fd7321747ecafe0611b5"
+  },
+  {
+   "key": "ch5:46",
+   "path": "ch5/ch5_s046_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "1a95de537f41df28e71833df69661237"
+  },
+  {
+   "key": "ch5:47",
+   "path": "ch5/ch5_s047_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "c3acd7413d0864530040b194edfc2a98"
+  },
+  {
+   "key": "ch5:48",
+   "path": "ch5/ch5_s048_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "39b1add33816aeded5c6ad1618949a69"
+  },
+  {
+   "key": "ch5:49",
+   "path": "ch5/ch5_s049_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "c892876cb342b1f78dd5adf1b856085f"
+  },
+  {
+   "key": "ch5:50",
+   "path": "ch5/ch5_s050_陆宣雨",
+   "speaker": "陆宣雨",
+   "voice": "longanli_v3",
+   "md5": "c72a51959a59dd9b5f12c38d6f5e8872"
+  },
+  {
+   "key": "ch5:51",
+   "path": "ch5/ch5_s051_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "7c7a4aa0c96253fd5cd67819400109f8"
+  },
+  {
+   "key": "ch5:52",
+   "path": "ch5/ch5_s052_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "41028ccc222612e6affafb40871a8932"
+  },
+  {
+   "key": "ch5:53",
+   "path": "ch5/ch5_s053_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "fd1fcea32b8efe6a5e1fc328b6ac151a"
+  },
+  {
+   "key": "ch5:54",
+   "path": "ch5/ch5_s054_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "89dd3d2ba144e495718cffc6bebb2165"
+  },
+  {
+   "key": "ch5:55",
+   "path": "ch5/ch5_s055_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "8da8c1bc0b7203b1eb65dc77f61dcf81"
+  },
+  {
+   "key": "ch5:56",
+   "path": "ch5/ch5_s056_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "f78912cd57091a07a577cf724b8c941e"
+  },
+  {
+   "key": "ch5:57",
+   "path": "ch5/ch5_s057_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "490061884b641154fbbe4703fd19cb77"
+  },
+  {
+   "key": "ch5:58",
+   "path": "ch5/ch5_s058_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "0f14d7f431099645a7c85881ea6794ad"
+  },
+  {
+   "key": "ch5:59",
+   "path": "ch5/ch5_s059_陆宣雨",
+   "speaker": "陆宣雨",
+   "voice": "longanli_v3",
+   "md5": "5bb1aec1ba46dac59a6ae267b2327daf"
+  },
+  {
+   "key": "ch5:60",
+   "path": "ch5/ch5_s060_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "d52cbeaf577ab009ad6eb37de89b3c97"
+  },
+  {
+   "key": "ch5:61",
+   "path": "ch5/ch5_s061_陆宣雨",
+   "speaker": "陆宣雨",
+   "voice": "longanli_v3",
+   "md5": "1559a7c85e80f00e4211e140e4d2a5df"
+  },
+  {
+   "key": "ch5:62",
+   "path": "ch5/ch5_s062_陆宣雨",
+   "speaker": "陆宣雨",
+   "voice": "longanli_v3",
+   "md5": "64b9ec5db92f5eff1fd7f50f8d00c121"
+  },
+  {
+   "key": "ch5:63",
+   "path": "ch5/ch5_s063_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "108446fbc33acb136cad69c55695cb55"
+  },
+  {
+   "key": "ch5:64",
+   "path": "ch5/ch5_s064_舍友A",
+   "speaker": "舍友A",
+   "voice": "longanhuan_v3",
+   "md5": "4e378e9467aa1de9f14082a4863403e9"
+  },
+  {
+   "key": "ch5:65",
+   "path": "ch5/ch5_s065_舍友A",
+   "speaker": "舍友A",
+   "voice": "longanhuan_v3",
+   "md5": "eb01fc53d73269cca1f1f4129bf51e17"
+  },
+  {
+   "key": "ch5:66",
+   "path": "ch5/ch5_s066_舍友B",
+   "speaker": "舍友B",
+   "voice": "longxian_v3",
+   "md5": "3709115d9ba35719415119331d4ec286"
+  },
+  {
+   "key": "ch5:67",
+   "path": "ch5/ch5_s067_舍友B",
+   "speaker": "舍友B",
+   "voice": "longxian_v3",
+   "md5": "d02041053c689014c5a8c682514fab9c"
+  },
+  {
+   "key": "md5:aca2fe95be089e25405acd1ef1ffe040",
+   "path": "ch5/ch5_c068_o0_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "aca2fe95be089e25405acd1ef1ffe040"
+  },
+  {
+   "key": "md5:6a01781bdf1b9f8794aad8b64a9a45e5",
+   "path": "ch5/ch5_c068_o1_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "6a01781bdf1b9f8794aad8b64a9a45e5"
+  },
+  {
+   "key": "md5:90ce432f5fc524eb3103e081f49d5f9c",
+   "path": "ch5/ch5_c068_o2_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "90ce432f5fc524eb3103e081f49d5f9c"
+  },
+  {
+   "key": "ch5:69",
+   "path": "ch5/ch5_s069_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "1b88af1af611361214e6dc71db90464a"
+  },
+  {
+   "key": "ch5:70",
+   "path": "ch5/ch5_s070_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "7a51065549e99a91bb439de9b82f764c"
+  },
+  {
+   "key": "ch5:71",
+   "path": "ch5/ch5_s071_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "57478e4257da665f5f5848162c7618dc"
+  },
+  {
+   "key": "ch5:72",
+   "path": "ch5/ch5_s072_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "7ccfa798595db99277e2abd662ecffd3"
+  },
+  {
+   "key": "ch5:73",
+   "path": "ch5/ch5_s073_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "a75317fbf1fef81a8114bd4248bc7f24"
+  },
+  {
+   "key": "ch5:74",
+   "path": "ch5/ch5_s074_陆宣雨",
+   "speaker": "陆宣雨",
+   "voice": "longanli_v3",
+   "md5": "d6dc5fd4f8481376c9549ddf5edc3b58"
+  },
+  {
+   "key": "ch5:75",
+   "path": "ch5/ch5_s075_陆宣雨",
+   "speaker": "陆宣雨",
+   "voice": "longanli_v3",
+   "md5": "0eeb57d3e22e97abac77743c8b64e3d9"
+  },
+  {
+   "key": "ch5:76",
+   "path": "ch5/ch5_s076_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "b87cbe181ab7ace0e29347a7e3242a79"
+  },
+  {
+   "key": "ch5:77",
+   "path": "ch5/ch5_s077_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "bd7c23ecfa23bf767909d405669ca2f7"
+  },
+  {
+   "key": "md5:1bcc2b5f031d39e8e476fb1d5eda63bd",
+   "path": "ch5/ch5_c078_o0_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "1bcc2b5f031d39e8e476fb1d5eda63bd"
+  },
+  {
+   "key": "md5:8648ee1ad7d755f86256aa86a9d980f6",
+   "path": "ch5/ch5_c078_o1_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "8648ee1ad7d755f86256aa86a9d980f6"
+  },
+  {
+   "key": "ch5:79",
+   "path": "ch5/ch5_s079_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "1e26cee0aa3b19d09ef6d1ae2babaeda"
+  },
+  {
+   "key": "ch5:80",
+   "path": "ch5/ch5_s080_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "c48f3145853a286bf330d52443cf378f"
+  },
+  {
+   "key": "ch5:81",
+   "path": "ch5/ch5_s081_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "9fe3f31ddc3e2a35fb4a15af180bf10c"
+  },
+  {
+   "key": "ch5:82",
+   "path": "ch5/ch5_s082_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "93d4557aea25cfe55545e88a4baad26b"
+  },
+  {
+   "key": "ch5:83",
+   "path": "ch5/ch5_s083_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "d4d879bf452c6e56c7e32813302c7760"
+  },
+  {
+   "key": "ch5:84",
+   "path": "ch5/ch5_s084_陆宣雨",
+   "speaker": "陆宣雨",
+   "voice": "longanli_v3",
+   "md5": "89dfd6d728489fddcf059473e9554fb5"
+  },
+  {
+   "key": "ch5:85",
+   "path": "ch5/ch5_s085_陆宣雨",
+   "speaker": "陆宣雨",
+   "voice": "longanli_v3",
+   "md5": "ef9e91d352a54cfa497393528b1b8a09"
+  },
+  {
+   "key": "ch5:86",
+   "path": "ch5/ch5_s086_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "c754f2fd975ca35512dbf3c6286932b3"
+  },
+  {
+   "key": "ch5:93",
+   "path": "ch5/ch5_s093_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "9768bdc1b39c054878140e829e12ce5f"
+  },
+  {
+   "key": "ch5:94",
+   "path": "ch5/ch5_s094_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "2ad6577e95389dd8a57d768418471a00"
+  },
+  {
+   "key": "ch5:95",
+   "path": "ch5/ch5_s095_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "38aad4c74de69ceca08d45b5ee0bf65a"
+  },
+  {
+   "key": "ch5:96",
+   "path": "ch5/ch5_s096_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "280d204b14711df4ce48fe4e772fa767"
+  },
+  {
+   "key": "ch5:97",
+   "path": "ch5/ch5_s097_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "4c508587c5436c1d2fb82c957ff63181"
+  },
+  {
+   "key": "md5:3f07e798c4d78250887f0b0a9898a6fa",
+   "path": "ch5/ch5_c098_o0_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "3f07e798c4d78250887f0b0a9898a6fa"
+  },
+  {
+   "key": "md5:4f0f4532a479e7aee36ef44cb5277fc7",
+   "path": "ch5/ch5_c098_o1_徐夏",
+   "speaker": "徐夏",
+   "voice": "longwan_v3",
+   "md5": "4f0f4532a479e7aee36ef44cb5277fc7"
+  },
+  {
+   "key": "ch5:99",
+   "path": "ch5/ch5_s099_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "65b1bcc77592d35807441ed052e3c487"
+  },
+  {
+   "key": "ch5:100",
+   "path": "ch5/ch5_s100_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "5ea4861c1c6cfcd24ed83f98dc0dbcc8"
+  },
+  {
+   "key": "ch5:101",
+   "path": "ch5/ch5_s101_旁白",
+   "speaker": "旁白",
+   "voice": "longtian_v3",
+   "md5": "66c1b55682c7f619c449462080f55172"
+  }
+ ]
+}

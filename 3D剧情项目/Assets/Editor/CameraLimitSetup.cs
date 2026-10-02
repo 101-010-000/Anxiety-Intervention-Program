@@ -25,8 +25,8 @@ public static class CameraLimitSetup
     const string SCENE = "Assets/Scenes/Game.unity";
     const string REPORT = "Assets/assets/_报告/_摄像机旋转限制.txt";
 
-    // ★ 定稿值（2026-10-01）：上抬 +15°（+40° 会越过 ~3m 墙顶）；水平 ±135°（共 270°，够用且基本甩不出房间）。
-    const float PITCH_MIN = -45f;
+    // ★ 定稿值（2026-10-01）：俯仰 -25°~+15°（-45° 会压到贴地仰视盯天花板；+40° 会越过 ~3m 墙顶）；水平 ±135°（共 270°）。
+    const float PITCH_MIN = -25f;
     const float PITCH_MAX = 15f;
     const float YAW_MIN = -135f;
     const float YAW_MAX = 135f;

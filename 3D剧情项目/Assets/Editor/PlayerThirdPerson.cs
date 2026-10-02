@@ -181,11 +181,12 @@ public static class PlayerThirdPerson
         fpc.tpDistance = 3.4f;
         fpc.tpHeight = 1.45f;
         fpc.tpLookHeight = 1.20f;
-        fpc.tpPitchMin = -45f;                        // 镜头最低压到 -45°（往上看）
-        fpc.tpPitchMax = 15f;                         // ★ 最高抬到 +15°（2026-10-01：+40° 会把镜头举到 ~3.6m，越过墙顶看到场景外/房顶内部）
-        fpc.tpYawClamp = true;                        // ★ 水平限位 ±135°（2026-10-01：防贴墙一甩看到场景外；参考朝向开局/瞬移/剧情摆镜头自动重开）
+        fpc.tpPitchMin = -25f;                        // ★ 最低压到 -25°（2026-10-01：-45° 会把镜头压到离地 0.35m 仰 ~36° 盯天花板）
+        fpc.tpPitchMax = 15f;                         // ★ 最高抬到 +15°（+40° 会把镜头举到墙顶上方，俯瞰穿帮）
+        fpc.tpYawClamp = true;                        // ★ 水平限位 ±135°（防贴墙一甩看到场景外）
         fpc.tpYawMin = -135f;
         fpc.tpYawMax = 135f;
+        fpc.tpYawSlideSpeed = 60f;                    // ★ 窗口中心向当前视角滑移（60°/s，顶边暂停）——死角永远跟在背后
         fpc.tpKeepAboveGround = true;                 // 贴地保护（不然 -45° 会钻到地底下）
         fpc.tpMinCameraHeight = 0.35f;
         fpc.tpMinDistance = 0.6f;
