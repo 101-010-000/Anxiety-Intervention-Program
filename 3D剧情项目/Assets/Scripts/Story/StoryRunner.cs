@@ -334,6 +334,12 @@ public class StoryRunner : MonoBehaviour
                 go.transform.position = target;
                 if (step.hide) go.SetActive(false);                    // 续播同样处理「走出门即隐藏」
                 else go.transform.rotation = Quaternion.Euler(0f, yaw, 0f);
+                // seat 终态（2026-10-01 办公室老师）：坐姿模型在场、走位模型隐藏（与 LeaveRoutine 到位收尾一致）
+                if (!string.IsNullOrEmpty(step.seat))
+                {
+                    var st = FindCharacterTransform(step.seat);
+                    if (st != null) { if (!st.gameObject.activeSelf) st.gameObject.SetActive(true); go.SetActive(false); }
+                }
                 break;
             }
 
@@ -366,7 +372,9 @@ public class StoryRunner : MonoBehaviour
         phoneChat.Show();
         foreach (var st in _resumeChat)
         {
-            if (!st.s.Contains("徐夏"))
+            // 判定跟手机主人走（同 PlayText）：徐夏视角与旧行为一致；林溪视角下徐夏来消息不换段，
+            // 已回放的记录不会被误清
+            if (!st.s.Contains(phoneChat.CurrentOwner))
                 phoneChat.SetContact(st.s.Replace("（微信）", "").Replace("（通知）", ""));
             phoneChat.Append(st.s, st.x);
         }
@@ -491,8 +499,9 @@ public class StoryRunner : MonoBehaviour
                 }
             }
 
-            // enter 的 seat（第3章王含）：坐姿模型实例开场同样要藏，走位到位才亮出（「走到凳子边坐下」）
-            if (step.t == "enter" && !string.IsNullOrEmpty(step.seat) && !_entranceNpcs.ContainsKey(step.seat))
+            // enter/leave 的 seat：坐姿模型实例开场同样要藏，走位到位才亮出
+            // （enter=第3章王含「走到凳子边坐下」；leave=第3章办公室老师「走到凳子旁坐下」）
+            if ((step.t == "enter" || step.t == "leave") && !string.IsNullOrEmpty(step.seat) && !_entranceNpcs.ContainsKey(step.seat))
             {
                 var s = FindCharacterTransform(step.seat);
                 if (s != null)
@@ -500,7 +509,7 @@ public class StoryRunner : MonoBehaviour
                     _entranceNpcs[step.seat] = s.gameObject;
                     if (s.gameObject.activeSelf) s.gameObject.SetActive(false);
                 }
-                else Debug.LogWarning("[StoryRunner] enter 的坐姿模型没找到：" + step.seat + "（到位时会再找一次）");
+                else Debug.LogWarning("[StoryRunner] " + step.t + " 的坐姿模型没找到：" + step.seat + "（到位时会再找一次）");
             }
         }
     }
@@ -625,8 +634,9 @@ public class StoryRunner : MonoBehaviour
             if (_nodeOpen && dialogue != null) { dialogue.HideNode(); _nodeOpen = false; }
             if (phoneChat != null)
             {
-                // 收到方决定聊天对象（徐夏发出不换段）：换段自动清空旧聊天、换标题
-                if (!step.s.Contains("徐夏"))
+                // 收到方决定聊天对象（主人发出不换段；判定跟手机主人走——林溪视角下林溪开口不算换段，
+                // 否则标题会被错改回「林溪」）：换段自动清空旧聊天、换标题
+                if (!step.s.Contains(phoneChat.CurrentOwner))
                     phoneChat.SetContact(step.s.Replace("（微信）", "").Replace("（通知）", ""));
                 if (!phoneChat.IsShown) phoneChat.Show();
             }
@@ -1192,6 +1202,20 @@ public class StoryRunner : MonoBehaviour
         // via 为空/全缺时 pts 就两点 = 原直线，行为不变
         var pts = BuildPath(from, step.via, target);
         yield return entrance.RunPath(pts, null); // faceTarget=null：保持走向（面朝座位方向走回去）
+
+        // seat（2026-10-01 第3章办公室老师）：到位整棵隐藏走位模型、亮出坐姿模型——「走到凳子旁坐下」
+        // 的舞台演出（不转镜头、无需玩家交互；切回主角视角后老师保持坐着）
+        if (!string.IsNullOrEmpty(step.seat))
+        {
+            var st = FindCharacterTransform(step.seat);
+            if (st != null)
+            {
+                if (!st.gameObject.activeSelf) st.gameObject.SetActive(true);
+                go.SetActive(false);
+            }
+            else
+                Debug.LogWarning("[StoryRunner] leave seat 找不到坐姿模型「" + step.seat + "」——走位模型保持在场");
+        }
 
         if (step.hide)
         {

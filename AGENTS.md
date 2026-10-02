@@ -836,6 +836,12 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   Skip 自检路径不走 NpcEntrance——换装在 EnterRoutine 协程收尾里，Skip 后下一帧照常执行。
   ★ **`lookAtDoor`（2026-10-01）**：入场开始是否强制转镜头（缺省 true 转 0.3s）；第3章王含填
   false——她从玩家左手边北墙走来，不抢镜头（用户定稿：只有这一步不转，其他章入场照旧）。
+  ★ **leave 也吃 `seat`（2026-10-01 第3章办公室老师）**：`{"t":"leave","who":"李老师_可动",
+  "to":"第3章_老师落座","seat":"李老师_办公室坐姿"}` = 走到锚点后整棵隐藏、亮出坐姿实例——
+  「老师走到凳子2 旁坐下」的舞台演出（leave 天然不转镜头、不预藏 who，正合切视角跟拍段；
+  seat 实例 Begin 同样预藏，SilentApply 按终态同步；切回主角视角后老师保持坐着）。
+  场景侧：坐姿实例用户手摆（原名 Sitting Idle → 已改名 李老师_办公室坐姿 防撞名），
+  落座锚点 Loc_办公室/多章锚点/第3章_老师落座。
   场景侧用 `Tools/干预项目/第三章王含入场（幂等）`（`Assets/Editor/WangHanEnterSetup.cs`）摆
   站立实例 `王含_站立`（已绑定.fbx + 王含_Idle 控制器）+ 门口/落座锚点，报告
   `assets/_报告/_第三章王含入场.txt`——★ 路线对食堂【全部】碰撞体（含路人/垃圾桶）做 ≥0.45m
@@ -1007,6 +1013,11 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   `Resources/语音/ch{N}` + 覆盖 `manifest.txt`（清单每次全量重写，键跟着新步号走）→
   Unity 里跑 `Tools/干预项目/台词语音/诊断（清单↔mp3↔剧本覆盖）`（`Editor/VoiceLineDiag.cs`）对账 →
   报告 `assets/_报告/_台词语音.txt`。
+  ★ **管线 2026-10-01 加了文本守门**：sidecar `synth_md5.json` 记录每片「合成时文本」的 md5，剧本文本变了
+  会自动删旧片强制重生成——根治"存在即跳过"吃掉剧本文本修改、导致**音频念旧句子**（用户实测第5章
+  "台词与音频对不上/重复"的根因之一）；合成并发已降为单线程（排除串台）。⚠ 若并行会话正在改某章 json，
+  其改动落定后重跑该章一遍即可（守门只补变化句）。⚠ 跑过 voice_shift_steps.py 位移重命名后，守门会因
+  md5 记录错位而重生成——无害但多花额度，位移后重跑管线即可对齐。
   ⚠ **只插入非语音步骤（walk/leave/interact/fade）时不用重新合成**：后续台词步号整体后移，
   跑 `额外文件/工具脚本/voice_shift_steps.py`（顶部常量 SHIFT/THRESHOLD/CHAPTER 按本次情况改）把步号键与 mp3 文件名
   （连 .meta）在 Resources 与 output 两处同步位移，再跑上面诊断对账即可（2026-09-30 第5章 +3、第3章 +1 实测）。
@@ -1016,6 +1027,11 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
   ⚠ **插入/拆分的是语音步骤（nar/dlg/mon）时要重新合成**：先把该步旧 mp3（两处）删掉——
   `synth()` 按文件存在跳过，不删就永远不会重录新文本；再跑 batch 生成 → 部署 → 诊断。
   ⚠ 该脚本改键在前、改名在后，失败重跑前先看输出——半途状态用 `voice_shift_steps_fix.py` 补完。
+  ★ **剧本反复插步、清单已有洞（缺键/陈旧键/md5 不符）时别再叠增量**：跑
+  `额外文件/工具脚本/voice_realign_chapter.py <章号> [--deploy]`（2026-10-01）——md5 内容指纹
+  全量对齐：按 (文本md5, 音色) 把现有 mp3 找回当前步号名（两阶段改名，同名争用内容安全），
+  真缺的列出来再 `voice_batch_generate.py <N>` 补合成；`--deploy` 镜像目录到 Resources 并同步
+  manifest.txt。幂等，跑完不再需要任何增量位移（2026-10-01 第3章实测：24 处错位+5 缺键一次归位）。
 - 试音档案：`额外文件/声线试音_v3/`（选角依据）；edge-tts 免费池（仅 3 普通话女声）已被否，弃用。
 
 ---

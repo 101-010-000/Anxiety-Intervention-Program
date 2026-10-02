@@ -49,8 +49,9 @@ public class StoryStep
                                              //   先预藏、黑屏期间点亮 → 淡出时人已在座，不穿帮）
     public string anchor = "";               // door：到达后的落点锚点名（缺省 = 用门自己的 arrivePoint）
     public string who = "";                  // enter：角色实例名（Begin 时预禁用，enter 时启用入场）
-    public string seat = "";                 // enter：到位后亮出的坐姿模型实例名（走位模型整棵隐藏）。
-                                             // 第3章王含：从食堂门走到 凳子2(9) 旁 → 切成用户摆好的坐姿（2026-09-30）；
+    public string seat = "";                 // enter/leave：到位后亮出的坐姿模型实例名（走位模型整棵隐藏）。
+                                             // enter=第3章王含：从食堂门走到 凳子2(9) 旁 → 切成用户摆好的坐姿（2026-09-30）；
+                                             // leave=第3章办公室老师：走到凳子2 旁坐下（2026-10-01，舞台演出、不转镜头、不预藏 who）；
                                              // seat 实例 Begin 时同样预藏，续播快进按终态同步（见 StoryRunner）
     public bool lookAtDoor = true;           // enter：入场开始时镜头是否强制转向出发点（0.3s 平滑，缺省转）。
                                              // 第3章王含填 false——她从玩家左手边北墙走来，不抢镜头（用户 2026-10-01）
