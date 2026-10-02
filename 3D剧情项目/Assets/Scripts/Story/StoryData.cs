@@ -52,6 +52,8 @@ public class StoryStep
     public string seat = "";                 // enter：到位后亮出的坐姿模型实例名（走位模型整棵隐藏）。
                                              // 第3章王含：从食堂门走到 凳子2(9) 旁 → 切成用户摆好的坐姿（2026-09-30）；
                                              // seat 实例 Begin 时同样预藏，续播快进按终态同步（见 StoryRunner）
+    public bool lookAtDoor = true;           // enter：入场开始时镜头是否强制转向出发点（0.3s 平滑，缺省转）。
+                                             // 第3章王含填 false——她从玩家左手边北墙走来，不抢镜头（用户 2026-10-01）
     public string from = "";                 // enter：门口起点锚点名
     public List<string> via = new List<string>();  // enter/leave：途经锚点名列表（同名解析同 to/from；
                                                    // 缺锚点=警告并跳过该点，不报错）。第2章陆宣雨退场绕开桌椅
@@ -78,6 +80,7 @@ public class StoryStep
     public float camH = -1f;                 // cut：机位高度（≤0 = 用 CutawayCamera 内置默认 1.55）。
                                              // 第1章林溪坐姿用 1.15（站着的高度看坐着的人会高高在上）——2026-09-30
     public float lookH = -1f;                // cut：LookAt 的“头”高（≤0 = 内置默认 1.35；林溪坐姿 0.95）
+    public string contact = "";              // cut：切视角时手机的聊天对象（第1章切林溪视角 → "徐夏"：标题换人）
     public string title = "";
     public List<StoryOption> options = new List<StoryOption>();
 }

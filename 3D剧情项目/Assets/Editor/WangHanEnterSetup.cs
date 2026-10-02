@@ -1,14 +1,17 @@
 // 第三章王含入场（2026-09-30，用户定稿）：王含不能开局就坐在食堂座位上——
-// 剧情到她台词前一步（第3章.json 的 enter 步骤），从 Content/Door_G_Frame (1)/Door_G_Door 走进来，
-// 沿东侧大动脉（x≈123，两边余量 ≥1.6m）向北，再从 凳子2 (8) 与 垃圾桶 (9) 之间 1m 缺口穿到北墙边，
-// 贴着她那把 凳子2 (9) 后方入座，切成用户摆好的坐姿模型（王含切换）再开口说话。
-// ★ 路线不得穿模（用户 2026-09-30）：全部 5 段对食堂【全部】碰撞体（含路人胶囊、垃圾桶、储物箱，
+// 剧情到她台词前一步（第3章.json 的 enter 步骤）开始走位，走到她那把 凳子2 (9) 旁，
+// 切成用户摆好的坐姿模型（王含切换）再开口说话。
+// 路线（用户 2026-10-01 重定）：出发点=用户手摆的 王含_站立（西北北墙边，111.2, 7.1），
+// 沿北墙直线 ~7.6m 到 凳子2(9) 后方入座（旧「东侧大动脉绕行」路线_1..4 已退役）。
+// ★ 路线不得穿模（用户 2026-09-30）：对食堂【全部】碰撞体（含路人胶囊、垃圾桶、储物箱，
 //   不跳过任何东西）按包围盒水平距离逐点采样，要求 ≥0.45m——自检不过会写在报告里。
 // 本工具只摆两样东西（幂等，节点已存在绝不挪位/重挂）：
 //   ① 站立实例 王含_站立（已绑定.fbx + 王含_Idle 控制器，含 Idle↔Walk 过渡，材质走 FBX 导入器重映射），
 //      摆在门口锚点，整棵 Outline 层（同第四章 林溪_宿舍 的做法）；
-//   ② 多章锚点：第3章_王含门口 / 路线_1..4 / 落座（json enter 的 from/via/to 按名解析）。
-// 运行时行为在 StoryRunner（enter 的 seat 字段）：Begin 预藏 王含_站立 与 王含切换；到位亮坐姿、藏站立。
+//   ② 多章锚点：第3章_王含门口 / 第3章_王含落座（json enter 的 from/to 按名解析）。
+//   ⚠ 用户手挪实例后要把「第3章_王含门口」锚点跟着挪到实例脚下（走位起点以锚点为准，工具会报错位）。
+// 运行时行为在 StoryRunner（enter 的 seat 字段）：Begin 预藏 王含_站立 与 王含切换；到位亮坐姿、藏站立；
+// lookAtDoor=false（仅此步）不强制转镜头。
 using System.IO;
 using System.Text;
 using UnityEditor;
@@ -25,15 +28,12 @@ public static class WangHanEnterSetup
     const string REPORT = "Assets/assets/_报告/_第三章王含入场.txt";
 
     // 锚点名 →（默认摆位, yaw）。节点已存在绝不改位置（手调优先，同 ChapterStoriesSetup 约定）。
-    // 路线 = 门口 → 东侧大动脉北上（x≈123.2）→ 西切到 凳子2(8)/垃圾桶(9) 缺口（x≈121.05）→ 凳子2(9) 后方入座
+    // 路线（用户 2026-10-01 重定）：王含_站立 用户手摆在西北北墙边，从那儿沿北墙直线
+    // 走到 凳子2(9) 后方入座（~7.6m，旧东侧大动脉路线_1..4 已退役）
     static readonly object[] ANCHORS =
     {
-        new object[] { "第3章_王含门口",   new Vector3(118.50f, 0f, -7.20f), 0f  },
-        new object[] { "第3章_王含路线_1", new Vector3(123.20f, 0f, -6.70f), 0f  },
-        new object[] { "第3章_王含路线_2", new Vector3(123.20f, 0f,  6.30f), 0f  },
-        new object[] { "第3章_王含路线_3", new Vector3(121.05f, 0f,  6.30f), 0f  },
-        new object[] { "第3章_王含路线_4", new Vector3(121.05f, 0f,  7.40f), 0f  },
-        new object[] { "第3章_王含落座",   new Vector3(118.80f, 0f,  7.35f), 180f },
+        new object[] { "第3章_王含门口",   new Vector3(111.21f, 0f,  7.12f), 90f  },
+        new object[] { "第3章_王含落座",   new Vector3(118.80f, 0f,  7.40f), 180f },
     };
 
     [MenuItem("Tools/干预项目/第三章王含入场（幂等）")]
@@ -89,6 +89,11 @@ public static class WangHanEnterSetup
             sb.AppendLine("站立实例新建：" + STAND + " @ " + go.transform.position);
         }
         else sb.AppendLine("站立实例已有（不动位）：" + STAND + " @ " + stand.position);
+
+        // 站立实例应与门口锚点重合（走位起点按【锚点】算）；用户手挪了实例没对齐会在这报警
+        if (doorT != null && Vector3.Distance(stand.position, doorT.position) > 0.05f)
+            sb.AppendLine("!! 站立实例 (" + stand.position + ") 与门口锚点 (" + doorT.position +
+                          ") 不重合——走位起点以锚点为准，请把锚点挪到实例脚下（或挪实例对齐锚点）");
 
         // Animator（FBX 不自带；控制器带 Idle↔Walk 过渡，NpcEntrance 写 Speed 即走路）
         var anim = stand.GetComponent<Animator>();

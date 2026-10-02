@@ -261,6 +261,15 @@ public class StoryRunner : MonoBehaviour
 
             case "cut":
                 CutawayCamera.Restore();                    // 快进不演切视角；兜底收掉（正常配对时本来就空）
+                if (phoneChat != null)
+                {   // 手机视角也要复刻：续播点落在切视角区间里时，微信回放（FlushResumeChat）才按对面的手机渲染
+                    if (string.IsNullOrEmpty(step.who)) phoneChat.SetOwner("徐夏");
+                    else
+                    {
+                        phoneChat.SetOwner(step.who);
+                        if (!string.IsNullOrEmpty(step.contact)) phoneChat.SetContact(step.contact);
+                    }
+                }
                 break;
 
             case "stage":
@@ -497,11 +506,16 @@ public class StoryRunner : MonoBehaviour
     }
 
     /// 按名找角色实例。★ 同名实例可能摆在多章容器下（宿舍有第二/第五章两个 陆宣雨_可动）：
-    /// 优先返回【本章容器】子树里的那个（第二章 enter 的是第二章的陆宣雨，不是第五章的），
-    /// 找不到本章的才退回第一个同名实例。
+    /// 优先返回【本章容器】子树里的那个（第二章 enter 的是第二章的陆宣雨，不是第五章的）；
+    /// 本章有【多个容器】（第5章宿舍/食堂都摆了第五章角色）时，同名双胞胎取【离玩家最近】的——
+    /// 剧情的 enter/leave 永远发生在玩家所在地（2026-10-01 实锤：舍友B 绑到了食堂的隐藏分身，
+    /// 宿舍真身原地不动，阻塞型退场还把剧情卡死）。找不到本章的才退回第一个同名实例。
     Transform FindCharacterTransform(string name)
     {
         Transform fallback = null;
+        Transform best = null;
+        float bestDist = float.MaxValue;
+        Vector3 pp = _player != null ? _player.transform.position : Vector3.zero;
         foreach (var t in FindObjectsOfType<Transform>(true))     // true：含禁用对象
         {
             if (t.name != name) continue;
@@ -509,9 +523,15 @@ public class StoryRunner : MonoBehaviour
             for (var p = t.parent; p != null; p = p.parent)
             {
                 var m = ChapterContainerRx.Match(p.name);
-                if (m.Success && ParseChapterNum(m.Groups[1].Value) == chapterIndex) return t;
+                if (m.Success && ParseChapterNum(m.Groups[1].Value) == chapterIndex)
+                {
+                    float d = _player != null ? (t.position - pp).sqrMagnitude : 0f;
+                    if (best == null || d < bestDist) { best = t; bestDist = d; }
+                    break;      // 该候选已确认属于本章容器，祖先遍历到此为止
+                }
             }
         }
+        if (best != null) return best;
         return fallback;
     }
 
@@ -742,6 +762,7 @@ public class StoryRunner : MonoBehaviour
         if (string.IsNullOrEmpty(step.who))
         {
             CutawayCamera.Restore();
+            if (phoneChat != null) phoneChat.SetOwner("徐夏");   // 切回主角 = 手机回到徐夏手里（气泡换回徐夏视角）
             if (_player != null) _player.enabled = true;
             Next();
             return;
@@ -750,6 +771,11 @@ public class StoryRunner : MonoBehaviour
         if (t == null) { Debug.LogWarning("[StoryRunner] cut 找不到角色「" + step.who + "」，跳过切视角"); Next(); return; }
         if (_player != null) _player.enabled = false;    // 停输入 + 停相机控制（组件停用，方法调用不受影响）
         CutawayCamera.Show(t, step.camH, step.lookH);
+        if (phoneChat != null)
+        {   // ★ 手机跟着视角走：切到林溪 = 这台手机是林溪的（她的回复走右蓝泡）；联系人由 contact 步骤字段指定
+            phoneChat.SetOwner(step.who);
+            if (!string.IsNullOrEmpty(step.contact)) phoneChat.SetContact(step.contact);
+        }
         Next();
     }
 
@@ -900,6 +926,7 @@ public class StoryRunner : MonoBehaviour
     {
         CurrState = State.Done;
         CutawayCamera.Restore();                          // 章末兜底：万一 cut 没配对收掉
+        if (phoneChat != null) phoneChat.SetOwner("徐夏");            // 章末兜底：手机视角一并回到徐夏
         foreach (var g in _stageShown) if (g != null && g.activeSelf) g.SetActive(false);   // 舞台道具兜底收回（中途结束剧情不剩重影）
         _stageShown.Clear();
         ResumeSeats();
@@ -1071,7 +1098,8 @@ public class StoryRunner : MonoBehaviour
 
         // ★ 镜头平滑转向门口（v4）： yaw+pitch 一起动 0.3s（此前硬切且不管 pitch，
         //   玩家低头看桌面时进场会盯着自己的脚——视频评审 2026-09-28）。与她淡入同步。
-        if (_player != null)
+        //   lookAtDoor=false 不转（第3章王含从玩家左手边北墙走来，不抢镜头——用户 2026-10-01）
+        if (step.lookAtDoor && _player != null)
             StartCoroutine(_player.LookTowardRoutine(startPt));
 
         _entrance = go.GetComponent<NpcEntrance>();
