@@ -78,6 +78,9 @@ public class StoryStep
                                              // 前一个走出几秒后下一个才动，避免挤在一起；SilentApply/快进不复刻）
     public string at = "";                   // interact：目标交互点 GameObject 名（缺省=旧逻辑取第一个可用点；
                                              // 第3章起一章多个 F 点，不点名会武装错点——2026-09-28）
+    public float standUp = 0f;               // interact：任务亮起 standUp 秒后让坐着的玩家自动起身
+                                             // （第5章「跟上大家」：NPC 先走几步造时间差，徐夏随后跟上；
+                                             //   0/缺省 = 不自动起身，走 SitSpot 原有的 WASD 起身）
     public float camH = -1f;                 // cut：机位高度（≤0 = 用 CutawayCamera 内置默认 1.55）。
                                              // 第1章林溪坐姿用 1.15（站着的高度看坐着的人会高高在上）——2026-09-30
     public float lookH = -1f;                // cut：LookAt 的“头”高（≤0 = 内置默认 1.35；林溪坐姿 0.95）

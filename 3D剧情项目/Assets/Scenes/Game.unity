@@ -65453,7 +65453,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 556146702}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.2043377, z: -0, w: 0.9789005}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.058, y: 0, z: -0.245}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -153629,7 +153629,7 @@ MonoBehaviour:
   key: 102
   oneShot: 1
   chapterTag: 4
-  promptText: "\u62FF\u8D77\u624B\u673A"
+  promptText: "\u70B9\u5F00\u73ED\u7FA4\u901A\u77E5"
   propObjectName: "\u624B\u673A_\u6DE1\u84DD"
   anySeat: 0
   seatObjectName: 

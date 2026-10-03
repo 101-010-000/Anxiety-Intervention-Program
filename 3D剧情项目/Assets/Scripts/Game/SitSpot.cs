@@ -52,6 +52,13 @@ public class SitSpot : MonoBehaviour
     [Tooltip("只在这些章允许坐。例：宿舍那个可坐点填 2、4 → 第5章就坐不下（用户 2026-09-29）")]
     public int[] onlyChapters = new int[0];
 
+    [Header("剧情门控（用户 2026-10-02）")]
+    [Tooltip("非空 = 该名字的交互点被【按 F 消费之后】(Consumed) 才允许「锁住自动坐下」。\n" +
+             "只认 Consumed 不认 armed（armed 有场景默认值 true，不可靠）。\n" +
+             "防止同地点更早的对话把玩家提前按到座位上（第4章：班群段人还在书桌边就被宿舍座位 auto 坐，\n" +
+             "到「坐下，翻看复习资料」的 F 点才该坐——宿舍两个座位点都填自己节点上的交互点名）")]
+    public string requireInteract = "";
+
     [Header("提示")]
     [Tooltip("靠近时显示【黑底小提示「按 F 坐下/起身」】（运行时自建小画布）。★默认关（用户 2026-10-01）：" +
              "不要这个黑底提示，交互提示用游戏原有的蓝色那套（UI交互/交互提示）；只有以后真要自由坐下的点再开")]
@@ -77,6 +84,8 @@ public class SitSpot : MonoBehaviour
 
     FirstPersonController _fpc;
     bool _seated;
+    StoryInteractable _gateSI;      // requireInteract 的解析缓存（实例字段——别用 static，编辑器关域重载会跨会话残留）
+    bool _gateLooked;
     static bool _suppressSit;          // 明确起身过（对话还锁着）→ 解锁前【所有座位】都别再自动坐回来
     public static bool Suppressed;     // 剧情演出总闸（stage 藏玩家模型期间）：Seat/Stand 一律不跑，
                                        // 防"被传走→起身"把站立模型亮回来（第3章老师视角段，2026-10-01）
@@ -121,7 +130,7 @@ public class SitSpot : MonoBehaviour
         {
             bool wantSit = (mode == SitMode.按F坐下)
                 ? (inRange && !_fpc.locked && Input.GetKeyDown(key))
-                : (inRange && _fpc.locked);
+                : (inRange && _fpc.locked && InteractConsumed());
             if (wantSit && !_suppressSit) Seat();
         }
         else
@@ -138,6 +147,24 @@ public class SitSpot : MonoBehaviour
         // 提示：剧情锁住（对话中）时 F 不起身，就别显示「按 F 起身」（用户 2026-10-01）
         if (showPrompt && !_fpc.locked) SitPrompt.Set(inRange, _seated, key);
         else SitPrompt.Hide(this);
+    }
+
+    /// <summary>requireInteract 门控：该交互点【已被消费】(Consumed，即玩家在那里按过 F) 才允许自动坐。
+    /// 找不到指定交互点只警告一次并不门控（和 StoryRunner 缺锚点的兜底口径一致）。</summary>
+    bool InteractConsumed()
+    {
+        if (string.IsNullOrEmpty(requireInteract)) return true;
+        if (!_gateLooked)
+        {
+            _gateLooked = true;
+            var own = GetComponent<StoryInteractable>();
+            if (own != null && own.name == requireInteract) _gateSI = own;
+            else
+                foreach (var s in Resources.FindObjectsOfTypeAll<StoryInteractable>())
+                    if (s != null && s.gameObject.scene.IsValid() && s.name == requireInteract) { _gateSI = s; break; }
+            if (_gateSI == null) Debug.LogWarning("[SitSpot] requireInteract 找不到交互点（不门控）：" + requireInteract, this);
+        }
+        return _gateSI == null || _gateSI.Consumed;
     }
 
     // 进场（加载场景/组件启用）时清掉上次会话残留的压制标记：

@@ -602,6 +602,7 @@ public class StoryRunner : MonoBehaviour
                 _currentF.ShowProp();   // 联动道具（手机）在交互步骤到达时先回到桌上（第2章第二次拿手机）
                 ShowWalkHint(step.x);
                 SetPerms(State.WaitInteract);
+                if (step.standUp > 0f) StartCoroutine(StandUpAfter(step.standUp));   // 「跟上大家」：NPC 先走几步，徐夏随后起身
                 break;
 
             default: PlayText(step); break;      // nar / dlg / mon
@@ -1138,6 +1139,16 @@ public class StoryRunner : MonoBehaviour
         _entrance = null;
         _enterRt = null;
         Next();
+    }
+
+    // 「跟上大家」：interact 带 standUp 秒时，任务亮起后让所有坐着的座位自动起身——
+    // NPC 先走几步造成时间差，徐夏随后跟上（第5章宿舍离场，2026-10-01 用户定稿）。
+    // 坐着的判定看 SitSpot.Seated：没人坐着时是空操作；WaitInteract 本就能走，起身只是演出的自动部分。
+    IEnumerator StandUpAfter(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        foreach (var spot in FindObjectsOfType<SitSpot>())
+            if (spot.Seated) spot.StandUp();
     }
 
     // ------------------------------------------------------------------ NPC 退场（leave 步骤，2026-09-28）
