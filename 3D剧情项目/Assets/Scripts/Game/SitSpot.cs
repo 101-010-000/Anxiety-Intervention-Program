@@ -409,7 +409,7 @@ public class SitSpot : MonoBehaviour
         if (seatedModel != null)
         {
             seatedModel.SetActive(false);                    // 收起坐姿模型
-            if (hideStandingModel) _fpc.SetStandingModelVisible(true);   // 站立模型回来
+            if (hideStandingModel && _fpc != null) _fpc.SetStandingModelVisible(true);   // 站立模型回来（判空：退出 Play 时 FPC 先销毁，OnDisable 兜底起身会走到这）
         }
         else if (_fpc != null && _fpc.animator != null)
         {
