@@ -837,10 +837,14 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 - **NPC 入场（enter 步骤，第2章陆宣雨）**：`{ "t": "enter", "who": "角色实例名", "from": "门口锚点名" }`。
   Begin 时按 json 预禁用 who（开场不在场）；enter 时启用并从 from 锚点走到玩家面前
   （缺省落点=玩家面前 1.3m，`to` 显式锚点可覆盖），播行走动画、到位面向玩家接对话。
-  ★ **`seat` = 到位换坐姿模型（2026-09-30 第3章王含）**：`"seat": "坐姿实例名"`——走位模型到位后
-  整棵隐藏、亮出用户摆好的坐姿实例（王含切换 = Sitting Idle.fbx 静态坐姿雕像，无需 Animator；
-  rest pose 即坐姿）。seat 实例 Begin 时随 enter 一起预藏，续播快进（SilentApply）按终态同步；
-  Skip 自检路径不走 NpcEntrance——换装在 EnterRoutine 协程收尾里，Skip 后下一帧照常执行。
+  ★ **`seat` = 到位换坐姿模型（引擎能力，2026-09-30）**：`"seat": "坐姿实例名"`——走位模型到位后
+  整棵隐藏、亮出用户摆好的坐姿实例。seat 实例 Begin 时随 enter/leave 一起预藏，续播快进
+  （SilentApply）按终态同步；Skip 自检路径不走 NpcEntrance——换装在协程收尾里，Skip 后下一帧照常执行。
+  ⚠ 第3章王含现在【不用】enter 的 seat 了（2026-10-01 用户定稿：走过来先站着，等徐夏说
+  「坐吧坐吧~」才坐下）——换装改用紧跟「坐吧坐吧~」的 stage 步骤：`{"t":"stage",
+  "showNames":["王含切换"],"hideNames":["王含_站立"]}`（stage 瞬时翻转自动推进、Begin 预藏
+  showNames、SilentApply/ToDone 同步，全现成机制零新代码；王含切换 = Sitting Idle.fbx 静态
+  坐姿雕像，rest pose 即坐姿）。
   ★ **`lookAtDoor`（2026-10-01）**：入场开始是否强制转镜头（缺省 true 转 0.3s）；第3章王含填
   false——她从玩家左手边北墙走来，不抢镜头（用户定稿：只有这一步不转，其他章入场照旧）。
   ★ **leave 也吃 `seat`（2026-10-01 第3章办公室老师）**：`{"t":"leave","who":"李老师_可动",
