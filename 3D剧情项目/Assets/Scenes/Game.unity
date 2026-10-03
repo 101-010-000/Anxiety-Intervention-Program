@@ -4929,6 +4929,7 @@ MonoBehaviour:
   groundOffset: 0
   standDistance: 1.8
   onlyChapters: 
+  requireInteract: 
   showPrompt: 0
   seatedModel: {fileID: 853474411}
   hideStandingModel: 1
@@ -9725,6 +9726,7 @@ MonoBehaviour:
   groundOffset: 0
   standDistance: 1.8
   onlyChapters: 
+  requireInteract: 
   showPrompt: 0
   seatedModel: {fileID: 1732591927}
   hideStandingModel: 1
@@ -35105,6 +35107,7 @@ Transform:
   - {fileID: 1732591926}
   - {fileID: 76208520}
   - {fileID: 1240939338}
+  - {fileID: 1025495324}
   m_Father: {fileID: 2003773275}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &272288134
@@ -50193,6 +50196,7 @@ MonoBehaviour:
   groundOffset: 0
   standDistance: 1.8
   onlyChapters: 
+  requireInteract: "\u7B2C5\u7AE0_\u56DE\u5EA7\u4F4D"
   showPrompt: 0
   seatedModel: {fileID: 1372641370}
   hideStandingModel: 1
@@ -120449,6 +120453,37 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 8901506036061887999, guid: 93f36ea8075a1324c9e2e6e6a6b080d1, type: 3}
+--- !u!1 &1025495323
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1025495324}
+  m_Layer: 0
+  m_Name: "\u7B2C3\u7AE0_\u738B\u542B\u8DEF\u7EBF_1"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1025495324
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1025495323}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.4000015, y: 0, z: 7.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 271906423}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1026422812
 GameObject:
   m_ObjectHideFlags: 0
@@ -125364,6 +125399,7 @@ MonoBehaviour:
   groundOffset: 0
   standDistance: 1.8
   onlyChapters: 
+  requireInteract: 
   showPrompt: 0
   seatedModel: {fileID: 833832458}
   hideStandingModel: 1
@@ -144121,7 +144157,7 @@ Transform:
   m_GameObject: {fileID: 1240939337}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000004371139}
-  m_LocalPosition: {x: -1.199997, y: 0, z: 7.4}
+  m_LocalPosition: {x: -2.4000015, y: 0, z: 6.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -153593,7 +153629,7 @@ MonoBehaviour:
   key: 102
   oneShot: 1
   chapterTag: 4
-  promptText: "\u70B9\u5F00\u73ED\u7FA4\u901A\u77E5"
+  promptText: "\u62FF\u8D77\u624B\u673A"
   propObjectName: "\u624B\u673A_\u6DE1\u84DD"
   anySeat: 0
   seatObjectName: 
@@ -215601,6 +215637,7 @@ MonoBehaviour:
   groundOffset: 0
   standDistance: 1.8
   onlyChapters: 
+  requireInteract: "\u7B2C4\u7AE0_\u5750\u4E0B\u770B\u8D44\u6599"
   showPrompt: 0
   seatedModel: {fileID: 1372641370}
   hideStandingModel: 1

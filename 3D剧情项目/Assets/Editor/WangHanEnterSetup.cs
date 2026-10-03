@@ -28,12 +28,14 @@ public static class WangHanEnterSetup
     const string REPORT = "Assets/assets/_报告/_第三章王含入场.txt";
 
     // 锚点名 →（默认摆位, yaw）。节点已存在绝不改位置（手调优先，同 ChapterStoriesSetup 约定）。
-    // 路线（用户 2026-10-01 重定）：王含_站立 用户手摆在西北北墙边，从那儿沿北墙直线
-    // 走到 凳子2(9) 后方入座（~7.6m，旧东侧大动脉路线_1..4 已退役）
+    // 路线（用户 2026-10-01 两轮重定）：王含_站立 用户手摆在西北北墙边，沿北墙走到 116.6 处
+    // 斜下到 凳子2(9) 西侧红圈位（用户圈定，117.6, 6.3）站着说话；「坐吧坐吧~」后 stage 换坐姿。
+    // （直连会蹭西边餐桌的 凳子2 角，v1 拐点是绕这个的；旧「东侧大动脉」路线已删）
     static readonly object[] ANCHORS =
     {
         new object[] { "第3章_王含门口",   new Vector3(111.21f, 0f,  7.12f), 90f  },
-        new object[] { "第3章_王含落座",   new Vector3(118.80f, 0f,  7.40f), 180f },
+        new object[] { "第3章_王含路线_1", new Vector3(116.60f, 0f,  7.10f), 0f  },
+        new object[] { "第3章_王含落座",   new Vector3(117.60f, 0f,  6.30f), 180f },
     };
 
     [MenuItem("Tools/干预项目/第三章王含入场（幂等）")]
