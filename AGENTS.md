@@ -187,8 +187,18 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
     （工具接线时也一律写 false）；交互提示统一用游戏原有的蓝色那套 `UI交互/交互提示`（剧情点自己给）。
     那个黑底小提示是 `SitSpot` 运行时自建的 `SitPrompt` 画布，只有以后真要开「自由按 F 坐下」的点才开。
   · ★ **只有剧情要坐的才坐**（用户 2026-09-30 定稿）：自由「按 F 坐下」的点**一律关掉**（`SitSpot.enabled=false`），
-    只留三个剧情座位：`Loc_食堂/多章锚点/第3章_落座`、`Loc_宿舍/多章锚点/第4章_坐下看资料`、
-    `Loc_宿舍/多章锚点/第5章_回座位`（都是 `剧情锁住自动坐下` 模式）。
+    只留四个剧情座位：`Loc_食堂/多章锚点/第3章_落座`、`Loc_宿舍/多章锚点/第4章_坐下看资料`、
+    `Loc_宿舍/多章锚点/第5章_回座位`、`Loc_宿舍/多章锚点/第2章_坐下刷手机`（都是 `剧情锁住自动坐下` 模式）。
+    ★ **第2章座位（2026-10-02 补）**：第4章门控上线后第二章"拿起手机后坐着"没了——原来 ch2 一直是在
+    **蹭**未门控的第4章座位坐下；现在给了自己的座位 `第2章_坐下刷手机`（与第4/5章座位同位 (79.23,0,3.58)、
+    共用坐姿模型 徐夏任务视角切换，`requireInteract=第2章_手机` + **`onlyChapters=[2]` 双保险**——
+    `Consumed` 跨章不重置，同一次 Play 连玩 2→4 章时没有限章会把班群段 bug 从后门放回来）。
+    ⚠ **给共用座位加门控前先想想有没有别的章在蹭它**——门控堵的是所有章的"蹭坐"路径。
+    ★ **门控只认 `Consumed`，而 `Consumed` 只在 `oneShot=true` 的交互点上会被置位**（2026-10-03 实锤）：
+    `StoryInteractable.Fire()` 里 `Consumed=true` 写在 `if (oneShot)` 内——第2章_手机 是 09-28 接线的
+    `oneShot=0` 旧值，按 F 剧情照走但 Consumed 永远 false → 座位门控永远不开（症状：第二章拿手机后
+    一直站着）。已把它改 `oneShot=1`（与第4章两个交互点同款）；第99步第二次拿手机走 runner 现成的
+    FindFree→Revive 复用路径，无需额外处理。**给门控填交互点名前，先查它的 oneShot 是不是 1。**
   · ★ **剧情门控 `SitSpot.requireInteract`（用户 2026-10-02）**：非空 = 剧情走到该名字的交互点
     （`Consumed`，即玩家在该点按过 F）之后才允许「锁住自动坐下」——只认 Consumed 不认 armed
     （armed 有场景默认值 true，第一版 `armed||Consumed` 语义已改掉）；否则同地点**更早的对话**
@@ -257,7 +267,8 @@ Scenes/Game.unity              剧情主场景（Build Settings 第 1 号，Scen
 - **运行时**：`SitSpot`（座位点）—— 玩家站到座位上且**剧情把玩家锁住**（locked=true，即正在对话）→ 自动坐下；
   对话结束（解锁）后按 WASD / 走开 / 被传送 → 起身（锁住期间 WASD 不起身）。
   **不需要改 StoryRunner**（靠"站在座位上 + 被锁住"这个组合判定，和现有 interact 流程天然对上）。
-  现在只有 3 个剧情座位（宿舍×2、食堂×1）挂着启用的 SitSpot，`onlyChapters` 清空 = 不限章节。
+  现在只有 4 个剧情座位（宿舍×3、食堂×1）挂着启用的 SitSpot；第2/4/5 章座位各自
+  `requireInteract` 门控到本座位交互点，第2章那个另带 `onlyChapters=[2]`（其余清空 = 不限章节）。
   NPC 用 `SitHere`（Start 把 Sitting 置 true），把 NPC 实例摆到座位上即可。
 - 第三人称镜头有**坐姿档**：`FirstPersonController.SetSitting(true)` 会把 `tpHeight` 1.45→0.95、
   `tpLookHeight` 1.2→0.72（不然坐着镜头盯头顶），起身自动还原。
